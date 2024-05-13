@@ -1,0 +1,103 @@
+{{#when  face 'eq' 0}}
+<div class="dice first-face success-cancel"></div>
+{{/when}}
+
+{{#when  face 'eq' 1}}
+<div class="dice first-face success-{{success}} {{give_up}}" 
+data-poll_difficulty="{{poll_difficulty}}" data-currentpoll="{{currentpoll}}" data-face="{{face}}" data-lock="{{locked}}">
+    <span class="dot dot-{{success}}" 
+      data-poll_difficulty="{{poll_difficulty}}" data-currentpoll="{{currentpoll}}" data-face="{{face}}" data-lock="{{locked}}">
+    </span>
+  </div>
+{{/when}}
+
+{{#when  face 'eq' 2}}
+<div class="dice second-face success-{{success}} {{give_up}}" 
+data-poll_difficulty="{{poll_difficulty}}" data-currentpoll="{{currentpoll}}" data-face="{{face}}" data-lock="{{locked}}">
+  <span class="dot dot-{{success}}" 
+      data-poll_difficulty="{{poll_difficulty}}" data-currentpoll="{{currentpoll}}" data-face="{{face}}" data-lock="{{locked}}">
+  </span>
+  <span class="dot dot-{{success}}" 
+      data-poll_difficulty="{{poll_difficulty}}" data-currentpoll="{{currentpoll}}" data-face="{{face}}" data-lock="{{locked}}">
+  </span>
+</div>
+{{/when}}
+
+{{#when  face 'eq' 3}}
+<div class="dice third-face success-{{success}} {{give_up}}" 
+data-poll_difficulty="{{poll_difficulty}}" data-currentpoll="{{currentpoll}}"  data-face="{{face}}" data-lock="{{locked}}">
+  <span class="dot dot-{{success}}" 
+      data-poll_difficulty="{{poll_difficulty}}" data-currentpoll="{{currentpoll}}" data-face="{{face}}" data-lock="{{locked}}"></span>
+  <span class="dot dot-{{success}}" 
+      data-poll_difficulty="{{poll_difficulty}}" data-currentpoll="{{currentpoll}}" data-face="{{face}}" data-lock="{{locked}}"></span>
+  <span class="dot dot-{{success}}" 
+      data-poll_difficulty="{{poll_difficulty}}" data-currentpoll="{{currentpoll}}" data-face="{{face}}" data-lock="{{locked}}"></span>
+</div>
+{{/when}}
+
+{{#when  face 'eq' 4}}
+<div class="fourth-face dice success-{{success}} {{give_up}}" 
+data-poll_difficulty="{{poll_difficulty}}" data-currentpoll="{{currentpoll}}" data-face="{{face}}" data-lock="{{locked}}">
+  <div class="column">
+    <span class="dot dot-{{success}}" 
+      data-poll_difficulty="{{poll_difficulty}}" data-currentpoll="{{currentpoll}}" data-face="{{face}}" data-lock="{{locked}}"></span>
+    <span class="dot dot-{{success}}" 
+      data-poll_difficulty="{{poll_difficulty}}" data-currentpoll="{{currentpoll}}" data-face="{{face}}" data-lock="{{locked}}"></span>
+  </div>
+  <div class="column">
+    <span class="dot dot-{{success}}" 
+      data-poll_difficulty="{{poll_difficulty}}" data-currentpoll="{{currentpoll}}" data-face="{{face}}" data-lock="{{locked}}"></span>
+    <span class="dot dot-{{success}}" 
+      data-poll_difficulty="{{poll_difficulty}}" data-currentpoll="{{currentpoll}}" data-face="{{face}}" data-lock="{{locked}}"></span>
+  </div>
+</div>
+{{/when}}
+
+{{#when  face 'eq' 5}}
+<div class="fifth-face dice success-{{success}} {{give_up}}" 
+data-poll_difficulty="{{poll_difficulty}}" data-currentpoll="{{currentpoll}}"  data-face="{{face}}" data-lock="{{locked}}">
+  
+  <div class="column">
+    <span class="dot dot-{{success}}" 
+      data-poll_difficulty="{{poll_difficulty}}" data-currentpoll="{{currentpoll}}" data-face="{{face}}" data-lock="{{locked}}"></span>
+    <span class="dot dot-{{success}}" 
+      data-poll_difficulty="{{poll_difficulty}}" data-currentpoll="{{currentpoll}}" data-face="{{face}}" data-lock="{{locked}}"></span>
+  </div>
+  
+  <div class="column">
+    <span class="dot dot-{{success}}" 
+      data-poll_difficulty="{{poll_difficulty}}" data-currentpoll="{{currentpoll}}" data-face="{{face}}" data-lock="{{locked}}"></span>
+  </div>
+  
+  <div class="column">
+    <span class="dot dot-{{success}}" 
+      data-poll_difficulty="{{poll_difficulty}}" data-currentpoll="{{currentpoll}}" data-face="{{face}}" data-lock="{{locked}}"></span>
+    <span class="dot dot-{{success}}" 
+      data-poll_difficulty="{{poll_difficulty}}" data-currentpoll="{{currentpoll}}" data-face="{{face}}" data-lock="{{locked}}"></span>
+  </div>
+
+</div>
+{{/when}}
+
+{{#when  face 'eq' 6}}
+<div class="sixth-face dice success-{{success}} {{give_up}}" 
+data-poll_difficulty="{{poll_difficulty}}" data-currentpoll="{{currentpoll}}"  data-face="{{face}}" data-lock="{{locked}}">
+  <div class="column">
+    <span class="dot dot-{{success}}" 
+      data-poll_difficulty="{{poll_difficulty}}" data-currentpoll="{{currentpoll}}" data-face="{{face}}" data-lock="{{locked}}"></span>
+    <span class="dot dot-{{success}}" 
+      data-poll_difficulty="{{poll_difficulty}}" data-currentpoll="{{currentpoll}}" data-face="{{face}}" data-lock="{{locked}}"></span>
+    <span class="dot dot-{{success}}" 
+      data-poll_difficulty="{{poll_difficulty}}" data-currentpoll="{{currentpoll}}" data-face="{{face}}" data-lock="{{locked}}"></span>
+  </div>
+  <div class="column">
+    <span class="dot dot-{{success}}" 
+      data-poll_difficulty="{{poll_difficulty}}" data-currentpoll="{{currentpoll}}" data-face="{{face}}" data-lock="{{locked}}"></span>
+    <span class="dot dot-{{success}}" 
+      data-poll_difficulty="{{poll_difficulty}}" data-currentpoll="{{currentpoll}}" data-face="{{face}}" data-lock="{{locked}}"></span>
+        <span class="dot dot-{{success}}" 
+      data-poll_difficulty="{{poll_difficulty}}" data-currentpoll="{{currentpoll}}" data-face="{{face}}" data-lock="{{locked}}"></span>
+  </div>
+
+</div>
+{{/when}}

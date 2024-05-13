@@ -1,0 +1,272 @@
+{
+  "Actor": {
+    "types": ["character", "npc"],
+    "templates": {
+      "base": {
+        "stress": {
+          "value": 12,
+          "current": 0,
+          "danger": 8,
+          "max": 12,
+          "min": 0
+        },
+        "biography": ""
+      },
+      "chapters": {
+        "chapters": {
+        "prologue": "",
+        "chapter1": "",
+        "chapter2": "",
+        "chapter3_0": "",
+        "chapter3_1": "",
+        "chapter4_0": "",
+        "chapter4_1": "",
+        "chapter5_0": "",
+        "chapter5_1": ""
+        }
+      }
+    },
+    "character": {
+      "templates": ["base", "chapters"],
+      "folk": "",
+      "homeland": "",
+      "profession": "",
+      "vocation": "",
+      "companion": "",
+      "languages": "Housian",
+      "experience": "",
+      "coins": 0,
+      "wealth": "",
+      "ttt": 0,
+      "aces": {
+        "clubs": false,
+        "hearts": false,
+        "diamonds": false,
+        "spades": false,
+        "joker": false
+      },
+      "conditions": {
+        "embarrassed": false,
+        "confused": false,
+        "hurt": false,
+        "frightened": false,
+        "tired": false,
+        "sick": false,
+        "poisoned": false,
+        "broken": false
+      },
+      "decorum": 0,
+      "fields": {
+        "society": {
+          "value": 1,
+          "suit": "hearts"
+        },
+        "academia": {
+            "value": 1,
+            "suit": "diamonds"
+        },
+        "war": {
+            "value": 1,
+            "suit": "clubs"
+        },
+        "street": {
+            "value": 1,
+            "suit": "spades"
+        }
+      },
+      "skills": {
+        "art": {
+            "value": 1,
+            "field": "society",
+            "suit": "hearts"
+          },
+          "charm": {
+              "value": 1,
+              "field": "society",
+              "suit": "hearts"
+          },
+          "eloquence": {
+            "value": 1,
+            "field": "society",
+            "suit": "hearts"
+          },
+          "etiquette": {
+            "value": 1,
+            "field": "society",
+            "suit": "hearts"
+          },
+          "grace": {
+            "value": 1,
+            "field": "society",
+            "suit": "hearts"
+          },
+          "care": {
+            "value": 1,
+            "field": "academia",
+            "suit": "diamonds"
+          },
+          "craft": {
+            "value": 1,
+            "field": "academia",
+            "suit": "diamonds"
+          },
+          "culture": {
+            "value": 1,
+            "field": "academia",
+            "suit": "diamonds"
+          },
+          "insight": {
+            "value": 1,
+            "field": "academia",
+            "suit": "diamonds"
+          },
+          "investigation": {
+            "value": 1,
+            "field": "academia",
+            "suit": "diamonds"
+          },
+          "athletics": {
+              "value": 1,
+              "field": "war",
+              "suit": "clubs"
+          },
+          "authority": {
+            "value": 1,
+            "field": "war",
+            "suit": "clubs"
+          },
+          "fight": {
+            "value": 1,
+            "field": "war",
+            "suit": "clubs"
+          },
+          "strength": {
+            "value": 1,
+            "field": "war",
+            "suit": "clubs"
+          },
+          "will": {
+            "value": 1,
+            "field": "war",
+            "suit": "clubs"
+          },
+          "caution": {
+              "value": 1,
+              "field": "street",
+              "suit": "spades"
+          },
+          "dexterity": {
+            "value": 1,
+            "field": "street",
+            "suit": "spades"
+          },
+          "elusion": {
+            "value": 1,
+            "field": "street",
+            "suit": "spades"
+          },
+          "exploration": {
+            "value": 1,
+            "field": "street",
+            "suit": "spades"
+          },
+          "shoot": {
+            "value": 1,
+            "field": "street",
+            "suit": "spades"
+          }
+      }
+    },
+    "npc": {
+      "templates": ["base"],
+      "cr": 0,
+      "threat": {
+        "level": 0
+      },
+      "actions": {
+        "action_1": "",
+        "action_2": "",
+        "action_3": "",
+        "action_4": "",
+        "action_5": "",
+        "action_6": ""
+      }
+    }
+  },
+  "Item": {
+    "types": ["item", "gadget", "weapon", "move", "contract", "trait", "profession", "vocation", "companion", "folk"],
+    "templates": {
+      "base": {
+        "description": "",
+        "trait": "",
+        "price": 0
+      }
+    },
+    "item": {
+      "templates": ["base"],
+      "quantity": 1,
+      "weight": 0
+    },
+    "gadget": {
+      "templates": ["base"]
+    },
+    "weapon": {
+      "templates": ["base"],
+      "type": "",
+      "skill": "",
+      "field": ""
+    },
+    "move": {
+      "description": "",
+      "requirements": "",
+      "exalsted": false,
+      "suits": {
+        "clubs": false,
+        "hearts": false,
+        "diamonds": false,
+        "spades": false
+      }
+    },
+    "contract": {
+      "type": "",
+      "concession": { 
+        "name": "",
+        "details": ""
+      },
+      "counterpart":{
+        "name": "",
+        "details": ""
+      }
+    },
+    "trait": {
+      "description": ""
+    },
+    "profession": {
+      "description": "",
+      "skills": "",
+      "field": "",
+      "moves": "",
+      "traits": "",
+      "has_companion": false
+    },
+    "vocation": {
+      "description": "",
+      "profession": "",
+      "skills": "",
+      "field": "",
+      "traits": "",
+      "has_companion": false
+    },
+    "companion": {
+      "description": "",
+      "profession": "",
+      "moves": "",
+      "traits": ""
+    },
+    "folk": {
+      "description": "",
+      "languages": "",
+      "contract": ""
+    }
+  }
+}

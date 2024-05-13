@@ -1,0 +1,50 @@
+{
+  "id": "household",
+  "title": "Household",
+  "description": "The Household system for FoundryVTT!",
+  "authors": [
+    {
+      "name": "Snagov",
+      "discord": "snagov"
+    },
+    {
+      "name": "Gus",
+      "discord": "gus4294"
+    }
+  ],
+  "url": "https://github.com/piecesofcodecom/household",
+  "license": "LICENSE.txt",
+  "readme": "README.md",
+  "bugs": "https://github.com/piecesofcodecom/household/issues",
+  "changelog": "CHANGELOG.md",
+  "media": [],
+  "version": "0.1.0",
+  "compatibility": {
+    "minimum": 11,
+    "verified": "11.315"
+  },
+  "esmodules": ["build/household.js"],
+  "styles": ["css/household.css"],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    },
+    {
+      "lang": "it",
+      "name": "Italiano",
+      "path": "lang/it.json"
+    }
+  ],
+  "packs": [],
+  "packFolders": [],
+  "socket": false,
+  "manifest": "https://github.com/piecesofcodecom/household/releases/latest/download/system.json",
+  "download": "https://github.com/piecesofcodecom/household/releases/download/0.1.0/system.zip",
+  "grid": {
+    "distance": 5,
+    "units": "ft"
+  },
+  "primaryTokenAttribute": "stress"
+}

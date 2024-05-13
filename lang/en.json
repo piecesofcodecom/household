@@ -1,0 +1,336 @@
+{
+  "HOUSEHOLD": {
+      "AcesSleeve": {
+          "long": "Aces up the Sleeve"
+      },
+      "ActionI": {
+          "long": "Action I"
+      },
+      "ActionII": {
+          "long": "Action II"
+      },
+      "ActionIII": {
+          "long": "Action III"
+      },
+      "ActionIV": {
+          "long": "Action IV"
+      },
+      "ActionV": {
+          "long": "Action V"
+      },
+      "ActionVI": {
+          "long": "Action VI"
+      },
+      "Actions": {
+          "long": "Actions"
+      },
+      "AllIn": {
+          "long": "All-In"
+      },
+      "ApplyModifier": {
+          "long": "Apply Modifier"
+      },
+      "Available": {
+        "long": "Available"
+      },
+      "Basic": {
+          "long": "Basic"
+      },
+      "BasicOpponent": {
+          "long": "Basic Opponent"
+      },
+      "ChapterI": {
+          "long": "Chapter I"
+      },
+      "ChapterII": {
+          "long": "Chapter II"
+      },
+      "ChapterIII": {
+          "long": "Chapter III"
+      },
+      "ChapterIV": {
+          "long": "Chapter IV"
+      },
+      "ChapterV": {
+          "long": "Chapter V"
+      },
+      "ChooseField": {
+          "long": "Choose a field"
+      },
+      "Coins": {
+          "long": "Coins"
+      },
+      "Conditions": {
+          "Broken": "Broken",
+          "Confused": "Confused",
+          "Embarrassed": "Embarrassed",
+          "Frightened": "Frightened",
+          "Hurt": "Hurt",
+          "Poisoned": "poisoned",
+          "Sick": "Sick",
+          "Tired": "Tired",
+          "long": "Conditions"
+      },
+      "Concession": {
+          "long": "Consession"
+      },
+      "Contract": {
+          "long": "Contract"
+      },
+      "Contracts": {
+          "long": "Contracts"
+      },
+      "Counterpart": {
+          "long": "Counterpart"
+      },
+      "Critical": {
+          "long": "Critical"
+      },
+      "CriticalOpponent": {
+          "long": "Critical Opponent"
+      },
+      "Decorum": {
+          "Decent": "Decent",
+          "Elegant": "Elegant",
+          "Pompous": "Pompous",
+          "Shabby": "Shabby",
+          "Uncouth": "Uncouth",
+          "long": "Decorum"
+      },
+      "Difficulty": {
+          "long": "Difficulty"
+      },
+      "Effect": {},
+      "Exhausted": {
+          "long": "Exhausted"
+      },
+      "Experience": {
+          "long": "Experience"
+      },
+      "Extreme": {
+          "long": "Extreme"
+      },
+      "Failure": {
+          "long": "Failure"
+      },
+      "Field": {
+          "Academia": {
+              "abbr": "aca",
+              "long": "Academia"
+          },
+          "Society": {
+              "abbr": "soc",
+              "long": "Society"
+          },
+          "Street": {
+              "abbr": "str",
+              "long": "Street"
+          },
+          "War": {
+              "abbr": "war",
+              "long": "War"
+          },
+          "long": "Field"
+      },
+      "Folk": {
+          "long": "Folk"
+      },
+      "FreeReRoll": {
+          "long": "Free Re-Roll"
+      },
+      "Gadgets": {
+          "long": "Gadgets"
+      },
+      "HasCompanion": {
+          "long": "Has Companion"
+      },
+      "Homeland": {
+          "long": "Homeland"
+      },
+      "Impossible": {
+          "long": "Impossible"
+      },
+      "Item": {},
+      "Jackpot": {
+          "long": "Jackpot"
+      },
+      "LostSuccess": {
+          "long": "Choose Lost Success"
+      },
+      "Matches": {
+          "long": "Matches"
+      },
+      "Memories": {
+        "long": "Memories"
+      },
+      "Moves": {
+          "long": "Moves"
+      },
+      "Price": {
+        "long": "Price"
+      },
+      "Profession": {
+          "long": "Profession"
+      },
+      "Prologue": {
+          "long": "Prologue"
+      },
+      "ReRoll": {
+          "long": "Re-Roll"
+      },
+      "RemainingDices": {
+          "long": "Remaining Dices"
+      },
+      "Reroll": {
+          "long": "Re-Rolling"
+      },
+      "RollAbility": {
+          "long": "Roll Ability"
+      },
+      "RollActions": {
+          "long": "Roll Opponent Action"
+      },
+      "Rolling": {
+          "long": "Rolling"
+      },
+      "SheetLabels": {
+          "Actor": "Househood Actor Sheet",
+          "Chapter": "Chapters",
+          "Configuration": "Configuration",
+          "Description": "Description",
+          "Equipament": "Househood Equipament Sheet",
+          "Equipaments": "Equipaments",
+          "General": "General",
+          "Item": "Househood Item Sheet",
+          "Name": "Name",
+          "Requirements": "Requirements",
+          "TraitsConditions": "Traits & Conditions",
+          "Type": "Type"
+      },
+      "Skill": {
+          "Art": {
+              "abbr": "art",
+              "long": "Art"
+          },
+          "Athletics": {
+              "abbr": "skill description from lang/<language>.json",
+              "long": "athletics"
+          },
+          "Authority": {
+              "abbr": "skill description from lang/<language>.json",
+              "long": "authority"
+          },
+          "Care": {
+              "abbr": "care",
+              "long": "Care"
+          },
+          "Caution": {
+              "abbr": "skill description from lang/<language>.json",
+              "long": "caution"
+          },
+          "Charm": {
+              "abbr": "char",
+              "long": "Charm"
+          },
+          "Craft": {
+              "abbr": "skill description from lang/<language>.json",
+              "long": "Craft"
+          },
+          "Culture": {
+              "abbr": "skill description from lang/<language>.json",
+              "long": "Culture"
+          },
+          "Dexterity": {
+              "abbr": "skill description from lang/<language>.json",
+              "long": "dexterity"
+          },
+          "Eloquence": {
+              "abbr": "eloq",
+              "long": "Eloquence"
+          },
+          "Elusion": {
+              "abbr": "skill description from lang/<language>.json",
+              "long": "elusion"
+          },
+          "Etiquette": {
+              "abbr": "etiq",
+              "long": "Etiquette"
+          },
+          "Exploration": {
+              "abbr": "skill description from lang/<language>.json",
+              "long": "exploration"
+          },
+          "Fight": {
+              "abbr": "skill description from lang/<language>.json",
+              "long": "fight"
+          },
+          "Grace": {
+              "abbr": "grac",
+              "long": "Grace"
+          },
+          "Insight": {
+              "abbr": "skill description from lang/<language>.json",
+              "long": "Insight"
+          },
+          "Investigation": {
+              "abbr": "skill description from lang/<language>.json",
+              "long": "Investigation"
+          },
+          "Shoot": {
+              "abbr": "skill description from lang/<language>.json",
+              "long": "Shoot"
+          },
+          "Strength": {
+              "abbr": "skill description from lang/<language>.json",
+              "long": "Strength"
+          },
+          "Will": {
+              "abbr": "skill description from lang/<language>.json",
+              "long": "will"
+          },
+          "long": "Skill"
+      },
+      "Stress": {
+          "long": "Stress"
+      },
+      "Success": {
+          "long": "Success"
+      },
+      "TTT": {
+          "long": "Terrible Terrible Things"
+      },
+      "Trait": {
+          "long": "Trait"
+      },
+      "Traits": {
+          "long": "Traits"
+      },
+      "Vocation": {
+          "long": "Vocation"
+      },
+      "Wealth": {
+          "long": "Wealth"
+      },
+      "Weapons": {
+          "long": "Weapons"
+      }
+  },
+  "TYPES": {
+      "Actor": {
+          "character": "Character",
+          "npc": "NPC"
+      },
+      "Item": {
+        "item": "Item",
+        "gadget": "Gadget",
+        "weapon": "Weapon",
+        "move": "Move",
+        "contract": "Contract",
+        "trait": "Trait",
+        "profession": "Profession",
+        "vocation": "Vocation",
+        "companion": "Companion",
+        "folk": "Folk"
+      }
+  }
+}

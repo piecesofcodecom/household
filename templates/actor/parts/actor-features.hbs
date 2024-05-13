@@ -1,0 +1,95 @@
+
+
+<div class="flexcol">
+  <h2 class="characteristic-title " >{{localize "HOUSEHOLD.AcesSleeve.long"}}</h2>
+</div>
+{{#each system.aces as | value key|}}
+<input 
+  id="aces-{{key}}-{{../actor.id}}" 
+  class="input-hidden custom-edit"  data-object="actor"
+  type="radio" 
+  max="2" 
+  data-dtype="Boolean" 
+  data-path="system.aces.{{key}}" 
+  data-value="{{value}}"
+/>
+{{/each}}
+<div class="" style="height: 70px; 
+  justify-content: center; margin-left: 20%; padding-top: 5px; border: 0px solid #000">
+
+  <label for="aces-hearts-{{actor.id}}" class="aces-card aces-card-1">
+
+    {{#if system.aces.hearts}}
+      <img class="aces-card-img" src="/systems/household/assets/sheet/ace-hearts-filled.svg">
+    {{else}}
+      <img class="aces-card-img" src="/systems/household/assets/sheet/ace-hearts.svg">
+    {{/if}}
+    </label>
+
+  <label for="aces-diamonds-{{actor.id}}" class="aces-card aces-card-2">
+    {{#if system.aces.diamonds}}
+      <img class="aces-card-img" src="/systems/household/assets/sheet/ace-diamonds-filled.svg">
+    {{else}}
+      <img class="aces-card-img" src="/systems/household/assets/sheet/ace-diamonds.svg">
+    {{/if}}
+  </label>
+  <label for="aces-clubs-{{actor.id}}" class="aces-card aces-card-3">
+    {{#if system.aces.clubs}}
+      <img class="aces-card-img" src="/systems/household/assets/sheet/ace-clubs-filled.svg">
+    {{else}}
+      <img class="aces-card-img" src="/systems/household/assets/sheet/ace-clubs.svg">
+    {{/if}}
+  </label>
+  <label for="aces-spades-{{actor.id}}" class="aces-card aces-card-4">
+    {{#if system.aces.spades}}
+      <img class="aces-card-img" src="/systems/household/assets/sheet/ace-spades-filled.svg">
+    {{else}}
+      <img class="aces-card-img" src="/systems/household/assets/sheet/ace-spades.svg">
+    {{/if}}
+  </label>
+  <label for="aces-joker-{{actor.id}}" class="aces-card aces-card-5">
+    {{#if system.aces.joker}}
+      <img class="aces-card-img" src="/systems/household/assets/sheet/ace-joker-filled.svg">
+    {{else}}
+      <img class="aces-card-img" src="/systems/household/assets/sheet/ace-joker.svg">
+    {{/if}}
+  </label>
+</div>
+<h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.Moves.long"}}</h2>
+{{> "systems/household/templates/actor/parts/actor-moves.hbs"}}
+
+
+
+<h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.Contracts.long"}}</h2>
+{{> "systems/household/templates/actor/parts/actor-contracts.hbs"}}
+
+<h2 class="characteristic-title">{{localize "HOUSEHOLD.TTT.long"}}</h2>
+<div class="flexrow">
+  {{#numLoop 5}}
+    
+    {{#when ../system.ttt 'gteq' this}}
+    <input class="input-hidden" type="radio" id="ttt-{{this}}-{{../actor.id}}" value="{{reduceBy this 1}}" name="system.ttt" data-dtype="Number">
+      <div style=" display: -webkit-box;  /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+  display: -ms-flexbox;  /* TWEENER - IE 10 */
+  display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+  display: flex; justify-content: center;
+  align-items: center;" >
+        <label style=" align-items: center;" for="ttt-{{this}}-{{../actor.id}}">
+            <img width="28" height="28" style="border: 0px" src="/systems/household/assets/sheet/ttt{{this}}-filled.svg">
+        </label>
+      </div>
+    {{else}}
+    <input class="input-hidden" type="radio" id="ttt-{{this}}-{{../actor.id}}" value="{{this}}" name="system.ttt" data-dtype="Number">
+      <div style=" display: -webkit-box;  /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+  display: -ms-flexbox;  /* TWEENER - IE 10 */
+  display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+  display: flex; justify-content: center;
+  align-items: center;" >
+        <label style=" align-items: center;"
+            for="ttt-{{this}}-{{../actor.id}}"><img width="28" height="28" style="border: 0px" src ="/systems/household/assets/sheet/ttt{{this}}.svg">
+        </label>
+      </div>
+    {{/when}}
+  
+  {{/numLoop}}
+  </div>

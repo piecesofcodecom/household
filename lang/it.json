@@ -1,0 +1,334 @@
+{
+    "HOUSEHOLD": {
+        "AcesSleeve": {
+            "long": "Assi Nella Manica"
+        },
+        "ActionI": {
+            "long": "Azione I"
+        },
+        "ActionII": {
+            "long": "Azione II"
+        },
+        "ActionIII": {
+            "long": "Azione III"
+        },
+        "ActionIV": {
+            "long": "Azione IV"
+        },
+        "ActionV": {
+            "long": "Azione V"
+        },
+        "ActionVI": {
+            "long": "Azione VI"
+        },
+        "Actions": {
+            "long": "Azioni"
+        },
+        "AllIn": {
+            "long": "Tutto o Niente"
+        },
+        "ApplyModifier": {
+            "long": "Scegli il Modificatore"
+        },
+        "Available": {
+            "long": "Disponibile"
+        },
+        "Basic": {
+            "long": "Base"
+        },
+        "BasicOpponent": {
+            "long": "Avversario Basico"
+        },
+        "ChapterI": {
+            "long": "Capitolo I"
+        },
+        "ChapterII": {
+            "long": "Capitolo II"
+        },
+        "ChapterIII": {
+            "long": "Capitolo III"
+        },
+        "ChapterIV": {
+            "long": "Capitolo IV"
+        },
+        "ChapterV": {
+            "long": "Capitolo V"
+        },
+        "ChooseField": {
+            "long": "Scegli l'Abilità"
+        },
+        "Coins": {
+            "long": ""
+        },
+        "Conditions": {
+            "Broken": "Spezzato",
+            "Confused": "Confuso",
+            "Embarrassed": "Umiliato",
+            "Frightened": "Spaventato",
+            "Hurt": "Ferito",
+            "Poisoned": "Avvelenato",
+            "Sick": "Malato",
+            "Tired": "Stanco",
+            "long": "Condizioni"
+        },
+        "Concession": {
+            "long": "Concessione"
+        },
+        "Contract": {
+            "long": "Contratto"
+        },
+        "Contracts": {
+            "long": "Contratti"
+        },
+        "Counterpart": {
+            "long": "Controparte"
+        },
+        "Critical": {
+            "long": "Critical"
+        },
+        "CriticalOpponent": {
+            "long": "Avversario Critico"
+        },
+        "Decorum": {
+            "Decent": "Decente",
+            "Elegant": "Elegante",
+            "Pompous": "Pomposo",
+            "Shabby": "Sciatto",
+            "Uncouth": "Rozzo",
+            "long": "Decoro"
+        },
+        "Difficulty": {
+            "long": "Difficoltà"
+        },
+        "Effect": {},
+        "Exhausted": {
+            "long": "Esaurito"
+        },
+        "Experience": {
+            "long": "Esperienze"
+        },
+        "Extreme": {
+            "long": "Estremo"
+        },
+        "Failure": {
+            "long": "Failure"
+        },
+        "Field": {
+            "Academia": {
+                "abbr": "aca",
+                "long": "Accademia"
+            },
+            "Society": {
+                "abbr": "soc",
+                "long": "Società"
+            },
+            "Street": {
+                "abbr": "str",
+                "long": "Strada"
+            },
+            "War": {
+                "abbr": "war",
+                "long": "Guerra"
+            },
+            "long": "Ambito"
+        },
+        "Folk": {
+            "long": "Popolo"
+        },
+        "FreeReRoll": {
+            "long": "Rilancio in Sicurezza"
+        },
+        "Gadgets": {
+            "long": "Marchingegni"
+        },
+        "HasCompanion": {
+            "long": "Ha Compagno"
+        },
+        "Homeland": {
+            "long": "Nazione"
+        },
+        "Impossible": {
+            "long": "Impossibile"
+        },
+        "Item": {},
+        "Jackpot": {
+            "long": "Un Successone!"
+        },
+        "LostSuccess": {
+            "long": "Perdi uno dei Successi"
+        },
+        "Memories": {
+            "long": "Memories"
+          },
+        "Matches": {
+            "long": "Combinazione"
+        },
+        "Moves": {
+            "long": "Manovre"
+        },
+        "Price": {
+            "long": "Prezzo"
+          },
+        "Profession": {
+            "long": "Professione"
+        },
+        "Prologue": {
+            "long": "Prologue"
+        },
+        "ReRoll": {
+            "long": "Rilancio"
+        },
+        "RemainingDices": {
+            "long": "Remaining Dices"
+        },
+        "RollAbility": {
+            "long": "Tiro"
+        },
+        "RollActions": {
+            "long": "Roll Opponent Action"
+        },
+        "Rolling": {
+            "long": "Tiro"
+        },
+        "SheetLabels": {
+            "Actor": "Househood Actor Sheet",
+            "Chapter": "Capitoli",
+            "Configuration": "Configurazione",
+            "Description": "Descrizione",
+            "Equipament": "Househood Equipament Sheet",
+            "Equipaments": "Equipaggiamenti",
+            "General": "Generale",
+            "Item": "Househood Item Sheet",
+            "Name": "Nome",
+            "Requirements": "Requisiti",
+            "TraitsConditions": "Tratti & Condizioni",
+            "Type": "Tipo"
+        },
+        "Skills": { "long": "Abilità" },
+        "Skill": {
+            "Art": {
+                "abbr": "art",
+                "long": "Arte"
+            },
+            "Athletics": {
+                "abbr": "",
+                "long": "Atletica"
+            },
+            "Authority": {
+                "abbr": "",
+                "long": "Autorità"
+            },
+            "Care": {
+                "abbr": "care",
+                "long": "Cura"
+            },
+            "Caution": {
+                "abbr": "",
+                "long": "Cautela"
+            },
+            "Charm": {
+                "abbr": "char",
+                "long": "Fascino"
+            },
+            "Craft": {
+                "abbr": "",
+                "long": "Tecnica"
+            },
+            "Culture": {
+                "abbr": "",
+                "long": "Culture"
+            },
+            "Dexterity": {
+                "abbr": "",
+                "long": "Destrezza"
+            },
+            "Eloquence": {
+                "abbr": "eloq",
+                "long": "Eloquenza"
+            },
+            "Elusion": {
+                "abbr": "",
+                "long": "Elusione"
+            },
+            "Etiquette": {
+                "abbr": "etiq",
+                "long": "Etichetta"
+            },
+            "Exploration": {
+                "abbr": "",
+                "long": "Esplorazione"
+            },
+            "Fight": {
+                "abbr": "",
+                "long": "Combattimento"
+            },
+            "Grace": {
+                "abbr": "grac",
+                "long": "Grazia"
+            },
+            "Insight": {
+                "abbr": "",
+                "long": "Intuito"
+            },
+            "Investigation": {
+                "abbr": "",
+                "long": "Indagine"
+            },
+            "Shoot": {
+                "abbr": "",
+                "long": "Tiro"
+            },
+            "Strength": {
+                "abbr": "",
+                "long": "Forza"
+            },
+            "Will": {
+                "abbr": "",
+                "long": "Volantà"
+            },
+            "long": "Abilità"
+        },
+        "Stress": {
+            "long": "Stress"
+        },
+        "Success": {
+            "long": "Successo"
+        },
+        "TTT": {
+            "long": "Brutte Brutte Cose"
+        },
+        "Trait": {
+            "long": "Tratto"
+        },
+        "Traits": {
+            "long": "Tratti"
+        },
+        "Vocation": {
+            "long": "Vocazione"
+        },
+        "Wealth": {
+            "long": "Ricchezza"
+        },
+        "Weapons": {
+            "long": "Armi"
+        }
+    },
+    "TYPES": {
+        "Actor": {
+            "character": "Character",
+            "npc": "NPC"
+        },
+        "Item": {
+            "item": "Articolo",
+            "gadget": "Marchingegni",
+            "weapon": "Arma",
+            "move": "Manovra",
+            "contract": "Contratto",
+            "trait": "Tratto",
+            "profession": "Professione",
+            "vocation": "Vocazione",
+            "companion": "Compagno",
+            "folk": "Populo"
+        }
+    }
+  }

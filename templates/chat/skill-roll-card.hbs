@@ -1,0 +1,95 @@
+<div class="household chat-card item-card" data-actor-id="{{ actor.id }}">
+    <h2 style="text-align: center; border: none; width: 100%">
+        {{localize (concat "HOUSEHOLD." reroll_message ".long") }}&nbsp;
+        <span class="ability-name">{{ localize (concat "HOUSEHOLD.Skill." ability ".long") }}</span>
+    </h2>
+
+    {{#hasSuccess dices }}
+    <h3 class="header_og">{{localize "HOUSEHOLD.Matches.long" }}</h3>
+    <div style="display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    align-items: center; /* Vertical center alignment */
+    justify-content: center; /* Horizontal center alignment */
+    width: 230px; /* Set the limit of the container width */
+    border: 0px solid #000; /* Just to show the container bounds */
+    padding: 10px;
+
+  ">
+        {{#each dices as |dice value|}}
+        {{#when dice.success 'noteq' 'none'}}
+        {{#when dice.face 'noteq' give_up_face }}
+        {{> "systems/household/templates/chat/parts/dices/faces.html"
+        poll_difficulty=../poll_difficulty
+        currentpoll=../currentpoll
+        face=dice.face_display
+        locked=dice.locked
+        success=dice.success
+        give_up=../give_up }}
+        {{/when}}
+        {{/when}}
+        {{/each }}
+    </div>
+
+    {{/hasSuccess }}
+    {{#hasNoSuccess dices }}
+    <h3 class="header_ms">{{localize "HOUSEHOLD.RemainingDices.long"}}</h3>
+    <div style="display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    align-items: center; /* Vertical center alignment */
+    justify-content: center; /* Horizontal center alignment */
+    width: 230px; /* Set the limit of the container width */
+    border: 0px solid #000; /* Just to show the container bounds */
+    padding: 10px;">
+        {{#each dices as |dice value|}}
+        {{#when dice.success 'eq' 'none'}}
+        {{> "systems/household/templates/chat/parts/dices/faces.html" face=dice.face locked=dice.locked
+        success=dice.success }}
+        {{/when}}
+        {{/each }}
+    </div>
+
+    {{/hasNoSuccess }}
+    <div class="success-list" style="">
+        {{#each successes as |scc key|}}
+        <span class="roll-suc roll-suc-{{scc.label}}">{{ scc.value }}x {{localize (concat "HOUSEHOLD." scc.label
+            ".long")}}</span>
+        {{/each}}
+    </div>
+
+    <div class="roll-outcome">
+        {{#when outcome 'eq' 'LostSuccess'}}
+        <i class='fas fa-exclamation-triangle icon-lost_success'></i>
+        {{/when}}
+        {{#when outcome 'noteq' ''}}
+        <span class="outcome out-{{outcome}}" class="dice-roll-result {{outcome}}">
+            {{ localize (concat "HOUSEHOLD." outcome ".long") }}
+        </span>
+        {{#when outcome 'eq' 'success'}}
+        <i class="fa-solid fa-circle-check icon-success"></i>
+        {{/when}}
+        {{#when outcome 'eq' 'failure'}}
+        <i class="fa-solid fa-xmark icon-failure"></i>
+        {{/when}}
+        {{/when}}
+    </div>
+    {{#if reroll}}
+    <br />
+    <button class="reroll-button" data-rerolltype="normal" data-currentpoll="{{currentpoll}}" data-field="{{field}}"
+        data-skill="{{skill}}" data-mod="{{mod}}" data-current_success="{{poll_success}}"
+        data-poll_difficulty="{{poll_difficulty}}" data-dices="{{ dices_string }}">{{localize
+        "HOUSEHOLD.ReRoll.long"}}</button>
+    <button class="reroll-button" data-rerolltype="free" data-currentpoll="{{currentpoll}}" data-field="{{field}}"
+        data-skill="{{skill}}" data-mod="{{mod}}" data-current_success="{{poll_success}}"
+        data-poll_difficulty="{{poll_difficulty}}" data-dices="{{ dices_string }}">{{localize
+        "HOUSEHOLD.FreeReRoll.long"}}</button>
+    {{/if}}
+    {{#if allin}}
+    <br />
+    <button class="reroll-button" data-rerolltype="allin" data-currentpoll="{{currentpoll}}" data-field="{{field}}"
+        data-skill="{{skill}}" data-mod="{{mod}}" data-current_success="{{poll_success}}"
+        data-poll_difficulty="{{poll_difficulty}}" data-dices="{{ dices_string }}">{{localize
+        "HOUSEHOLD.AllIn.long"}}</button>
+    {{/if}}
+</div>

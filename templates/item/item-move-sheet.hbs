@@ -1,0 +1,69 @@
+<form class="{{cssClass}}" autocomplete="off">
+  <header class="sheet-header">
+    <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" />
+    <div class="header-fields">
+      <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="Name" /></h1>
+      <div class="grid grid-4col" style="width: 100px">
+        {{#each item.system.suits as | value key | }}
+        <div class="resource">
+          {{#if value }}
+          <input type="radio" class="input-hidden custom-edit" data-value="{{value}}" data-path="system.suits.{{key}}"
+            data-dtype="Boolean" id="choose-{{key}}-{{../item.id}}" />
+          <label for="choose-{{key}}-{{../item.id}}">
+            <img width="80" height="80" src="/systems/household/assets/sheet/{{key}}-filled.svg" alt="" />
+          </label>
+          {{else}}
+          <input type="radio" class="input-hidden custom-edit" data-value="{{value}}" data-path="system.suits.{{key}}"
+            data-dtype="Boolean" id="choose-{{key}}-{{../item.id}}" />
+          <label for="choose-{{key}}-{{../item.id}}">
+            <img style="width: 100%" src="/systems/household/assets/sheet/{{key}}.svg" alt="" />
+          </label>
+          {{/if}}
+        </div>
+        {{/each}}
+        <!--div class="resource">
+          {{#if item.system.exalsted}}
+          <input id="move-availability-{{item.d}}" class="input-hidden custom-edit" type="radio" max="2"
+            data-path="system.exalsted" data-value="{{item.system.exalsted}}" data-dtype="Boolean" />
+          <label class="label-stress stress-square-damage" for="move-availability-{{item.d}}">
+            <span style="margin-left: 20px; color: #000"></span>
+          </label>
+          {{else}}
+          <input id="move-availability-{{item.d}}" class="input-hidden custom-edit" type="radio" max="2"
+            data-path="system.exalsted" data-value="{{item.system.exalsted}}" data-dtype="Boolean" />
+          <label class="label-stress stress-square" for="move-availability-{{item.d}}">
+            <span style="margin-left: 20px; color: #000"></span>
+          </label>
+          {{/if}}
+        </div-->
+      </div>
+    </div>
+  </header>
+  {{!-- Sheet Tab Navigation --}}
+  <nav class="sheet-tabs tabs" data-group="primary">
+    <a class="item" data-tab="description">{{localize "HOUSEHOLD.SheetLabels.General"}}</a>
+    <!--a class="item" data-tab="attributes">Attributes</a-->
+  </nav>
+  {{!-- Sheet Body --}}
+  <section class="sheet-body">
+    {{!-- Description Tab --}}
+    <div class="tab" data-group="primary" data-tab="description">
+
+      <label class="resource-label my-title">{{localize "HOUSEHOLD.SheetLabels.Requirements"}}</label>
+      <input class="" type="text" name="system.requirements" value="{{system.requirements}}" data-dtype="String" />
+      {{!-- To render inline rolls in a TinyMCE editor, you need to pass the parent actor's (if any) roll data to the
+      rollData prop. --}}
+
+      <label class="resource-label my-title">{{localize "HOUSEHOLD.SheetLabels.Description"}}</label>
+      {{editor
+      item.system.description
+      target='system.description'
+      button=true
+      editable=editable
+      engine='prosemirror'
+      }}
+    </div>
+  </section>
+</form>
+
+{{log system}}

@@ -1,0 +1,57 @@
+<form class="{{cssClass}}" autocomplete="off">
+  <header class="sheet-header">
+    <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" />
+    <div class="header-fields">
+      <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="Name" /></h1>
+      
+        <div class="resource">
+          <label class="resource-label">{{localize "HOUSEHOLD.SheetLabels.Type"}}</label>
+          <input type="text" name="system.type" value="{{system.type}}" data-dtype="String" />
+        </div>
+
+    </div>
+  </header>
+
+  {{!-- Sheet Tab Navigation --}}
+  <nav class="sheet-tabs tabs" data-group="primary">
+    <a class="item" data-tab="description">{{localize "HOUSEHOLD.Consession.long"}}</a>
+    <a class="item" data-tab="attributes">{{localize "HOUSEHOLD.Counterpart.long"}}</a>
+  </nav>
+
+  {{!-- Sheet Body --}}
+  <section class="sheet-body">
+    {{!-- Description Tab --}}
+    <div class="tab" data-group="primary" data-tab="description">
+      <div class="resource">
+        <label class="resource-label">{{localize "HOUSEHOLD.SheetLabels.Name"}}</label>
+        <input type="text" name="system.concession.name" value="{{system.concession.name}}" data-dtype="String" />
+      </div>
+      {{editor
+        item.system.concession.details
+        target='system.concession.details'
+        button=true
+        editable=editable
+        engine='prosemirror'
+      }}
+
+    </div>
+
+    {{!-- Attributes Tab --}}
+    <div class="tab attributes" data-group="primary" data-tab="attributes">
+      {{!-- As you add new fields, add them in here! --}}
+      <div class="resource">
+        <label class="resource-label">{{localize "HOUSEHOLD.SheetLabels.Name"}}</label>
+        <input type="text" name="system.counterpart.name" value="{{system.counterpart.name}}" data-dtype="String" />
+      </div>
+     {{editor
+        item.system.counterpart.details
+        target='system.counterpart.details'
+        button=true
+        editable=editable
+        engine='prosemirror'
+      }}
+    </div>
+  </section>
+</form>
+
+{{log system}}

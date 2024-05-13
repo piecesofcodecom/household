@@ -1,0 +1,196 @@
+<form class="{{cssClass}} {{actor.type}} flexcol" autocomplete="off" 
+>
+
+  {{!-- Sheet Header --}}
+  <header class="sheet-header" >
+    <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" height="100" width="100"/>
+    <div class="header-fields">
+      <h1 class="charname"><input name="name" type="text" value="{{actor.name}}" placeholder="Name"/></h1>
+      {{!-- The grid classes are defined in scss/global/_grid.scss. To use,
+      use both the "grid" and "grid-Ncol" class where "N" can be any number
+      from 1 to 12 and will create that number of columns.  --}}
+      <div class="resources grid grid-4col">
+
+        {{!-- "flex-group-center" is also defined in the _grid.scss file
+        and it will add a small amount of padding, a border, and will
+        center all of its child elements content and text. --}}
+
+      <div class="resource flex-group-center">
+          <label for="system.attributes.level.value" class="resource-label">{{localize "HOUSEHOLD.Folk.long"}}</label>
+          <div class="resource-content flexrow flex-center flex-between">
+          <input type="text" name="system.folk" value="{{system.folk}}" data-dtype="String"/>
+          </div>
+        </div>
+
+        <div class="resource flex-group-center">
+          <label for="system.attributes.level.value" class="resource-label">{{localize "HOUSEHOLD.Homeland.long"}}</label>
+          <div class="resource-content flexrow flex-center flex-between">
+          <input type="text" name="system.homeland" value="{{system.homeland}}" data-dtype="String"/>
+          </div>
+        </div>
+
+        <div class="resource flex-group-center">
+          <label for="system.attributes.level.value" class="resource-label">{{localize "HOUSEHOLD.Profession.long"}}</label>
+          <div class="resource-content flexrow flex-center flex-between">
+          <input type="text" name="system.profession" value="{{system.profession}}" data-dtype="String"/>
+          </div>
+        </div>
+
+        <div class="resource flex-group-center">
+          <label for="system.attributes.level.value" class="resource-label">{{localize "HOUSEHOLD.Vocation.long"}}</label>
+          <div class="resource-content flexrow flex-center flex-between">
+          <input type="text" name="system.vocation" value="{{system.vocation}}" data-dtype="String"/>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  {{!-- Sheet Tab Navigation --}}
+  <nav class="sheet-tabs tabs" data-group="primary">
+    {{!-- Default tab is specified in actor-sheet.mjs --}}
+    <a class="item" data-tab="features">{{localize "HOUSEHOLD.SheetLabels.General"}}</a>
+    <a class="item" data-tab="others">{{localize "HOUSEHOLD.SheetLabels.TraitsConditions"}}</a>
+    <a class="item" data-tab="items">{{localize "HOUSEHOLD.SheetLabels.Equipaments"}}</a>
+    <a class="item" data-tab="description">{{localize "HOUSEHOLD.SheetLabels.Chapter"}}</a>
+    <!--a class="item" data-tab="spells">Spells</a>
+    <a class="item" data-tab="effects">Effects</a-->
+  </nav>
+
+  {{!-- Sheet Body --}}
+  <section class="sheet-body">
+
+    {{!-- Owned Features Tab --}}
+    <div class="tab features" data-group="primary" data-tab="features">
+      <section class="grid grid-3col">
+        <aside class="sidebar">
+
+          {{!-- The grid classes are defined in scss/global/_grid.scss. To use,
+          use both the "grid" and "grid-Ncol" class where "N" can be any number
+          from 1 to 12 and will create that number of columns.  --}}
+          <div class="fields flexcol" style="gap: 3px">
+            {{#each system.fields as |ability key|}}
+              <div class="field flexrow flex-group-center">
+                <label for="system.fields.{{key}}.value" class="resource-label flexlarge align-left field-title">
+                  {{ability.label}}
+                </label>
+                <div class="flexrow flex-group-right">
+                {{#numLoop 2}}
+                  {{#when  ability.value 'gteq' this}}
+                      <input id="{{key}}-{{this}}" class="input-hidden" type="radio" max="2" name="system.fields.{{key}}.value" value="{{this}}" data-dtype="Number"/>
+                      <label class="label-ability bg-{{ability.suit}}-filled" for="{{key}}-{{this}}">
+                      </label>
+                    {{else}}
+                      <input id="{{key}}-{{this}}" class="input-hidden" type="radio" max="2" name="system.fields.{{key}}.value" value="{{this}}" data-dtype="Number"/>
+                      <label class="label-ability bg-{{ability.suit}}" for="{{key}}-{{this}}">
+                      </label>
+                    {{/when}}
+                {{/numLoop}}
+                </div>
+              </div>
+              {{#each ../system.skills as |skill ky|}}
+
+                {{#when skill.field 'eq' key }}
+                  <div class="skill flexrow flex-group-center">
+                    <label for="system.skills.{{ky}}.value" class="resource-label message-item flexlarge align-left" 
+                    data-type="skill" data-field="{{key}}" data-key="{{ky}}" data-label="{{skill.label}}">{{skill.label}}</label>
+                    {{#numLoop 4}}
+                      {{#when  skill.value 'gteq' this}}
+                          <input id="{{ky}}-{{this}}" class="input-hidden" type="radio" max="2" name="system.skills.{{ky}}.value" value="{{this}}" data-dtype="Number"/>
+                          <label class="label-skill bg-{{ability.suit}}-filled" for="{{ky}}-{{this}}"></label>
+                      {{else}}
+                          <input id="{{ky}}-{{this}}" class="input-hidden" type="radio" max="2" name="system.skills.{{ky}}.value" value="{{this}}" data-dtype="Number"/>
+                          <label class="label-skill bg-{{ability.suit}}" for="{{ky}}-{{this}}"></label>
+                      {{/when}}
+                    {{/numLoop}}
+                  </div>
+                {{/when}}
+              {{/each}}
+              
+            {{/each}}
+          </div>
+        </aside>
+
+        {{!-- For the main features list, span the right two columns --}}
+        <section class="main grid-span-2">
+          {{!-- This is a Handlebars partial. They're stored in the `/parts` folder next to this sheet, and defined in module/helpers/templates.mjs --}}
+          {{> "systems/household/templates/actor/parts/actor-features.hbs"}}
+        </section>
+
+      </section>
+    </div>
+
+    {{!-- Owned Features Tab --}}
+    <div class="tab features" data-group="primary" data-tab="others">
+      {{> "systems/household/templates/actor/parts/actor-others.hbs"}}
+      </div>
+
+    {{!-- Biography Tab --}}
+    <div class="tab biography" data-group="primary" data-tab="description">
+      <h2 class="characteristic-title">{{localize "HOUSEHOLD.Memories.long"}}</h2>
+      <div class="resource">
+          <label class="resource-label">{{localize "HOUSEHOLD.Prologue.long"}}</label>
+          <input type="text" name="system.chapters.prologue" value="{{system.chapters.prologue}}" data-dtype="String" />
+        </div>
+        <div class="resource">
+          <label class="resource-label">{{localize "HOUSEHOLD.ChapterI.long"}}</label>
+          <input type="text" name="system.chapters.chapter1" value="{{system.chapters.chapter1}}" data-dtype="String" />
+        </div>
+        <div class="resource">
+          <label class="resource-label">{{localize "HOUSEHOLD.ChapterII.long"}}</label>
+          <input type="text" name="system.chapters.chapter2" value="{{system.chapters.chapter2}}" data-dtype="String" />
+        </div>
+        <div class="resource">
+          <label class="resource-label">{{localize "HOUSEHOLD.ChapterIII.long"}}</label>
+          <input type="text" name="system.chapters.chapter3_0" value="{{system.chapters.chapter3_0}}" data-dtype="String" />
+          <input type="text" name="system.chapters.chapter3_1" value="{{system.chapters.chapter3_1}}" data-dtype="String" />
+        </div>
+        <div class="resource">
+          <label class="resource-label">{{localize "HOUSEHOLD.ChapterIV.long"}}</label>
+          <input type="text" name="system.chapters.chapter4_0" value="{{system.chapters.chapter4_0}}" data-dtype="String" />
+          <input type="text" name="system.chapters.chapter4_1" value="{{system.chapters.chapter4_1}}" data-dtype="String" />
+        </div>
+        <div class="resource">
+          <label class="resource-label">{{localize "HOUSEHOLD.ChapterV.long"}}</label>
+          <input type="text" name="system.chapters.chapter5_0" value="{{system.chapters.chapter5_0}}" data-dtype="String" />
+          <input type="text" name="system.chapters.chapter5_1" value="{{system.chapters.chapter5_1}}" data-dtype="String" />
+        </div>
+        <h2 class="characteristic-title">{{localize "HOUSEHOLD.Experience.long"}}</h2>
+      {{!-- If you want TinyMCE editors to output inline rolls when rendered, you need to pass the actor's roll data to the rollData property. --}}
+      {{editor system.biography target="system.biography" rollData=rollData button=true owner=owner editable=editable}}
+    </div>
+
+    {{!-- Owned Items Tab --}}
+    
+    <div class="tab items" data-group="primary" data-tab="items">
+      <div class="flexrow flexcenter">
+        
+        <div class="flexcenter">
+          <h3 style="text-align: center" class="characteristic-description">{{localize "HOUSEHOLD.Wealth.long"}}</h3>
+        </div>
+        <div class="resource">
+          
+          <input type="text" name="system.wealth" value="{{system.wealth}}" data-dtype="String" />
+        </div>
+        
+        <div class="flexcenter"><h3 class="characteristic-description" style="text-align: center">{{localize "HOUSEHOLD.Coins.long"}}</h3></div>
+        
+        <div class="resource">
+          
+          <input type="text" name="system.coins" value="{{system.coins}}" data-dtype="String" />
+        </div>
+        
+      </div>
+      <h2 class="characteristic-title">{{localize "HOUSEHOLD.SheetLabels.General"}}</h2>
+       {{> "systems/household/templates/actor/parts/actor-items.hbs"}}
+      <h2 class="characteristic-title">{{localize "HOUSEHOLD.Weapons.long"}}</h2>
+       {{> "systems/household/templates/actor/parts/actor-weapons.hbs"}}
+      <h2 class="characteristic-title">{{localize "HOUSEHOLD.Gadgets.long"}}</h2>
+       {{> "systems/household/templates/actor/parts/actor-gadgets.hbs"}}
+    </div>
+  </section>
+</form>
+
+{{log system}}
+

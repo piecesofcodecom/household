@@ -1,0 +1,116 @@
+<div class="household chat-card item-card" data-actor-id="{{ actor.id }}">
+     
+    <h2 class="ability-name">{{ skill.label }}</span>
+        <div style="display: flex;" >
+        {{#numLoop skill.value}}
+        <!--i style="color: {{../skill.color}}" class="fa-solid {{../skill.icon}}"></i-->
+        <img 
+            style="margin-left: 5px; width: 20px; border: 0;"
+            src="/systems/household/assets/sheet/{{../skill.suit}}-filled.svg" 
+            alt="{{this}}" />
+        {{/numLoop}}
+        </div>
+    </h2>
+    <h3 class="header_og">{{ localize "HOUSEHOLD.ChooseField.long"}}</h3>
+    
+    <div style="display: flex; justify-content: center;align-items: center; gap: 20px;">
+    {{#each fields as |fd key|}}
+        {{#when key 'eq' ../field}}
+            <input 
+            type="radio"  
+            class="input-hidden field-option field field-{{key}}" 
+            data-key="{{key}}" 
+            id="choose-{{key}}-{{../actor.id}}-{{../timestamp}}" 
+            name="field-{{../timestamp}}" 
+            value="{{key}}" checked="checked" />
+            <label for="choose-{{key}}-{{../actor.id}}-{{../timestamp}}">
+            <img 
+                src="/systems/household/assets/sheet/{{key}}.svg" 
+                alt="" />
+            </label>
+        {{else}}
+        <input 
+            type="radio"  
+            class="input-hidden field-option field field-{{key}}" 
+            data-key="{{key}}" 
+            id="choose-{{key}}-{{../actor.id}}-{{../timestamp}}" 
+            name="field-{{../timestamp}}" 
+            value="{{key}}" />
+            <label for="choose-{{key}}-{{../actor.id}}-{{../timestamp}}">
+            <img 
+                src="/systems/household/assets/sheet/{{fd.suit}}.svg" 
+                alt="" />
+            </label>
+        {{/when}}   
+    {{/each}}
+    </div>
+    <h3 class="header_og">{{ localize "HOUSEHOLD.Difficulty.long"}}</h3>
+        
+        <div style="display: flex; justify-content: center;align-items: center; gap: 2px;        ">
+            <div>
+                <h4>{{ localize "HOUSEHOLD.Basic.long"}}</h4>
+                <input id="difficulty-basic-{{../timestamp}}" 
+                class="difficulty-option option-empty" type="text" 
+                data-key="2" data-label="basic" name="Basic" placeholder="0" >
+            </div>
+            <div>
+                <h4>{{ localize "HOUSEHOLD.Critical.long"}}</h4>
+                <input id="difficulty-critical-{{../timestamp}}" class="difficulty-option option-empty" type="text" 
+                data-key="3" data-label="critical" name="critical" placeholder="0" >
+            </div>
+            <div>
+                <h4>{{ localize "HOUSEHOLD.Extreme.long"}}</h4>
+                <input id="difficulty-extreme-{{../timestamp}}" class="difficulty-option option-empty" type="text" 
+                data-key="4" data-label="extreme" name="extreme" placeholder="0" >
+            </div>
+            <div>
+                <h4>{{ localize "HOUSEHOLD.Impossible.long"}}</h4>
+                <input id="difficulty-impossible-{{../timestamp}}" class="difficulty-option option-empty" type="text" 
+                data-key="5" data-label="impossible" name="impossible" placeholder="0" >
+            </div>
+        <!--div style="display: flex;">
+        <input list="difficulty_list" name="extreme" placeholder="Extreme" >
+        <input list="difficulty_list" name="impossible" placeholder="Impossible" >
+        <datalist id="difficulty_list">
+            <option value="0">
+            <option value="1">
+            <option value="2">
+            <option value="3">
+            <option value="4">
+            <option value="5">
+        </datalist-->
+        </div>
+    <br />
+    <h3 class="header_og">{{ localize "HOUSEHOLD.ApplyModifier.long"}}</h3>
+    <div style="
+  left: 50%;
+  top: 50%;
+  display: table;">
+
+    <input type="radio" class="modifier-option" data-key="" id="minus-three-{{timestamp}}" name="modifier-{{timestamp}}" value="-3" >
+    <label class="mod-label-minus" for="minus-three-{{timestamp}}">-3</label>
+
+    <input type="radio" class="modifier-option" data-key="" id="minus-two-{{timestamp}}" name="modifier-{{timestamp}}" value="-2" >
+    <label class="mod-label-minus" for="minus-two-{{timestamp}}">-2</label>
+
+    <input type="radio" class="modifier-option" data-key="" id="minus-one-{{timestamp}}" name="modifier-{{timestamp}}" value="-1" >
+    <label class="mod-label-minus" for="minus-one-{{timestamp}}">-1</label>
+
+    <input type="radio" class="modifier-option" data-key="" id="zero-{{timestamp}}" checked="checked" name="modifier-{{timestamp}}" value="0" >
+    <label class="mod-label" for="zero-{{timestamp}}">0</label>
+
+    <input type="radio" class="modifier-option" data-key="" id="plus-one-{{timestamp}}" name="modifier-{{timestamp}}" value="1" >
+    <label class="mod-label-plus" for="plus-one-{{timestamp}}">+1</label>
+
+    <input type="radio" class="modifier-option" data-key="" id="plus-two-{{timestamp}}" name="modifier-{{timestamp}}" value="2" >
+    <label class="mod-label-plus" for="plus-two-{{timestamp}}">+2</label>
+
+    <input type="radio" class="modifier-option" data-key="" id="plus-three-{{timestamp}}" name="modifier-{{timestamp}}" value="3" >
+    <label class="mod-label-plus" for="plus-three-{{timestamp}}">+3</label>
+    
+    </div>
+    <br />
+    <button id="roll-button" data-type="skill" data-key="{{key}}" data-label="{{key}}" class="roll-ability">
+        {{ localize "HOUSEHOLD.RollAbility.long"}}
+    </button>
+</div>

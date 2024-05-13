@@ -1,0 +1,37 @@
+<form class="{{cssClass}}" autocomplete="off">
+  <header class="sheet-header">
+    <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" />
+    <div class="header-fields">
+      <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="Name" /></h1>
+      <div class="grid ">
+        <div class="resource">
+           <label class="resource-label">{{localize "HOUSEHOLD.Contract.long"}}</label>
+          <input type="text" name="system.contract" value="{{system.contract}}" data-dtype="String" />
+      </div>
+    </div>
+    </div>
+  </header>
+
+  {{!-- Sheet Tab Navigation --}}
+  <nav class="sheet-tabs tabs" data-group="primary">
+    <a class="item" data-tab="description">{{localize "HOUSEHOLD.SheetLabels.Description"}}</a>
+  </nav>
+
+  {{!-- Sheet Body --}}
+  <section class="sheet-body">
+    {{!-- Description Tab --}}
+    <div class="tab" data-group="primary" data-tab="description">
+      {{editor
+        item.system.description
+        target='system.description'
+        button=true
+        editable=editable
+        engine='prosemirror'
+      }}
+    </div>
+    
+  </section>
+</form>
+
+
+{{log system}}

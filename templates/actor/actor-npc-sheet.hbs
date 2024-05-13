@@ -1,0 +1,123 @@
+<form class="{{cssClass}} {{actor.type}} flexcol" autocomplete="off" >
+
+  {{!-- Sheet Header --}}
+  <header class="sheet-header">
+    <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" height="100" width="100" />
+    <div class="header-fields">
+      <h1 class="charname"><input name="name" type="text" value="{{actor.name}}" placeholder="Name" /></h1>
+      {{!-- The grid classes are defined in scss/global/_grid.scss. To use,
+      use both the "grid" and "grid-Ncol" class where "N" can be any number
+      from 1 to 12 and will create that number of columns. --}}
+      <div class="resources grid grid-2col">
+
+        {{!-- "flex-group-center" is also defined in the _grid.scss file
+        and it will add a small amount of padding, a border, and will
+        center all of its child elements content and text. --}}
+        <div class="resource flex-group-center">
+          <!--label for="system.health.value" class="resource-label">Threat</label-->
+          <div class="resource-content flexrow flex-center flex-between">
+            {{#when actor.system.threat.level 'lteq' 1}}
+            <h4  class="characteristic-description" style="text-align: center">{{localize "HOUSEHOLD.BasicOpponent.long"}}</h4>
+            {{else}}
+            <h4 class="characteristic-description" style="text-align: center">{{localize "HOUSEHOLD.CriticalOpponent.long"}}</h4>
+            {{/when}}
+
+          </div>
+        </div>
+
+        <div class="resource flex-group-center">
+          <div class="">
+            {{#numLoop 5}}
+              {{#when ../actor.system.threat.level 'gteq' this }}
+                {{#when ../actor.system.threat.level 'eq' this }}
+                  <input type="radio" class="input-hidden" id="{{../actor.id}}-threat_{{this}}" name="system.threat.level" value="{{reduceBy this 1}}" data-dtype="Number" >
+                {{else}}
+                  <input type="radio" class="input-hidden" id="{{../actor.id}}-threat_{{this}}" name="system.threat.level" value="{{this}}" data-dtype="Number" >
+                {{/when}}
+                 <label  for="{{../actor.id}}-threat_{{this}}">
+                  <i style="font-size: 1.5em; margin: 2px; color: #612877" class="fa-solid fa-spider"></i>
+                </label>
+              {{else}}
+                <input type="radio" class="input-hidden" id="{{../actor.id}}-threat_{{this}}" name="system.threat.level" value="{{this}}" data-dtype="Number" >
+                  <label for="{{../actor.id}}-threat_{{this}}">
+                  <i style="font-size: 1.5em; margin: 2px; color: #612877" class="fa-thin fa-spider"></i>
+                </label>
+              {{/when}}
+
+            {{/numLoop}}
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  {{!-- Sheet Tab Navigation --}}
+  <nav class="sheet-tabs tabs" data-group="primary">
+    {{!-- Default tab is specified in actor-sheet.mjs --}}
+    <a class="item" data-tab="description">{{localize "HOUSEHOLD.SheetLabels.Description"}}</a>
+    <a class="item" data-tab="items">{{localize "HOUSEHOLD.SheetLabels.Equipaments"}}</a>
+    <a class="item" data-tab="effects">{{localize "HOUSEHOLD.Actions.long"}}</a>
+  </nav>
+
+  {{!-- Sheet Body --}}
+  <section class="sheet-body">
+   
+
+
+    {{!-- Biography Tab --}}
+    <div class="tab biography" data-group="primary" data-tab="description">
+      {{> "systems/household/templates/actor/parts/npc-main.hbs"}}
+      </div>
+      
+
+    {{!-- Owned Items Tab --}}
+    <div class="tab items" data-group="primary" data-tab="items">
+      <h2 class="characteristic-title">{{localize "HOUSEHOLD.SheetLabels.General"}}</h2>
+       {{> "systems/household/templates/actor/parts/actor-items.hbs"}}
+      <h2 class="characteristic-title">{{localize "HOUSEHOLD.Weapons.long"}}</h2>
+       {{> "systems/household/templates/actor/parts/actor-weapons.hbs"}}
+      <h2 class="characteristic-title">{{localize "HOUSEHOLD.Gadgets.long"}}</h2>
+       {{> "systems/household/templates/actor/parts/actor-gadgets.hbs"}}
+    </div>
+
+    {{!-- Active Effects Tab --}}
+    <div class="tab effects" data-group="primary" data-tab="effects">
+      <div class="flexcol"> 
+        <div class="resource">
+              <label> <a class="rollable" data-type="action"><h2 class="characteristic-description">{{localize "HOUSEHOLD.RollActions.long"}}</h2></a></label>
+          </div>
+        <div class="resource">
+              <label class="resource-label"><h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.ActionI.long"}}</h2></label>
+              <input type="text" name="system.actions.action_1" value="{{system.actions.action_1}}" data-dtype="String" />
+          </div>
+
+          <div class="resource">
+              <label class="resource-label"><h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.ActionII.long"}}</h2></label>
+              <input type="text" name="system.actions.action_2" value="{{system.actions.action_2}}" data-dtype="String" />
+          </div>
+
+          <div class="resource">
+              <label class="resource-label"><h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.ActionIII.long"}}</h2></label>
+              <input type="text" name="system.actions.action_3" value="{{system.actions.action_3}}" data-dtype="String" />
+          </div>
+
+          <div class="resource">
+              <label class="resource-label"><h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.ActionIV.long"}}</h2></label>
+              <input type="text" name="system.actions.action_4" value="{{system.actions.action_4}}" data-dtype="String" />
+          </div>
+
+          <div class="resource">
+              <label class="resource-label"><h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.ActionV.long"}}</h2></label>
+              <input type="text" name="system.actions.action_5" value="{{system.actions.action_5}}" data-dtype="String" />
+          </div>
+
+          <div class="resource">
+              <label class="resource-label"><h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.ActionVI.long"}}</h2></label>
+              <input type="text" name="system.actions.action_6" value="{{system.actions.action_6}}" data-dtype="String" />
+          </div>
+      </div>
+    </div>
+
+  </section>
+</form>
