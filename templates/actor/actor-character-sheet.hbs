@@ -15,34 +15,25 @@
         and it will add a small amount of padding, a border, and will
         center all of its child elements content and text. --}}
 
-      <div class="resource flex-group-center">
-          <label for="system.attributes.level.value" class="resource-label">{{localize "HOUSEHOLD.Folk.long"}}</label>
-          <div class="resource-content flexrow flex-center flex-between">
-          <input type="text" name="system.folk" value="{{system.folk}}" data-dtype="String"/>
-          </div>
+        <div class="resource__group">
+            <input class="form__field" type="text" name="system.folk" value="{{system.folk}}" placeholder="" data-dtype="String"/>
+            <label class="form__label" for="system.attributes.level.value" >{{localize "HOUSEHOLD.Folk.long"}}</label>
         </div>
 
-        <div class="resource flex-group-center">
-          <label for="system.attributes.level.value" class="resource-label">{{localize "HOUSEHOLD.Homeland.long"}}</label>
-          <div class="resource-content flexrow flex-center flex-between">
-          <input type="text" name="system.homeland" value="{{system.homeland}}" data-dtype="String"/>
-          </div>
+        <div class="resource__group">
+            <input class="form__field" type="text" name="system.homeland" value="{{system.homeland}}"  placeholder="" data-dtype="String"/>
+            <label class="form__label" for="system.attributes.level.value" class="resource-label">{{localize "HOUSEHOLD.Homeland.long"}}</label>
         </div>
 
-        <div class="resource flex-group-center">
-          <label for="system.attributes.level.value" class="resource-label">{{localize "HOUSEHOLD.Profession.long"}}</label>
-          <div class="resource-content flexrow flex-center flex-between">
-          <input type="text" name="system.profession" value="{{system.profession}}" data-dtype="String"/>
-          </div>
+        <div class="resource__group">
+            <input class="form__field" type="text" name="system.profession" value="{{system.profession}}"  placeholder="" data-dtype="String"/>
+            <label class="form__label" for="system.attributes.level.value" class="resource-label">{{localize "HOUSEHOLD.Profession.long"}}</label>
         </div>
 
-        <div class="resource flex-group-center">
-          <label for="system.attributes.level.value" class="resource-label">{{localize "HOUSEHOLD.Vocation.long"}}</label>
-          <div class="resource-content flexrow flex-center flex-between">
-          <input type="text" name="system.vocation" value="{{system.vocation}}" data-dtype="String"/>
-          </div>
+        <div class="resource__group">
+            <input class="form__field" type="text" name="system.vocation" value="{{system.vocation}}"  placeholder="" data-dtype="String"/>
+            <label class="form__label" for="system.attributes.level.value" class="resource-label">{{localize "HOUSEHOLD.Vocation.long"}}</label>
         </div>
-
       </div>
     </div>
   </header>
@@ -183,11 +174,14 @@
         
       </div>
       <h2 class="characteristic-title">{{localize "HOUSEHOLD.SheetLabels.General"}}</h2>
-       {{> "systems/household/templates/actor/parts/actor-items.hbs"}}
+       {{> "systems/household/templates/actor/parts/actor-list-items.hbs" items=gear type='equipament'}}
+      
       <h2 class="characteristic-title">{{localize "HOUSEHOLD.Weapons.long"}}</h2>
-       {{> "systems/household/templates/actor/parts/actor-weapons.hbs"}}
+       
+       {{> "systems/household/templates/actor/parts/actor-list-items.hbs" items=weapons type='weapon'}}
+
       <h2 class="characteristic-title">{{localize "HOUSEHOLD.Gadgets.long"}}</h2>
-       {{> "systems/household/templates/actor/parts/actor-gadgets.hbs"}}
+      {{> "systems/household/templates/actor/parts/actor-list-items.hbs" items=gadgets type='equipament'}}
     </div>
   </section>
 </form>

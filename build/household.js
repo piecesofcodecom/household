@@ -1165,15 +1165,23 @@ class HouseholdActorSheet extends ActorSheet {
       const path = dataset.path;
       const label = dataset.label;
       const current_value = dataset.value;
+      let html = `<input id="newvalue" value="${current_value}">`;
+      if (label.toLowerCase() === 'stress') {
+        const crucial_boxes = dataset.crucial_boxes;
+        html = `Total Stress Boxes ${html}<br />Crucial Box positions: <input id="crucial_boxes" value="${crucial_boxes}" placeholder="example: 3,6,8">`;
+      }
+      
       return Dialog.wait({
         title: `Edit ${label}`,
-        content: `<input id="newvalue" value="${current_value}">`,
+        content: html,
         buttons: {
           button1: {
             label: "Save",
             callback: (html) => {
               const new_value = html.find("input#newvalue").val();
               this.actor.update({[path]: new_value});
+              const crucial_boxes = html.find("input#crucial_boxes").val();
+              this.actor.update({'system.crucial_boxes': crucial_boxes});
 
              },
             icon: `<i class="fas fa-save"></i>`
@@ -1492,14 +1500,7 @@ const preloadHandlebarsTemplates = async function () {
     'systems/household/templates/actor/parts/actor-features.hbs',
     'systems/household/templates/actor/parts/actor-others.hbs',
     'systems/household/templates/actor/parts/actor-list-items.hbs',
-    'systems/household/templates/actor/parts/actor-items.hbs',
-    'systems/household/templates/actor/parts/actor-weapons.hbs',
-    'systems/household/templates/actor/parts/actor-gadgets.hbs',
-    'systems/household/templates/actor/parts/actor-moves.hbs',
-    'systems/household/templates/actor/parts/actor-contracts.hbs',
-    'systems/household/templates/actor/parts/actor-effects.hbs',
     // Item partials
-    'systems/household/templates/item/parts/item-effects.hbs',
     // Chat parts
     'systems/household/templates/chat/parts/dices/faces.html',
     // NPC parts
@@ -1580,11 +1581,10 @@ Handlebars.registerHelper('doCheck', function (data) {
 
 Handlebars.registerHelper('getSuitFromField', function (raw_data) {
   const field = raw_data.trim().toLowerCase();
-  if(field === 'society') return 'heart';
-  if(field === 'academia') return 'diamond';
-  if(field === 'society') return 'heart';
-  if(field === 'war') return 'club';
-  if(field === 'street') return 'spade';
+  if(field === 'society' || field === 'hearts') return 'heart';
+  if(field === 'academia' || field === 'diamonds') return 'diamond';
+  if(field === 'war' || field === 'clubs') return 'club';
+  if(field === 'street' || field === 'spades') return 'spade';
   return "empty-set";
 });
 
@@ -1598,14 +1598,15 @@ Handlebars.registerHelper('getWeaponTypeIcon', function (raw_data) {
 
 Handlebars.registerHelper('getFieldColor', function (raw_data) {
   const field = raw_data.trim().toLowerCase();
-  if(field === 'society') return 'red';
-  if(field === 'academia') return 'blue';
-  if(field === 'war') return 'green';
-  if(field === 'street') return 'black';
+  if(field === 'society' || field === 'hearts') return 'red';
+  if(field === 'academia' || field === 'diamonds') return 'blue';
+  if(field === 'war' || field === 'clubs') return 'green';
+  if(field === 'street' || field === 'spades') return 'black';
   return "red";
 });
 
 Handlebars.registerHelper('doCheckIf', function (operand_1, operator, operand_2) {
+  
   let operators = {                     //  {{#when <operand1> 'eq' <operand2>}}
     'eq': (l,r) => l == r,              //  {{/when}}
     'noteq': (l,r) => l != r,
@@ -1615,7 +1616,8 @@ Handlebars.registerHelper('doCheckIf', function (operand_1, operator, operand_2)
     'lteq': (l,r) => ((+l) < (+r)) || (l == r),        //               gt
     'or': (l,r) => l || r,                             // {{else}}
     'and': (l,r) => l && r,                            //               lt
-    '%': (l,r) => (l % r) === 0                        // {{/when}}
+    '%': (l,r) => (l % r) === 0,
+    'in': (l,r) => r.split(',').includes(l)                        // {{/when}
   };
   
   let result = operators[operator](operand_1,operand_2);
@@ -1645,7 +1647,8 @@ Handlebars.registerHelper("when", function(operand_1, operator, operand_2, optio
     'lteq': (l,r) => ((+l) < (+r)) || (l == r),        //               gt
     'or': (l,r) => l || r,                             // {{else}}
     'and': (l,r) => l && r,                            //               lt
-    '%': (l,r) => (l % r) === 0                        // {{/when}}
+    '%': (l,r) => (l % r) === 0,
+    'in': (l,r) => r.split(',').includes(String(l))                          // {{/when}}
   };
   
   let result = operators[operator](operand_1,operand_2);

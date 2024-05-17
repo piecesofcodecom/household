@@ -618,6 +618,11 @@
   background-color: #ba5858;
 }
 
+/** LIST ITEMS
+
+
+*/
+
 
 /* SELECT DROPDOWN
 
@@ -951,6 +956,69 @@ SELECT DROPDOWN END
   cursor: pointer;
 }
 
+.sheet .resource__group {
+  position: relative;
+  padding: 15px 0 0;
+  margin-top: 10px;
+  width: 100%;
+}
+
+
+.sheet .form__field {
+  font-family: inherit;
+  width: 100%;
+  border: 0;
+  border-bottom: 2px solid #000;
+  outline: 0;
+  font-size: 1rem;
+  color: #030303;
+  padding: 7px 0;
+  background: transparent;
+  transition: border-color 0.2s;
+
+  &::placeholder {
+    color: transparent;
+  }
+
+  &:placeholder-shown ~ .form__label {
+    font-size: 0.6rem;
+    color: #000;
+    cursor: text;
+    top: 18px;
+  }
+}
+
+.sheet .form__label {
+  position: absolute;
+  top: 0;
+  display: block;
+  transition: 0.2s;
+  font-size: 1rem;
+  color: #646363;
+  font-weight:700;    
+}
+
+.sheet .form__field:focus {
+  ~ .form__label {
+    position: absolute;
+    top: 0;
+    display: block;
+    transition: 0.2s;
+    font-size: 1rem;
+    color: #000000;
+    font-weight:700;    
+  }
+  padding-bottom: 6px;  
+  font-weight: 700;
+  border-width: 3px;
+  border-image: linear-gradient(to right, #000000,#b5b6b5);
+  border-image-slice: 1;
+}
+/* reset input */
+.sheet .form__field{
+  &:required,&:invalid { box-shadow:none; }
+}
+
 
 /** ITEM LIST
 
@@ -959,24 +1027,26 @@ SELECT DROPDOWN END
   border-color: #f2bebb;
   /*color: rgba(255, 255, 255, 0.9);*/
   /*background: #878d99;*/
-  border: 1px solid;
+  border-bottom: 1px solid;
   cursor: pointer;
   transition: background 0.3s;
   border-radius: 4px;
-  min-height: 8px;
+  /*min-height: 8px;*/
+  max-height: 250px;
+  overflow-y: scroll;
 
   transform-origin: top center;
   transform: rotate(0.1deg);
   transition: all 0.3s;
-   background-color:rgba(0, 0, 0, 0.1);
+   /*background-color:rgba(0, 0, 0, 0.1);*/
 }
 .sheet details:hover {
-  border-color: #878d99;
+  /*border-color: #878d99;*/
   /*color: rgba(255, 255, 255, 0.6);*/
 }
 .sheet details:active {
   /*color: rgba(255, 255, 255, 0.9);*/
-  border-color: #6d7380;
+  /*border-color: #6d7380;*/
 }
 .sheet details > summary {
   list-style: none;

@@ -1,46 +1,85 @@
 {{#each items as |item id|}}
 <details class='item' data-item-id='{{item._id}}' class="default square">
-		<summary>
-      <img style="border: 0px;" class="item-summary-title"
-              src='{{item.img}}'
-              title='{{item.name}}'
-              width='24'
-              height='24'
-            />
-      <span class="item-summary-title" style="opacity: 1.0;">{{item.name}}</span>
-       {{#each item.system.suits as | value key|}}
-          {{#if value}}
-            <img style="vertical-align:middle; border: 0px" width="12" height="12" src="/systems/household/assets/sheet/{{key}}-filled.svg" />
-            {{/if}}
-        {{/each}}
-          <label><a style="float:right; margin-left: 5px;" 
-            class='item-control item-delete'
-            title='{{localize "DOCUMENT.Delete" type='Item'}}'
-          >
-            <i class='fas fa-trash'></i>
-          </a></label>
-          <label><a style=" float:right; margin-left: 5px;" 
-            class='item-control item-edit'
-            title='{{localize "DOCUMENT.Update" type='Item'}}'
-          >
-            <i class='fas fa-edit'></i>
-          </a></label>
-          {{#when type 'eq' 'move' }}
-            {{#if item.system.exalsted}}
-              <input id="move-{{item._id}}" class="input-hidden custom-edit" type="radio" max="2"
-              data-object="item" data-id="{{item._id}}" data-path="system.exalsted" data-value="{{item.system.exalsted}}" data-dtype="Boolean"/>
-              <label class='item-control' style="float:right; margin-left: 5px; margin-right: 15px"  class="" for="move-{{item._id}}" >
-                <i style="color: red" class="fa-regular fa-toggle-large-off"></i>
-              </label>
-            {{else}}
-              <input id="move-{{item._id}}" class="input-hidden custom-edit" type="radio" max="2" 
-              data-object="item" data-id="{{item._id}}" data-path="system.exalsted" data-value="{{item.system.exalsted}}" data-dtype="Boolean"/>
-              <label class='item-control' style="float:right; margin-left: 5px;margin-right: 15px" class=" " for="move-{{item._id}}" >
-                <i style="color: green" class="fa-regular fa-toggle-large-on"></i>
-              </label>
-            {{/if}}
-          {{/when}}
-    </summary>
-		{{{item.system.description}}}
-	</details>
-  {{/each}}
+  <summary>
+    <img style="border: 0px;" class="item-summary-title" src='{{item.img}}' title='{{item.name}}' width='24'
+      height='24' />
+    <span class="item-summary-title" style="opacity: 1.0;">{{item.name}}</span>
+    {{#each item.system.suits as | value key|}}
+      {{#if value}}
+        <i style="color: {{getFieldColor key}}" class="fa-solid fa-{{getSuitFromField key}}"></i>
+        <!--img style="vertical-align:middle; border: 0px" width="12" height="12"
+          src="/systems/household/assets/sheet/{{key}}-filled.svg" /-->
+      {{/if}}
+    {{/each}}
+    <label>
+      <a style="float:right; margin-left: 5px;" class='item-control item-delete'
+        title='{{localize "DOCUMENT.Delete" type=' Item'}}'>
+        <i class='fas fa-trash'></i>
+      </a>
+    </label>
+    <label><a style=" float:right; margin-left: 5px;" class='item-control item-edit'
+        title='{{localize "DOCUMENT.Update" type=' Item'}}'>
+        <i class='fas fa-edit'></i>
+      </a>
+    </label>
+    {{#if item.system.price}}
+      <label class='' style="float:right; margin-left: 5px;margin-right: 15px">
+        {{item.system.price}}
+        <i style="color: #d49d08" class="fa-solid fa-coins"></i>
+      </label>
+    {{/if}}
+    {{#if item.system.type}}
+      <label style="float:right; margin-left: 5px;margin-right: 5px">
+        <i class="fa-regular {{getWeaponTypeIcon item.system.type}}"></i>
+      </label>
+    {{/if}}
+    {{#if item.system.field}}
+      <label style="float:right; margin-left: 5px;margin-right: 5px">
+        <i style="color: {{getFieldColor item.system.field}}" class="fa-solid fa-{{getSuitFromField item.system.field}}"></i>
+      </label>
+    {{/if}}
+    {{#when type 'eq' 'move' }}
+      {{#if item.system.exalsted}}
+        <input id="move-{{item._id}}" class="input-hidden custom-edit" type="radio" max="2" data-object="item"
+          data-id="{{item._id}}" data-path="system.exalsted" data-value="{{item.system.exalsted}}" data-dtype="Boolean" />
+        <label class='item-control' style="float:right; margin-left: 5px; margin-right: 15px" class=""
+          for="move-{{item._id}}">
+          <i style="color: red" class="fa-regular fa-toggle-large-off"></i>
+        </label>
+      {{else}}
+        <input id="move-{{item._id}}" class="input-hidden custom-edit" type="radio" max="2" data-object="item"
+          data-id="{{item._id}}" data-path="system.exalsted" data-value="{{item.system.exalsted}}" data-dtype="Boolean" />
+        <label class='item-control' style="float:right; margin-left: 5px;margin-right: 15px" class=" "
+          for="move-{{item._id}}">
+          <i style="color: green" class="fa-regular fa-toggle-large-on"></i>
+        </label>
+      {{/if}}
+    {{/when}}
+  </summary>
+  <br />
+  {{#if item.system.requirements}}
+    <b>{{item.system.requirements}}</b><br /><br />
+  {{/if}}
+  {{#if item.system.trait}}
+    <b>{{item.system.trait}}</b><br /><br />
+  {{/if}}
+  {{#when type 'eq' 'contract' }}
+    <div class="flexrow">
+      <div>
+        <div class="">
+          <h4 style=" font-weight: bold; text-align: center">{{localize "HOUSEHOLD.Concession.long"}}: {{item.system.concession.name}}</h4>
+        </div>
+        <div>{{{item.system.concession.details}}}</div>
+      </div>
+      <div>
+        <div>
+          <h4 style=" font-weight: bold; text-align: center">{{localize "HOUSEHOLD.Counterpart.long"}}: {{item.system.counterpart.name}}</h4>
+        </div>
+        <div>{{{item.system.counterpart.details}}}</div>
+      </div>
+    </div>
+  {{else}}
+	  {{{item.system.description}}} <br />
+  {{/when}}
+</details>
+{{/each}}

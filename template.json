@@ -179,10 +179,7 @@
     },
     "npc": {
       "templates": ["base"],
-      "cr": 0,
-      "threat": {
-        "level": 0
-      },
+      "crucial_boxes": "",
       "actions": {
         "action_1": "",
         "action_2": "",

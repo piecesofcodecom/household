@@ -74,11 +74,13 @@
     {{!-- Owned Items Tab --}}
     <div class="tab items" data-group="primary" data-tab="items">
       <h2 class="characteristic-title">{{localize "HOUSEHOLD.SheetLabels.General"}}</h2>
-       {{> "systems/household/templates/actor/parts/actor-items.hbs"}}
+       {{> "systems/household/templates/actor/parts/actor-list-items.hbs" items=gears type='equipament'}}
+      
       <h2 class="characteristic-title">{{localize "HOUSEHOLD.Weapons.long"}}</h2>
-       {{> "systems/household/templates/actor/parts/actor-weapons.hbs"}}
+       {{> "systems/household/templates/actor/parts/actor-list-items.hbs" items=weapons type='weapons'}}
+      
       <h2 class="characteristic-title">{{localize "HOUSEHOLD.Gadgets.long"}}</h2>
-       {{> "systems/household/templates/actor/parts/actor-gadgets.hbs"}}
+       {{> "systems/household/templates/actor/parts/actor-list-items.hbs" items=gadgets type='equipament'}}
     </div>
 
     {{!-- Active Effects Tab --}}

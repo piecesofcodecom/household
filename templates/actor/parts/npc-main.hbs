@@ -2,7 +2,7 @@
 the rollData property. --}}
 <h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.Stress.long"}}
     <a style=" float:right; margin-left: 5px;" class='npc-popup-item-edit' title='' data-dtype="Number"
-        data-path="system.stress.value" data-label="Stress" data-value="{{actor.system.stress.value}}">
+        data-path="system.stress.value" data-label="Stress" data-crucial_boxes="{{actor.system.crucial_boxes}}" data-value="{{actor.system.stress.value}}">
         <i class='fas fa-edit'></i>
     </a>
 </h2>
@@ -13,19 +13,20 @@ the rollData property. --}}
   padding: 0.5rem 0.5rem;
   vertical-align: middle;">
         {{#when ../system.stress.current 'gteq' this}}
-        {{#multipleOf this 5}}
-        <input id="stress-{{this}}-{{../actor.id}}" class="input-hidden" type="radio" max="2"
-            name="system.stress.current" value="{{reduceBy this 1}}" data-dtype="Number" />
-        <label class="label-stress stress-rosette-damage" for="stress-{{this}}-{{../actor.id}}">
-        </label>
+        {{#when this 'in' ../system.crucial_boxes}}
+        
+            <input id="stress-{{this}}-{{../actor.id}}" class="input-hidden" type="radio" max="2"
+                name="system.stress.current" value="{{reduceBy this 1}}" data-dtype="Number" />
+            <label class="label-stress stress-rosette-damage" for="stress-{{this}}-{{../actor.id}}">
+            </label>
         {{else}}
-        <input id="stress-{{this}}-{{../actor.id}}" class="input-hidden" type="radio" max="2"
-            name="system.stress.current" value="{{reduceBy this 1}}" data-dtype="Number" />
-        <label class="label-stress stress-square-damage" for="stress-{{this}}-{{../actor.id}}">
-        </label>
-        {{/multipleOf}}
+            <input id="stress-{{this}}-{{../actor.id}}" class="input-hidden" type="radio" max="2"
+                name="system.stress.current" value="{{reduceBy this 1}}" data-dtype="Number" />
+            <label class="label-stress stress-square-damage" for="stress-{{this}}-{{../actor.id}}">
+            </label>
+        {{/when}}
         {{else}}
-        {{#multipleOf this 5}}
+        {{#when this 'in' ../system.crucial_boxes}}
         <input id="stress-{{this}}-{{../actor.id}}" class="input-hidden" type="radio" max="2"
             name="system.stress.current" value="{{this}}" data-dtype="Number" />
         <label class="label-stress stress-rosette" for="stress-{{this}}-{{../actor.id}}"> </label>
@@ -33,7 +34,7 @@ the rollData property. --}}
         <input id="stress-{{this}}-{{../actor.id}}" class="input-hidden" type="radio" max="2"
             name="system.stress.current" value="{{this}}" data-dtype="Number" />
         <label class="label-stress stress-square" for="stress-{{this}}-{{../actor.id}}"> </label>
-        {{/multipleOf}}
+        {{/when}}
         {{/when}}
     </div>
     {{/numLoop}}

@@ -56,12 +56,12 @@
   </label>
 </div>
 <h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.Moves.long"}}</h2>
-{{> "systems/household/templates/actor/parts/actor-moves.hbs"}}
+{{> "systems/household/templates/actor/parts/actor-list-items.hbs" items=moves type='move'}}
 
 
 
 <h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.Contracts.long"}}</h2>
-{{> "systems/household/templates/actor/parts/actor-contracts.hbs"}}
+{{> "systems/household/templates/actor/parts/actor-list-items.hbs" items=contracts type='contract'}}
 
 <h2 class="characteristic-title">{{localize "HOUSEHOLD.TTT.long"}}</h2>
 <div class="flexrow">
