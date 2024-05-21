@@ -10,12 +10,12 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    # get part of the tag after the `v`
+    # Extract tag version number
     - name: Extract tag version number
       id: get_version
       uses: battila7/get-version-action@v2
 
-    # Substitute the Manifest and Download URLs in the module.json
+    # Substitute Manifest and Download Links For Versioned Ones
     - name: Substitute Manifest and Download Links For Versioned Ones
       id: sub_manifest_link_version
       uses: microsoft/variable-substitution@v1
@@ -37,13 +37,14 @@ jobs:
     - name: Generate minified CSS
       run: npm run build:css
 
-    # Run build
-    - run: npm run build
+    # Run Rollup Build
+    - name: Run Rollup Build
+      run: npm run build
 
     # Create a zip file with all files required by the module to add to the release
-    - run: zip -r ./system.zip system.json readme.md LICENSE.txt readme/ assets/ styles/ build/ lang/ packs/
+    - run: zip -r ./system.zip system.json readme.md LICENSE.txt assets/ styles/ scripts/ dist/ languages/
 
-    # Create a release for this specific version
+    # Update Release with Files
     - name: Update Release with Files
       id: create_version_release
       uses: ncipollo/release-action@v1
@@ -52,7 +53,7 @@ jobs:
         name: ${{ github.event.release.name }}
         draft: ${{ github.event.release.unpublished }}
         prerelease: ${{ github.event.release.prerelease }}
-        token: ${{ secrets.REPO_SEC }}
+        token: ${{ secrets.MY_GITHUB_TOKEN }}
         artifacts: './system.json, ./system.zip'
         tag: ${{ github.event.release.tag_name }}
         body: ${{ github.event.release.body }}
@@ -65,7 +66,7 @@ jobs:
         path: "./system.json"
         prop_path: "id"
 
-    - name: Get mininum
+    - name: Get minimum
       id: minimum
       uses: notiz-dev/github-action-json-property@release
       with:
@@ -79,3 +80,4 @@ jobs:
         path: "./system.json"
         prop_path: "compatibility.verified"
   
+    
