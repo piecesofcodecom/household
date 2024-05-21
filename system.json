@@ -23,7 +23,7 @@
     "minimum": 11,
     "verified": "11.315"
   },
-  "esmodules": ["build/household.min.mjs"],
+  "esmodules": ["build/household.js"],
   "styles": ["styles/household.min.css"],
   "languages": [
     {
