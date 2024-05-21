@@ -1,5 +1,4 @@
 <form class="{{cssClass}} {{actor.type}} flexcol" autocomplete="off" >
-
   {{!-- Sheet Header --}}
   <header class="sheet-header">
     <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" height="100" width="100" />
@@ -55,20 +54,18 @@
   {{!-- Sheet Tab Navigation --}}
   <nav class="sheet-tabs tabs" data-group="primary">
     {{!-- Default tab is specified in actor-sheet.mjs --}}
-    <a class="item" data-tab="description">{{localize "HOUSEHOLD.SheetLabels.Description"}}</a>
+    <a class="item" data-tab="main">{{localize "HOUSEHOLD.SheetLabels.Main"}}</a>
     <a class="item" data-tab="items">{{localize "HOUSEHOLD.SheetLabels.Equipaments"}}</a>
-    <a class="item" data-tab="effects">{{localize "HOUSEHOLD.Actions.long"}}</a>
+    <!--a class="item" data-tab="effects">{{localize "HOUSEHOLD.Actions.long"}}</a-->
   </nav>
 
   {{!-- Sheet Body --}}
-  <section class="sheet-body">
+  <section class="sheet-body logo-bg">
    
-
-
-    {{!-- Biography Tab --}}
-    <div class="tab biography" data-group="primary" data-tab="description">
-      {{> "systems/household/templates/actor/parts/npc-main.hbs"}}
-      </div>
+    {{!-- General Tab --}}
+    <div class="tab general" data-group="primary" data-tab="main">
+      {{> "systems/household/templates/actor/parts/npc-tab-main.hbs"}}
+    </div>
       
 
     {{!-- Owned Items Tab --}}
@@ -81,45 +78,16 @@
       
       <h2 class="characteristic-title">{{localize "HOUSEHOLD.Gadgets.long"}}</h2>
        {{> "systems/household/templates/actor/parts/actor-list-items.hbs" items=gadgets type='equipament'}}
+
+       <!-- Description -->
+      <h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.SheetLabels.Description"}}</h2>
+      {{editor system.biography target="system.biography" rollData=rollData button=true owner=owner editable=editable}}
     </div>
 
     {{!-- Active Effects Tab --}}
-    <div class="tab effects" data-group="primary" data-tab="effects">
-      <div class="flexcol"> 
-        <div class="resource">
-              <label> <a class="rollable" data-type="action"><h2 class="characteristic-description">{{localize "HOUSEHOLD.RollActions.long"}}</h2></a></label>
-          </div>
-        <div class="resource">
-              <label class="resource-label"><h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.ActionI.long"}}</h2></label>
-              <input type="text" name="system.actions.action_1" value="{{system.actions.action_1}}" data-dtype="String" />
-          </div>
-
-          <div class="resource">
-              <label class="resource-label"><h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.ActionII.long"}}</h2></label>
-              <input type="text" name="system.actions.action_2" value="{{system.actions.action_2}}" data-dtype="String" />
-          </div>
-
-          <div class="resource">
-              <label class="resource-label"><h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.ActionIII.long"}}</h2></label>
-              <input type="text" name="system.actions.action_3" value="{{system.actions.action_3}}" data-dtype="String" />
-          </div>
-
-          <div class="resource">
-              <label class="resource-label"><h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.ActionIV.long"}}</h2></label>
-              <input type="text" name="system.actions.action_4" value="{{system.actions.action_4}}" data-dtype="String" />
-          </div>
-
-          <div class="resource">
-              <label class="resource-label"><h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.ActionV.long"}}</h2></label>
-              <input type="text" name="system.actions.action_5" value="{{system.actions.action_5}}" data-dtype="String" />
-          </div>
-
-          <div class="resource">
-              <label class="resource-label"><h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.ActionVI.long"}}</h2></label>
-              <input type="text" name="system.actions.action_6" value="{{system.actions.action_6}}" data-dtype="String" />
-          </div>
-      </div>
-    </div>
+    <!--div class="tab effects" data-group="primary" data-tab="effects">
+      
+    </div-->
 
   </section>
 </form>

@@ -23,8 +23,8 @@
     "minimum": 11,
     "verified": "11.315"
   },
-  "esmodules": ["build/household.js"],
-  "styles": ["css/household.css"],
+  "esmodules": ["build/household.min.mjs"],
+  "styles": ["css/household.min.css"],
   "languages": [
     {
       "lang": "en",
@@ -41,7 +41,7 @@
   "packFolders": [],
   "socket": false,
   "manifest": "https://github.com/piecesofcodecom/household/releases/latest/download/system.json",
-  "download": "https://github.com/piecesofcodecom/household/releases/download/0.1.0/system.zip",
+  "download": "placeholder",
   "grid": {
     "distance": 5,
     "units": "ft"

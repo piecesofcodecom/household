@@ -1,0 +1,98 @@
+<!-- Decorum -->
+<h2 class="characteristic-title">{{localize "HOUSEHOLD.Decorum.long"}}</h2>
+
+<div class=" grid-decorum  flex-group-center ">
+  <div class=" decorum_1 decorum">
+    <input type="radio" id="{{actor.id}}-decorum_1" name="system.decorum" value="1" data-dtype="Number" {{doCheckIf
+      system.decorum 'eq' 1}}>
+  </div>
+
+  <div class=" decorum-text  ">
+    <span class="custom-system-label-root">
+      <div class="custom-system-label-icons"></div>
+      <div class="custom-system-label custom-system-label-label" data-value="Shabby" data-name="">{{localize
+        "HOUSEHOLD.Decorum.Shabby"}}</div>
+    </span>
+  </div>
+
+  <div class="decorum_3 decorum">
+    <input type="radio" id="{{actor.id}}-decorum_3" name="system.decorum" value="3" data-dtype="Number" {{doCheckIf
+      system.decorum 'eq' 3}}>
+  </div>
+
+  <div class=" decorum-text  ">
+    <span class="custom-system-label-root">
+      <div class="custom-system-label-icons"></div>
+      <div class="custom-system-label custom-system-label-label" data-value="Elegant" data-name="">{{localize
+        "HOUSEHOLD.Decorum.Elegant"}}</div>
+    </span>
+  </div>
+
+  <div class=" decorum_5 decorum  ">
+    <input type="radio" id="{{actor.id}}-decorum_5" name="system.decorum" value="5" data-dtype="Number" {{doCheckIf
+      system.decorum 'gteq' 5}}>
+  </div>
+
+  <div class=" decorum-text  ">
+    <span class="custom-system-label-root">
+      <div class="custom-system-label-icons"></div>
+      <div class="custom-system-label custom-system-label-label" data-value="Uncouth" data-name="">{{localize
+        "HOUSEHOLD.Decorum.Uncouth"}}</div>
+    </span>
+  </div>
+
+  <div class=" decorum_2 decorum  ">
+    <input type="radio" id="{{actor.id}}-decorum_2" name="system.decorum" value="2" data-dtype="Number" {{doCheckIf
+      system.decorum 'eq' 2}}>
+  </div>
+
+  <div class=" decorum-text  ">
+    <span class="custom-system-label-root">
+      <div class="custom-system-label-icons"></div>
+      <div class="custom-system-label custom-system-label-label" data-value="Decent" data-name="">{{localize
+        "HOUSEHOLD.Decorum.Decent"}}</div>
+    </span>
+  </div>
+
+  <div class=" decorum_4 decorum  ">
+    <input type="radio" id="{{actor.id}}-decorum_4" name="system.decorum" value="4" data-dtype="Number" {{doCheckIf
+      system.decorum 'eq' 4}}>
+  </div>
+
+  <div class=" decorum-text  ">
+    <span class="custom-system-label-root">
+      <div class="custom-system-label-icons"></div>
+      <div class="custom-system-label custom-system-label-label" data-value="Pompous" data-name="">{{localize
+        "HOUSEHOLD.Decorum.Pompous"}}</div>
+    </span>
+  </div>
+</div>
+
+<!-- Terrible Terrible Things -->
+<h2 class="characteristic-title">{{localize "HOUSEHOLD.TTT.long"}}</h2>
+<div class="flexrow">
+  {{#numLoop 5}}
+
+  {{#when ../system.ttt 'gteq' this}}
+  <input class="input-hidden" type="radio" id="ttt-{{this}}-{{../actor.id}}" value="{{reduceBy this 1}}"
+    name="system.ttt" data-dtype="Number">
+  <div class="ttt-icon">
+    <label style=" align-items: center;" for="ttt-{{this}}-{{../actor.id}}">
+      <img width="28" height="28" style="border: 0px" src="/systems/household/assets/sheet/ttt{{this}}-filled.svg">
+    </label>
+  </div>
+  {{else}}
+  <input class="input-hidden" type="radio" id="ttt-{{this}}-{{../actor.id}}" value="{{this}}" name="system.ttt"
+    data-dtype="Number">
+  <div class="ttt-icon">
+    <label style=" align-items: center;" for="ttt-{{this}}-{{../actor.id}}"><img width="28" height="28"
+        style="border: 0px" src="/systems/household/assets/sheet/ttt{{this}}.svg">
+    </label>
+  </div>
+  {{/when}}
+  {{/numLoop}}
+</div>
+
+<!-- Contracts -->
+<h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.Contracts.long"}}</h2>
+{{> "systems/household/templates/actor/parts/actor-list-items.hbs" items=contracts type='contract'}}

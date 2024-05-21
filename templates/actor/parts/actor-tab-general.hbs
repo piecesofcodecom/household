@@ -1,0 +1,54 @@
+ <section class="grid grid-3col  ">
+        <aside class="sidebar ">
+
+          {{!-- The grid classes are defined in scss/global/_grid.scss. To use,
+          use both the "grid" and "grid-Ncol" class where "N" can be any number
+          from 1 to 12 and will create that number of columns.  --}}
+          <div class="fields flexcol" style="gap: 3px">
+            {{#each system.fields as |ability key|}}
+              <div class="field flexrow flex-group-center">
+                <label for="system.fields.{{key}}.value" class="resource-label flexlarge align-left field-title">
+                  {{ability.label}}
+                </label>
+                <div class="flexrow flex-group-right">
+                {{#numLoop 2}}
+                  {{#when  ability.value 'gteq' this}}
+                      <input id="{{key}}-{{this}}" class="input-hidden" type="radio" max="2" name="system.fields.{{key}}.value" value="{{this}}" data-dtype="Number"/>
+                      <label class="label-ability bg-{{ability.suit}}-filled" for="{{key}}-{{this}}">
+                      </label>
+                    {{else}}
+                      <input id="{{key}}-{{this}}" class="input-hidden" type="radio" max="2" name="system.fields.{{key}}.value" value="{{this}}" data-dtype="Number"/>
+                      <label class="label-ability bg-{{ability.suit}}" for="{{key}}-{{this}}">
+                      </label>
+                    {{/when}}
+                {{/numLoop}}
+                </div>
+              </div>
+              {{#each ../system.skills as |skill ky|}}
+
+                {{#when skill.field 'eq' key }}
+                  <div class="skill flexrow flex-group-center">
+                    <label for="system.skills.{{ky}}.value" class="resource-label message-item flexlarge align-left" 
+                    data-type="skill" data-field="{{key}}" data-key="{{ky}}" data-label="{{skill.label}}">{{skill.label}}</label>
+                    {{#numLoop 4}}
+                      {{#when  skill.value 'gteq' this}}
+                          <input id="{{ky}}-{{this}}" class="input-hidden" type="radio" max="2" name="system.skills.{{ky}}.value" value="{{this}}" data-dtype="Number"/>
+                          <label class="label-skill bg-{{ability.suit}}-filled" for="{{ky}}-{{this}}"></label>
+                      {{else}}
+                          <input id="{{ky}}-{{this}}" class="input-hidden" type="radio" max="2" name="system.skills.{{ky}}.value" value="{{this}}" data-dtype="Number"/>
+                          <label class="label-skill bg-{{ability.suit}}" for="{{ky}}-{{this}}"></label>
+                      {{/when}}
+                    {{/numLoop}}
+                  </div>
+                {{/when}}
+              {{/each}}
+              
+            {{/each}}
+          </div>
+        </aside>
+
+        <section class="main grid-span-2 ">
+          {{> "systems/household/templates/actor/parts/actor-tab-general-right.hbs"}}
+        </section>
+
+      </section>

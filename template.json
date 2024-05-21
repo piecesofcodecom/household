@@ -39,10 +39,10 @@
       "wealth": "",
       "ttt": 0,
       "aces": {
-        "clubs": false,
-        "hearts": false,
-        "diamonds": false,
-        "spades": false,
+        "club": false,
+        "heart": false,
+        "diamond": false,
+        "spade": false,
         "joker": false
       },
       "conditions": {
@@ -59,121 +59,121 @@
       "fields": {
         "society": {
           "value": 1,
-          "suit": "hearts"
+          "suit": "heart"
         },
         "academia": {
             "value": 1,
-            "suit": "diamonds"
+            "suit": "diamond"
         },
         "war": {
             "value": 1,
-            "suit": "clubs"
+            "suit": "club"
         },
         "street": {
             "value": 1,
-            "suit": "spades"
+            "suit": "spade"
         }
       },
       "skills": {
         "art": {
             "value": 1,
             "field": "society",
-            "suit": "hearts"
+            "suit": "heart"
           },
           "charm": {
               "value": 1,
               "field": "society",
-              "suit": "hearts"
+              "suit": "heart"
           },
           "eloquence": {
             "value": 1,
             "field": "society",
-            "suit": "hearts"
+            "suit": "heart"
           },
           "etiquette": {
             "value": 1,
             "field": "society",
-            "suit": "hearts"
+            "suit": "heart"
           },
           "grace": {
             "value": 1,
             "field": "society",
-            "suit": "hearts"
+            "suit": "heart"
           },
           "care": {
             "value": 1,
             "field": "academia",
-            "suit": "diamonds"
+            "suit": "diamond"
           },
           "craft": {
             "value": 1,
             "field": "academia",
-            "suit": "diamonds"
+            "suit": "diamond"
           },
           "culture": {
             "value": 1,
             "field": "academia",
-            "suit": "diamonds"
+            "suit": "diamond"
           },
           "insight": {
             "value": 1,
             "field": "academia",
-            "suit": "diamonds"
+            "suit": "diamond"
           },
           "investigation": {
             "value": 1,
             "field": "academia",
-            "suit": "diamonds"
+            "suit": "diamond"
           },
           "athletics": {
               "value": 1,
               "field": "war",
-              "suit": "clubs"
+              "suit": "club"
           },
           "authority": {
             "value": 1,
             "field": "war",
-            "suit": "clubs"
+            "suit": "club"
           },
           "fight": {
             "value": 1,
             "field": "war",
-            "suit": "clubs"
+            "suit": "club"
           },
           "strength": {
             "value": 1,
             "field": "war",
-            "suit": "clubs"
+            "suit": "club"
           },
           "will": {
             "value": 1,
             "field": "war",
-            "suit": "clubs"
+            "suit": "club"
           },
           "caution": {
               "value": 1,
               "field": "street",
-              "suit": "spades"
+              "suit": "spade"
           },
           "dexterity": {
             "value": 1,
             "field": "street",
-            "suit": "spades"
+            "suit": "spade"
           },
           "elusion": {
             "value": 1,
             "field": "street",
-            "suit": "spades"
+            "suit": "spade"
           },
           "exploration": {
             "value": 1,
             "field": "street",
-            "suit": "spades"
+            "suit": "spade"
           },
           "shoot": {
             "value": 1,
             "field": "street",
-            "suit": "spades"
+            "suit": "spade"
           }
       }
     },
@@ -216,12 +216,12 @@
     "move": {
       "description": "",
       "requirements": "",
-      "exalsted": false,
+      "exhausted": false,
       "suits": {
-        "clubs": false,
-        "hearts": false,
-        "diamonds": false,
-        "spades": false
+        "club": false,
+        "heart": false,
+        "diamond": false,
+        "spade": false
       }
     },
     "contract": {
@@ -236,7 +236,8 @@
       }
     },
     "trait": {
-      "description": ""
+      "description": "",
+      "optional": false
     },
     "profession": {
       "description": "",

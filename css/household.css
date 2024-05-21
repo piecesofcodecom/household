@@ -955,6 +955,13 @@ SELECT DROPDOWN END
 .sheet .ttt {
   cursor: pointer;
 }
+.sheet .ttt-icon {
+  display: -webkit-box;  /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+  display: -ms-flexbox;  /* TWEENER - IE 10 */
+  display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+  display: flex; justify-content: center;
+  align-items: center;
+}
 
 .sheet .resource__group {
   position: relative;
@@ -1023,23 +1030,30 @@ SELECT DROPDOWN END
 /** ITEM LIST
 
 */
-.sheet details {
+.sheet .item-list {
   border-color: #f2bebb;
-  /*color: rgba(255, 255, 255, 0.9);*/
-  /*background: #878d99;*/
   border-bottom: 1px solid;
   cursor: pointer;
   transition: background 0.3s;
   border-radius: 4px;
-  /*min-height: 8px;*/
   max-height: 250px;
-  overflow-y: scroll;
-
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #ddd !important;
   transform-origin: top center;
   transform: rotate(0.1deg);
   transition: all 0.3s;
-   /*background-color:rgba(0, 0, 0, 0.1);*/
 }
+
+.item-list::-webkit-scrollbar {
+  width: 0px !important;
+  height: 0px !important;
+}
+
+.item-list::-webkit-scrollbar-button {
+  display: none !important;
+}
+
 .sheet details:hover {
   /*border-color: #878d99;*/
   /*color: rgba(255, 255, 255, 0.6);*/
@@ -1117,6 +1131,97 @@ SELECT DROPDOWN END
     background-color:rgba(0, 0, 0, 0.2);
 }
 
+/* conditions
+*/
+.sheet .conditions-grid {
+  display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto auto;
+    gap: 5px;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 10px;
+}
+.sheet .condition-icon {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.sheet .condition-icon span {
+  margin-left: 10px;
+}
+
+.sheet .condition-icon i {
+  font-size: 20px;
+}
+
+.sheet .condition-icon-heart {
+  color: red;  
+}
+
+.sheet .condition-icon-diamond {
+  color: blue;  
+}
+
+.sheet .condition-icon-club {
+  color: green;  
+}
+
+.sheet .condition-icon-spade {
+  color: black;  
+}
+
+.sheet .custom-condition-radio[type="checkbox"]:checked,
+.sheet .custom-condition-radio[type="checkbox"]:not(:checked) {
+    position: absolute;
+    left: -9999px;
+}
+.sheet .custom-condition-radio[type="checkbox"]:checked + label,
+.sheet .custom-condition-radio[type="checkbox"]:not(:checked) + label
+{
+    position: relative;
+    padding-left: 28px;
+    cursor: pointer;
+    line-height: 20px;
+    display: inline-block;
+    color: #666;
+}
+.sheet .custom-condition-radio[type="checkbox"]:checked + label:before,
+.sheet .custom-condition-radio[type="checkbox"]:not(:checked) + label:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 18px;
+    height: 18px;
+    border: 1px solid #ddd;
+    border-radius: 100%;
+    background: #fff;
+}
+.sheet .custom-condition-radio[type="checkbox"]:checked + label:after,
+.sheet .custom-condition-radio[type="checkbox"]:not(:checked) + label:after {
+    content: '';
+    width: 16px;
+    height: 16px;
+    background: #fc055c;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    border-radius: 100%;
+    -webkit-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+}
+.sheet .custom-condition-radio[type="checkbox"]:not(:checked) + label:after {
+    opacity: 0;
+    -webkit-transform: scale(0);
+    transform: scale(0);
+}
+.sheet .custom-condition-radio[type="checkbox"]:checked + label:after {
+    opacity: 1;
+    -webkit-transform: scale(1);
+    transform: scale(1);
+}
 
 /** DECORUM */
 .sheet .decorum-text{
@@ -1143,6 +1248,18 @@ SELECT DROPDOWN END
 	text-align: center;
 }
 
+/*.sheet .logo-bg {
+  background: url(/systems/household/assets/official/logo_bg.png);
+  background-position: bottom 10px center;
+  background-repeat: no-repeat;
+  background-size: 200px 200px;
+}
+.sheet .logo-bg2 {
+  background: url(/systems/household/assets/official/logo_bg.png);
+  background-position: bottom 36px center;
+  background-repeat: no-repeat;
+  background-size: 200px 200px;
+}*/
 .sheet .decorum input[type="checkbox"] {
   -webkit-appearance: initial;
   appearance: initial;
@@ -1234,40 +1351,40 @@ background-size: cover !important;
 
 }
 
-.chat-message input[type=radio]:checked.field-hearts+label>img {
-  content: url("/systems/household/assets/sheet/hearts-filled.svg");
+.chat-message input[type=radio]:checked.field-heart+label>img {
+  content: url("/systems/household/assets/sheet/heart-filled.svg");
 }
 
 .chat-message input[type=radio]:checked.field-society+label>img {
-  content: url("/systems/household/assets/sheet/hearts-filled.svg");
+  content: url("/systems/household/assets/sheet/heart-filled.svg");
 }
 
-.chat-message input[type=radio]:checked.field-diamonds+label>img {
-  content: url("/systems/household/assets/sheet/diamonds-filled.svg");
+.chat-message input[type=radio]:checked.field-diamond+label>img {
+  content: url("/systems/household/assets/sheet/diamond-filled.svg");
 }
 
 .chat-message input[type=radio]:checked.field-academia+label>img {
-  content: url("/systems/household/assets/sheet/diamonds-filled.svg");
+  content: url("/systems/household/assets/sheet/diamond-filled.svg");
 }
 
-.chat-message input[type=radio]:checked.field-clubs+label>img {
-  content: url("/systems/household/assets/sheet/clubs-filled.svg");
+.chat-message input[type=radio]:checked.field-club+label>img {
+  content: url("/systems/household/assets/sheet/club-filled.svg");
 }
 
 .chat-message input[type=radio]:checked.field-war+label>img {
-  content: url("/systems/household/assets/sheet/clubs-filled.svg");
+  content: url("/systems/household/assets/sheet/club-filled.svg");
 }
 
-.chat-message input[type=radio]:checked.field-spades+label>img {
-  content: url("/systems/household/assets/sheet/spades-filled.svg");
+.chat-message input[type=radio]:checked.field-spade+label>img {
+  content: url("/systems/household/assets/sheet/spade-filled.svg");
 }
 
 .chat-message input[type=radio]:checked.field-street+label>img {
-  content: url("/systems/household/assets/sheet/spades-filled.svg");
+  content: url("/systems/household/assets/sheet/spade-filled.svg");
 }
 
-.household .hearts-bg {
-  background: url(/systems/household/assets/sheet/hearts2_bg.webp);
+.household .heart-bg {
+  background: url(/systems/household/assets/sheet/heart2_bg.webp);
   background-repeat: no-repeat;
   background-size: auto 140px;
   background-position: 1px bottom;
@@ -1306,35 +1423,35 @@ background-size: cover !important;
   text-align: center;
 }
 
-.household .bg-hearts {
-  background-image: url(/systems/household/assets/sheet/hearts.svg);
+.household .bg-heart {
+  background-image: url(/systems/household/assets/sheet/heart.svg);
 }
 
-.household .bg-hearts-filled {
-  background-image: url(/systems/household/assets/sheet/hearts-filled.svg);
+.household .bg-heart-filled {
+  background-image: url(/systems/household/assets/sheet/heart-filled.svg);
 }
 
-.household .bg-clubs {
-  background-image: url(/systems/household/assets/sheet/clubs.svg);
+.household .bg-club {
+  background-image: url(/systems/household/assets/sheet/club.svg);
 }
 
-.household .bg-clubs-filled {
-  background-image: url(/systems/household/assets/sheet/clubs-filled.svg);
+.household .bg-club-filled {
+  background-image: url(/systems/household/assets/sheet/club-filled.svg);
 }
 
-.household .bg-diamonds {
-  background-image: url(/systems/household/assets/sheet/diamonds.svg);
+.household .bg-diamond {
+  background-image: url(/systems/household/assets/sheet/diamond.svg);
 }
 
-.household .bg-diamonds-filled {
-  background-image: url(/systems/household/assets/sheet/diamonds-filled.svg);
+.household .bg-diamond-filled {
+  background-image: url(/systems/household/assets/sheet/diamond-filled.svg);
 }
 
 
-.household .bg-spades {
-  background-image: url(/systems/household/assets/sheet/spades.svg);
+.household .bg-spade {
+  background-image: url(/systems/household/assets/sheet/spade.svg);
 }
 
-.household .bg-spades-filled {
-  background-image: url(/systems/household/assets/sheet/spades-filled.svg);
+.household .bg-spade-filled {
+  background-image: url(/systems/household/assets/sheet/spade-filled.svg);
 }

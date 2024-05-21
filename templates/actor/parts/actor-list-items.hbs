@@ -1,5 +1,5 @@
 {{#each items as |item id|}}
-<details class='item' data-item-id='{{item._id}}' class="default square">
+<details class='item-list' data-item-id='{{item._id}}' class="default square">
   <summary>
     <img style="border: 0px;" class="item-summary-title" src='{{item.img}}' title='{{item.name}}' width='24'
       height='24' />
@@ -12,13 +12,13 @@
       {{/if}}
     {{/each}}
     <label>
-      <a style="float:right; margin-left: 5px;" class='item-control item-delete'
+      <a style="float:right; margin-left: 5px;" class='item-control item-delete' 
         title='{{localize "DOCUMENT.Delete" type=' Item'}}'>
         <i class='fas fa-trash'></i>
       </a>
     </label>
     <label><a style=" float:right; margin-left: 5px;" class='item-control item-edit'
-        title='{{localize "DOCUMENT.Update" type=' Item'}}'>
+        title='{{localize "DOCUMENT.Update" type=' Item'}}' >
         <i class='fas fa-edit'></i>
       </a>
     </label>

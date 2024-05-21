@@ -166,6 +166,12 @@
         "Moves": {
             "long": "Manovre"
         },
+        "Placeholders": {
+            "Contract": "Inserisci il nome del contratto.",
+            "Moves": "Inserisci l'elenco delle manovre. Devono essere separate da virgole.",
+            "Skills": "Inserisci l'elenco delle abilità. Devono essere separate da virgole.",
+            "Traits": "Inserisci l'elenco delle tratti. Devono essere separate da virgole."            
+          },
         "Price": {
             "long": "Prezzo"
           },
@@ -199,12 +205,13 @@
             "Equipaments": "Equipaggiamenti",
             "General": "Generale",
             "Item": "Househood Item Sheet",
+            "Main": "Principale",
             "Name": "Nome",
+            "Others": "Decoro & Contrati",
             "Requirements": "Requisiti",
-            "TraitsConditions": "Tratti & Condizioni",
+            "Skills": "Abilità",
             "Type": "Tipo"
         },
-        "Skills": { "long": "Abilità" },
         "Skill": {
             "Art": {
                 "abbr": "art",

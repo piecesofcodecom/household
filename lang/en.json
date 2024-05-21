@@ -66,7 +66,7 @@
           "Embarrassed": "Embarrassed",
           "Frightened": "Frightened",
           "Hurt": "Hurt",
-          "Poisoned": "poisoned",
+          "Poisoned": "Poisoned",
           "Sick": "Sick",
           "Tired": "Tired",
           "long": "Conditions"
@@ -166,6 +166,12 @@
       "Moves": {
           "long": "Moves"
       },
+      "Placeholders": {
+        "Contract": "Enter the contract name.",
+        "Moves": "Enter the list of moves. They must be separated by commas.",
+        "Skills": "Enter the list of skills. They must be separated by commas.",
+        "Traits": "Enter the list of traits. They must be separated by commas."
+      },
       "Price": {
         "long": "Price"
       },
@@ -202,9 +208,11 @@
           "Equipaments": "Equipaments",
           "General": "General",
           "Item": "Househood Item Sheet",
+          "Main": "Main",
           "Name": "Name",
+          "Others": "Decorum & Contracts",
           "Requirements": "Requirements",
-          "TraitsConditions": "Traits & Conditions",
+          "Skills": "Skills",
           "Type": "Type"
       },
       "Skill": {
