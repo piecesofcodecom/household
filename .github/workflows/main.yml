@@ -27,13 +27,18 @@ jobs:
         manifest: https://github.com/${{github.repository}}/releases/latest/download/module.json
         download: https://github.com/${{github.repository}}/releases/download/${{github.event.release.tag_name}}/system.zip
 
-    # Run build
+    # Set up Node.js
     - uses: actions/setup-node@v3
       with:
         node-version: '18'
     - run: npm install
+
+    # Generate minified CSS
+    - name: Generate minified CSS
+      run: npm run build:css
+
+    # Run build
     - run: npm run build
-    - run: npm run build:css
 
     # Create a zip file with all files required by the module to add to the release
     - run: zip -r ./system.zip system.json readme.md LICENSE.txt readme/ assets/ styles/ build/ lang/ packs/
@@ -73,3 +78,4 @@ jobs:
       with:
         path: "./system.json"
         prop_path: "compatibility.verified"
+  
