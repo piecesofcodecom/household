@@ -80,23 +80,4 @@ jobs:
         path: "./system.json"
         prop_path: "compatibility.verified"
   
-    # Submit to foundry
-    - name: Submit package to FoundryVTT Package Release API
-      run: |
-        curl -X POST "https://api.foundryvtt.com/_api/packages/release_version/" \
-          -H "Content-Type: application/json" \
-          -H "Authorization: ${{ secrets.FOUNDRY_KEY }}" \
-          -d '{
-            "id": "${{ steps.systemID.outputs.prop }}",
-            "dry-run": false,
-            "release": {
-              "version": "${{ steps.get_version.outputs.version-without-v }}",
-              "manifest": "https://github.com/${{ github.repository }}/releases/latest/download/module.json",
-              "notes": "https://github.com/${{ github.repository }}/releases/tag/${{ steps.get_version.outputs.version-without-v }}",
-              "compatibility": {
-                "minimum": "${{ steps.minimum.outputs.prop }}",
-                "verified": "${{ steps.verified.outputs.prop }}",
-                "maximum": ""
-              }
-            }
-          }'
+
