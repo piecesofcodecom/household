@@ -388,10 +388,17 @@ Hooks.on('renderChatMessage', (message, html, data) => {
 
   
   });
-  if (message.author.id !== game.user.id && !game.user.isGM) {
-    // Disable or hide input fields
-    html.find("input, select, textarea, label").prop("disabled", true);
-}
+  if(game.version.includes('11.')) {
+    if (message.user.id !== game.user.id && !game.user.isGM) {
+      // Disable or hide input fields
+      html.find("input, select, textarea, label").prop("disabled", true);
+    }
+  } else {
+    if (message.author.id !== game.user.id && !game.user.isGM) {
+      // Disable or hide input fields
+      html.find("input, select, textarea, label").prop("disabled", true);
+    }
+  }
 });
 
 /* -------------------------------------------- */
