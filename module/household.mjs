@@ -217,7 +217,6 @@ Hooks.on('renderDialog', (dialog, html, content) => {
 Other Hooks */
 Hooks.on('renderChatMessage', (message, html, data) => {
   // make a new parser
-  ("PREMIO");
   (HOUSEHOLD.premium);
   const parser = new DOMParser();
   const actor = message.speaker.actor;
