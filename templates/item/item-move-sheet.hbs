@@ -9,33 +9,18 @@
           {{#if value }}
           <input type="radio" class="input-hidden custom-edit" data-value="{{value}}" data-path="system.suits.{{key}}"
             data-dtype="Boolean" id="choose-{{key}}-{{../item.id}}" />
-          <label for="choose-{{key}}-{{../item.id}}">
-            <img width="80" height="80" src="/systems/household/assets/sheet/{{key}}-filled.svg" alt="" />
+          <label for="choose-{{key}}-{{../item.id}}" class="condition-icon">
+            <i class="fa-solid fa-{{key}} condition-icon-{{key}}"></i>
           </label>
           {{else}}
           <input type="radio" class="input-hidden custom-edit" data-value="{{value}}" data-path="system.suits.{{key}}"
             data-dtype="Boolean" id="choose-{{key}}-{{../item.id}}" />
-          <label for="choose-{{key}}-{{../item.id}}">
-            <img style="width: 100%" src="/systems/household/assets/sheet/{{key}}.svg" alt="" />
+          <label for="choose-{{key}}-{{../item.id}}" class="condition-icon">
+            <i class="fa-regular fa-{{key}} condition-icon-{{key}}"></i>
           </label>
           {{/if}}
         </div>
         {{/each}}
-        <!--div class="resource">
-          {{#if item.system.exalsted}}
-          <input id="move-availability-{{item.d}}" class="input-hidden custom-edit" type="radio" max="2"
-            data-path="system.exalsted" data-value="{{item.system.exalsted}}" data-dtype="Boolean" />
-          <label class="label-stress stress-square-damage" for="move-availability-{{item.d}}">
-            <span style="margin-left: 20px; color: #000"></span>
-          </label>
-          {{else}}
-          <input id="move-availability-{{item.d}}" class="input-hidden custom-edit" type="radio" max="2"
-            data-path="system.exalsted" data-value="{{item.system.exalsted}}" data-dtype="Boolean" />
-          <label class="label-stress stress-square" for="move-availability-{{item.d}}">
-            <span style="margin-left: 20px; color: #000"></span>
-          </label>
-          {{/if}}
-        </div-->
       </div>
     </div>
   </header>

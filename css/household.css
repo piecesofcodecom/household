@@ -1248,7 +1248,7 @@ SELECT DROPDOWN END
 	text-align: center;
 }
 
-/*.sheet .logo-bg {
+.sheet .logo-bg {
   background: url(/systems/household/assets/official/logo_bg.png);
   background-position: bottom 10px center;
   background-repeat: no-repeat;
@@ -1259,7 +1259,7 @@ SELECT DROPDOWN END
   background-position: bottom 36px center;
   background-repeat: no-repeat;
   background-size: 200px 200px;
-}*/
+}
 .sheet .decorum input[type="checkbox"] {
   -webkit-appearance: initial;
   appearance: initial;
@@ -1411,6 +1411,7 @@ background-size: cover !important;
   height: 20px;
   padding: 0;
   text-align: center;
+  font-size: 15pt;
 }
 
 .household .label-skill {
@@ -1421,6 +1422,7 @@ background-size: cover !important;
   height: 15px;
   padding: 0;
   text-align: center;
+  font-size: 10pt;
 }
 
 .household .bg-heart {

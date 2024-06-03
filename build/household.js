@@ -821,10 +821,15 @@ async function chooseTrait(actor, item) {
     d.render(true);
 }
 
-function populateField(actor, field) {
+async function populateField(actor, field) {
     const key = field.toLowerCase();
     const new_value = actor.system.fields[key].value + 1;
-    actor.update({ [`system.fields.${key}.value`]: new_value });
+    if(new_value < 3 && new_value > 0) {
+        await actor.update({ [`system.fields.${key}.value`]: new_value });
+        if (new_value == 2) {
+            await actor.update({ [`system.aces.${actor.system.fields[key].suit}`]: true });
+        }
+    }
 }
 
 function populateSkills(actor, skills) {
@@ -1068,6 +1073,10 @@ class HouseholdActorSheet extends ActorSheet {
    */
   _prepareCharacterData(context) {
 
+    /*if (context.actor.img == 'icons/svg/mystery-man.svg') {
+      context.actor.img = '/systems/household/assets/official/logo.png';
+    }*/
+
     for (let [k, v] of Object.entries(context.system.fields)) {
       v.label = game.i18n.localize(CONFIG.HOUSEHOLD.fields[k]) ?? k;
       if (k == 'society') {
@@ -1140,8 +1149,11 @@ class HouseholdActorSheet extends ActorSheet {
 
     // Render the item sheet for viewing/editing prior to the editable check.
     html.on('click', '.item-edit', (ev) => {
-      const li = $(ev.currentTarget).parents('.item');
+      console.log(ev);
+      const li = $(ev.currentTarget).parents('.item-list');
+      console.log(li);
       const item = this.actor.items.get(li.data('itemId'));
+      console.log(li);
       item.sheet.render(true);
     });
 
@@ -1153,7 +1165,7 @@ class HouseholdActorSheet extends ActorSheet {
     html.on('click', '.item-create', this._onItemCreate.bind(this));
     // Delete Inventory Item
     html.on('click', '.item-delete', (ev) => {
-      const li = $(ev.currentTarget).parents('.item');
+      const li = $(ev.currentTarget).parents('.item-list');
       const item = this.actor.items.get(li.data('itemId'));
       item.delete();
       li.slideUp(200, () => this.render(false));
@@ -1497,14 +1509,16 @@ class HouseholdItemSheet extends ItemSheet {
 const preloadHandlebarsTemplates = async function () {
   return loadTemplates([
     // Actor partials.
-    'systems/household/templates/actor/parts/actor-features.hbs',
-    'systems/household/templates/actor/parts/actor-others.hbs',
+    'systems/household/templates/actor/parts/actor-tab-general.hbs',
+    'systems/household/templates/actor/parts/actor-tab-general-right.hbs',
+    'systems/household/templates/actor/parts/actor-tab-others.hbs',
     'systems/household/templates/actor/parts/actor-list-items.hbs',
     // Item partials
     // Chat parts
     'systems/household/templates/chat/parts/dices/faces.html',
     // NPC parts
-    "systems/household/templates/actor/parts/npc-main.hbs"
+    "systems/household/templates/actor/parts/npc-tab-main.hbs",
+    "systems/household/templates/actor/parts/npc-tab-main-right.hbs"
   ]);
 };
 
@@ -1513,7 +1527,7 @@ const preloadHandlebarsTemplates = async function () {
 /* -------------------------------------------- */
 /*  Init Hook                                   */
 /* -------------------------------------------- */
-
+ 
 Hooks.once('init', function () {
   // Add utility classes to the global game object so that they're more easily
   // accessible in global contexts.
@@ -1529,7 +1543,6 @@ Hooks.once('init', function () {
   if (premium && premium.active) {
     HOUSEHOLD.premium = true;
   }
-
 
   /**
    * Set an initiative formula for the system
@@ -1581,10 +1594,10 @@ Handlebars.registerHelper('doCheck', function (data) {
 
 Handlebars.registerHelper('getSuitFromField', function (raw_data) {
   const field = raw_data.trim().toLowerCase();
-  if(field === 'society' || field === 'hearts') return 'heart';
-  if(field === 'academia' || field === 'diamonds') return 'diamond';
-  if(field === 'war' || field === 'clubs') return 'club';
-  if(field === 'street' || field === 'spades') return 'spade';
+  if(field === 'society' || field === 'heart') return 'heart';
+  if(field === 'academia' || field === 'diamond') return 'diamond';
+  if(field === 'war' || field === 'club') return 'club';
+  if(field === 'street' || field === 'spade') return 'spade';
   return "empty-set";
 });
 
@@ -1598,10 +1611,10 @@ Handlebars.registerHelper('getWeaponTypeIcon', function (raw_data) {
 
 Handlebars.registerHelper('getFieldColor', function (raw_data) {
   const field = raw_data.trim().toLowerCase();
-  if(field === 'society' || field === 'hearts') return 'red';
-  if(field === 'academia' || field === 'diamonds') return 'blue';
-  if(field === 'war' || field === 'clubs') return 'green';
-  if(field === 'street' || field === 'spades') return 'black';
+  if(field === 'society' || field === 'heart') return 'red';
+  if(field === 'academia' || field === 'diamond') return 'blue';
+  if(field === 'war' || field === 'club') return 'green';
+  if(field === 'street' || field === 'spade') return 'black';
   return "red";
 });
 
@@ -1705,20 +1718,13 @@ Hooks.on('renderDialog', (dialog, html, content) => {
   html.find('.profession-select').click(async function(event) {
     const description = event.currentTarget.parentNode.querySelector('#profession-description-popup');
     let item = await fromUuid(event.target.value);
-    /*if (event.target.id == 'move' || event.target.id == 'trait') {
-      //alert(event.target.value)
-      item = await fromUuid(event.target.value)
-    } else {
-      alert(event.target.value)
-      item = game.items.filter(el => el.name == event.target.value && el.type == event.target.id)
-      if (item.length > 0) {
-        item = item[0]
+
+    if (item) {
+      if (Object.keys(item).length > 0) {
+        description.innerHTML = "";
+        description.textContent = "";
+        description.innerHTML = item.system.description;
       }
-    }*/
-    if (Object.keys(item).length > 0) {
-      description.innerHTML = "";
-      description.textContent = "";
-      description.innerHTML = item.system.description;
     }
 
   });
@@ -1726,6 +1732,7 @@ Hooks.on('renderDialog', (dialog, html, content) => {
 /*
 Other Hooks */
 Hooks.on('renderChatMessage', (message, html, data) => {
+  // make a new parser
   (HOUSEHOLD.premium);
   const parser = new DOMParser();
   message.speaker.actor;
@@ -1897,10 +1904,17 @@ Hooks.on('renderChatMessage', (message, html, data) => {
 
   
   });
-  if (message.author.id !== game.user.id && !game.user.isGM) {
-    // Disable or hide input fields
-    html.find("input, select, textarea, label").prop("disabled", true);
-}
+  if(game.version.includes('11.')) {
+    if (message.user.id !== game.user.id && !game.user.isGM) {
+      // Disable or hide input fields
+      html.find("input, select, textarea, label").prop("disabled", true);
+    }
+  } else {
+    if (message.author.id !== game.user.id && !game.user.isGM) {
+      // Disable or hide input fields
+      html.find("input, select, textarea, label").prop("disabled", true);
+    }
+  }
 });
 
 /* -------------------------------------------- */

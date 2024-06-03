@@ -14,11 +14,13 @@
                 {{#numLoop 2}}
                   {{#when  ability.value 'gteq' this}}
                       <input id="{{key}}-{{this}}" class="input-hidden" type="radio" max="2" name="system.fields.{{key}}.value" value="{{this}}" data-dtype="Number"/>
-                      <label class="label-ability bg-{{ability.suit}}-filled" for="{{key}}-{{this}}">
+                      <label class="label-ability" for="{{key}}-{{this}}">
+                        <i class="fa-solid fa-{{ability.suit}} condition-icon-{{ability.suit}}"></i>
                       </label>
                     {{else}}
                       <input id="{{key}}-{{this}}" class="input-hidden" type="radio" max="2" name="system.fields.{{key}}.value" value="{{this}}" data-dtype="Number"/>
-                      <label class="label-ability bg-{{ability.suit}}" for="{{key}}-{{this}}">
+                      <label class="label-ability " for="{{key}}-{{this}}">
+                        <i class="fa-regular fa-{{ability.suit}} condition-icon-{{ability.suit}}"></i>
                       </label>
                     {{/when}}
                 {{/numLoop}}
@@ -33,10 +35,14 @@
                     {{#numLoop 4}}
                       {{#when  skill.value 'gteq' this}}
                           <input id="{{ky}}-{{this}}" class="input-hidden" type="radio" max="2" name="system.skills.{{ky}}.value" value="{{this}}" data-dtype="Number"/>
-                          <label class="label-skill bg-{{ability.suit}}-filled" for="{{ky}}-{{this}}"></label>
+                          <label class="label-skill" for="{{ky}}-{{this}}">
+                            <i class="fa-solid fa-{{ability.suit}} condition-icon-{{ability.suit}}"></i>
+                          </label>
                       {{else}}
                           <input id="{{ky}}-{{this}}" class="input-hidden" type="radio" max="2" name="system.skills.{{ky}}.value" value="{{this}}" data-dtype="Number"/>
-                          <label class="label-skill bg-{{ability.suit}}" for="{{ky}}-{{this}}"></label>
+                          <label class="label-skill" for="{{ky}}-{{this}}">
+                            <i class="fa-regular fa-{{ability.suit}} condition-icon-{{ability.suit}}"></i>
+                          </label>
                       {{/when}}
                     {{/numLoop}}
                   </div>
