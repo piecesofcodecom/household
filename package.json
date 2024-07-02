@@ -7,7 +7,7 @@
     "build-css": "sass src/scss/household.scss css/household.css --style=expanded --no-source-map",
     "build-js": "npx rollup -c --bundleConfigAsCjs",
     "watch": "sass src/scss/household.scss css/household.css --style=expanded --source-map --watch",
-    "minify": "minify.cmd css/household.css > styles/household.min.css && npx terser build/household.js -o build/household.min.js &&  npx rimraf build/household.js",
+    "minify": "postcss css/style.css -u cssnano -o css/style.min.css && npx terser build/household.js -o build/household.min.js &&  npx rimraf build/household.js",
     "release": "node release.cjs"
   },
   "browserslist": [
@@ -23,7 +23,9 @@
     "rimraf": "^5.0.7",
     "rollup": "^4.17.2",
     "sass": "^1.53.0",
-    "terser": "^5.7.1"
+    "terser": "^5.7.1",
+    "cssnano": "^5.0.0",
+    "postcss-cli": "^9.0.0"
   },
   "main": "index.js",
   "directories": {
