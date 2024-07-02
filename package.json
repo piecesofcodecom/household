@@ -7,7 +7,7 @@
     "build-css": "sass src/scss/household.scss css/household.css --style=expanded --no-source-map",
     "build-js": "npx rollup -c --bundleConfigAsCjs",
     "watch": "sass src/scss/household.scss css/household.css --style=expanded --source-map --watch",
-    "minify": "postcss css/style.css -u cssnano -o css/style.min.css && npx terser build/household.js -o build/household.min.js &&  npx rimraf build/household.js",
+    "minify-js": "npx terser build/household.js -o build/household.min.js &&  npx rimraf build/household.js",
     "release": "node release.cjs"
   },
   "browserslist": [
