@@ -1,1 +1,33 @@
-{"scripts":{"build":"rollup -c","dev":"rollup -wcm","build:css":"postcss css/household.css -o styles/household.min.css"},"devDependencies":{"@rollup/plugin-commonjs":"^20.0.0","@rollup/plugin-json":"^4.1.0","@rollup/plugin-multi-entry":"^6.0.0","@rollup/plugin-node-resolve":"^13.3.0","cssnano":"^5.0.6","eslint":"^8.25.0","eslint-config-standard":"^17.0.0","eslint-plugin-import":"^2.26.0","eslint-plugin-n":"^15.3.0","eslint-plugin-promise":"^6.1.0","postcss":"^8.3.6","postcss-cli":"^8.3.1","rollup":"^2.56.3","rollup-plugin-terser":"^7.0.2"},"type":"module"}
+{
+  "name": "household",
+  "version": "2.0.0",
+  "type": "module",
+  "description": "CSS compiler for the Household system",
+  "scripts": {
+    "build-css": "sass src/scss/household.scss css/household.css --style=expanded --no-source-map",
+    "build-js": "npx rollup -c --bundleConfigAsCjs",
+    "watch": "sass src/scss/household.scss css/household.css --style=expanded --source-map --watch",
+    "minify": "minify.cmd css/household.css > styles/household.min.css && npx terser build/household.js -o build/household.min.js &&  npx rimraf build/household.js",
+    "release": "node release.cjs"
+  },
+  "browserslist": [
+    "last 3 versions"
+  ],
+  "author": "Snagov",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "fs-extra": "^10.1.0",
+    "rimraf": "^5.0.7",
+    "rollup": "^4.17.2",
+    "sass": "^1.53.0",
+    "terser": "^5.7.1"
+  },
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "keywords": []
+}

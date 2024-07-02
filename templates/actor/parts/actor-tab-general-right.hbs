@@ -29,94 +29,18 @@
   </div>
   {{/numLoop}}
 </div>
-
-<!-- conditions -->
-<h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.Conditions.long"}}</h2>
-<div class="conditions-grid">
-
-  <input id="condition-embarassed-{{actor.id}}" style="display: none" type="checkbox"
-    name="system.conditions.embarassed" value="{{system.conditions.embarassed}}" data-dtype="Boolean" {{doCheck
-    system.conditions.embarassed}}>
-  <label class="resource-label condition-icon" for="condition-embarassed-{{actor.id}}">
-    {{#if system.conditions.embarassed}}
-    <i class="fa-solid fa-heart condition-icon-heart"></i>
-    {{else}}
-    <i class="fa-light fa-heart condition-icon-heart"></i>
-    {{/if}}
-    <span>{{localize "HOUSEHOLD.Conditions.Embarrassed"}}</span></label>
-
-  <input id="condition-frightened-{{actor.id}}" style="display: none" type="checkbox"
-    name="system.conditions.frightened" value="{{system.conditions.frightened}}" data-dtype="Boolean" {{doCheck
-    system.conditions.frightened}}>
-  <label class="resource-label condition-icon" for="condition-frightened-{{actor.id}}">
-    {{#if system.conditions.frightened}}
-    <i class="fa-solid fa-spade condition-icon-spade"></i>
-    {{else}}
-    <i class="fa-light fa-spade condition-icon-spade"></i>
-    {{/if}}
-    <span>{{localize "HOUSEHOLD.Conditions.Frightened"}}</span></label>
-
-
-
-  <input id="condition-poisoned-{{actor.id}}" class="custom-condition-radio" type="checkbox"
-    name="system.conditions.poisoned" value="{{system.conditions.poisoned}}" data-dtype="Boolean" {{doCheck
-    system.conditions.poisoned}}>
-  <label for="condition-poisoned-{{actor.id}}" class="resource-label">
-    {{localize "HOUSEHOLD.Conditions.Poisoned"}}</label>
-
-
-
-  <input id="condition-confused-{{actor.id}}" style="display: none" type="checkbox" name="system.conditions.confused"
-    value="{{system.conditions.confused}}" data-dtype="Boolean" {{doCheck system.conditions.confused}}>
-  <label class="resource-label condition-icon" for="condition-confused-{{actor.id}}">
-    {{#if system.conditions.confused}}
-    <i class="fa-solid fa-diamond condition-icon-diamond"></i>
-    {{else}}
-    <i class="fa-light fa-diamond condition-icon-diamond"></i>
-    {{/if}}
-    <span>{{localize "HOUSEHOLD.Conditions.Confused"}}</span></label>
-
-  <input id="condition-tired-{{actor.id}}" class="custom-condition-radio" type="checkbox" name="system.conditions.tired"
-    value="{{system.conditions.tired}}" data-dtype="Boolean" {{doCheck system.conditions.tired}}>
-  <label class="resource-label" for="condition-tired-{{actor.id}}">
-    {{localize "HOUSEHOLD.Conditions.Tired"}}</label>
-
-  <input id="condition-broken-{{actor.id}}" class="custom-condition-radio" type="checkbox"
-    name="system.conditions.broken" value="{{system.conditions.broken}}" data-dtype="Boolean" {{doCheck
-    system.conditions.broken}}>
-  <label for="condition-broken-{{actor.id}}" class="resource-label">
-    {{localize "HOUSEHOLD.Conditions.Broken"}}</label>
-
-
-  <input id="condition-hurt-{{actor.id}}" style="display:none" type="checkbox" name="system.conditions.hurt"
-    value="{{system.conditions.hurt}}" data-dtype="Boolean" {{doCheck system.conditions.hurt}}>
-
-  <label class="resource-label condition-icon" for="condition-hurt-{{actor.id}}">
-    {{#if system.conditions.hurt}}
-    <i class="fa-solid fa-club condition-icon-club"></i>
-    {{else}}
-    <i class="fa-light fa-club condition-icon-club"></i>
-    {{/if}}
-    <span>{{localize "HOUSEHOLD.Conditions.Hurt"}}</span></label>
-
-
-  <input id="condition-sick-{{actor.id}}" class="custom-condition-radio" type="checkbox" name="system.conditions.sick"
-    value="{{system.conditions.sick}}" data-dtype="Boolean" {{doCheck system.conditions.sick}}>
-  </input>
-  <label class="resource-label" for="condition-sick-{{actor.id}}">
-    {{localize "HOUSEHOLD.Conditions.Sick"}}</label>
-</div>
+<br />
 <!-- Traits -->
 <h2 class="characteristic-title">{{localize "HOUSEHOLD.Traits.long"}}</h2>
 {{> "systems/household/templates/actor/parts/actor-list-items.hbs" items=traits type='trait'}}
-
+<br />
 <!-- Aces up the sleeve -->
 <div class="flexcol">
   <h2 class="characteristic-title ">{{localize "HOUSEHOLD.AcesSleeve.long"}}</h2>
 </div>
 {{#each system.aces as | value key|}}
-<input id="aces-{{key}}-{{../actor.id}}" class="input-hidden"type="checkbox" 
-  data-dtype="Boolean" name="system.aces.{{key}}" value="{{value}}" />
+<input id="aces-{{key}}-{{../actor.id}}" class="custom-edit input-hidden" type="checkbox" 
+  data-dtype="Boolean" data-path="system.aces.{{key}}" data-value="{{value}}" data-object="actor" />
 {{/each}}
 <div class="" style="height: 70px; 
   justify-content: center; margin-left: 20%; padding-top: 5px; border: 0px solid #000">
@@ -159,5 +83,7 @@
     {{/if}}
   </label>
 </div>
+<br />
+<!-- Moves -->
 <h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.Moves.long"}}</h2>
 {{> "systems/household/templates/actor/parts/actor-list-items.hbs" items=moves type='move'}}

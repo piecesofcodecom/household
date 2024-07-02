@@ -56,6 +56,8 @@ export class HouseholdActorSheet extends ActorSheet {
 
     // Prepare NPC data and items.
     if (actorData.type == 'npc') {
+      this.position.width = 750;
+      this.position.height = 850;
       this._prepareItems(context);
     }
 
@@ -81,9 +83,9 @@ export class HouseholdActorSheet extends ActorSheet {
    */
   _prepareCharacterData(context) {
 
-    /*if (context.actor.img == 'icons/svg/mystery-man.svg') {
-      context.actor.img = '/systems/household/assets/official/logo.png';
-    }*/
+    if (context.actor.img == 'icons/svg/mystery-man.svg') {
+      context.actor.img = '/systems/household/assets/official/logo_bg.png';
+    }
 
     for (let [k, v] of Object.entries(context.system.fields)) {
       v.label = game.i18n.localize(CONFIG.HOUSEHOLD.fields[k]) ?? k;
@@ -224,10 +226,12 @@ export class HouseholdActorSheet extends ActorSheet {
       }
       if(dataset.object === 'actor') {
         this.actor.update({[path]: new_value})
+        console.log("custom update", path, new_value);
       } else if(dataset.object === 'item') {
         const item = this.actor.items.get(dataset.id);
         item.update({[path]: new_value})
       }
+
       
     });
 

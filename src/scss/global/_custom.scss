@@ -1,0 +1,105 @@
+.aces-card {
+    width:44px;
+    height: 61px;
+    position: absolute;
+    opacity: 1;
+    
+  }
+  
+  .aces-card-img {
+    width: 44px;
+    height: 61px;
+    border: 0px;
+  }
+  
+  .aces-card-1 {
+    transform-origin: bottom center; transform:rotate(-48deg);margin-left:30px;
+  }
+  
+  .aces-card-2 {
+    transform-origin: bottom center; transform:rotate(-24deg);margin-left:60px;
+  }
+  
+  .aces-card-3 {
+    transform-origin: bottom center; transform:rotate(0deg);margin-left:90px;
+  }
+  
+  .aces-card-4 {
+    transform-origin: bottom center; transform:rotate(24deg);margin-left:120px;
+   
+  }
+  
+  .aces-card-5 {
+    transform-origin: bottom center; transform:rotate(48deg);margin-left:150px;
+  }
+
+  .header_og {
+    color: #356978;
+    text-align: center;
+    border: none;
+    width: 100%
+  }
+  
+  .header_ms {
+    color: #862955;
+    text-align: center;
+    border: none;
+    width: 100%
+  }
+
+  .household-dialog-class .f-group {
+    max-width: 250px;
+    margin: 0 auto;
+    text-align: left;
+    select {
+      width: 100%;
+    }
+  }
+  
+  .household-dialog-class .dialog-button {
+    position: absolute; left: 35%; width: 30%; 
+    bottom: 20px;
+    text-align: center;
+  }
+
+  .household-dialog-class .household-dialog-title {
+    font-family: 'LHF_Encore', Beau Rivage, cursive;
+    font-size: 1.6em;
+    font-weight: 500;
+    text-transform: capitalize;
+    border: none;
+    font-weight: bold;
+    text-align: center;
+  }
+  
+    .household-dialog-class .household-dialog-title:after {
+      content: "";
+      display: block;
+      background-image: url(/systems/household/assets/sheet/deco1.svg);
+      background-size: 350px, auto;
+      background-repeat: no-repeat;
+      background-position: center bottom;
+      height: 20px;
+      margin-bottom: 10px;
+    }
+  
+  .household-dialog-class .window-content {
+    margin-top: 10px;
+    padding: 2px;
+    border: solid 20px;
+    border-image-source: url(/systems/household/assets/chat/deco4.svg) !important;
+    border-image-slice: 20 20;
+  }
+
+  .item-list::-webkit-scrollbar {
+    width: 0px !important;
+    height: 0px !important;
+  }
+  
+  .item-list::-webkit-scrollbar-button {
+    display: none !important;
+  }
+
+  [open] .sheet summary {
+    background-color:rgba(0, 0, 0, 0.2);
+}

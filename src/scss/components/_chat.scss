@@ -1,0 +1,349 @@
+.ability-name {
+    font-family: 'LHF_Encore', Beau Rivage, cursive;
+    font-size: 1.2rem;
+    font-weight: 600;
+    border: 0px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .transition {
+    transition: all .3s ease-out;
+  }
+  
+  input[type="radio"].modifier-option {
+    visibility: hidden;
+    height: 0;
+    width: 0;
+  }
+  
+  .mod-label,
+  .mod-label-plus,
+  .mod-label-minus {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    cursor: pointer;
+    background-color: #918f8f;
+    color: white;
+    padding: 3px 6px;
+    border-radius: 3px;
+    transition: all .3s ease-out;
+  }
+  
+  .option-empty {
+    background-color: #58ba83;
+    color: white;
+    text-align: center;
+  }
+  
+  .option-selected {
+    background-color: #ba5858;
+    color: white;
+    text-align: center;
+  }
+  
+  ::placeholder {
+    text-align: center;
+    color: #ffffff;
+  }
+  
+  ::-ms-input-placeholder {
+    color: rgb(255, 255, 255);
+  }
+  
+  input[type="radio"].modifier-option:checked+label.mod-label {
+    background-color: #454545;
+  }
+  
+  input[type="radio"].modifier-option:checked+label.mod-label-plus {
+    background-color: #58ba83;
+  }
+  
+  input[type="radio"].modifier-option:checked+label.mod-label-minus {
+    background-color: #ba5858;
+  }
+
+  .table-results {
+    display: grid;
+    width: 100%;
+    margin-top: 10px;
+    padding: 2px;
+    border: solid 20px;
+    border-image-source: url(/systems/household/assets/chat/deco4.svg) !important;
+    border-image-slice: 20 20;
+  
+  }
+  .chat-card {
+    display: grid;
+    width: 100%;
+    margin-top: 10px;
+    padding: 2px;
+    border: solid 20px;
+    border-image-source: url(/systems/household/assets/chat/deco4.svg);
+    border-image-slice: 20 20;
+  }
+  
+  .roll-suc {
+    font-size: 18px;
+    margin-left: 20px;
+    font-style: none;
+    text-align: center;
+    font-weight: bold;
+  }
+  
+  .icon-lost_success {
+    font-size: 48px;
+    color: yellow
+  }
+  
+  .icon-Success {
+    font-size: 48px;
+    color: green
+  }
+  
+  .icon-Failure {
+    font-size: 48px;
+    color: red
+  }
+  
+  
+  .outcome {
+    margin-left: 20px;
+    font-style: none;
+    font-weight: bold;
+  }
+  
+  .roll-outcome {
+    display: grid;
+    grid-gap: 5px;
+    grid-template-columns: repeat(1, 1fr);
+    align-items: center;
+    justify-items: center; margin-top: 5px;
+  }
+  
+  .out-LostSuccess {
+    color: #860c0c;
+    font-size: 20px;
+  }
+  
+  .out-Success {
+    color: #0c9e2b;
+    font-size: 28px;
+  }
+  
+  .out-Failure {
+    color: #860c0c;
+    font-size: 28px;
+  }
+  
+  .out-Jackpot {
+    color: #109717;
+    font-size: 28px;
+  }
+  
+  .roll-suc-Basic {
+    color: #356978;
+  
+  }
+  
+  .roll-suc-Critical {
+    color: #9ea021;
+  }
+  
+  .roll-suc-Extreme {
+    color: #78356d;
+  }
+  
+  .roll-suc-Impossible {
+    color: #bb1818;
+  }
+  
+  .roll-suc-Jackpot {
+    color: #075f1a;
+  }
+  
+  
+  .first-face {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .success-none {
+    background-color: white;
+  }
+  
+  .success-basic {
+    background-color: #356978;
+  }
+  
+  .success-cancel {
+    background-color: rgb(235, 134, 134);
+  }
+  
+  .success-critical {
+    background-color: #9ea021;
+  }
+  
+  .success-extreme {
+    background-color: #78356d;
+  }
+  
+  .success-impossible {
+    background-color: #bb1818;
+  }
+  
+  .success-jackpot {
+    background-color: #075f1a;
+  }
+  
+  .dice {
+    padding: 4px;
+    width: 24px;
+    height: 24px;
+    border-radius: 10%;
+    margin-right: 10px;
+  }
+  
+  .dot-basic,
+  .dot-critical,
+  .dot-extreme,
+  .dot-impossible,
+  .dot-jackpot {
+    background-color: rgb(255, 255, 255);
+  }
+  
+  .dot-none {
+    background-color: rgb(36, 34, 34);
+  }
+  
+  .dice-result {
+    display: none;
+  }
+  
+  .dot {
+    display: block;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+  }
+  
+  .second-face {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .second-face .dot:nth-of-type(2) {
+    align-self: flex-end;
+  }
+  
+  .third-face {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .third-face .dot:nth-of-type(1) {
+    align-self: flex-end;
+  }
+  
+  .third-face .dot:nth-of-type(2) {
+    align-self: center;
+  }
+  
+  
+  .fourth-face,
+  .sixth-face,
+  .fifth-face {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .fourth-face .column,
+  .sixth-face .column,
+  .fifth-face .column {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .fifth-face .column:nth-of-type(2) {
+    justify-content: center;
+  }
+  
+  .input-hidden {
+    position: absolute;
+    left: -9999px;
+  }
+  
+  .cancel-dice {
+    width: 24px;
+    height: 24px;
+    position: relative;
+    background-color: red;
+    margin: auto;
+  }
+  
+  .give_up {
+    cursor: pointer;
+  }
+  
+  .cancel-dice:before,
+  .cancel-dice:after {
+    content: '';
+    width: 110%;
+    height: 3px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background: white;
+  }
+  
+  .cancel-dice:before {
+    -webkit-transform: translate(-50%, -50%) rotate(45deg);
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+  
+  .cancel-dice:after {
+    -webkit-transform: translate(-50%, -50%) rotate(-45deg);
+    transform: translate(-50%, -50%) rotate(-45deg);
+  }
+  
+  input[type=radio].field+label>img {
+    border: 0px dashed #444;
+    width: 20px;
+    height: 20px;
+    transition: 500ms all;
+  }
+
+  input[type=radio]:checked.field-heart+label>img {
+    content: url("/systems/household/assets/sheet/heart-filled.svg");
+  }
+  
+  input[type=radio]:checked.field-society+label>img {
+    content: url("/systems/household/assets/sheet/heart-filled.svg");
+  }
+  
+  input[type=radio]:checked.field-diamond+label>img {
+    content: url("/systems/household/assets/sheet/diamond-filled.svg");
+  }
+  
+  input[type=radio]:checked.field-academia+label>img {
+    content: url("/systems/household/assets/sheet/diamond-filled.svg");
+  }
+  
+  input[type=radio]:checked.field-club+label>img {
+    content: url("/systems/household/assets/sheet/club-filled.svg");
+  }
+  
+  input[type=radio]:checked.field-war+label>img {
+    content: url("/systems/household/assets/sheet/club-filled.svg");
+  }
+  
+  input[type=radio]:checked.field-spade+label>img {
+    content: url("/systems/household/assets/sheet/spade-filled.svg");
+  }
+  
+  input[type=radio]:checked.field-street+label>img {
+    content: url("/systems/household/assets/sheet/spade-filled.svg");
+  }

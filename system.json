@@ -18,12 +18,12 @@
   "bugs": "https://github.com/piecesofcodecom/household/issues",
   "changelog": "CHANGELOG.md",
   "media": [],
-  "version": "0.1.0",
+  "version": "placeholder",
   "compatibility": {
     "minimum": 11,
-    "verified": "12"
+    "verified": "11.315"
   },
-  "esmodules": ["build/household.js"],
+  "esmodules": ["build/household.min.js"],
   "styles": ["styles/household.min.css"],
   "languages": [
     {

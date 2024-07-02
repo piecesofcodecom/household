@@ -36,11 +36,15 @@ the rollData property. --}}
   </div>
   {{/numLoop}}
 </div>
-
+<br />
 <!-- Moves -->
 <h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.Moves.long"}}</h2>
 {{> "systems/household/templates/actor/parts/actor-list-items.hbs" items=moves type="move"}}
-
+<br />
 <!-- Traits -->
 <h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.Traits.long"}}</h2>
 {{> "systems/household/templates/actor/parts/actor-list-items.hbs" items=traits type="trait"}}
+<br />
+<!-- Description -->
+      <h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.SheetLabels.Description"}}</h2>
+      {{editor system.biography target="system.biography" rollData=rollData button=true owner=owner editable=editable}}

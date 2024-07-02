@@ -1,5 +1,9 @@
 // Add custom fonts by visiting and search https://fonts.google.com
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+@font-face {
+  font-family: 'LHF_Encore';
+  src: url('/systems/household/fonts/lhf-encore-distressed.ttf');
+}
 
 // Import utilities.
 @import 'utils/typography';
@@ -11,6 +15,7 @@
 @import 'global/window';
 @import 'global/grid';
 @import 'global/flex';
+@import 'global/custom';
 
 /* Styles limited to household sheets */
 .household {
@@ -18,4 +23,13 @@
   @import 'components/resource';
   @import 'components/items';
   @import 'components/effects';
+  @import 'components/custom';
+}
+
+.sheet {
+  @import 'components/sheets';
+}
+
+.chat-message {
+  @import 'components/chat';
 }

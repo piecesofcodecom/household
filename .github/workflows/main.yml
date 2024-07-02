@@ -15,34 +15,30 @@ jobs:
       id: get_version
       uses: battila7/get-version-action@v2
 
-    # Substitute Manifest and Download Links For Versioned Ones
-    - name: Substitute Manifest and Download Links For Versioned Ones
-      id: sub_manifest_link_version
-      uses: microsoft/variable-substitution@v1
-      with:
-        files: 'system.json'
-      env:
-        version: ${{steps.get_version.outputs.version-without-v}}
-        url: https://github.com/${{github.repository}}
-        manifest: https://github.com/${{github.repository}}/releases/latest/download/system.json
-        download: https://github.com/${{github.repository}}/releases/download/${{github.event.release.tag_name}}/system.zip
-
     # Set up Node.js
     - uses: actions/setup-node@v3
       with:
         node-version: '18'
     - run: npm install
 
-    # Generate minified CSS
-    - name: Generate minified CSS
-      run: npm run build:css
+    # Build Release
+    - name: Generate release
+      run: npm run release
 
-    # Run Rollup Build
-    - name: Run Rollup Build
-      run: npm run build
+    # Substitute Manifest and Download Links For Versioned Ones
+    - name: Substitute Manifest and Download Links For Versioned Ones
+      id: sub_manifest_link_version
+      uses: microsoft/variable-substitution@v1
+      with:
+        files: release/system.json'
+      env:
+        version: ${{steps.get_version.outputs.version-without-v}}
+        url: https://github.com/${{github.repository}}
+        manifest: https://github.com/${{github.repository}}/releases/latest/download/system.json
+        download: https://github.com/${{github.repository}}/releases/download/${{github.event.release.tag_name}}/system.zip
 
     # Create a zip file with all files required by the system to add to the release
-    - run: zip -r ./system.zip system.json template.json readme.md LICENSE.txt assets/ build/ fonts/ lang/ templates/ packs/ readme/ styles/
+    - run: cd release && zip -r ./system.zip system.json template.json readme.md LICENSE.txt assets/ build/ fonts/ lang/ templates/ packs/ readme/ styles/
 
     # Update Release with Files
     - name: Update Release with Files
@@ -54,49 +50,8 @@ jobs:
         draft: ${{ github.event.release.unpublished }}
         prerelease: ${{ github.event.release.prerelease }}
         token: ${{ secrets.REPO_SEC }}
-        artifacts: './system.json, ./system.zip'
+        artifacts: './release/system.json, ./release/system.zip'
         tag: ${{ github.event.release.tag_name }}
         body: ${{ github.event.release.body }}
 
-    # Publish version to foundry
-    - name: Get System ID
-      id: systemID
-      uses: notiz-dev/github-action-json-property@release
-      with:
-        path: "./system.json"
-        prop_path: "id"
-
-    - name: Get minimum
-      id: minimum
-      uses: notiz-dev/github-action-json-property@release
-      with:
-        path: "./system.json"
-        prop_path: "compatibility.minimum"
-
-    - name: Get verified
-      id: verified
-      uses: notiz-dev/github-action-json-property@release
-      with:
-        path: "./system.json"
-        prop_path: "compatibility.verified"
-  
-    # Submit to foundry
-    - name: Submit package to FoundryVTT Package Release API
-      run: |
-        curl -X POST "https://api.foundryvtt.com/_api/packages/release_version/" \
-          -H "Content-Type: application/json" \
-          -H "Authorization: ${{ secrets.FOUNDRY_KEY }}" \
-          -d '{
-            "id": "${{ steps.systemID.outputs.prop }}",
-            "dry-run": false,
-            "release": {
-              "version": "${{ steps.get_version.outputs.version-without-v }}",
-              "manifest": "https://github.com/${{ github.repository }}/releases/latest/download/system.json",
-              "notes": "https://github.com/${{ github.repository }}/releases/tag/${{ steps.get_version.outputs.version-without-v }}",
-              "compatibility": {
-                "minimum": "${{ steps.minimum.outputs.prop }}",
-                "verified": "${{ steps.verified.outputs.prop }}",
-                "maximum": ""
-              }
-            }
-          }'
+    

@@ -1,7 +1,7 @@
 <form class="{{cssClass}} {{actor.type}} flexcol" autocomplete="off" >
   {{!-- Sheet Header --}}
   <header class="sheet-header">
-    <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" height="100" width="100" />
+    <img class="profile-img" src="{{actor.img}}" style="border: 0px;" data-edit="img" title="{{actor.name}}" height="100" width="100" />
     <div class="header-fields">
       <h1 class="charname"><input name="name" type="text" value="{{actor.name}}" placeholder="Name" /></h1>
       {{!-- The grid classes are defined in scss/global/_grid.scss. To use,
@@ -54,13 +54,13 @@
   {{!-- Sheet Tab Navigation --}}
   <nav class="sheet-tabs tabs" data-group="primary">
     {{!-- Default tab is specified in actor-sheet.mjs --}}
-    <a class="item" data-tab="main">{{localize "HOUSEHOLD.SheetLabels.Main"}}</a>
-    <a class="item" data-tab="items">{{localize "HOUSEHOLD.SheetLabels.Equipaments"}}</a>
+    <a class="item" data-tab="main" title="{{localize "HOUSEHOLD.SheetLabels.Main"}}"><i class="fa-solid fa-house"></i></a>
+    <a class="item" data-tab="items" title="{{localize "HOUSEHOLD.SheetLabels.Equipaments"}}"><i class="fa-solid fa-gear"></i></a>
     <!--a class="item" data-tab="effects">{{localize "HOUSEHOLD.Actions.long"}}</a-->
   </nav>
 
   {{!-- Sheet Body --}}
-  <section class="sheet-body logo-bg">
+  <section class="sheet-body">
    
     {{!-- General Tab --}}
     <div class="tab general" data-group="primary" data-tab="main">
@@ -72,16 +72,12 @@
     <div class="tab items" data-group="primary" data-tab="items">
       <h2 class="characteristic-title">{{localize "HOUSEHOLD.SheetLabels.General"}}</h2>
        {{> "systems/household/templates/actor/parts/actor-list-items.hbs" items=gears type='equipament'}}
-      
+      <br />
       <h2 class="characteristic-title">{{localize "HOUSEHOLD.Weapons.long"}}</h2>
        {{> "systems/household/templates/actor/parts/actor-list-items.hbs" items=weapons type='weapons'}}
-      
+      <br />
       <h2 class="characteristic-title">{{localize "HOUSEHOLD.Gadgets.long"}}</h2>
        {{> "systems/household/templates/actor/parts/actor-list-items.hbs" items=gadgets type='equipament'}}
-
-       <!-- Description -->
-      <h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.SheetLabels.Description"}}</h2>
-      {{editor system.biography target="system.biography" rollData=rollData button=true owner=owner editable=editable}}
     </div>
 
     {{!-- Active Effects Tab --}}
