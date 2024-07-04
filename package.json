@@ -25,7 +25,8 @@
     "sass": "^1.53.0",
     "terser": "^5.7.1",
     "cssnano": "^5.0.0",
-    "postcss-cli": "^9.0.0"
+    "postcss-cli": "^9.0.0",
+    "braces": ">=3.0.3"
   },
   "main": "index.js",
   "directories": {
