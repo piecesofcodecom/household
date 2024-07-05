@@ -23,7 +23,7 @@ jobs:
 
     # Build Release
     - name: Generate release
-      run: npm run release
+      run: mkdir styles && mkdir css && npm run release
 
     # Substitute Manifest and Download Links For Versioned Ones
     - name: Substitute Manifest and Download Links For Versioned Ones
