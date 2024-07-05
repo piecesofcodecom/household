@@ -27,7 +27,7 @@
   
   }
 
-  nav.sheet-tabs {
+  nav.custom {
     margin: 4px 0;
     border-top: 1px solid var(--color-border-light-primary);
     border-bottom: 1px solid var(--color-border-light-primary);
@@ -36,7 +36,7 @@
     border-top-right-radius: 8px;
   }
   
-  nav.sheet-tabs > [data-tab] {
+  nav.custom > [data-tab] {
     padding: 5px 5px;
   }
 
@@ -62,7 +62,7 @@
     width: 100%;
   }
 
-  nav.tabs {
+  nav.custom {
     --tab-full-width: 44px;
     --tab-inactive-width: 34px;
     position: absolute;

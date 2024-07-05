@@ -39,6 +39,7 @@ async function createRelease() {
     await runCommand('npm run build-css');
     await runCommand('npm run build-js');
     await runCommand('npm run minify-js');
+    await runCommand('npm run minify-css');
 
     // Verifica se o diretório de destino existe, se não, cria
     await fs.ensureDir(destDir);

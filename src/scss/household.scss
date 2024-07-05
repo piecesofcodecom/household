@@ -26,10 +26,13 @@
   @import 'components/custom';
 }
 
-.sheet {
-  @import 'components/sheets';
-}
+
 
 .chat-message {
   @import 'components/chat';
+}
+
+.sheet.item,
+.sheet.actor {
+  @import 'components/sheets';
 }
