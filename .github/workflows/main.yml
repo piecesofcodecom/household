@@ -24,8 +24,6 @@ jobs:
     # Build Release
     - name: Generate release
       run: npm run release
-    - name: List release directory contents
-      run: ls -la /home/runner/work/household/household/release/
 
     # Substitute Manifest and Download Links For Versioned Ones
     - name: Substitute Manifest and Download Links For Versioned Ones
@@ -39,6 +37,8 @@ jobs:
         manifest: https://github.com/${{github.repository}}/releases/latest/download/system.json
         download: https://github.com/${{github.repository}}/releases/download/${{github.event.release.tag_name}}/system.zip
 
+    - name: Minify Action
+      uses: anthonyftwang/minify-action@v1.0.1
     # Create a zip file with all files required by the system to add to the release
     - run: cd release && zip -r ./system.zip system.json template.json readme.md LICENSE.txt assets/ build/ fonts/ lang/ templates/ packs/ readme/ styles/
 

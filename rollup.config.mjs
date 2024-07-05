@@ -22,7 +22,7 @@ export default {
           preset: 'default',
         })
       ],
-      extract: 'styles/household.min.css', // Extrai e minifica o CSS para um arquivo separado
+      extract: path.resolve('css', 'household.min.css'), // Extrai e minifica o CSS para um arquivo separado
       minimize: true, // Enable minification
     })
   ]
