@@ -24,6 +24,8 @@ jobs:
     # Build Release
     - name: Generate release
       run: npm run release
+    - name: List release directory contents
+      run: ls -la /home/runner/work/household/household/release/
 
     # Substitute Manifest and Download Links For Versioned Ones
     - name: Substitute Manifest and Download Links For Versioned Ones
