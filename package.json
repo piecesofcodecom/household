@@ -10,6 +10,7 @@
     "minify-js": "npx terser build/household.js -o build/household.min.js && npx rimraf build/household.js",
     "minify-css": "npx postcss ./css/household.css > ./styles/household.min.css",
     "release": "node release.cjs",
+    "dev": "node dev.cjs",
     "build": "npm run build-css && npm run build-js",
     "minify": "npm run minify-css && npm run minify-js",
     "build-all": "npm run build && npm run minify"

@@ -17,6 +17,11 @@
 @import 'global/flex';
 @import 'global/custom';
 
+.household-dialog {
+  @import 'global/dialog';
+  @import 'components/custom';
+}
+
 /* Styles limited to household sheets */
 .household {
   @import 'components/forms';
@@ -36,3 +41,4 @@
 .sheet.actor {
   @import 'components/sheets';
 }
+

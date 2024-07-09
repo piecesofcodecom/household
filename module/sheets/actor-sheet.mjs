@@ -56,7 +56,7 @@ export class HouseholdActorSheet extends ActorSheet {
 
     // Prepare NPC data and items.
     if (actorData.type == 'npc') {
-      this.position.width = 750;
+      this.position.width = 500;
       this.position.height = 850;
       this._prepareItems(context);
     }
@@ -179,6 +179,83 @@ export class HouseholdActorSheet extends ActorSheet {
       const item = this.actor.items.get(li.data('itemId'));
       item.delete();
       li.slideUp(200, () => this.render(false));
+    });
+
+
+    html.on('click', '.action-configuration', async (env) => {
+      const templateData = {
+        "action_1": {
+          "text": this.actor.system.actions.action_1,
+          "placeholder": game.i18n.localize('HOUSEHOLD.ActionI.long')
+        },
+        "action_2": {
+          "text": this.actor.system.actions.action_1,
+          "placeholder": game.i18n.localize('HOUSEHOLD.ActionI.long')
+        },
+        "action_3": {
+          "text": this.actor.system.actions.action_1,
+          "placeholder": game.i18n.localize('HOUSEHOLD.ActionI.long')
+        },
+        "action_4": {
+          "text": this.actor.system.actions.action_1,
+          "placeholder": game.i18n.localize('HOUSEHOLD.ActionI.long')
+        },
+        "action_5": {
+          "text": this.actor.system.actions.action_1,
+          "placeholder": game.i18n.localize('HOUSEHOLD.ActionI.long')
+        },
+        "action_6": {
+          "text": this.actor.system.actions.action_1,
+          "placeholder": game.i18n.localize('HOUSEHOLD.ActionI.long')
+        }
+      };
+
+      const dialog_action_config =  await renderTemplate("systems/household/templates/dialog/dialog-actions.hbs", templateData);      
+      foundry.applications.api.DialogV2.prompt({
+        window: { title: "Config Actions", icon: "fa-solid fa-gear" },
+        position: {width: 550},
+        classes: ["household-dialog"],
+        content: dialog_action_config,
+        rejectClose: false,
+        modal: true,
+        ok: {
+          label: "Submit",
+          callback: (event, button, dialog) => {
+            const new_value = {
+              "action_1": button.form.elements.action_1.value,
+              "action_2": button.form.elements.action_2.value,
+              "action_3": button.form.elements.action_3.value,
+              "action_4": button.form.elements.action_4.value,
+              "action_5": button.form.elements.action_5.value,
+              "action_6": button.form.elements.action_6.value
+            }
+            this.actor.update({['system.actions']: new_value});
+          }
+        }
+      })
+      /*return Dialog.wait({
+        title: `Configure Actions`,
+        content: dialog_action_config,
+        buttons: {
+          button1: {
+            label: "Save",
+            callback: (html) => {
+              const actions = {
+                "action_1": html.find("input#action-1").val(),
+                "action_2": html.find("input#action-2").val(),
+                "action_3": html.find("input#action-3").val(),
+                "action_4": html.find("input#action-4").val(),
+                "action_5": html.find("input#action-5").val(),
+                "action_6": html.find("input#action-6").val()
+              }
+              console.log(actions);
+              //this.actor.update({['system.actions']: new_value});
+
+             },
+            icon: `<i class="fas fa-save"></i>`
+          }
+        }
+    }).render(true);*/
     });
 
     html.on('click', '.npc-popup-item-edit', (ev) => {

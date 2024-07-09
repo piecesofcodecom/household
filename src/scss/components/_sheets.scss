@@ -380,3 +380,11 @@
   border-top: 0px;
   border-right: 0px;
 }
+
+.roll-action:hover + .roll-action-description {
+  display: block;
+}
+
+.roll-action-description {
+  display: none;
+}

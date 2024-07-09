@@ -24,6 +24,9 @@
       "Actions": {
           "long": "Actions"
       },
+      "ActionTable": {
+        "long": "Action Table"
+      },
       "AllIn": {
           "long": "All-In"
       },
@@ -99,6 +102,11 @@
       },
       "Difficulty": {
           "long": "Difficulty"
+      },
+      "Edit": {
+        "ActionTable": {
+            "long": "Edit Action Table"
+        }
       },
       "Effect": {},
       "Exhausted": {

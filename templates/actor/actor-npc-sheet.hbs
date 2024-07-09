@@ -3,7 +3,7 @@
   <header class="sheet-header">
     <img class="profile-img" src="{{actor.img}}" style="border: 0px;" data-edit="img" title="{{actor.name}}" height="100" width="100" />
     <div class="header-fields">
-      <h1 class="charname"><input name="name" type="text" value="{{actor.name}}" placeholder="Name" /></h1>
+      <h1 class="char-name"><input class="char-name" name="name" type="text" value="{{actor.name}}" placeholder="Name" /></h1>
       {{!-- The grid classes are defined in scss/global/_grid.scss. To use,
       use both the "grid" and "grid-Ncol" class where "N" can be any number
       from 1 to 12 and will create that number of columns. --}}
@@ -55,16 +55,48 @@
   <nav class="sheet-tabs tabs custom" data-group="primary">
     {{!-- Default tab is specified in actor-sheet.mjs --}}
     <a class="item" data-tab="main" title="{{localize "HOUSEHOLD.SheetLabels.Main"}}"><i class="fa-solid fa-house"></i></a>
-    <a class="item" data-tab="items" title="{{localize "HOUSEHOLD.SheetLabels.Equipaments"}}"><i class="fa-solid fa-gear"></i></a>
-    <!--a class="item" data-tab="effects">{{localize "HOUSEHOLD.Actions.long"}}</a-->
+    <a class="item roll-action rollable" data-type="action" title="{{localize "HOUSEHOLD.RollActions.long"}}"><i class="fa-solid fa-dice"></i></a>
+    <a class="item action-configuration" data-type="action" title="{{localize "HOUSEHOLD.Edit.ActionTable.long"}}"><i class="fa-solid fa-gear"></i></a>
   </nav>
+  <div class="roll-action-description">
+    <div class="resource flex-group-center">
+          <h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.ActionI.long"}}</h2>
+          <p>{{system.actions.action_1}}</p>
+        </div>
+
+        <div class="resource flex-group-center">
+          <h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.ActionII.long"}}</h2>
+          <p>{{system.actions.action_2}}</p>
+        </div>
+
+        <div class="resource flex-group-center">
+          <h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.ActionIII.long"}}</h2>
+          <p>{{system.actions.action_3}}</p>
+        </div>
+
+        <div class="resource flex-group-center">
+          <h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.ActionIV.long"}}</h2>
+          <p>{{system.actions.action_4}}</p>
+        </div>
+
+        <div class="resource flex-group-center">
+          <h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.ActionV.long"}}</h2>
+          <p>{{system.actions.action_5}}</p>
+        </div>
+
+        <div class="resource flex-group-center">
+          <h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.ActionVI.long"}}</h2>
+          <p>{{system.actions.action_6}}</p>
+        </div>
+      </div>
+    </div>
 
   {{!-- Sheet Body --}}
   <section class="sheet-body">
    
     {{!-- General Tab --}}
     <div class="tab general" data-group="primary" data-tab="main">
-      {{> "systems/household/templates/actor/parts/npc-tab-main.hbs"}}
+      {{> "systems/household/templates/actor/parts/npc-tab-main-right.hbs"}}
     </div>
       
 

@@ -17,7 +17,18 @@
   "readme": "README.md",
   "bugs": "https://github.com/piecesofcodecom/household/issues",
   "changelog": "CHANGELOG.md",
-  "media": [],
+  "media": [
+        {
+            "type": "cover",
+            "loop": false,
+            "flags": {}
+        },
+        {
+            "type": "setup",
+            "url": "systems/household/assets/official/system_bg.webp",
+            "thumbnail": "systems/household/assets/default_world.jpg"
+        }
+    ],
   "version": "placeholder",
   "compatibility": {
     "minimum": 11,

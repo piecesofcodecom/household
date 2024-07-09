@@ -1,47 +1,23 @@
-<section class="grid grid-3col">
-  <aside class="sidebar ">
-    <div class="fields flexcol flex-group-center" style="gap: 3px">
-      <div class="flexcol flex-group-center">
+<!--section class="grid grid-2col"-->
+  <!--aside class="sidebar">
+    <div style="border: 1px solid #000; background-color: #ffffff; opacity: 0.6;" class="fields flexcol flex-group-center" style="gap: 3px">
+      <div  class="flexcol flex-group-center">
         <div class="resource flex-group-center">
-          <label> <a class="rollable" data-type="action">
+          <label> <span style="display:inline-block; float:right;">
+              <a class="item active action-configuration" data-tab="main" title="Main">
+                <i class="fa-solid fa-gear"></i>
+              </a>
+            </span>
+            <a class="rollable" data-type="action">
               <h2 class="characteristic-description">{{localize "HOUSEHOLD.RollActions.long"}}</h2>
-            </a></label>
+            </a>
+          </label>
         </div>
-        <div class="resource flex-group-center">
-            <h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.ActionI.long"}}</h2>
-          <input type="text" name="system.actions.action_1" value="{{system.actions.action_1}}" data-dtype="String" />
-        </div>
-
-        <div class="resource flex-group-center">
-            <h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.ActionII.long"}}</h2>
-          <input type="text" name="system.actions.action_2" value="{{system.actions.action_2}}" data-dtype="String" />
-        </div>
-
-        <div class="resource flex-group-center">
-            <h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.ActionIII.long"}}</h2>
-          <input type="text" name="system.actions.action_3" value="{{system.actions.action_3}}" data-dtype="String" />
-        </div>
-
-        <div class="resource flex-group-center">
-            <h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.ActionIV.long"}}</h2>
-          <input type="text" name="system.actions.action_4" value="{{system.actions.action_4}}" data-dtype="String" />
-        </div>
-
-        <div class="resource flex-group-center">
-            <h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.ActionV.long"}}</h2>
-          <input type="text" name="system.actions.action_5" value="{{system.actions.action_5}}" data-dtype="String" />
-        </div>
-
-        <div class="resource flex-group-center">
-            <h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.ActionVI.long"}}</h2>
-          <input type="text" name="system.actions.action_6" value="{{system.actions.action_6}}" data-dtype="String" />
-        </div>
-      </div>
     </div>
-  </aside>
+  </aside-->
 
-  <section class="main grid-span-2 ">
+  <section class="main grid ">
     {{> "systems/household/templates/actor/parts/npc-tab-main-right.hbs"}}
   </section>
 
-</section>
+<!--/section-->
