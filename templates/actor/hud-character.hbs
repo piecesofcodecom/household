@@ -1,0 +1,162 @@
+<div class="character-stats">
+    <div class="character-stats-content">
+        <h4>{{localize "HOUSEHOLD.Fields.long"}}</h4>
+        <div class="abilities">
+            {{#each abilities as |ab key|}}
+            <div class="ability" data-ability="{{ab.id}}" data-character-id="{{@root/id}}">
+                <div class="ability-wrapper rollable">
+                    <span class="name">{{ab.ab}}</span>
+                    <span class="mod">
+                        {{#range ab.value}}
+                        <i class="fa-solid fa-{{ab.suit}} condition-icon-{{ab.suit}} {{ab.suit}}"></i>
+                        {{/range}}
+                    </span>
+                </div>
+                {{#if ab.jp}}
+                <span class="save" data-jp="{{ab.jp.id}}" data-jp-label="{{ab.jp.label}}"
+                    data-tooltip="{{ab.jp.title}}"><i class="fa-light fa-dice-d20 fa-sm"></i> {{ab.jp.label}}</span>
+                {{else}}
+                <span class="save">{{ab.mod}}</span>
+                {{/if}}
+            </div>
+            {{/each}}
+        </div>
+        <h4>Skills</h4>
+        <ul class="skills">
+            {{#each skills as |skill|}}
+            <li class="skill rollable" data-skill="{{skill.id}}" data-character-id="{{@root/id}}">
+                <span class="name">{{skill.name}}</span>
+                <span class="mod">
+                     {{#range skill.mod}}
+                        <i class="fa-solid fa-{{skill.suit}} condition-icon-{{skill.suit}} {{skill.suit}}"></i>
+                        {{/range}}
+                    </span>
+            </li>
+            {{/each}}
+        </ul>
+
+
+    </div>
+</div>
+
+<div class="character-info">
+    <div class="character-info-top">
+        <form class="character-attrs">
+            <div class="bar-wrapper">
+                <div class="attr">
+                    <label>{{localize "HOUSEHOLD.Profession.long"}}</label>
+                    <span>{{ profession }}</span>
+                </div>
+
+                <div class="attr">
+                    <label>{{localize "HOUSEHOLD.initiative"}}</label>
+                    <span>{{ini}}</span>
+                </div>
+
+                <div class="attr">
+                    <label>Stress</label>
+                    <span contenteditable="true">{{armor}}</span>
+                </div>
+            </div>
+        </form>
+
+        <div class="character-picture" data-tooltip="{{ name }}">
+            <img src="{{picture}}" alt="{{name}}" />
+
+            <div class="sheet" data-character="{{id}}">
+                {{localize "HOUSEHOLD.open_sheet"}}
+            </div>
+
+            {{#if isCharacter}}
+            <!--div class="character-level">
+                <div class="character-level-badge"></div>
+                <span>{{ name }}</span>
+            </div-->
+            {{/if}}
+        </div>
+
+        <div class="character-health">
+            <div class="bar-wrapper">
+                <div class="bar {{hp.status}}" style="width: {{hp.percent}}%"></div>
+
+                <input type="text" id="current-health" data-value="{{hp.value}}" data-id="{{id}}"
+                    value="{{hp.value}}" />
+                <span class="divider">/</span>
+                <input type="text" value="{{hp.max}}" disabled />
+                <!--input data-tooltip="Stress" type="text" value="{{hp.max}}" /-->
+            </div>
+
+        </div>
+    </div>
+
+    <div class="character-buttons">
+        <button class="stats-toggle">{{localize "HOUSEHOLD.stats"}}</button>
+        <div class="divider"></div>
+        <button class="actions-toggle">{{localize "HOUSEHOLD.actions"}}</button>
+    </div>
+
+    {{!--
+    <div class="character-details">
+        <div class="character-name">
+            {{name}}
+        </div>
+
+        <div class="character-race-class">
+            {{race}} {{class}}
+        </div>
+    </div>
+    --}}
+</div>
+
+<div class="character-actions">
+    <div class="character-actions-content">
+        {{#each actions as |actions kind|}}
+        {{#ifNotEmpty actions}}
+        <div class="actions-category">
+            <h4>{{actionTypeName kind}}</h4>
+
+            <div class="action-list">
+                {{#each actions as |a|}}
+                <div class="action item" data-item-id="{{a.id}}" data-character-id="{{@root/id}}">
+                    <div class="item-left">
+                        <img src="{{a.img}}" />
+
+                        <span>{{trimString a.name 20}}</span>
+                    </div>
+                    <div class="item-right">
+                        {{#if a.bac}}
+                        &nbsp;<a data-ba="bac" data-item-id="{{a.id}}" data-character-id="{{@root/id}}"
+                            class="attack-roll icon-button" title="{{localize " HOUSEHOLD.bac.description"}} (1d20
+                            {{a.bac_bonus}})"><i class="fa-light fa-dagger"></i></a>
+                        {{/if}}
+                        {{#if (and a.bad a.bac)}}
+                        &nbsp;ou
+                        {{/if}}
+                        {{#if a.bad}}
+                        &nbsp;<a data-ba="bad" data-item-id="{{a.id}}" data-character-id="{{@root/id}}"
+                            class="attack-roll icon-button" title="{{localize " HOUSEHOLD.bad.description"}} (1d20
+                            {{a.bac_bonus}})"><i class="fa-light fa-bow-arrow"></i></a>
+                        {{/if}}
+                        {{#if a.ba}}
+                        &nbsp;<a data-ba="ba" data-item-id="{{a.id}}" data-character-id="{{@root/id}}"
+                            class="attack-roll icon-button" title="Rolar ataque (1d20 {{a.ba_bonus}})"><i
+                                class="fa-light fa-mace"></i></a>
+                        {{/if}}
+                        {{#if (eq kind "spell")}}
+                        &nbsp;<a class="spell-cast" data-item-id="{{a.id}}" data-character-id="{{@root/id}}"
+                            title="Lançar">
+                            <i class="fa-solid fa-hand-sparkles"></i></a>
+                        {{else}}
+                        &nbsp;<a data-ba="bad" data-item-id="{{a.id}}" data-character-id="{{@root/id}}"
+                            class="damage-roll icon-button" title="Rolar dano ({{a.damage}})"><i
+                                class="fa-light fa-dice-d20"></i></a>
+                        {{/if}}
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+        </div>
+        {{/ifNotEmpty}}
+        {{/each}}
+    </div>
+</div>

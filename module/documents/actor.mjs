@@ -131,9 +131,9 @@ export class HouseholdActor extends Actor {
   }
 
   async _skillRoll(field, skill, mod = 0) {
-    const field_dices = this.system.fields[field].value;
-    const skill_dices = this.system.skills[skill].value;
-    let dice_poll = (Number(field_dices) + Number(skill_dices) + Number(mod));
+    const field_dice = this.system.fields[field].value;
+    const skill_dice = this.system.skills[skill].value;
+    let dice_poll = (Number(field_dice) + Number(skill_dice) + Number(mod));
     const formula = this._getFormula(dice_poll);
 
     let roll = new Roll(formula)
@@ -166,7 +166,7 @@ export class HouseholdActor extends Actor {
     return succ_to_chat;
   }
 
-  prepareDicesToChat(dice_poll, cancel_face = 0) {
+  preparediceToChat(dice_poll, cancel_face = 0) {
     const success_label = {
       '2': 'basic',
       '3': 'critical',
@@ -174,11 +174,11 @@ export class HouseholdActor extends Actor {
       '5': 'impossible',
       '6': 'jackpot'
     };
-    let dices_to_chat = [];
+    let dice_to_chat = [];
     for (let [key, value] of Object.entries(dice_poll)) {
       if (value > 0) {
         for (let j = 0; j < value; j++) {
-          dices_to_chat.push({
+          dice_to_chat.push({
             face: Number(key),
             success: value > 1 ? success_label[value] : 'none',
             locked: dice_poll[key] > 1 ? true : false,
@@ -187,12 +187,12 @@ export class HouseholdActor extends Actor {
         }
       }
     }
-    return dices_to_chat;
+    return dice_to_chat;
   }
   async _sendToChat(roll, field, skill, mod, poll_difficulty, dice_poll, success_poll, outcome, is_reroll, is_allin, is_jackpot, allow_reroll, allow_allin, give_up) {
     //face=dice.face locked=dice.locked success=dice.success
 
-    const dices = this.prepareDicesToChat(dice_poll);
+    const dice = this.preparediceToChat(dice_poll);
     const successes = this.prepareSuccessToChat(success_poll);
 
     if (is_allin) {
@@ -200,12 +200,12 @@ export class HouseholdActor extends Actor {
       allow_reroll = 0;
     }
 
-    // if there is no remaining dices, no buttons
+    // if there is no remaining dice, no buttons
 
 
     let initialValue = 0;
-    Object.entries(dices).reduce(
-      (accumulator, [key, currentValue]) => { !dices[key].locked ? initialValue += 1 : 0 },
+    Object.entries(dice).reduce(
+      (accumulator, [key, currentValue]) => { !dice[key].locked ? initialValue += 1 : 0 },
       {},
     );
 
@@ -219,9 +219,9 @@ export class HouseholdActor extends Actor {
       field: field,
       mod: mod,
       actor: this,
-      dices: dices,
+      dice: dice,
       currentpoll: JSON.stringify(dice_poll),
-      dices_string: JSON.stringify(dices),
+      dice_string: JSON.stringify(dice),
       poll_difficulty: JSON.stringify(poll_difficulty),
       poll_success: JSON.stringify(success_poll),
       successes: successes,
@@ -255,9 +255,9 @@ export class HouseholdActor extends Actor {
    */
 
   _get_poll(field, skill, mod) {
-    const field_dices = this.system.fields[field].value;
-    const skill_dices = this.system.skills[skill].value;
-    let dice_poll = (Number(field_dices) + Number(skill_dices) + Number(mod));
+    const field_dice = this.system.fields[field].value;
+    const skill_dice = this.system.skills[skill].value;
+    let dice_poll = (Number(field_dice) + Number(skill_dice) + Number(mod));
     return dice_poll;
 
   }

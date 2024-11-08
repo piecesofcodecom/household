@@ -3,6 +3,7 @@
       "AcesSleeve": {
           "long": "Aces up the Sleeve"
       },
+      "actions": "Actions",
       "ActionI": {
           "long": "Action I"
       },
@@ -140,6 +141,9 @@
           },
           "long": "Field"
       },
+      "Fields": {
+        "long": "Fields"
+      },
       "Folk": {
           "long": "Folk"
       },
@@ -174,6 +178,7 @@
       "Moves": {
           "long": "Moves"
       },
+      "open_sheet": "Open Sheet",
       "Placeholders": {
         "Contract": "Enter the contract name.",
         "Moves": "Enter the list of moves. They must be separated by commas.",
@@ -192,8 +197,8 @@
       "ReRoll": {
           "long": "Re-Roll"
       },
-      "RemainingDices": {
-          "long": "Remaining Dices"
+      "RemainingDice": {
+          "long": "Remaining Dice"
       },
       "Reroll": {
           "long": "Re-Rolling"
@@ -212,8 +217,7 @@
           "Chapter": "Chapters",
           "Configuration": "Configuration",
           "Description": "Description",
-          "Equipament": "Househood Equipament Sheet",
-          "Equipaments": "Equipaments",
+          "Equipament": "Equipament",
           "General": "General",
           "Item": "Househood Item Sheet",
           "Main": "Main",
@@ -230,11 +234,11 @@
           },
           "Athletics": {
               "abbr": "skill description from lang/<language>.json",
-              "long": "athletics"
+              "long": "Athletics"
           },
           "Authority": {
               "abbr": "skill description from lang/<language>.json",
-              "long": "authority"
+              "long": "Authority"
           },
           "Care": {
               "abbr": "care",
@@ -242,7 +246,7 @@
           },
           "Caution": {
               "abbr": "skill description from lang/<language>.json",
-              "long": "caution"
+              "long": "Caution"
           },
           "Charm": {
               "abbr": "char",
@@ -258,7 +262,7 @@
           },
           "Dexterity": {
               "abbr": "skill description from lang/<language>.json",
-              "long": "dexterity"
+              "long": "Dexterity"
           },
           "Eloquence": {
               "abbr": "eloq",
@@ -266,7 +270,7 @@
           },
           "Elusion": {
               "abbr": "skill description from lang/<language>.json",
-              "long": "elusion"
+              "long": "Elusion"
           },
           "Etiquette": {
               "abbr": "etiq",
@@ -274,11 +278,11 @@
           },
           "Exploration": {
               "abbr": "skill description from lang/<language>.json",
-              "long": "exploration"
+              "long": "Exploration"
           },
           "Fight": {
               "abbr": "skill description from lang/<language>.json",
-              "long": "fight"
+              "long": "Fight"
           },
           "Grace": {
               "abbr": "grac",
@@ -302,10 +306,11 @@
           },
           "Will": {
               "abbr": "skill description from lang/<language>.json",
-              "long": "will"
+              "long": "Will"
           },
           "long": "Skill"
       },
+      "stats": "Abilities",
       "Stress": {
           "long": "Stress"
       },

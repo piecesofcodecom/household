@@ -140,6 +140,9 @@
             },
             "long": "Ambito"
         },
+        "Fields": {
+        "long": "Fields"
+        },
         "Folk": {
             "long": "Popolo"
         },
@@ -174,6 +177,7 @@
         "Moves": {
             "long": "Manovre"
         },
+        "open_sheet": "Open Sheet",
         "Placeholders": {
             "Contract": "Inserisci il nome del contratto.",
             "Moves": "Inserisci l'elenco delle manovre. Devono essere separate da virgole.",
@@ -192,8 +196,8 @@
         "ReRoll": {
             "long": "Rilancio"
         },
-        "RemainingDices": {
-            "long": "Remaining Dices"
+        "RemainingDice": {
+            "long": "Remaining Dice"
         },
         "RollAbility": {
             "long": "Tiro"
@@ -209,8 +213,7 @@
             "Chapter": "Capitoli",
             "Configuration": "Configurazione",
             "Description": "Descrizione",
-            "Equipament": "Househood Equipament Sheet",
-            "Equipaments": "Equipaggiamenti",
+            "Equipament": "Equipaggiamenti",
             "General": "Generale",
             "Item": "Househood Item Sheet",
             "Main": "Principale",

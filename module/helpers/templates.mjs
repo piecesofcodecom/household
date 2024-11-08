@@ -12,7 +12,7 @@ export const preloadHandlebarsTemplates = async function () {
     'systems/household/templates/actor/parts/actor-list-items.hbs',
     // Item partials
     // Chat parts
-    'systems/household/templates/chat/parts/dices/faces.html',
+    'systems/household/templates/chat/parts/dice/faces.html',
     // NPC parts
     "systems/household/templates/actor/parts/npc-tab-main.hbs",
     "systems/household/templates/actor/parts/npc-tab-main-right.hbs",

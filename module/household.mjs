@@ -8,11 +8,17 @@ import { HouseholdItemSheet } from './sheets/item-sheet.mjs';
 import { preloadHandlebarsTemplates } from './helpers/templates.mjs';
 import { HOUSEHOLD } from './helpers/config.mjs';
 
+/*import {
+  getCharacter,
+  characterData,
+} from "./sheets/actor-hud.mjs";*/
+import * as actions from "./helpers/actions.mjs";
+import { isGm } from "./helpers/utils.mjs";
 /* -------------------------------------------- */
 /*  Init Hook                                   */
 /* -------------------------------------------- */
  
-Hooks.once('init', function () {
+Hooks.once('init', async function () {
   // Add utility classes to the global game object so that they're more easily
   // accessible in global contexts.
   game.household = {
@@ -20,6 +26,16 @@ Hooks.once('init', function () {
     HouseholdItem,
     rollItemMacro,
   };
+
+  $("body.game").append('<div id="player-character"></div>');
+  $("body.game").append('<div id="party"></div>');
+
+  await loadTemplates([
+    "systems/household/templates/actor/hud-character.hbs"
+  ]);
+
+  //activatePlayerListeners();
+  //activatePartyListeners();
 
   // Add custom constants for configuration.
   CONFIG.HOUSEHOLD = HOUSEHOLD;
@@ -65,7 +81,13 @@ Hooks.once('init', function () {
 /* -------------------------------------------- */
 /*  Handlebars Helpers                          */
 /* -------------------------------------------- */
-
+Handlebars.registerHelper("range", function (n, block) {
+  let accum = "";
+  for (let i = 0; i < n; ++i) {
+    accum += block.fn(i);
+  }
+  return accum;
+});
 // If you need to add Handlebars helpers, here is a useful example:
 Handlebars.registerHelper('toLowerCase', function (str) {
   return str.toLowerCase();
@@ -184,6 +206,51 @@ Handlebars.registerHelper('hasNoSuccess', function (obj, options) {
       return options.fn(this);
     return options.inverse(this);
 });
+
+Handlebars.registerHelper("ifNotEmpty", (input, block) => {
+  if (
+    input &&
+    ((input.length && input.length > 0) || (input.size && input.size > 0))
+  ) {
+    return block.fn(this);
+  }
+});
+
+const actionTypeNames = {
+  action: "actions",
+  bonus: "bonus_actions",
+  reaction: "reactions",
+  crew: "crew_actions",
+  weapon: "weapons",
+  spell: "spells",
+  active: "active",
+  inactive: "inactive"
+};
+
+Handlebars.registerHelper('trimString', function (str, maxSize) {
+  if (str.length > maxSize) {
+      return str.substring(0, maxSize) + '...';  // Append ellipsis if truncated
+  } else {
+      return str;
+  }
+});
+
+Handlebars.registerHelper("actionTypeName", (type) => {
+  const key = actionTypeNames[type] || "other_actions";
+  return game.i18n.localize(`HOUSEHOLD.${key}`);
+});
+
+Handlebars.registerHelper("modifier", (x) => (x < 0 ? x : `+${x}`));
+
+Handlebars.registerHelper("abilityName", (id) =>
+  game.i18n.localize(`DND5E.Ability${id.titleCase()}Abbr`)
+);
+
+/*Handlebars.registerHelper("skillName", (id) =>
+  game.i18n.localize(`DND5E.Skill${id.titleCase()}`)
+);*/
+
+Handlebars.registerHelper("firstWord", (str) => str.split(" ")[0]);
 
 /* -------------------------------------------- */
 /*  Ready Hook                                  */
@@ -361,7 +428,7 @@ Hooks.on('renderChatMessage', (message, html, data) => {
     const  poll_difficulty = JSON.parse(dataset.poll_difficulty);
     const evaluation = actor.evaluatePoll(clone_current_poll, poll_difficulty)
 
-    const dices = actor.prepareDicesToChat(current_poll, Number(face_gave_up));
+    const dice = actor.prepareDiceToChat(current_poll, Number(face_gave_up));
     const successes = actor.prepareSuccessToChat(evaluation.poll_successes);
     const templateData = {
       ability: "Art",
@@ -369,9 +436,9 @@ Hooks.on('renderChatMessage', (message, html, data) => {
       field: 'society',
       mod: 1,
       actor: actor,      
-      dices: dices,
+      dice: dice,
       currentpoll: JSON.stringify(current_poll),
-      dices_string: JSON.stringify(dices),
+      dice_string: JSON.stringify(dice),
       poll_difficulty: JSON.stringify(poll_difficulty),
       poll_success: JSON.stringify({}),
       successes: successes,
@@ -465,6 +532,152 @@ function rollItemMacro(itemUuid) {
     // Trigger the item roll
     item.roll();
   });
+}
+
+/** HUD FUNCTIUONS */
+Hooks.on("renderApplication", async function () {
+  //await renderCharacter();
+
+  if (isGm()) {
+    $("#players").removeClass("hidden");
+  } else {
+    $("#players").addClass("hidden");
+  }
+});
+
+Hooks.on("updateActor", async function (actor) {
+  /*if (actor.id === getCharacter()?.id) {
+    await renderCharacter();
+  }*/
+});
+
+Hooks.on("updateOwnedItem", async function (actor, _, diff) {
+  /*if (actor.id !== getCharacter()?.id) {
+    return;
+  }*/
+
+  // Wait a little bit so the item is updated and can be rendered
+  // correctly in the actions list.
+  /*await new Promise((resolve) => setTimeout(resolve, 1000));
+  await renderCharacter();*/
+});
+
+Hooks.on('controlToken', async function () {
+  if (!isGm()) return;
+  //await renderCharacter();
+});
+
+Hooks.on('refreshToken', async function () {
+  //if (!isGm()) return;
+  //await renderCharacter();
+});
+
+
+Hooks.on('deleteToken', async function () {
+  if (!isGm()) return;
+  //await renderCharacter();
+})
+
+function activatePlayerListeners(elem) {
+  const sheet = elem.querySelector('#player-character .sheet');
+  sheet.addEventListener("click", actions.openSheet);
+  setupHealthPointsTracker("#current-health");
+  
+  const skills = elem.querySelectorAll('#player-character .skill')
+  for(let skill of skills) {
+    skill.addEventListener("click", actions.rollSkill);
+  }
+  //$(elem).on("click", "#player-character .save", actions.rollSave);
+  //$(elem).on("click", "#player-character .ability", actions.rollAbility);
+  const abilities = elem.querySelectorAll('#player-character .ability')
+  for(let ability of abilities) {
+    ability.addEventListener("click", actions.rollAbility);
+  }
+  const actions_menu = elem.querySelector('#player-character .actions-toggle');
+  actions_menu.addEventListener("click", toggleActions);
+
+  const stats_menu = elem.querySelector('#player-character .stats-toggle');
+  stats_menu.addEventListener("click", toggleStats);
+  
+}
+
+function toggleActions(e) {
+  e.stopPropagation();
+  $(".character-actions").toggleClass("show");
+  $(".stats-toggle").removeClass("active");
+  $(".actions-toggle").toggleClass("active");
+  $(".character-stats").removeClass("show");
+}
+
+function toggleStats(e) {
+  e.stopPropagation();
+  $(".character-stats").toggleClass("show");
+  $(".stats-toggle").toggleClass("active");
+  $(".actions-toggle").removeClass("active");
+  $(".character-actions").removeClass("show");
+}
+
+function setupHealthPointsTracker(element) {
+  $(document).on("focus", element, function () {
+    this.value = "";
+  });
+
+  $(document).on("blur", element, function () {
+    this.value = this.dataset.value;
+  });
+
+  $(document).on("keyup", element, function (e) {
+    if (e.keyCode !== 13) {
+      return;
+    }
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    const actor = game.actors.get(this.dataset.id);
+    if (!actor) {
+      return;
+    }
+
+    const current = this.dataset.value;
+    const text = this.value.trim();
+
+    let dmg;
+    if (text.startsWith("+") || text.startsWith("-")) {
+      dmg = -Number(text);
+    } else {
+      const num = Number(text);
+      dmg = num > current ? -(num - current) : current - num;
+    }
+
+    if (!isNaN(dmg)) {
+      actor.applyDamage(dmg);
+    }
+  });
+}
+
+async function renderCharacter() {
+  const elem = document.getElementById("player-character");
+  if (!elem) return;
+  
+
+  const character = getCharacter();
+  if (!character) {
+    elem.parentNode.removeChild(elem);
+    $("body.game").append('<div id="player-character"></div>');
+    return;
+  }
+
+  const data = characterData(character);
+  if (!data) return;
+
+  const tpl = await renderTemplate(
+    "systems/household/templates/actor/hud-character.hbs",
+    data
+  );
+
+  elem.innerHTML = tpl;
+  activatePlayerListeners(elem);
 }
 
 
