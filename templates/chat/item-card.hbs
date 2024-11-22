@@ -1,0 +1,18 @@
+<div class="household chat-card item-card" data-actor-id="{{ actor.id }}">
+    <div class="item-display">
+        <div class="item-header">
+            <img width="32px" src="{{img}}" alt="{{name}} icon" class="item-icon">
+            <h2 class="item-name">{{name}}</h2>
+        </div>
+        <div class="item-body">
+            <p class="item-description">{{{description}}}</p>
+        </div>
+        <div class="item-footer">
+            {{#if has_action}}
+                <p class="item-action">Action: <strong>{{action}}</strong></p>
+                {{/if}}
+        </div>
+    </div>
+
+
+</div>

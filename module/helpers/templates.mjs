@@ -17,6 +17,8 @@ export const preloadHandlebarsTemplates = async function () {
     "systems/household/templates/actor/parts/npc-tab-main.hbs",
     "systems/household/templates/actor/parts/npc-tab-main-right.hbs",
     // Dialogs
-    "systems/household/templates/dialog/dialog-actions.hbs"
+    "systems/household/templates/dialog/dialog-actions.hbs",
+    "systems/household/templates/actor/hud-character.hbs",
+    "systems/household/templates/actor/hud-npc.hbs"
   ]);
 };

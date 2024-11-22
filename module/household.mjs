@@ -8,12 +8,37 @@ import { HouseholdItemSheet } from './sheets/item-sheet.mjs';
 import { preloadHandlebarsTemplates } from './helpers/templates.mjs';
 import { HOUSEHOLD } from './helpers/config.mjs';
 
-/*import {
+import {
   getCharacter,
   characterData,
-} from "./sheets/actor-hud.mjs";*/
+} from "./sheets/actor-hud.mjs";
 import * as actions from "./helpers/actions.mjs";
 import { isGm } from "./helpers/utils.mjs";
+
+function preparediceToChat(dice_poll, cancel_face = 0) {
+  const success_label = {
+    '2': 'basic',
+    '3': 'critical',
+    '4': 'extreme',
+    '5': 'impossible',
+    '6': 'jackpot'
+  };
+  let dice_to_chat = [];
+  for (let [key, value] of Object.entries(dice_poll)) {
+    if (value > 0) {
+      for (let j = 0; j < value; j++) {
+        dice_to_chat.push({
+          face: Number(key),
+          success: value > 1 ? success_label[value] : 'none',
+          locked: dice_poll[key] > 1 ? true : false,
+          face_display: Number(key) === Number(cancel_face) ? 0 : Number(key),
+        })
+      }
+    }
+  }
+  return dice_to_chat;
+}
+
 /* -------------------------------------------- */
 /*  Init Hook                                   */
 /* -------------------------------------------- */
@@ -30,9 +55,9 @@ Hooks.once('init', async function () {
   $("body.game").append('<div id="player-character"></div>');
   $("body.game").append('<div id="party"></div>');
 
-  await loadTemplates([
-    "systems/household/templates/actor/hud-character.hbs"
-  ]);
+  // await loadTemplates([
+    
+  // ]);
 
   //activatePlayerListeners();
   //activatePartyListeners();
@@ -156,6 +181,35 @@ Handlebars.registerHelper("multipleOf", function(value, multipler, options) {
   return options.inverse(this);
 });
 
+Handlebars.registerHelper('stressPercentage', function(stress) {
+  if (!stress || stress.max === 0) {
+    return 1;
+  }
+  
+  const percentage = 1- ((stress.max - stress.current) / stress.max);
+  return percentage; // Clamping the value between 0 and 100
+});
+
+Handlebars.registerHelper('getOpacyDecorum', function(decorum) {
+  // Example logic: adjust as needed
+
+  if (decorum == 1) {
+    return 1; // Fully opaque
+  }
+  if (decorum == 2) {
+    return 0.7; // Semi-opaque
+  }
+  if (decorum == 3) {
+    return 0.5 // Mostly transparent
+  }
+  if (decorum == 4) {
+    return 0.3 // Mostly transparent
+  }
+  if (decorum == 5) {
+    return 0 // Mostly transparent
+  }
+});
+
 Handlebars.registerHelper("when", function(operand_1, operator, operand_2, options) {
   let operators = {                     //  {{#when <operand1> 'eq' <operand2>}}
     'eq': (l,r) => l == r,              //  {{/when}}
@@ -252,9 +306,26 @@ Handlebars.registerHelper("abilityName", (id) =>
 
 Handlebars.registerHelper("firstWord", (str) => str.split(" ")[0]);
 
+
+
 /* -------------------------------------------- */
 /*  Ready Hook                                  */
 /* -------------------------------------------- */
+
+Hooks.on('renderChatMessage', (message, html, data) => {
+  // Get the chat log element
+  const chatLog = document.querySelector('#chat-log');
+  if (chatLog) {
+    // Scroll to the bottom
+    const observer = new MutationObserver(() => {
+      chatLog.scrollTo({
+        top: chatLog.scrollHeight,
+        behavior: 'smooth'
+      });
+    });
+    observer.observe(chatLog, { childList: true });
+  }
+});
 
 Hooks.once('ready', function () {
   // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
@@ -419,6 +490,7 @@ Hooks.on('renderChatMessage', (message, html, data) => {
 
   html.find('.give_up').click(async event => {
     event.preventDefault();
+    // TODO refazer essa parte
     const dataset = event.target.dataset;
     const face_gave_up = dataset.face;
     const current_poll = JSON.parse(dataset.currentpoll)
@@ -426,9 +498,8 @@ Hooks.on('renderChatMessage', (message, html, data) => {
     clone_current_poll[face_gave_up] = 0;
     const actor = game.actors.get(message.speaker.actor)
     const  poll_difficulty = JSON.parse(dataset.poll_difficulty);
-    const evaluation = actor.evaluatePoll(clone_current_poll, poll_difficulty)
-
-    const dice = actor.prepareDiceToChat(current_poll, Number(face_gave_up));
+    const evaluation = actor.evaluatePoll(clone_current_poll, poll_difficulty);
+    const dice = preparediceToChat(current_poll, Number(face_gave_up));
     const successes = actor.prepareSuccessToChat(evaluation.poll_successes);
     const templateData = {
       ability: "Art",
@@ -535,8 +606,13 @@ function rollItemMacro(itemUuid) {
 }
 
 /** HUD FUNCTIUONS */
+Hooks.on("household.onUpdateTokenRequest", async function() {
+  if (!game.user.isGM)
+    await renderCharacter();
+})
 Hooks.on("renderApplication", async function () {
-  //await renderCharacter();
+  if (!game.user.isGM)
+    await renderCharacter();
 
   if (isGm()) {
     $("#players").removeClass("hidden");
@@ -546,36 +622,36 @@ Hooks.on("renderApplication", async function () {
 });
 
 Hooks.on("updateActor", async function (actor) {
-  /*if (actor.id === getCharacter()?.id) {
+  if (actor.id === getCharacter()?.id) {
     await renderCharacter();
-  }*/
+  }
 });
 
 Hooks.on("updateOwnedItem", async function (actor, _, diff) {
-  /*if (actor.id !== getCharacter()?.id) {
+  if (actor.id !== getCharacter()?.id) {
     return;
-  }*/
+  }
 
   // Wait a little bit so the item is updated and can be rendered
   // correctly in the actions list.
-  /*await new Promise((resolve) => setTimeout(resolve, 1000));
-  await renderCharacter();*/
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+  await renderCharacter();
 });
 
 Hooks.on('controlToken', async function () {
   if (!isGm()) return;
-  //await renderCharacter();
+  await renderCharacter();
 });
 
 Hooks.on('refreshToken', async function () {
-  //if (!isGm()) return;
-  //await renderCharacter();
+  if (!isGm()) return;
+  await renderCharacter();
 });
 
 
 Hooks.on('deleteToken', async function () {
   if (!isGm()) return;
-  //await renderCharacter();
+  await renderCharacter();
 })
 
 function activatePlayerListeners(elem) {
@@ -583,12 +659,41 @@ function activatePlayerListeners(elem) {
   sheet.addEventListener("click", actions.openSheet);
   setupHealthPointsTracker("#current-health");
   
-  const skills = elem.querySelectorAll('#player-character .skill')
+  const skills = elem.querySelectorAll('#player-character .skill');
+
+  const editvalues = elem.querySelectorAll("#player-character .editValue");
+  for (let item of editvalues) {
+    item.addEventListener("click", actions.editValue);
+  }
+
+  const editInputs = elem.querySelectorAll("#player-character .InputeditValue");
+  for (let item of editInputs) {
+    item.addEventListener("input", actions.InputeditValue);
+  }
+
+  const rollaction = elem.querySelector('#player-character .roll-action');
+  if (rollaction) {
+    rollaction.addEventListener('click', actions.rollAction);
+  }
+ 
+  const decorum = elem.querySelectorAll('#player-character .decorum');
+  const items = elem.querySelectorAll('#player-character .item');
+  for (let item of items) {
+    item.addEventListener("click", actions.useItem);
+  }
+  const aces = elem.querySelectorAll('#player-character .aces');
+  for (let ace of aces) {
+
+    ace.addEventListener("click", actions.useAce);
+  }
+  //$(elem).on("click", "#player-character .item", actions.useItem);
+  for (let dec of decorum) {
+    dec.addEventListener("click", actions.setAttribute);
+  }
+  
   for(let skill of skills) {
     skill.addEventListener("click", actions.rollSkill);
   }
-  //$(elem).on("click", "#player-character .save", actions.rollSave);
-  //$(elem).on("click", "#player-character .ability", actions.rollAbility);
   const abilities = elem.querySelectorAll('#player-character .ability')
   for(let ability of abilities) {
     ability.addEventListener("click", actions.rollAbility);
@@ -668,17 +773,95 @@ async function renderCharacter() {
     return;
   }
 
-  const data = characterData(character);
+  let actor = character;
+  if (character instanceof TokenDocument || character instanceof Token) {
+    actor = character.actor;
+  } 
+  const data = characterData(actor, character.id);
   if (!data) return;
+  const scroll_1 = $('.character-actions-content').scrollTop();
+  const scroll_2 = $('.character-stats-content').scrollTop();
+  data["tabs"] = {
+    characterStats: $(".character-stats").length > 0 ? ($(".character-stats").attr("class")).replace("character-stats") : "",
+    statsToggle: $(".stats-toggle").length > 0 ? ($(".stats-toggle").attr("class")).replace("stats-toggle") : "",
+    actionsToggle: $(".actions-toggle").length > 0 ? ($(".actions-toggle").attr("class")).replace("actions-toggle") : "",
+    characterActions: $(".character-actions").length > 0 ? ($(".character-actions").attr("class")).replace("character-actions") : "",
+  }
+  data["tabs"].characterStats = data["tabs"].characterStats.trim().replace('undefined','')
+  data["tabs"].statsToggle = data["tabs"].statsToggle.trim().replace('undefined','')
+  data["tabs"].actionsToggle = data["tabs"].actionsToggle.trim().replace('undefined','')
+  data["tabs"].characterActions = data["tabs"].characterActions.trim().replace('undefined','')
+  let tpl;
 
-  const tpl = await renderTemplate(
-    "systems/household/templates/actor/hud-character.hbs",
-    data
-  );
+   
+  if (actor.type == "npc") {
+    tpl = await renderTemplate(
+      "systems/household/templates/actor/hud-npc.hbs",
+      data
+    );
+  } else {
+    tpl = await renderTemplate(
+      "systems/household/templates/actor/hud-character.hbs",
+      data
+    );
+  }
 
   elem.innerHTML = tpl;
+  $('.character-actions-content').scrollTop(scroll_1);
+  $('.character-stats-content').scrollTop(scroll_2);
   activatePlayerListeners(elem);
 }
+/** DICE */
+export const DENOMINATION = "6";
+
+export class HHDice extends foundry.dice.terms.Die {
+  constructor(termData) {
+    super({ ...termData, faces: 6 });
+  }
+
+  static DENOMINATION = "6";
+}
+
+// Register the custom die term with Foundry VTT
+CONFIG.Dice.terms["6"] = HHDice;
+
+Hooks.once('diceSoNiceReady', (dice3d) => {
+  dice3d.addSystem({ id: "household", name: "Household" }, "preferred");
+  dice3d.addDicePreset({
+    type: 'd6',
+    labels: [
+      '/systems/household/assets/dice/face_1.png',
+      '/systems/household/assets/dice/face_2.png',
+      '/systems/household/assets/dice/face_3.png',
+      '/systems/household/assets/dice/face_4.png',
+      '/systems/household/assets/dice/face_5.png',
+      '/systems/household/assets/dice/face_6.png'],
+    bumpMaps: [
+      '/systems/household/assets/dice/face_1_bump.png', 
+      '/systems/household/assets/dice/face_2_bump.png', 
+      '/systems/household/assets/dice/face_3_bump.png', 
+      '/systems/household/assets/dice/face_4_bump.png', 
+      '/systems/household/assets/dice/face_5_bump.png',
+      '/systems/household/assets/dice/face_6_bump.png'],
+    colorset:'household',
+    system: 'household',
+
+  });
+
+  dice3d.addColorset(
+    {
+      name: "household",
+      description: "Household Default",
+      category: "Colors",
+      foreground: ["#0d0d0d"],
+      background: ["#c5c5c5"],
+      outline: ["#db1515", "#1551db"],
+      material: "plastic",
+      visibility: "visible",
+    },
+    "preferred",
+  );
+});
 
 
 

@@ -1,21 +1,12 @@
 <div class="household chat-card item-card" data-actor-id="{{ actor.id }}">
     <h2 style="text-align: center; border: none; width: 100%">
         {{localize (concat "HOUSEHOLD." reroll_message ".long") }}&nbsp;
-        <span class="ability-name">{{ localize (concat "HOUSEHOLD.Skill." ability ".long") }}</span>
+        <span class="ability-name">{{ability}} {{ localize (concat "HOUSEHOLD.Skill." ability ".long") }}</span>
     </h2>
 
     {{#hasSuccess dice }}
     <h3 class="header_og">{{localize "HOUSEHOLD.Matches.long" }}</h3>
-    <div style="display: flex;
-    gap: 5px;
-    flex-wrap: wrap;
-    align-items: center; /* Vertical center alignment */
-    justify-content: center; /* Horizontal center alignment */
-    width: 230px; /* Set the limit of the container width */
-    border: 0px solid #000; /* Just to show the container bounds */
-    padding: 10px;
-
-  ">
+    <div style="display: flex;gap: 5px;margin-bottom: 10px; justify-content: center; flex-wrap: wrap;">
         {{#each dice as |dice value|}}
         {{#when dice.success 'noteq' 'none'}}
         {{#when dice.face 'noteq' give_up_face }}

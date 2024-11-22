@@ -1,0 +1,173 @@
+<div class="character-stats {{#when characterStats 'noteq' ''}}{{tabs.characterStats}}{{/when}}">
+    <div class="character-stats-content">
+        {{#each items as |items kind|}}
+            {{#ifNotEmpty items}}
+                <div class="actions-category">
+                    <h4>{{localize (concat "HOUSEHOLD." kind ".long")}}</h4>
+                    <div class="action-list">
+                        {{#each items as |item|}}
+                            <div class="action item" data-item-id="{{ item.id }}" data-character-id="{{@root/id}}">
+                                <div class="item-left" data-tooltip="{{ item.system.description }}">
+                                    <img src="{{ item.img }}" />
+
+                                    <span>{{trimString item.name 20}}
+                                         {{#if (eq item.type "move")}}
+                                            {{#each item.system.suits as | value key|}}
+                                                {{#if value}}
+                                                    <i style="color: {{getFieldColor key}}" class="fa-solid fa-{{getSuitFromField key}}"></i>
+                                                {{/if}}
+                                            {{/each}}
+                                        {{/if}}
+                                    </span>
+                                </div>
+                                <div class="item-right">
+                                    &nbsp; 
+                                    {{#if (eq item.type "move")}}
+                                        {{#if item.system.exhausted}}
+                                            <a data-type="{{ item.type }}" data-action="use" data-item-id="{{ item.id }}" data-character-id="{{@root/id}}"
+                                                class="action item" title="{{ item.name }}">
+                                                <i style="color: red" class="fa-regular fa-toggle-large-off"></i>
+                                            </a>
+                                        {{else}}
+                                        <a data-type="{{ item.type }}" data-action="use" data-item-id="{{ item.id }}" data-character-id="{{@root/id}}"
+                                                class="action item" title="{{ item.name }}">
+                                                <i style="color: green" class="fa-regular fa-toggle-large-on"></i>
+                                            </a>
+                                        {{/if}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        {{/each}}
+                    </div>
+                </div>
+        {{/ifNotEmpty}}
+        {{/each}}
+
+
+    </div>
+</div>
+
+<div class="character-info">
+    <div class="character-info-top">
+        <form class="npc-attrs">
+            <div class="bar-wrapper" style="background-color: #cec3c9; display: flex;
+    justify-content: center;
+    align-items: center;text-align: center;">
+                
+                   {{#numLoop 5}}
+              {{#when @root/threat.level 'gteq' this }}
+                {{#when @root/threat.level 'eq' this }}
+                  <input type="radio" style="display: none" id="{{@root/id}}-threat_{{this}}" name="system.threat.level" value="{{reduceBy this 1}}" data-dtype="Number" >
+                {{else}}
+                  <input type="radio" style="display: none" id="{{@root/id}}-threat_{{this}}" name="system.threat.level" value="{{this}}" data-dtype="Number" >
+                {{/when}}
+                 <label  for="{{@root/id}}-threat_{{this}}">
+                  <i style="font-size: 1.5em; margin: 2px; color: #612877" class="fa-solid fa-spider"></i>
+                </label>
+              {{else}}
+                <input type="radio" style="display: none" id="{{@root/id}}-threat_{{this}}" name="system.threat.level" value="{{this}}" data-dtype="Number" >
+                  <label for="{{@root/id}}-threat_{{this}}">
+                  <i style="font-size: 1.5em; margin: 2px; color: #612877" class="fa-thin fa-spider"></i>
+                </label>
+              {{/when}}
+
+            {{/numLoop}}
+
+            
+
+                <!--div class="attr">
+                    <label>Stress</label>
+                    <span contenteditable="true">{{armor}}</span>
+                </div-->
+            </div>
+        </form>
+
+        <div class="npc-picture" data-tooltip="{{ name }}">
+            <!--img src="{{picture}}" alt="{{name}}" /-->
+            <div id="frame" class="npc-frame"></div>
+            <div id="photo-mask">
+                <img src="{{picture}}" alt="{{name}}" class="photo-subject">
+            </div>
+            <div id="glass-highlight"></div>
+            <div id="grunge-texture-npc" style="opacity: {{stressPercentage stress}};"></div>
+            <div id="grunge-texture-npc2" style="opacity: {{stressPercentage stress}};"></div>
+
+            <div class="sheet" data-character-id="{{id}}" style="margin-left: 25px;
+    margin-top: 25px;">
+                {{localize "HOUSEHOLD.open_sheet"}}
+            </div>
+
+            <div class="npc-level">
+                <div class="character-level-badge">
+                    <input class="InputeditValue" style="height: 40px;
+    position: relative;
+    background-size: cover;
+    z-index: 4;
+    border: 0;
+    text-align: center;
+    background-position: center;
+    background-image: {{#when stress.current 'lteq' stress.max}}
+    url(/systems/household/assets/sheet/{{#when stress.current 'in' crucial_boxes}}rosette{{else}}square{{/when}}-small{{#when stress.current 'in' crucial_boxes}}-red{{/when}}.png);
+    {{else}}
+    url(/systems/household/assets/sheet/overstressed.png);
+    {{/when}}
+    width: 40px;
+    opacity: 0.7;
+    color: #eee;
+    background-repeat: no-repeat;font-weight: bold;" type="text" value="{{#when stress.current 'lteq' stress.max}}{{stress.current}}{{/when}}" data-path="system.stress.current" data-value="{{stress.current}}" data-character-id="{{@root/id}}">
+                </div>
+            </div>
+        </div>
+
+        <div class="npc-health">
+            <div class="bar-wrapper" style="background-color: #cec3c9; display: flex;
+    justify-content: center;
+    align-items: center;text-align: center;">
+                <i style="color: black; font-size: x-large;
+    cursor: pointer;" class="fa-solid fa-dice roll-action"  data-character-id="{{id}}"></i>
+                <!--input data-tooltip="Stress" type="text" value="{{hp.max}}" /-->
+            </div>
+
+        </div>
+    </div>
+
+    <div class="character-buttons">
+        <button class="stats-toggle {{#when statsToggle 'noteq' ''}}{{tabs.statsToggle}}{{/when}}">{{localize "HOUSEHOLD.stats"}}</button>
+        <div class="divider"></div>
+        <button class="actions-toggle {{#when actionsToggle 'noteq' ''}}{{tabs.actionsToggle}}{{/when}}">{{localize "HOUSEHOLD.actions"}}</button>
+    </div>
+
+    {{!--
+    <div class="character-details">
+        <div class="character-name">
+            {{name}}
+        </div>
+
+        <div class="character-race-class">
+            {{race}} {{class}}
+        </div>
+    </div>
+    --}}
+</div>
+
+<div class="character-actions {{#when characterActions 'noteq' ''}}{{tabs.characterActions}}{{/when}}">
+    <div class="character-actions-content" style="">
+        <!-- FORMATACAO TESTE -->
+        
+        <div class="dialog-content standard-form">
+           <h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.ActionI.long"}}</h2>
+<p style="color: rgb(0, 0, 0)">{{actions.action_1}}</p>
+<h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.ActionII.long"}}</h2>
+<p style="color: rgb(0, 0, 0)">{{actions.action_2}}</p>
+<h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.ActionIII.long"}}</h2>
+<p style="color: rgb(0, 0, 0)">{{actions.action_3}}</p>
+<h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.ActionIV.long"}}</h2>
+<p style="color: rgb(0, 0, 0)">{{actions.action_4}}</p>
+<h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.ActionV.long"}}</h2>
+<p style="color: rgb(0, 0, 0)">{{actions.action_5}}</p>
+<h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.ActionVI.long"}}</h2>
+<p style="color: rgb(0, 0, 0)">{{actions.action_6}}</p>
+
+        <!-- FORMATACAO TESTE FIM -->
+    </div>
+</div>

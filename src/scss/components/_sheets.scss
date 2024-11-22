@@ -201,6 +201,7 @@
     align-items: center; /* Garante que o conteúdo dentro do label esteja alinhado ao centro verticalmente */
     justify-content: flex-start; /* Alinha o conteúdo dentro do label ao início horizontalmente */
     width: 100%; /* Garante que o label ocupe toda a largura da célula */
+    cursor: pointer;
   }
    
 .conditions-grid {
@@ -387,4 +388,28 @@
 
 .roll-action-description {
   display: none;
+}
+
+.create-item-circle {
+  align-items: center;
+    position: absolute;
+    right: 10px;
+    padding-left: 10px;
+    margin-top: -15px;
+    background-color: #fff;
+    border: 2px solid #333;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, .3);
+    color: #333;
+    cursor: pointer;
+    display: flex;
+    height: 20px;
+    justify-content: center;
+    transition: background-color .3s, color .3s;
+    width: 20px;
+}
+
+.create-item-circle:hover {
+  background-color: #333;       /* Change background on hover */
+  color: #fff;                  /* Change icon color on hover */
 }

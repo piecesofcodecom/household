@@ -65,7 +65,7 @@
 <!--Stress-->
 <h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.Stress.long"}}</h2>
 <div class="flexrow">
-  {{#numLoop system.stress.value}}
+  {{#numLoop system.stress.max}}
     <div class=''>
       {{#when ../system.stress.current 'gteq' this}}
         {{#when this 'eq' ../system.stress.danger}}

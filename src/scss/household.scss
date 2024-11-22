@@ -1,5 +1,6 @@
 // Add custom fonts by visiting and search https://fonts.google.com
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400;1,700&family=Vollkorn:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 @font-face {
   font-family: 'LHF_Encore';
   src: url('/systems/household/fonts/lhf-encore-distressed.ttf');
@@ -12,6 +13,7 @@
 @import 'utils/variables';
 
 /* Global styles */
+@import 'components/hud';
 @import 'global/window';
 @import 'global/grid';
 @import 'global/flex';

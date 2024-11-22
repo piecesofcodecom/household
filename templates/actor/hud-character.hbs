@@ -1,7 +1,7 @@
-<div class="character-stats">
+<div class="character-stats {{#when characterStats 'noteq' ''}}{{tabs.characterStats}}{{/when}}">
     <div class="character-stats-content">
-        <h4>{{localize "HOUSEHOLD.Fields.long"}}</h4>
-        <div class="abilities">
+        <!--h4>{{localize "HOUSEHOLD.Fields.long"}}</h4-->
+        <!--div class="abilities">
             {{#each abilities as |ab key|}}
             <div class="ability" data-ability="{{ab.id}}" data-character-id="{{@root/id}}">
                 <div class="ability-wrapper rollable">
@@ -12,26 +12,59 @@
                         {{/range}}
                     </span>
                 </div>
-                {{#if ab.jp}}
-                <span class="save" data-jp="{{ab.jp.id}}" data-jp-label="{{ab.jp.label}}"
-                    data-tooltip="{{ab.jp.title}}"><i class="fa-light fa-dice-d20 fa-sm"></i> {{ab.jp.label}}</span>
-                {{else}}
-                <span class="save">{{ab.mod}}</span>
-                {{/if}}
             </div>
             {{/each}}
-        </div>
-        <h4>Skills</h4>
-        <ul class="skills">
+        </div-->
+        <h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.Field.Society.long"}}</h2>
+        <ul class="skills society">
             {{#each skills as |skill|}}
-            <li class="skill rollable" data-skill="{{skill.id}}" data-character-id="{{@root/id}}">
-                <span class="name">{{skill.name}}</span>
-                <span class="mod">
-                     {{#range skill.mod}}
-                        <i class="fa-solid fa-{{skill.suit}} condition-icon-{{skill.suit}} {{skill.suit}}"></i>
-                        {{/range}}
-                    </span>
-            </li>
+                {{#when skill.field 'eq' 'society'}}
+                    <li class="skill rollable" data-type="skill" data-field="{{skill.field}}" data-key="{{skill.id}}" data-label="{{skill.name}}" data-character-id="{{@root/id}}">
+                        <span class="name">{{skill.name}}</span>
+                        <span class="mod">
+                            {{skill.mod}}x<i class="fa-solid fa-{{skill.suit}} condition-icon-{{skill.suit}} {{skill.suit}}"></i> 
+                        </span>
+                    </li>
+                {{/when}}
+            {{/each}}
+        </ul>
+        <h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.Field.Academia.long"}}</h2>
+        <ul class="skills academia">
+            {{#each skills as |skill|}}
+                {{#when skill.field 'eq' 'academia'}}
+                    <li class="skill rollable" data-type="skill" data-field="{{skill.field}}" data-key="{{skill.id}}" data-label="{{skill.name}}" data-character-id="{{@root/id}}">
+                        <span class="name">{{skill.name}}</span>
+                        <span class="mod">
+                            {{skill.mod}}x<i class="fa-solid fa-{{skill.suit}} condition-icon-{{skill.suit}} {{skill.suit}}"></i> 
+                        </span>
+                    </li>
+                {{/when}}
+            {{/each}}
+        </ul>
+        <h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.Field.War.long"}}</h2>
+        <ul class="skills war">
+            {{#each skills as |skill|}}
+                {{#when skill.field 'eq' 'war'}}
+                    <li class="skill rollable" data-type="skill" data-field="{{skill.field}}" data-key="{{skill.id}}" data-label="{{skill.name}}" data-character-id="{{@root/id}}">
+                        <span class="name">{{skill.name}}</span>
+                        <span class="mod">
+                            {{skill.mod}}x<i class="fa-solid fa-{{skill.suit}} condition-icon-{{skill.suit}} {{skill.suit}}"></i> 
+                        </span>
+                    </li>
+                {{/when}}
+            {{/each}}
+        </ul>
+        <h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.Field.Street.long"}}</h2>
+        <ul class="skills street">
+            {{#each skills as |skill|}}
+                {{#when skill.field 'eq' 'street'}}
+                    <li class="skill rollable" data-type="skill" data-field="{{skill.field}}" data-key="{{skill.id}}" data-label="{{skill.name}}" data-character-id="{{@root/id}}">
+                        <span class="name">{{skill.name}}</span>
+                        <span class="mod">
+                            {{skill.mod}}x<i class="fa-solid fa-{{skill.suit}} condition-icon-{{skill.suit}} {{skill.suit}}"></i> 
+                        </span>
+                    </li>
+                {{/when}}
             {{/each}}
         </ul>
 
@@ -43,56 +76,113 @@
     <div class="character-info-top">
         <form class="character-attrs">
             <div class="bar-wrapper">
-                <div class="attr">
-                    <label>{{localize "HOUSEHOLD.Profession.long"}}</label>
-                    <span>{{ profession }}</span>
+                {{#each abilities as |ab key|}}
+                    {{#when ab.value 'eq' 2}}
+                    <div class="attr">
+                        <label>{{ab.ab}}</label>
+                        <span>
+                            {{#range ab.value}}
+                                <i class="fa-solid fa-{{ab.suit}} condition-icon-{{ab.suit}} {{ab.suit}}"></i>
+                            {{/range}}
+                        </span>
+                    </div>
+                    {{/when}}
+                {{/each}}
+
+                <!--div class="attr">
+                    <label>{{localize "HOUSEHOLD.Decorum.long"}}</label>
+                    <span>{{localize (concat "HOUSEHOLD.Decorum." decorum_name) }}</span>
                 </div>
 
                 <div class="attr">
-                    <label>{{localize "HOUSEHOLD.initiative"}}</label>
-                    <span>{{ini}}</span>
-                </div>
+                    <label>sdf{{localize "HOUSEHOLD.TTT.abbr"}}</label>
+                    <span>{{ttt}}</span>
+                </div-->
 
-                <div class="attr">
+                <!--div class="attr">
                     <label>Stress</label>
                     <span contenteditable="true">{{armor}}</span>
-                </div>
+                </div-->
             </div>
         </form>
 
         <div class="character-picture" data-tooltip="{{ name }}">
-            <img src="{{picture}}" alt="{{name}}" />
+            <div id="frame" class="char-frame"></div>
+            <div id="photo-mask">
+                <img src="{{picture}}" alt="{{name}}" class="photo-subject">
+            </div>
+            <div id="glass-highlight"></div>
+            <div id="grunge-texture-char" style="opacity: {{getOpacyDecorum decorum}};"></div>
+            <!--img src="{{picture}}" alt="{{name}}" /-->
 
-            <div class="sheet" data-character="{{id}}">
+            <div class="sheet" data-character-id="{{@root/id}}">
                 {{localize "HOUSEHOLD.open_sheet"}}
             </div>
 
             {{#if isCharacter}}
-            <!--div class="character-level">
-                <div class="character-level-badge"></div>
-                <span>{{ name }}</span>
-            </div-->
+            <div class="character-level">
+                <div class="character-level-badge">
+                    <input class="InputeditValue" style="height: 40px;
+    position: relative;
+    background-size: cover;
+    z-index: 4;
+    border: 0;
+    text-align: center;
+    background-position: center;
+    {{#when stress.current 'lteq' stress.max}}
+        background-image: url(/systems/household/assets/sheet/{{#when stress.current 'eq' stress.danger}}rosette{{else}}square{{/when}}-small.png);
+    {{else}}
+         background-image: url(/systems/household/assets/sheet/overstressed.png);
+    {{/when}}
+    width: 40px;
+    opacity: 0.7;
+    color: #eee;
+    background-repeat: no-repeat;font-weight: bold;" type="text" value="{{#when stress.current 'lteq' stress.max}}{{stress.current}}{{/when}}" data-path="system.stress.current" data-value="{{stress.current}}" data-character-id="{{@root/id}}">
+                </div>
+            </div>
             {{/if}}
         </div>
 
         <div class="character-health">
             <div class="bar-wrapper">
-                <div class="bar {{hp.status}}" style="width: {{hp.percent}}%"></div>
+                <div class="attr">
+                        <!--label>{{ab.ab}}</label-->
+                        <span style="margin-left: 15px;">
+                          <img width="29px" height="31px" class="aces" style="margin-top: 6px"
+                          data-path="system.aces.heart" data-value="true"
+                          src="/systems/household/assets/sheet/ace-heart{{#if aces.heart}}-filled{{/if}}.svg" 
+                          data-path="system.aces.heart" data-value="{{aces.heart}}" data-character-id="{{@root/id}}">
 
-                <input type="text" id="current-health" data-value="{{hp.value}}" data-id="{{id}}"
-                    value="{{hp.value}}" />
-                <span class="divider">/</span>
-                <input type="text" value="{{hp.max}}" disabled />
-                <!--input data-tooltip="Stress" type="text" value="{{hp.max}}" /-->
+                          <img width="29px" height="31px" class="aces"  style="margin-top: 6px"
+                          data-path="system.aces.diamond" data-value="true"
+                          src="/systems/household/assets/sheet/ace-diamond{{#if aces.diamond}}-filled{{/if}}.svg" 
+                          data-path="system.aces.diamond" data-value="{{aces.diamond}}" data-character-id="{{@root/id}}">
+
+                          <img width="29px" height="31px" class="aces" style="margin-top: 6px" 
+                          data-path="system.aces.club" data-value="true"
+                          src="/systems/household/assets/sheet/ace-club{{#if aces.club}}-filled{{/if}}.svg" 
+                          data-path="system.aces.club" data-value="{{aces.club}}" data-character-id="{{@root/id}}">
+
+                          <img width="29px" height="31px" class="aces" style="margin-top: 6px" 
+                          data-path="system.aces.spade" data-value="true"
+                          src="/systems/household/assets/sheet/ace-spade{{#if aces.spade}}-filled{{/if}}.svg" 
+                          data-path="system.aces.spade" data-value="{{aces.spade}}" data-character-id="{{@root/id}}">
+
+                          <img width="29px" height="31px" class="aces" style="margin-top: 6px" 
+                          data-path="system.aces.joker" data-value="true"
+                          src="/systems/household/assets/sheet/ace-joker{{#if aces.joker}}-filled{{/if}}.svg" 
+                          data-path="system.aces.joker" data-value="{{aces.joker}}" data-character-id="{{@root/id}}">
+                        </span>
+                </div>
             </div>
 
         </div>
     </div>
 
     <div class="character-buttons">
-        <button class="stats-toggle">{{localize "HOUSEHOLD.stats"}}</button>
+        <button class="stats-toggle {{#when statsToggle 'noteq' ''}}{{tabs.statsToggle}}{{/when}}">{{localize "HOUSEHOLD.stats"}}</button>
         <div class="divider"></div>
-        <button class="actions-toggle">{{localize "HOUSEHOLD.actions"}}</button>
+        <button class="actions-toggle {{#when actionsToggle 'noteq' ''}}{{tabs.actionsToggle}}{{/when}}">{{localize "HOUSEHOLD.actions"}}</button>
     </div>
 
     {{!--
@@ -108,12 +198,200 @@
     --}}
 </div>
 
-<div class="character-actions">
+<div class="character-actions {{#when characterActions 'noteq' ''}}{{tabs.characterActions}}{{/when}}">
     <div class="character-actions-content">
+        <!-- FORMATACAO TESTE -->
+         <h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.Conditions.long"}}</h2>
+        <div class="conditions-grid">
+        <div class="condition editValue" data-character-id="{{@root/id}}" data-dtype="Boolean" data-path="system.conditions.embarrassed">
+            <i class="fa-{{#if conditions.embarrassed}}solid{{else}}light{{/if}} fa-heart" style="color: red"></i>&nbsp;{{localize "HOUSEHOLD.Conditions.Embarrassed"}}</div>
+        
+        <div class="condition editValue" data-character-id="{{@root/id}}" data-dtype="Boolean" data-path="system.conditions.confused">
+            <i class="fa-{{#if conditions.confused}}solid{{else}}light{{/if}} fa-diamond" style="color: blue"></i>&nbsp;{{localize "HOUSEHOLD.Conditions.Confused"}}</div>
+        
+        <div class="condition editValue" data-character-id="{{@root/id}}" data-dtype="Boolean" data-path="system.conditions.hurt">
+            <i class="fa-{{#if conditions.hurt}}solid{{else}}light{{/if}} fa-club" style="color: green"></i>&nbsp;{{localize "HOUSEHOLD.Conditions.Hurt"}}</div>
+        
+        <div class="condition editValue" data-character-id="{{@root/id}}" data-dtype="Boolean" data-path="system.conditions.frightened">
+            <i class="fa-{{#if conditions.frightened}}solid{{else}}light{{/if}} fa-spade" style="color: black"></i>&nbsp;{{localize "HOUSEHOLD.Conditions.Frightened"}}</div>
+        
+        <div class="condition editValue" data-character-id="{{@root/id}}" data-dtype="Boolean" data-path="system.conditions.tired">
+            <i class="fa-{{#if conditions.tired}}solid{{else}}light{{/if}} fa-circle"></i>&nbsp;{{localize "HOUSEHOLD.Conditions.Tired"}}</div>
+        
+        <div class="condition editValue" data-character-id="{{@root/id}}" data-dtype="Boolean" data-path="system.conditions.sick">
+            <i class="fa-{{#if conditions.sick}}solid{{else}}light{{/if}} fa-circle"></i>&nbsp;{{localize "HOUSEHOLD.Conditions.Sick"}}</div>
+        
+        <div class="condition editValue" data-character-id="{{@root/id}}" data-dtype="Boolean" data-path="system.conditions.poisoned">
+            <i class="fa-{{#if conditions.poisoned}}solid{{else}}light{{/if}} fa-circle"></i>&nbsp;{{localize "HOUSEHOLD.Conditions.Poisoned"}}</div>
+        
+        <div class="condition editValue" data-character-id="{{@root/id}}" data-dtype="Boolean" data-path="system.conditions.broken">
+            <i class="fa-{{#if conditions.broken}}solid{{else}}light{{/if}} fa-circle"></i>&nbsp;{{localize "HOUSEHOLD.Conditions.Broken"}}</div>
+        </div>
+
+        
+
+         {{#each items as |items kind|}}
+            {{#ifNotEmpty items}}
+                <div class="actions-category">
+                     <h2 class="characteristic-title" style="text-align: center;">{{localize (concat "HOUSEHOLD." kind ".long")}}</h2>
+                    <div class="action-list">
+                        {{#each items as |item|}}
+                            <div class="action" >
+                                <div class="item-left item" data-tooltip="{{ item.system.description }}" data-action="show" data-item-id="{{ item.id }}" data-character-id="{{@root/id}}">
+                                    <img src="{{ item.img }}" />
+
+                                    <span>{{trimString item.name 20}}
+                                        {{#if (eq item.type "move")}}
+                                            {{#each item.system.suits as | value key|}}
+                                                {{#if value}}
+                                                    <i style="color: {{getFieldColor key}}" class="fa-solid fa-{{getSuitFromField key}}"></i>
+                                                {{/if}}
+                                            {{/each}}
+                                        {{/if}}
+                                    </span>
+                                </div>
+                                <div class="item-right">
+                                    &nbsp; 
+                                    {{#if (eq item.type "move")}}
+                                        {{#if item.system.exhausted}}
+                                            <a data-type="{{ item.type }}" data-action="use" data-item-id="{{ item.id }}" data-character-id="{{@root/id}}"
+                                                class="action item" title="{{ item.name }}">
+                                                <i style="color: red" class="fa-regular fa-toggle-large-off"></i>
+                                            </a>
+                                        {{else}}
+                                        <a data-type="{{ item.type }}" data-action="use" data-item-id="{{ item.id }}" data-character-id="{{@root/id}}"
+                                                class="action item" title="{{ item.name }}">
+                                                <i style="color: green" class="fa-regular fa-toggle-large-on"></i>
+                                            </a>
+                                        {{/if}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        {{/each}}
+                    </div>
+                </div>
+        {{/ifNotEmpty}}
+        {{/each}}
+
+        <div class="actions-category">
+             <h2 class="characteristic-title" style="text-align: center;">Decorum</h2>
+            <div class="grid-decorum  flex-group-center">
+                    <div class="editValue decorum_1 decorum" data-index="1" data-character-id="{{@root/id}}"  data-value="1" data-dtype="Number" data-path="system.decorum" data-character-id="{{@root/id}}" 
+                        style="background: url(/systems/household/assets/sheet/butterfly-filled{{#unless (eq decorum 1)}}-white{{/unless}}.svg) !important;
+                            background-repeat: no-repeat !important;
+                            background-size: cover !important;
+                            -webkit-filter: none !important;     cursor: pointer;
+                            flex: 0 0 27px;
+                            height: 22px;
+                            transform: scale(1.0);
+                            width: 27px; appearance: none;">
+                    </div>
+                
+                    <div class=" decorum-text  ">
+                    <span class="custom-system-label-root">
+                        <div class="custom-system-label-icons"></div>
+                        <div class="custom-system-label custom-system-label-label" style="font-size: smaller; color: black;" data-value="Shabby" data-name="">Shabby</div>
+                    </span>
+                    </div>
+                
+                    <div class="editValue decorum_3 decorum" data-character-id="{{@root/id}}" data-character-id="{{@root/id}}"  data-value="3" data-dtype="Number" data-path="system.decorum" data-index="3" style="appearance: none;
+                        background: url(/systems/household/assets/sheet/butterfly-filled{{#unless (eq decorum 3)}}-white{{/unless}}.svg);
+                        background-repeat: no-repeat !important;
+                        background-size: cover !important;
+                        cursor: pointer;
+                        flex: 0 0 27px;
+                        height: 22px;
+                        transform: scale(1.0);
+                        width: 27px;">
+                    </div>
+                
+                    <div class=" decorum-text  ">
+                    <span class="custom-system-label-root">
+                        <div class="custom-system-label-icons"></div>
+                        <div class="custom-system-label custom-system-label-label" style="font-size: smaller; color: black;" data-value="Elegant" data-name="">Elegant</div>
+                    </span>
+                    </div>
+                
+                    <div class="editValue decorum_5 decorum" data-character-id="{{@root/id}}" data-value="5" data-dtype="Number" data-path="system.decorum" data-index="5" style="appearance: none;
+                        background: url(/systems/household/assets/sheet/butterfly-filled{{#unless (eq decorum 5)}}-white{{/unless}}.svg);
+                        background-repeat: no-repeat !important;
+                        background-size: cover !important;
+                        cursor: pointer;
+                        flex: 0 0 27px;
+                        height: 22px;
+                        transform: scale(1.0);
+                        width: 27px;">
+                    </div>
+                
+                    <div class=" decorum-text  ">
+                    <span class="custom-system-label-root">
+                        <div class="custom-system-label-icons"></div>
+                        <div class="custom-system-label custom-system-label-label" style="font-size: smaller; color: black;" data-value="Uncouth" data-name="">Uncouth</div>
+                    </span>
+                    </div>
+                
+                    <div class="editValue decorum_2 decorum" data-character-id="{{@root/id}}"  data-value="2" data-dtype="Number" data-path="system.decorum" data-index="2" style="appearance: none;
+                        background: url(/systems/household/assets/sheet/butterfly-filled{{#unless (eq decorum 2)}}-white{{/unless}}.svg);
+                        background-repeat: no-repeat !important;
+                        background-size: cover !important;
+                        cursor: pointer;
+                        flex: 0 0 27px;
+                        height: 22px;
+                        transform: scale(1.0);
+                        width: 27px;">
+                    </div>
+                
+                    <div class=" decorum-text  ">
+                    <span class="custom-system-label-root">
+                        <div class="custom-system-label-icons"></div>
+                        <div class="custom-system-label custom-system-label-label" style="font-size: smaller; color: black;" data-value="Decent" data-name="">Decent</div>
+                    </span>
+                    </div>
+                
+                    <div class="editValue decorum_4 decorum" data-character-id="{{@root/id}}"  data-value="4" data-dtype="Number" data-path="system.decorum" data-index="4" style="appearance: none;
+                        background: url(/systems/household/assets/sheet/butterfly-filled{{#unless (eq decorum 4)}}-white{{/unless}}.svg);
+                        background-repeat: no-repeat !important;
+                        background-size: cover !important;
+                        cursor: pointer;
+                        flex: 0 0 27px;
+                        height: 22px;
+                        transform: scale(1.0);
+                        width: 27px;">
+                    </div>
+                    <div class=" decorum-text  ">
+                    <span class="custom-system-label-root">
+                        <div class="custom-system-label-icons"></div>
+                        <div class="custom-system-label custom-system-label-label" style="font-size: smaller; color: black;" data-value="Pompous" data-name="">Pompous</div>
+                    </span>
+                    </div>
+                </div>
+        </div>
+
+        <div class="actions-category">
+             <h2 class="characteristic-title" style="text-align: center;">Terrible Terrible Things</h2>
+            <div class="flexrow">
+      
+                {{#numLoop 5}}
+                    <div class="ttt-icon">
+                        <label style=" align-items: center;" for="ttt-1-UZtNsBndEWuHdkdR">
+                            {{#when @root/ttt 'gteq' this}}
+                                <img class="editValue" data-character-id="{{@root/id}}" width="25" height="25" data-path="system.ttt" data-value="{{reduceBy this 1}}" data-dtype="Number" style="border: 0px" src="/systems/household/assets/sheet/ttt{{this}}-filled.svg">
+                            {{else}}
+                                <img class="editValue" data-character-id="{{@root/id}}" width="25" height="25" data-path="system.ttt" data-value="{{this}}" data-dtype="Number" style="border: 0px" src="/systems/household/assets/sheet/ttt{{this}}.svg">
+                            {{/when}}
+                        </label>
+                    </div>
+                {{/numLoop}}
+            </div>
+        </div>
+
+        
+
+        <!-- FORMATACAO TESTE FIM -->
         {{#each actions as |actions kind|}}
         {{#ifNotEmpty actions}}
         <div class="actions-category">
-            <h4>{{actionTypeName kind}}</h4>
+            <h4 class="category-title">{{actionTypeName kind}}</h4>
 
             <div class="action-list">
                 {{#each actions as |a|}}

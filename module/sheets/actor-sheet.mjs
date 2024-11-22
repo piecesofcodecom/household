@@ -97,7 +97,7 @@ export class HouseholdActorSheet extends ActorSheet {
 
     for (let [k, v] of Object.entries(context.system.skills)) {
       v.label = game.i18n.localize(CONFIG.HOUSEHOLD.skills[k]) ?? k;
-      if(v.field=='society') {
+      if (v.field == 'society') {
         v.icon = "fa-heart";
         v.color = "red";
       }
@@ -159,12 +159,34 @@ export class HouseholdActorSheet extends ActorSheet {
 
     // Render the item sheet for viewing/editing prior to the editable check.
     html.on('click', '.item-edit', (ev) => {
-      console.log(ev)
       const li = $(ev.currentTarget).parents('.item-list');
-      console.log(li)
       const item = this.actor.items.get(li.data('itemId'));
-      console.log(li)
       item.sheet.render(true);
+    });
+
+    html.find('.create-item-circle').click(async (event) => {
+      event.preventDefault();
+
+      const itemType = event.currentTarget.dataset.type;
+      const itemName = `New ${itemType.charAt(0).toUpperCase() + itemType.slice(1)}`;
+
+      const itemData = {
+        name: itemName,
+        type: itemType,
+        data: {}
+      };
+
+      const actor = this.actor;
+      const createdItems = await actor.createEmbeddedDocuments("Item", [itemData]);
+
+      // Get the created item (should be the first item in the returned array)
+      const newItem = createdItems[0];
+
+      // Open the item sheet for the newly created item
+      if (newItem) {
+        newItem.sheet.render(true);
+      }
+
     });
 
     // -------------------------------------------------------------
@@ -210,10 +232,10 @@ export class HouseholdActorSheet extends ActorSheet {
         }
       };
 
-      const dialog_action_config =  await renderTemplate("systems/household/templates/dialog/dialog-actions.hbs", templateData);      
+      const dialog_action_config = await renderTemplate("systems/household/templates/dialog/dialog-actions.hbs", templateData);
       foundry.applications.api.DialogV2.prompt({
         window: { title: "Config Actions", icon: "fa-solid fa-gear" },
-        position: {width: 550},
+        position: { width: 550 },
         classes: ["household-dialog"],
         content: dialog_action_config,
         rejectClose: false,
@@ -229,38 +251,15 @@ export class HouseholdActorSheet extends ActorSheet {
               "action_5": button.form.elements.action_5.value,
               "action_6": button.form.elements.action_6.value
             }
-            this.actor.update({['system.actions']: new_value});
+            this.actor.update({ ['system.actions']: new_value });
           }
         }
       })
-      /*return Dialog.wait({
-        title: `Configure Actions`,
-        content: dialog_action_config,
-        buttons: {
-          button1: {
-            label: "Save",
-            callback: (html) => {
-              const actions = {
-                "action_1": html.find("input#action-1").val(),
-                "action_2": html.find("input#action-2").val(),
-                "action_3": html.find("input#action-3").val(),
-                "action_4": html.find("input#action-4").val(),
-                "action_5": html.find("input#action-5").val(),
-                "action_6": html.find("input#action-6").val()
-              }
-              console.log(actions);
-              //this.actor.update({['system.actions']: new_value});
-
-             },
-            icon: `<i class="fas fa-save"></i>`
-          }
-        }
-    }).render(true);*/
     });
 
     html.on('click', '.npc-popup-item-edit', (ev) => {
       //const element = $(ev.currentTarget).parents('.npc-popup-item-edit');;
-      const dataset =ev.currentTarget.dataset;
+      const dataset = ev.currentTarget.dataset;
       const path = dataset.path;
       const label = dataset.label;
       const current_value = dataset.value;
@@ -269,7 +268,7 @@ export class HouseholdActorSheet extends ActorSheet {
         const crucial_boxes = dataset.crucial_boxes;
         html = `Total Stress Boxes ${html}<br />Crucial Box positions: <input id="crucial_boxes" value="${crucial_boxes}" placeholder="example: 3,6,8">`
       }
-      
+
       return Dialog.wait({
         title: `Edit ${label}`,
         content: html,
@@ -277,16 +276,16 @@ export class HouseholdActorSheet extends ActorSheet {
           button1: {
             label: "Save",
             callback: (html) => {
-              const new_value = html.find("input#newvalue").val();
-              this.actor.update({[path]: new_value});
+              const new_value = Number(html.find("input#newvalue").val());
+              this.actor.update({ [path]: new_value });
               const crucial_boxes = html.find("input#crucial_boxes").val();
-              this.actor.update({'system.crucial_boxes': crucial_boxes});
+              this.actor.update({ 'system.crucial_boxes': crucial_boxes });
 
-             },
+            },
             icon: `<i class="fas fa-save"></i>`
           }
         }
-    }).render(true);
+      }).render(true);
     });
 
     //Custom edit
@@ -294,22 +293,23 @@ export class HouseholdActorSheet extends ActorSheet {
       const dataset = ev.target.dataset;
       const path = dataset.path;
       let new_value = '';
-      if(dataset.dtype === 'Boolean') {
-        if(dataset.value==='false') {
+      if (dataset.dtype === 'Boolean') {
+        if (dataset.value === 'false') {
           new_value = true;
         } else {
           new_value = false;
         }
+      } else {
+        new_value = dataset.value;
       }
-      if(dataset.object === 'actor') {
-        this.actor.update({[path]: new_value})
-        console.log("custom update", path, new_value);
-      } else if(dataset.object === 'item') {
+      if (dataset.object === 'actor') {
+        this.actor.update({ [path]: new_value })
+      } else if (dataset.object === 'item') {
         const item = this.actor.items.get(dataset.id);
-        item.update({[path]: new_value})
+        item.update({ [path]: new_value })
       }
 
-      
+
     });
 
     // Active Effect management
@@ -340,23 +340,23 @@ export class HouseholdActorSheet extends ActorSheet {
   async _onDropItem(event) {
     event.preventDefault();
     const dataTransfer = JSON.parse(event.dataTransfer.getData('text/plain'));
-    
+
     // Parse the dataTransfer to get item details
     if (dataTransfer.type === 'Item') {
       const item = await fromUuid(dataTransfer.uuid);
 
       if (["profession"].includes(item.type)) {
         addProfession(this.actor, item);
-      } else if(item.type == 'folk') {
+      } else if (item.type == 'folk') {
         const contract_name = item.system.contract;
-        let contract_item = game.items.filter(el => el.type=='contract' && el.name.toLowerCase() == contract_name.toLowerCase())
-        this.actor.update({'system.folk': item.name})
-        if(contract_item.length == 0 && HOUSEHOLD.premium) {
-          const packs = game.packs.get(HOUSEHOLD.premium_name+'.character')
+        let contract_item = game.items.filter(el => el.type == 'contract' && el.name.toLowerCase() == contract_name.toLowerCase())
+        this.actor.update({ 'system.folk': item.name })
+        if (contract_item.length == 0 && HOUSEHOLD.premium) {
+          const packs = game.packs.get(HOUSEHOLD.premium_name + '.character')
           const contents = await packs.getDocuments();
-          contract_item = contents.filter(el => el.type=='contract' && el.name.toLowerCase() == contract_name.toLowerCase())
+          contract_item = contents.filter(el => el.type == 'contract' && el.name.toLowerCase() == contract_name.toLowerCase())
         }
-        if(contract_item.length > 0) {
+        if (contract_item.length > 0) {
           let newItemData = {
             name: contract_item[0].name,
             type: contract_item[0].type,
@@ -367,7 +367,7 @@ export class HouseholdActorSheet extends ActorSheet {
 
         }
 
-      }else {
+      } else {
         let newItemData = {
           name: item.name,
           type: item.type,
@@ -378,7 +378,7 @@ export class HouseholdActorSheet extends ActorSheet {
         await this.actor.createEmbeddedDocuments("Item", [newItemData]);
       }
     }
-      // You can now decide whether to add this item to the actor, modify it, or reject it
+    // You can now decide whether to add this item to the actor, modify it, or reject it
 
   }
 
@@ -427,7 +427,7 @@ export class HouseholdActorSheet extends ActorSheet {
         rollMode: game.settings.get('core', 'rollMode'),
       });
       return;
-      
+
     }
     if (dataset.rollType) {
       if (dataset.rollType == 'item') {
@@ -454,7 +454,6 @@ export class HouseholdActorSheet extends ActorSheet {
     const context = this.getData();
     const element = event.currentTarget;
     const dataset = element.dataset;
-    
     ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: this.actor }),
       flavor: ''
@@ -469,7 +468,7 @@ export class HouseholdActorSheet extends ActorSheet {
         timestamp: msg.timestamp
       };
       const html = await renderTemplate("systems/household/templates/chat/skill-show-card.hbs", templateData);
-      msg.update( { flavor: html } );
+      msg.update({ flavor: html });
     });
   }
 }

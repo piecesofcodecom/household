@@ -74,6 +74,57 @@ export class HouseholdActor extends Actor {
     return data;
   }
 
+  async skillRoll(dataset) {
+    const skill = this.system.skills[dataset.key];
+    skill.label = game.i18n.localize(CONFIG.HOUSEHOLD.skills[dataset.key])
+    const templateData = {
+      ability: dataset.label,
+      skill: skill,
+      fields: this.system.fields,
+      key: dataset.key,
+      field: dataset.field,
+      actor: this,
+      //timestamp: msg.timestamp
+    };
+    const html = await renderTemplate("systems/household/templates/chat/skill-show-card.hbs", templateData);
+    const dialogData = {
+      title: "Skill and Field Selection",
+      content: html,
+      buttons: {
+          roll: {
+              label: "Roll",
+              callback: (html) => {
+                  const skill = html.find('input[name="selected-skill"]:checked').val();
+                  const field = html.find('input[name="selected-field"]:checked').val();
+  
+                  if (!skill || !field) {
+                      ui.notifications.warn("Please select both a skill and a field before rolling!");
+                      return;
+                  }
+  
+                  
+                  ui.notifications.info(`Rolling ${skill} with field ${field}`);
+              },
+          },
+          cancel: {
+              label: "Cancel",
+          },
+      },
+      default: "roll",
+  };
+  
+  const formOptions = {
+      id: "skill-field-dialog",
+      classes: ["dialog", "dialog-v2"],
+      render: (html) => {
+          console.log("Dialog V2 rendered!");
+      },
+  };
+  
+  new Dialog(dialogData, formOptions).render(true);
+  
+  }
+
   /**
    * Prepare character roll data.
    */
@@ -139,7 +190,7 @@ export class HouseholdActor extends Actor {
     let roll = new Roll(formula)
     await roll.evaluate()
     return {
-      poll: Array.from(Object.values(roll.terms).filter(item => item instanceof Die)),
+      poll: Array.from(Object.values(roll.terms).filter(item => item instanceof foundry.dice.terms.Die)),
       roll: roll
     };
 
@@ -273,7 +324,7 @@ export class HouseholdActor extends Actor {
     let roll = new Roll(formula)
     await roll.evaluate()
     return {
-      poll: Array.from(Object.values(roll.terms).filter(item => item instanceof Die)),
+      poll: Array.from(Object.values(roll.terms).filter(item => item instanceof foundry.dice.terms.Die)),
       roll: roll
     };
 

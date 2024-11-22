@@ -171,41 +171,42 @@
   }
   
   .success-none {
-    background-color: white;
+    background-color: #eeecec;
   }
   
   .success-basic {
-    background-color: #356978;
+    background-color: #eeecec;
   }
   
   .success-cancel {
-    background-color: rgb(235, 134, 134);
+    background-color: #eeecec;
   }
   
   .success-critical {
-    background-color: #9ea021;
+    background-color: #eeecec;
   }
   
   .success-extreme {
-    background-color: #78356d;
+    background-color: #eeecec;
   }
   
   .success-impossible {
-    background-color: #bb1818;
+    background-color: #eeecec;
   }
   
   .success-jackpot {
-    background-color: #075f1a;
+    background-color: #eeecec;
   }
   
   .dice {
-    padding: 4px;
-    width: 24px;
-    height: 24px;
+    /*padding: 4px;*/
+    width: 32px;
+    height: 32px;
     border-radius: 10%;
     margin-right: 10px;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
   }
-  
+  /*
   .dot-basic,
   .dot-critical,
   .dot-extreme,
@@ -217,12 +218,12 @@
   .dot-none {
     background-color: rgb(36, 34, 34);
   }
-  
+  */
   .dice-result {
     display: none;
   }
   
-  .dot {
+  /*.dot {
     display: block;
     width: 4px;
     height: 4px;
@@ -270,7 +271,7 @@
   .fifth-face .column:nth-of-type(2) {
     justify-content: center;
   }
-  
+  */
   .input-hidden {
     position: absolute;
     left: -9999px;
@@ -346,4 +347,51 @@
   
   input[type=radio]:checked.field-street+label>img {
     content: url("/systems/household/assets/sheet/spade-filled.svg");
+  }
+
+  .item-display {
+    /*border: 1px solid #444;*/
+    /*background: #222;*/
+    /*color: #fff;*/
+    padding: 10px;
+    border-radius: 8px;
+    max-width: 400px;
+    margin: 10px auto;
+    font-family: Arial, sans-serif;
+  }
+  
+  .item-header {
+    display: flex;
+    align-items: center;
+  }
+  
+  .item-icon {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+    border-radius: 5px;
+    border: 1px solid #888;
+  }
+  
+  .item-name {
+    font-size: 1.5rem;
+    margin: 0;
+  }
+  
+  .item-body {
+    margin-top: 10px;
+  }
+  
+  .item-description {
+    font-size: 1rem;
+    margin: 0;
+  }
+  
+  .item-footer {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    text-align: center
+  }
+  .item-action {
+    font-size: 1.0rem;
   }

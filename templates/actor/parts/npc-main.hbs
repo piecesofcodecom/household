@@ -2,12 +2,12 @@
 the rollData property. --}}
 <h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.Stress.long"}}
     <a style=" float:right; margin-left: 5px;" class='npc-popup-item-edit' title='' data-dtype="Number"
-        data-path="system.stress.value" data-label="Stress" data-crucial_boxes="{{actor.system.crucial_boxes}}" data-value="{{actor.system.stress.value}}">
+        data-path="system.stress.max" data-label="Stress" data-crucial_boxes="{{actor.system.crucial_boxes}}" data-value="{{actor.system.stress.max}}">
         <i class='fas fa-edit'></i>
     </a>
 </h2>
 <div style="margin: 0rem; padding: 1rem 1rem; text-align: center;">
-    {{#numLoop system.stress.value}}
+    {{#numLoop system.stress.max}}
     <div style="display: inline-block;
   border: 0px solid red;
   padding: 0.5rem 0.5rem;

@@ -1,10 +1,10 @@
 <!-- conditions -->
 <h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.Conditions.long"}}</h2>
 <div class="conditions-grid flex-group-center">
-  <input id="condition-embarassed-{{actor.id}}" style="display: none" type="checkbox"
-    name="system.conditions.embarassed" value="{{system.conditions.embarassed}}" data-dtype="Boolean" {{doCheck
-    system.conditions.embarassed}}>
-  <label class="resource-label condition-icon" for="condition-embarassed-{{actor.id}}">
+  <input id="condition-embarrassed-{{actor.id}}" style="display: none" type="checkbox"
+    name="system.conditions.embarrassed" value="{{system.conditions.embarrassed}}" data-dtype="Boolean" {{doCheck
+    system.conditions.embarrassed}}>
+  <label class="resource-label condition-icon" for="condition-embarrassed-{{actor.id}}">
     {{#if system.conditions.embarassed}}
     <i class="fa-solid fa-heart condition-icon-heart"></i>
     {{else}}
@@ -150,17 +150,18 @@
 
   {{#when ../system.ttt 'gteq' this}}
   <input class="input-hidden" type="radio" id="ttt-{{this}}-{{../actor.id}}" value="{{reduceBy this 1}}"
-    name="system.ttt" data-dtype="Number">
+    name="system.ttt" data-dtype="Number" data-path="system.ttt">
   <div class="ttt-icon">
     <label style=" align-items: center;" for="ttt-{{this}}-{{../actor.id}}">
-      <img width="28" height="28" style="border: 0px" src="/systems/household/assets/sheet/ttt{{this}}-filled.svg">
+      <img class="custom-edit" width="28" height="28" style="border: 0px" src="/systems/household/assets/sheet/ttt{{this}}-filled.svg" data-value="{{reduceBy this 1}}" data-dtype="Number" data-path="system.ttt">
     </label>
   </div>
   {{else}}
   <input class="input-hidden" type="radio" id="ttt-{{this}}-{{../actor.id}}" value="{{this}}" name="system.ttt"
-    data-dtype="Number">
+    data-dtype="Number" data-path="system.ttt">
   <div class="ttt-icon">
-    <label style=" align-items: center;" for="ttt-{{this}}-{{../actor.id}}"><img width="28" height="28"
+    <label style=" align-items: center;" for="ttt-{{this}}-{{../actor.id}}">
+    <img class="custom-edit" width="28" height="28" data-value="{{this}}" data-dtype="Number" data-path="system.ttt"
         style="border: 0px" src="/systems/household/assets/sheet/ttt{{this}}.svg">
     </label>
   </div>
@@ -169,5 +170,9 @@
 </div>
 <br />
 <!-- Contracts -->
-<h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.Contracts.long"}}</h2>
+<h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.Contracts.long"}}
+  <button class="create-item-circle" data-type="contract">
+  <i class="fas fa-plus"></i>
+</button>
+</h2>
 {{> "systems/household/templates/actor/parts/actor-list-items.hbs" items=contracts type='contract'}}

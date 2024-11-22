@@ -8,7 +8,7 @@
     "build-js": "npx rollup -c rollup.config.mjs",
     "watch": "sass src/scss/household.scss css/household.css --style=expanded --source-map --watch",
     "minify-js": "npx terser build/household.js -o build/household.min.js && npx rimraf build/household.js",
-    "minify-css": "npx postcss ./css/household.css > ./styles/household.min.css",
+    "minify-css": "npx postcss ./css/household.css --dir ./styles/",
     "release": "node release.cjs",
     "dev": "node dev.cjs",
     "build": "npm run build-css && npm run build-js",
