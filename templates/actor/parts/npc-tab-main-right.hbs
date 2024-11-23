@@ -38,11 +38,19 @@ the rollData property. --}}
 </div>
 <br />
 <!-- Moves -->
-<h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.Moves.long"}}</h2>
+<h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.Moves.long"}}
+  <button class="create-item-circle" data-type="move">
+    <i class="fas fa-plus"></i>
+  </button>
+</h2>
 {{> "systems/household/templates/actor/parts/actor-list-items.hbs" items=moves type="move"}}
 <br />
 <!-- Traits -->
-<h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.Traits.long"}}</h2>
+<h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.Traits.long"}}
+  <button class="create-item-circle" data-type="trait">
+    <i class="fas fa-plus"></i>
+  </button>
+</h2>
 {{> "systems/household/templates/actor/parts/actor-list-items.hbs" items=traits type="trait"}}
 <br />
 <!-- Description -->
