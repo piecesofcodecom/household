@@ -113,7 +113,6 @@
             </div>
             <div id="glass-highlight"></div>
             <div id="grunge-texture-char" style="opacity: {{getOpacyDecorum decorum}};"></div>
-            <!--img src="{{picture}}" alt="{{name}}" /-->
 
             <div class="sheet" data-character-id="{{@root/id}}">
                 {{localize "HOUSEHOLD.open_sheet"}}
@@ -200,7 +199,6 @@
 
 <div class="character-actions {{#when characterActions 'noteq' ''}}{{tabs.characterActions}}{{/when}}">
     <div class="character-actions-content">
-        <!-- FORMATACAO TESTE -->
          <h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.Conditions.long"}}</h2>
         <div class="conditions-grid">
         <div class="condition editValue" data-character-id="{{@root/id}}" data-dtype="Boolean" data-path="system.conditions.embarrassed">
@@ -384,10 +382,5 @@
                 {{/numLoop}}
             </div>
         </div>
-
-        
-
-        <!-- FORMATACAO TESTE FIM -->
-        
     </div>
 </div>
