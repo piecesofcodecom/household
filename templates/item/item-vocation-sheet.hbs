@@ -36,7 +36,7 @@
           <input type="text" name="system.field" value="{{system.field}}" data-dtype="String" />
       </div>
       <div class="resource">
-          <label class="resource-label">{{localize "HOUSEHOLD.Skills.long"}}</label>
+          <label class="resource-label">{{localize "HOUSEHOLD.SheetLabels.Skills"}}</label>
           <input type="text" name="system.skills" value="{{system.skills}}" data-dtype="String" placeholder="{{localize 'HOUSEHOLD.Placeholders.Skills'}}" />
       </div>
       <div class="resource">
@@ -44,7 +44,7 @@
           <input type="text" name="system.traits" value="{{system.traits}}" data-dtype="String" placeholder="{{localize 'HOUSEHOLD.Placeholders.Traits'}}" />
       </div>
       <div class="resource">
-          <label class="resource-label"{{localize "HOUSEHOLD.HasCompanion.long"}}</label>
+          <label class="resource-label">{{localize "HOUSEHOLD.HasCompanion.long"}}</label>
           {{#if system.has_companion}}
             <input type="checkbox" name="system.has_companion" value="{{system.has_companion}}" data-dtype="Boolean" checked/>
             {{else}}

@@ -388,53 +388,6 @@
         
 
         <!-- FORMATACAO TESTE FIM -->
-        {{#each actions as |actions kind|}}
-        {{#ifNotEmpty actions}}
-        <div class="actions-category">
-            <h4 class="category-title">{{actionTypeName kind}}</h4>
-
-            <div class="action-list">
-                {{#each actions as |a|}}
-                <div class="action item" data-item-id="{{a.id}}" data-character-id="{{@root/id}}">
-                    <div class="item-left">
-                        <img src="{{a.img}}" />
-
-                        <span>{{trimString a.name 20}}</span>
-                    </div>
-                    <div class="item-right">
-                        {{#if a.bac}}
-                        &nbsp;<a data-ba="bac" data-item-id="{{a.id}}" data-character-id="{{@root/id}}"
-                            class="attack-roll icon-button" title="{{localize " HOUSEHOLD.bac.description"}} (1d20
-                            {{a.bac_bonus}})"><i class="fa-light fa-dagger"></i></a>
-                        {{/if}}
-                        {{#if (and a.bad a.bac)}}
-                        &nbsp;ou
-                        {{/if}}
-                        {{#if a.bad}}
-                        &nbsp;<a data-ba="bad" data-item-id="{{a.id}}" data-character-id="{{@root/id}}"
-                            class="attack-roll icon-button" title="{{localize " HOUSEHOLD.bad.description"}} (1d20
-                            {{a.bac_bonus}})"><i class="fa-light fa-bow-arrow"></i></a>
-                        {{/if}}
-                        {{#if a.ba}}
-                        &nbsp;<a data-ba="ba" data-item-id="{{a.id}}" data-character-id="{{@root/id}}"
-                            class="attack-roll icon-button" title="Rolar ataque (1d20 {{a.ba_bonus}})"><i
-                                class="fa-light fa-mace"></i></a>
-                        {{/if}}
-                        {{#if (eq kind "spell")}}
-                        &nbsp;<a class="spell-cast" data-item-id="{{a.id}}" data-character-id="{{@root/id}}"
-                            title="Lançar">
-                            <i class="fa-solid fa-hand-sparkles"></i></a>
-                        {{else}}
-                        &nbsp;<a data-ba="bad" data-item-id="{{a.id}}" data-character-id="{{@root/id}}"
-                            class="damage-roll icon-button" title="Rolar dano ({{a.damage}})"><i
-                                class="fa-light fa-dice-d20"></i></a>
-                        {{/if}}
-                    </div>
-                </div>
-                {{/each}}
-            </div>
-        </div>
-        {{/ifNotEmpty}}
-        {{/each}}
+        
     </div>
 </div>

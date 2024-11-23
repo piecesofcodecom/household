@@ -162,8 +162,8 @@ section.chat-sidebar .jump-to-bottom > a {
   );
 }
 
-#sidebar button:not([class~="roll-ability"]):not([class~="reroll-button"]),
-.dialog-buttons button:not([class~="roll-ability"]):not([class~="reroll-button"]) {
+#sidebar button:not([class~="roll-ability"]):not([class~="reroll-button"]):not([class~="dialog-button"]),
+.dialog-buttons button:not([class~="roll-ability"]):not([class~="reroll-button"]):not([class~="dialog-button"]) {
   box-shadow: 0 0 0 1px var(--gold) inset, 0 0 0 3px black inset;
   border: 1px solid black !important;
   background: black !important;
@@ -175,12 +175,13 @@ section.chat-sidebar .jump-to-bottom > a {
 
 .sidebar-tab .action-buttons button:not(.reroll-button),
 .sidebar-tab .action-buttons button:not(.roll-ability),
+.sidebar-tab .action-buttons button:not(.dialog-button),
 .dir__btn-header {
   height: 30px !important;
 }
 
-#sidebar button:not(.reroll-button):not(.roll-ability)::after,
-.dialog-buttons button:not(.reroll-button):not(.roll-button)::after {
+#sidebar button:not(.reroll-button):not(.roll-ability):not(.dialog-button)::after,
+.dialog-buttons button:not(.reroll-button):not(.roll-button):not(.dialog-button)::after {
   position: absolute;
   content: ' ';
   top: 0;
