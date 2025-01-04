@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="dialog_roll.css">
+
+</head>
+
+<body>
+    <div class="household-dialog-content" data-actor-id="UZtNsBndEWuHdkdR">
+        <div class="content">
+            <!-- Skill Section -->
+            <div class="skill-container">
+                <div class="title">Will</div>
+                <div class="skill-level">
+                    <img src="./assets/suits/club-filled.svg" alt="Level Icon 1">
+                    <img src="./assets/suits/club-filled.svg" alt="Level Icon 2">
+                    <img src="./assets/suits/club-filled.svg" alt="Level Icon 1">
+                    <img src="./assets/suits/club-filled.svg" alt="Level Icon 2">
+                </div>
+            </div>
+
+            <!-- "Select a Field" Text -->
+            <div class="select-field">Field Selection</div>
+
+            <!-- Field Images -->
+            <div class="fields">
+                <img src="./assets/suits/club-filled.svg" data-selected="./assets/suits/club-filled.svg" alt="Field 1"
+                    title="Field 1">
+                <img src="./assets/suits/spade.svg" data-selected="./assets/suits/spade-filled.svg" alt="Field 2" title="Field 2">
+                <img src="./assets/suits/heart.svg" data-selected="./assets/suits/heart-filled.svg" alt="Field 3" title="Field 3">
+                <img src="./assets/suits/diamond.svg" data-selected="./assets/suits/diamond-filled.svg" alt="Field 4"
+                    title="Field 4">
+            </div>
+            <div class="difficulty-selection">
+                <div class="select-difficulty">Select Difficulty</div>
+                <div class="difficulties">
+                    <div class="difficulty" data-difficulty="easy">
+                        <span class="label">Easy</span>
+                        <span class="count">0x</span>
+                    </div>
+                    <div class="difficulty" data-difficulty="medium">
+                        <span class="label">Medium</span>
+                        <span class="count">0x</span>
+                    </div>
+                    <div class="difficulty" data-difficulty="hard">
+                        <span class="label">Hard</span>
+                        <span class="count">0x</span>
+                    </div>
+                    <div class="difficulty" data-difficulty="extreme">
+                        <span class="label">Extreme</span>
+                        <span class="count">0x</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modifier-selection">
+                <div class="select-modifier">Select Modifier</div>
+                <div class="modifier-control">
+                    <button class="decrement">-</button>
+                    <span class="modifier-value">0</span>
+                    <button class="increment">+</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <script>
+        document.querySelectorAll('.difficulty').forEach(difficulty => {
+            const countSpan = difficulty.querySelector('.count');
+
+            // Left-click: Increase count
+            difficulty.addEventListener('click', () => {
+                let count = parseInt(countSpan.textContent.replace('x', ''), 10) || 0;
+                count++;
+                countSpan.textContent = `${count}x`;
+            });
+
+            // Right-click: Decrease count
+            difficulty.addEventListener('contextmenu', (event) => {
+                event.preventDefault(); // Prevent the context menu from appearing
+                let count = parseInt(countSpan.textContent.replace('x', ''), 10) || 0;
+                if (count > 0) {
+                    count--;
+                }
+                countSpan.textContent = `${count}x`;
+            });
+        });
+
+
+        // Add event listeners for field selection
+        // Add event listeners for field selection
+        document.querySelectorAll('.fields img').forEach(field => {
+            field.addEventListener('click', () => {
+                // Reset all fields to their default images and remove the 'selected' class
+                document.querySelectorAll('.fields img').forEach(f => {
+                    f.src = f.src.replace('-filled', ''); // Replace filled version with default
+                    f.classList.remove('selected');
+                });
+
+                // Update the clicked field to the filled version
+                const selectedImage = field.getAttribute('data-selected');
+                field.src = selectedImage;
+                field.classList.add('selected'); // Add 'selected' class for styling
+            });
+        });
+
+        const modifierValueSpan = document.querySelector('.modifier-value');
+        let modifierValue = 0; // Initial modifier value
+
+        document.querySelector('.decrement').addEventListener('click', () => {
+            modifierValue--;
+            modifierValueSpan.textContent = modifierValue;
+        });
+
+        document.querySelector('.increment').addEventListener('click', () => {
+            modifierValue++;
+            modifierValueSpan.textContent = modifierValue;
+        });
+
+
+    </script>
+</body>
+
+</html>

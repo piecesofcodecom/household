@@ -297,12 +297,8 @@ Handlebars.registerHelper("actionTypeName", (type) => {
 Handlebars.registerHelper("modifier", (x) => (x < 0 ? x : `+${x}`));
 
 Handlebars.registerHelper("abilityName", (id) =>
-  game.i18n.localize(`DND5E.Ability${id.titleCase()}Abbr`)
+  game.i18n.localize(`HOUSEHOLD.Ability${id.titleCase()}Abbr`)
 );
-
-/*Handlebars.registerHelper("skillName", (id) =>
-  game.i18n.localize(`DND5E.Skill${id.titleCase()}`)
-);*/
 
 Handlebars.registerHelper("firstWord", (str) => str.split(" ")[0]);
 
@@ -355,7 +351,7 @@ Hooks.on('renderDialog', (dialog, html, content) => {
 Other Hooks */
 Hooks.on('renderChatMessage', (message, html, data) => {
   // make a new parser
-  (HOUSEHOLD.premium);
+  if (! message.flags?.customCss) return;
   const parser = new DOMParser();
   const actor = message.speaker.actor;
   const token = message.speaker.token;
@@ -485,7 +481,8 @@ Hooks.on('renderChatMessage', (message, html, data) => {
           }, {})
       );
     const keep_poll = keep_success(current_poll);
-    actor.onSkillRoll(dataset.field, dataset.skill, dataset.mod, poll_difficulty, keep_poll, normal_reroll, free_reroll, all_in, current_success)
+    const message_id = dataset.messageId;
+    actor.onSkillRoll(dataset.field, dataset.skill, dataset.mod, poll_difficulty, keep_poll, normal_reroll, free_reroll, all_in, current_success, message_id)
   });
 
   html.find('.give_up').click(async event => {
@@ -692,7 +689,7 @@ function activatePlayerListeners(elem) {
   }
   
   for(let skill of skills) {
-    skill.addEventListener("click", actions.rollSkill);
+    skill.addEventListener("click", actions.dialogRollSkill);
   }
   const abilities = elem.querySelectorAll('#player-character .ability')
   for(let ability of abilities) {
@@ -826,7 +823,7 @@ export class HHDice extends foundry.dice.terms.Die {
 CONFIG.Dice.terms["6"] = HHDice;
 
 Hooks.once('diceSoNiceReady', (dice3d) => {
-  dice3d.addSystem({ id: "household", name: "Household" }, "preferred");
+  dice3d.addSystem({ id: "household", name: "Household" }, "default");
   dice3d.addDicePreset({
     type: 'd6',
     labels: [
@@ -847,7 +844,7 @@ Hooks.once('diceSoNiceReady', (dice3d) => {
     system: 'household',
 
   });
-
+  
   dice3d.addColorset(
     {
       name: "household",
@@ -859,8 +856,93 @@ Hooks.once('diceSoNiceReady', (dice3d) => {
       material: "plastic",
       visibility: "visible",
     },
-    "preferred",
+    "default",
   );
+  
+  dice3d.addSystem({ id: "garden", name: "Household Garden" }, "secondary");
+  dice3d.addDicePreset({
+    type: 'd6',
+    labels: [
+      '/systems/household/assets/dice/face_1_gold.png',
+      '/systems/household/assets/dice/face_2_gold.png',
+      '/systems/household/assets/dice/face_3_gold.png',
+      '/systems/household/assets/dice/face_4_gold.png',
+      '/systems/household/assets/dice/face_5_gold.png',
+      '/systems/household/assets/dice/face_6_gold.png'],
+    bumpMaps: [
+      '/systems/household/assets/dice/face_1_bump.png', 
+      '/systems/household/assets/dice/face_2_bump.png', 
+      '/systems/household/assets/dice/face_3_bump.png', 
+      '/systems/household/assets/dice/face_4_bump.png', 
+      '/systems/household/assets/dice/face_5_bump.png',
+      '/systems/household/assets/dice/face_6_bump.png'],
+    colorset:'garden',
+    system: 'household',
+    name: 'garden',
+
+  });
+  dice3d.addColorset(
+    {
+      name: "garden",
+      description: "Household Garden",
+      category: "Colors",
+      foreground: ["#0d0d0d"],
+      background: ["#0e8005"],
+      outline: ["#db1515", "#1551db"],
+      material: "plastic",
+      visibility: "visible",
+    },
+    "secondary",
+  );
+});
+
+Hooks.on("renderChatMessage", async (message, html, data) => {
+  if (! message.flags?.customCss) {
+    if (message.rolls.length > 0) {
+      const roll = message.rolls[0];
+      if (roll instanceof Roll) {
+        const dice = [];
+        for (const term of roll.terms) {
+          for (const die of term.results) {
+            dice.push({
+              face: die.result,
+              locked: false
+            });
+          }
+        }
+        
+        // const dice = roll.dice;
+        // const faces = dice.map((d) => d.faces);
+        // const total = dice.reduce((acc, d) => acc + d.total, 0);
+        // const facesCount = faces.reduce((acc, f) => {
+        //   acc[f] = (acc[f] || 0) + 1;
+        //   return acc;
+        // }, {});
+
+        //const diceToChat = preparediceToChat(facesCount);
+        //const diceString = JSON.stringify(diceToChat);
+
+        const templateData = {
+          dice: dice,
+          /*dice_string: diceString,
+          total: total,*/
+        };
+        const html = await renderTemplate("systems/household/templates/chat/dice-roll.hbs", templateData);
+        message.update({ flavor: html, flags: { customCss: true } });
+        //message.flags.customCss = true;
+      }
+    }
+  } else {
+    const messageId = message.id;
+      //const updatedHtml = html.replace(/data-message-id="MESSAGEID"/g, `data-message-id="${messageId}"`);
+      html.find('button').each(function(index) {
+        $(this).attr('data-message-id', messageId);
+    });
+      // Update the chat message with the new HTML
+      // await message.update({
+      //   flavor: updatedHtml
+      // });
+  }
 });
 
 

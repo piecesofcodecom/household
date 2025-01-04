@@ -1,0 +1,115 @@
+.skill-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.value-display {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Adds space between the image and the text */
+}
+
+.value-display img {
+    width: 20px;
+    border: 0;
+}
+
+.skill-name {
+    border: 0;
+    display: flex;
+    font-family: LHF_Encore, Beau Rivage, cursive;
+    font-size: 1.2rem;
+    /*font-weight: 700;*/
+    color: rgb(48, 47, 47);
+    justify-content: space-between;
+    text-shadow: none;
+}
+
+.header_og {
+    border: none;
+    text-align: center;
+    width: 100%;
+    text-shadow: none;
+    color: rgb(48, 47, 47);
+    font-family: LHF_Encore, Beau Rivage, cursive;
+}
+
+.header_og {
+    border: none;
+    text-align: center;
+    width: 100%;
+    text-shadow: none;
+    color: rgb(48, 47, 47);
+    font-family: LHF_Encore, Beau Rivage, cursive;
+}
+
+.display-fields {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+}
+
+/* Container to center items horizontally */
+.difficulty-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px; /* Adjust spacing between items as needed */
+}
+
+/* Each difficulty item container */
+.difficulty-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100px; /* Set a fixed width for uniformity */
+}
+
+/* Difficulty header */
+.difficulty-header {
+    text-align: center;
+    font-size: small;
+    width: 100%; /* Match the width of the parent container */
+}
+
+/* Difficulty option */
+.difficulty-option {
+    border-radius: 25px;
+    border: 2px solid #171320;
+    width: 32px;
+    height: 32px;
+    display: flex
+;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+
+.collapsible-content {
+    display: none;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+}
+
+.collapsible-header {
+    cursor: pointer;
+    user-select: none;
+    /*background-color: #f0f0f0;*/
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.field-label span {
+    position: absolute;
+    margin-left: 2px;
+    font-size: medium;
+}
+
+.field-label img {
+    width: 30px !important;
+    height: 30px !important;
+}

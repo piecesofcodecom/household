@@ -1,12 +1,12 @@
 <div class="household chat-card item-card" data-actor-id="{{ actor.id }}">
     <h2 style="text-align: center; border: none; width: 100%">
-        {{localize (concat "HOUSEHOLD." reroll_message ".long") }}&nbsp;
-        <span class="ability-name">{{ability}} {{ localize (concat "HOUSEHOLD.Skill." ability ".long") }}</span>
+        <!--{{localize (concat "HOUSEHOLD." reroll_message ".long") }}&nbsp;-->
+        <span class="ability-name">{{ localize (concat "HOUSEHOLD.Skill." ability ".long") }}</span>
     </h2>
 
     {{#hasSuccess dice }}
     <h3 class="header_og">{{localize "HOUSEHOLD.Matches.long" }}</h3>
-    <div style="display: flex;gap: 5px;margin-bottom: 10px; justify-content: center; flex-wrap: wrap;">
+    <div class="dice-list">
         {{#each dice as |dice value|}}
         {{#when dice.success 'noteq' 'none'}}
         {{#when dice.face 'noteq' give_up_face }}
@@ -25,14 +25,7 @@
     {{/hasSuccess }}
     {{#hasNoSuccess dice }}
     <h3 class="header_ms">{{localize "HOUSEHOLD.RemainingDice.long"}}</h3>
-    <div style="display: flex;
-    gap: 5px;
-    flex-wrap: wrap;
-    align-items: center; /* Vertical center alignment */
-    justify-content: center; /* Horizontal center alignment */
-    width: 230px; /* Set the limit of the container width */
-    border: 0px solid #000; /* Just to show the container bounds */
-    padding: 10px;">
+    <div class="dice-list">
         {{#each dice as |dice value|}}
         {{#when dice.success 'eq' 'none'}}
         {{> "systems/household/templates/chat/parts/dice/faces.html" face=dice.face locked=dice.locked
@@ -69,18 +62,18 @@
     <br />
     <button class="reroll-button" data-rerolltype="normal" data-currentpoll="{{currentpoll}}" data-field="{{field}}"
         data-skill="{{skill}}" data-mod="{{mod}}" data-current_success="{{poll_success}}"
-        data-poll_difficulty="{{poll_difficulty}}" data-dice="{{ dice_string }}">{{localize
+        data-poll_difficulty="{{poll_difficulty}}" data-dice="{{ dice_string }}" data-message-id="MESSAGEID">{{localize
         "HOUSEHOLD.ReRoll.long"}}</button>
     <button class="reroll-button" data-rerolltype="free" data-currentpoll="{{currentpoll}}" data-field="{{field}}"
         data-skill="{{skill}}" data-mod="{{mod}}" data-current_success="{{poll_success}}"
-        data-poll_difficulty="{{poll_difficulty}}" data-dice="{{ dice_string }}">{{localize
+        data-poll_difficulty="{{poll_difficulty}}" data-dice="{{ dice_string }}" data-message-id="MESSAGEID">{{localize
         "HOUSEHOLD.FreeReRoll.long"}}</button>
     {{/if}}
     {{#if allin}}
     <br />
     <button class="reroll-button" data-rerolltype="allin" data-currentpoll="{{currentpoll}}" data-field="{{field}}"
         data-skill="{{skill}}" data-mod="{{mod}}" data-current_success="{{poll_success}}"
-        data-poll_difficulty="{{poll_difficulty}}" data-dice="{{ dice_string }}">{{localize
+        data-poll_difficulty="{{poll_difficulty}}" data-dice="{{ dice_string }}" data-message-id="MESSAGEID">{{localize
         "HOUSEHOLD.AllIn.long"}}</button>
     {{/if}}
 </div>

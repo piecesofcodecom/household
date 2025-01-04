@@ -209,18 +209,3 @@ export function characterData(c, tokenId) {
   };
 }
 
-function hpStatus(percent) {
-  if (percent <= 25) {
-    return 'critical';
-  }
-
-  if (percent <= 50) {
-    return 'injured';
-  }
-
-  if (percent <= 75) {
-    return 'hurt';
-  }
-
-  return 'healthy';
-}

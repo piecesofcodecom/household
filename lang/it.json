@@ -72,8 +72,11 @@
             "Poisoned": "Avvelenato",
             "Sick": "Malato",
             "Tired": "Stanco",
-            "long": "Condizioni"
+            "long": "Condizioni",
+            "On": "Abilitato",
+            "Off": "Disabilitato"
         },
+        "ConditionToggleMessage" : "Attiva la condizione <b>{condition}</b> a <b>{status}</b>",
         "Concession": {
             "long": "Concessione"
         },

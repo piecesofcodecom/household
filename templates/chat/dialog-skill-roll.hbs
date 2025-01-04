@@ -1,0 +1,69 @@
+<div class="household dialog-skill-roll" data-actor-id="{{ actor.id }}">
+    <div class="skill-details">
+        <h2 class="skill-name">{{ skill.label }}</h2>
+        <input style="display: none" value="{{skill_key}}" id="skill" name="skill" />
+        <div class="value-display">
+            <img src="/systems/household/assets/sheet/{{skill.suit}}-filled.svg" alt="{{this}}" />
+            <span>x{{skill.value}}</span>
+        </div>
+    </div>
+
+    
+    <h3 class="characteristic-title-dialog">{{localize "HOUSEHOLD.ChooseField.long" }}</h3>
+    <div class="display-fields">
+        {{#each fields as |fd key|}}
+            {{#when key 'eq' @root/field}}
+            <input type="radio" class="input-hidden toggle-input field-option field field-{{key}}" data-key="{{key}}"
+                id="choose-{{key}}-{{@root/actor.id}}" name="field" value="{{key}}" checked/>
+            <label class="field-label" for="choose-{{key}}-{{@root/actor.id}}">
+                <img src="/systems/household/assets/sheet/{{fd.suit}}-filled.svg" alt="" />
+                <span>x{{fd.value}}</span>
+            </label>
+            {{else}}
+            <input type="radio" class="input-hidden toggle-input field-option field field-{{key}}" data-key="{{key}}"
+                id="choose-{{key}}-{{@root/actor.id}}" name="field" value="{{key}}" />
+            <label class="field-label" for="choose-{{key}}-{{@root/actor.id}}">
+                <img src="/systems/household/assets/sheet/{{fd.suit}}.svg" alt="" />
+                <span>x{{fd.value}}</span>
+            </label>
+            {{/when}}
+        {{/each}}
+    </div>
+
+    <!-- Collapsible extra Section -->
+    <h3 class="characteristic-title-dialog collapsible-header">
+        Extras
+    </h3>
+    <div class="collapsible-content">
+        <h3 class="header_og">
+            {{ localize "HOUSEHOLD.Difficulty.long" }}
+        </h3>
+        <div class="difficulty-container">
+            <div class="difficulty-item">
+                <h4 class="difficulty-header">Basic</h4>
+                <input id="difficulty-basic" class="difficulty-option option-empty" type="text" data-key="2" data-label="basic" name="basic" placeholder="x0" readonly="">
+            </div>
+            <div class="difficulty-item">
+                <h4 class="difficulty-header">Critical</h4>
+                <input id="difficulty-critical" class="difficulty-option option-empty" type="text" data-key="3" data-label="critical" name="critical" value="x0" readonly="">
+            </div>
+            <div class="difficulty-item">
+                <h4 class="difficulty-header">Extreme</h4>
+                <input id="difficulty-extreme" class="difficulty-option option-empty" type="text" data-key="4" data-label="extreme" name="extreme" value="x0" readonly="">
+            </div>
+            <div class="difficulty-item">
+                <h4 class="difficulty-header">Impossible</h4>
+                <input id="difficulty-impossible" class="difficulty-option option-empty" type="text" data-key="5" data-label="impossible" name="impossible" value="x0" readonly="">
+            </div>
+        </div>
+
+
+        <h3 class="header_og">
+        {{ localize "HOUSEHOLD.ApplyModifier.long" }}
+        </h3>
+         <div class="difficulty-container modifier-item">
+            <input class="difficulty-option" data-key="" id="modifier" name="modifier"
+                value="0" readonly="">
+        </div>
+    </div>
+</div>
