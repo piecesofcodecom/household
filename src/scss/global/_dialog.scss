@@ -15,7 +15,10 @@
   }
   
   .window-content {
-    background: url(/systems/household/assets/sheet/sheet_bg.webp) repeat;
+    background: url(/systems/household/assets/sheet/sheet_bg.webp);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
   
   }
 
@@ -36,4 +39,29 @@
   
   input[type=text]:focus {
     border: 3px solid #555;
+  }
+
+  .characteristic-title-dialog {
+    border: none;
+    color: #000;
+    font-family: LHF_Encore, Beau Rivage, cursive;
+    font-size: 1.6em;
+    text-align: center;
+    text-transform: capitalize;
+    margin: 0px !important;
+  }
+
+  .characteristic-title-dialog:after {
+    content: "";
+    display: block;
+    background-image: url(/systems/household/assets/sheet/deco1.svg);
+    background-size: 350px, auto;
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    height: 20px;
+    margin-bottom: 10px;
+  }
+
+  .field-label, .difficulty-item, .modifier-item {
+    cursor: pointer;
   }

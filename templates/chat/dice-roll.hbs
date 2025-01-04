@@ -1,0 +1,8 @@
+<div class="household chat-card item-card" data-actor-id="{{ actor.id }}">
+    <div class="dice-list">
+    {{#each dice as |dice value|}}
+     {{> "systems/household/templates/chat/parts/dice/faces.html" face=dice.face locked=dice.locked
+        success=dice.success }}
+    {{/each}}
+    </div>
+</div>

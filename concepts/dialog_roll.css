@@ -1,0 +1,188 @@
+@font-face {
+    font-family: 'LHF_Encore';
+    src: url('fonts/lhf-encore-distressed.ttf');
+  }
+
+.household-dialog-content {
+    width: 400px;
+    height: 400px;
+    padding: 30px;
+    background: url('assets/bg/background.png') no-repeat center center;
+    background-size: cover;
+    position: relative;
+    color: white;
+    font-family: Arial, sans-serif;
+    box-sizing: border-box;
+}
+
+.household-dialog-content::before {
+    content: "";
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    border: 20px solid transparent;
+    border-image: url('assets/frames/deco4.svg') 30 round;
+    pointer-events: none;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    position: relative;
+    z-index: 1;
+    height: 100%;
+}
+
+.skill-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Align skill name and icons horizontally */
+    margin-bottom: 20px; /* Add spacing below the skill section */
+}
+
+.title {
+    font-size: 30px;
+    font-weight: bold;
+    color: black;
+    font-family: 'LHF_Encore', Beau Rivage, cursive;
+}
+
+.skill-level {
+    display: flex;
+    gap: 5px; /* Space between icons */
+}
+
+.skill-level img {
+    width: 20px;
+    height: 20px;
+}
+
+.select-field {
+    font-size: 16px;
+    color: black;
+    text-align: center;
+    margin-bottom: 10px; /* Add spacing below the text */
+}
+
+.fields {
+    display: flex;
+    justify-content: center; /* Center the field images */
+    gap: 15px; /* Space between field images */
+}
+
+.fields img {
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: transform 0.3s, border-color 0.3s;
+}
+
+.fields img:hover {
+    transform: scale(1.1); /* Slight zoom effect on hover */
+     /* Highlight border on hover */
+}
+
+.fields img:hover {
+    content: attr(data-hover); /* Use the data-hover attribute for the hover image */
+}
+/* Difficulty Section */
+.difficulty-selection {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.select-difficulty {
+    font-size: 16px;
+    color: black;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.difficulties {
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Space between difficulty items */
+}
+
+.difficulty {
+    display: flex;
+    flex-direction: row; /* Align label and count in a row */
+    align-items: center;
+    cursor: pointer;
+    transition: color 0.3s;
+    gap: 5px; /* Space between name and count */
+}
+
+.difficulty:hover .label {
+    color: #007BFF; /* Highlight label text on hover */
+}
+
+.difficulty .label {
+    font-size: 14px;
+    font-weight: bold;
+    color: black;
+}
+
+.difficulty .count {
+    font-size: 14px;
+    font-weight: bold;
+    color: black;
+}
+
+/* Modifier Selection */
+/* Modifier Selection */
+.modifier-selection {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.select-modifier {
+    font-size: 16px;
+    color: black;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.modifier-control {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px; /* Space between buttons and value */
+}
+
+.modifier-control button {
+    font-size: 9px;
+    font-weight: bold;
+    color: white;
+    background-color: #FFB6C1; /* Light pastel pink */
+    border: none;
+    border-radius: 50%; /* Fully rounded */
+    width: 25px; /* Increased size for aesthetic */
+    height: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+.modifier-control button:hover {
+    background-color: #FFCCCC; /* Slightly darker pastel pink on hover */
+    transform: scale(1.1); /* Slight zoom effect on hover */
+}
+
+.modifier-control .modifier-value {
+    font-size: 18px;
+    font-weight: bold;
+    color: #555; /* Neutral dark pastel */
+    width: 50px;
+    text-align: center;
+    background-color: #E6E6FA; /* Light pastel lavender */
+    border-radius: 10px; /* Rounded edges for the display */
+    padding: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+

@@ -32,7 +32,7 @@
   "version": "placeholder",
   "compatibility": {
     "minimum": 11,
-    "verified": "11.315"
+    "verified": "12.331"
   },
   "esmodules": ["build/household.min.js"],
   "styles": ["styles/household.css"],

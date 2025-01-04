@@ -23,7 +23,8 @@
   }
   
   .window-content {
-    background: url(/systems/household/assets/sheet/sheet_bg.webp) repeat;
+    background: url(/systems/household/assets/sheet/sheet_bg.webp) no-repeat;
+    background-size: cover;
   
   }
 

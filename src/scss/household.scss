@@ -24,6 +24,11 @@
   @import 'components/custom';
 }
 
+.dialog-skill-roll {
+  @import 'global/dialog';
+  @import 'components/dialog';
+}
+
 /* Styles limited to household sheets */
 .household {
   @import 'components/forms';
@@ -33,6 +38,9 @@
   @import 'components/custom';
 }
 
+.dialog-skill-roll {
+  @import 'components/dialog';
+}
 
 
 .chat-message {

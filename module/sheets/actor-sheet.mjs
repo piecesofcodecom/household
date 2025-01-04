@@ -454,6 +454,8 @@ export class HouseholdActorSheet extends ActorSheet {
     const context = this.getData();
     const element = event.currentTarget;
     const dataset = element.dataset;
+    this.actor.dialogRollSkill(dataset);
+    return;
     ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: this.actor }),
       flavor: ''
