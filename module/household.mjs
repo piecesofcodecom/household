@@ -859,8 +859,8 @@ Hooks.once('diceSoNiceReady', (dice3d) => {
     "default",
   );
   
-  dice3d.addSystem({ id: "garden", name: "Household Garden" }, "secondary");
-  dice3d.addDicePreset({
+  //dice3d.addSystem({ id: "garden", name: "Household Garden" }, "secondary");
+  /*dice3d.addDicePreset({
     type: 'd6',
     labels: [
       '/systems/household/assets/dice/face_1_gold.png',
@@ -893,7 +893,7 @@ Hooks.once('diceSoNiceReady', (dice3d) => {
       visibility: "visible",
     },
     "secondary",
-  );
+  );*/
 });
 
 Hooks.on("renderChatMessage", async (message, html, data) => {

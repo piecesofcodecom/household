@@ -53,6 +53,11 @@
   "socket": false,
   "manifest": "https://github.com/piecesofcodecom/household/releases/latest/download/system.json",
   "download": "placeholder",
+  "relationships": {
+    "requires": [{
+      "id": "dice-so-nice"
+    }]
+  },
   "grid": {
     "distance": 5,
     "units": "ft"
