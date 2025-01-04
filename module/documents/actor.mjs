@@ -74,57 +74,6 @@ export class HouseholdActor extends Actor {
     return data;
   }
 
-  // async skillRoll(dataset) {
-  //   const skill = this.system.skills[dataset.key];
-  //   skill.label = game.i18n.localize(CONFIG.HOUSEHOLD.skills[dataset.key])
-  //   const templateData = {
-  //     ability: dataset.label,
-  //     skill: skill,
-  //     fields: this.system.fields,
-  //     key: dataset.key,
-  //     field: dataset.field,
-  //     actor: this,
-  //     //timestamp: msg.timestamp
-  //   };
-  //   const html = await renderTemplate("systems/household/templates/chat/skill-show-card.hbs", templateData);
-  //   const dialogData = {
-  //     title: "Skill and Field Selection",
-  //     content: html,
-  //     buttons: {
-  //       roll: {
-  //         label: "Roll",
-  //         callback: (html) => {
-  //           const skill = html.find('input[name="selected-skill"]:checked').val();
-  //           const field = html.find('input[name="selected-field"]:checked').val();
-
-  //           if (!skill || !field) {
-  //             ui.notifications.warn("Please select both a skill and a field before rolling!");
-  //             return;
-  //           }
-
-
-  //           ui.notifications.info(`Rolling ${skill} with field ${field}`);
-  //         },
-  //       },
-  //       cancel: {
-  //         label: "Cancel",
-  //       },
-  //     },
-  //     default: "roll",
-  //   };
-
-  //   const formOptions = {
-  //     id: "skill-field-dialog",
-  //     classes: ["dialog", "dialog-v2"],
-  //     render: (html) => {
-  //       console.log("Dialog V2 rendered!");
-  //     },
-  //   };
-
-  //   new Dialog(dialogData, formOptions).render(true);
-
-  // }
-
   /**
    * Prepare character roll data.
    */
@@ -408,7 +357,6 @@ export class HouseholdActor extends Actor {
     '4': 0,
     '5': 0
   }, keep_poll = false, is_reroll = false, is_free_reroll = false, is_allin = false, original_poll_success = {}, message_id = 0) {
-    console.warn(' poll_difficulty',poll_difficulty)
     const normalized_difficult = this._normilize(poll_difficulty);
     const normalized_original_success = this._normilize(original_poll_success);
     const normilized_jackpot = 81;
@@ -484,9 +432,7 @@ export class HouseholdActor extends Actor {
     if (normalized_success === 0) {
       allow_reroll = false;
     }
-    console.warn('normalized_success', normalized_success)
-    console.warn('normalized_difficult', normalized_difficult)
-    console.warn(' normilized_jackpot', normilized_jackpot)
+
     if (poll_successes['6'] > 0 && normalized_success >= normilized_jackpot) {
       outcome = 'Jackpot';
       is_jackpot = true;
@@ -568,7 +514,6 @@ export class HouseholdActor extends Actor {
               '5': button.form.elements.impossible.value
             }
           }
-          console.log(data)
           actor.onSkillRoll(
             button.form.elements.field.value,
             button.form.elements.skill.value,
@@ -586,7 +531,6 @@ export class HouseholdActor extends Actor {
       render: (event) => {
         // Add event listeners for collapsible headers   
         const $html = $(event.target.element);
-        //console.log($html)
         $html.find(".collapsible-header").on("click", (event) => {
           const header = event.currentTarget;
           const content = header.nextElementSibling;
@@ -599,7 +543,6 @@ export class HouseholdActor extends Actor {
         });
   
         $html.find('.difficulty-item').on('mousedown', function (event) {
-          console.log("event")
           // Prevent the default context menu on right-click
           if (event.button === 2) event.preventDefault();
           
@@ -623,7 +566,6 @@ export class HouseholdActor extends Actor {
         });
   
         $html.find('.modifier-item').on('mousedown', function (event) {
-          console.log("event")
           // Prevent the default context menu on right-click
           if (event.button === 2) event.preventDefault();
           
@@ -663,7 +605,6 @@ export class HouseholdActor extends Actor {
                 
                   if (img.length > 0) {
                     const currentSrc = img.attr("src");
-                    console.log(currentSrc);
                       // Update the image based on whether this input is checked
                       if (input.id === selectedInputId) {
                           if(!currentSrc.includes('-filled'))
@@ -683,5 +624,22 @@ export class HouseholdActor extends Actor {
     //dialog.addEventListener('click', (event) => { console.log(event) } )
   
   }
+
+  toggleCondition(path) {
+    const condition_value = path.split('.').reduce((acc, part) => acc && acc[part], this);
+    const  condition_name = path.split('.').pop();
+    let messageContent = game.i18n.localize('HOUSEHOLD.ConditionToggleMessage');
+    messageContent = messageContent.replace("{condition}", game.i18n.localize('HOUSEHOLD.Conditions.' + condition_name.charAt(0).toUpperCase() + condition_name.slice(1)));
+    messageContent = messageContent.replace("{status}", !Boolean(condition_value) ? game.i18n.localize('HOUSEHOLD.Conditions.On') : game.i18n.localize('HOUSEHOLD.Conditions.Off'))
+    ChatMessage.create({
+      user: game.user.id, // The ID of the current user sending the message
+      flavor: messageContent, // The message content
+      speaker: ChatMessage.getSpeaker() // Automatically sets the speaker as the current user or token
+    });
+    this.update({ [path]: !Boolean(condition_value) })
+  }
 }
+
+
+
 

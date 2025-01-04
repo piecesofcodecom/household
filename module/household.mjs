@@ -902,8 +902,6 @@ Hooks.on("renderChatMessage", async (message, html, data) => {
       const roll = message.rolls[0];
       if (roll instanceof Roll) {
         const dice = [];
-
-        console.warn("ROLL",roll.terms)
         for (const term of roll.terms) {
           for (const die of term.results) {
             dice.push({
@@ -929,7 +927,6 @@ Hooks.on("renderChatMessage", async (message, html, data) => {
           /*dice_string: diceString,
           total: total,*/
         };
-        console.warn(templateData)
         const html = await renderTemplate("systems/household/templates/chat/dice-roll.hbs", templateData);
         message.update({ flavor: html, flags: { customCss: true } });
         //message.flags.customCss = true;

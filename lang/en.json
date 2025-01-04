@@ -73,8 +73,11 @@
           "Poisoned": "Poisoned",
           "Sick": "Sick",
           "Tired": "Tired",
-          "long": "Conditions"
+          "long": "Conditions",
+          "On": "Enabled",
+          "Off": "Disabled"
       },
+      "ConditionToggleMessage" : "Toggle the condition <b>{condition}</b> to <b>{status}</b>",
       "Concession": {
           "long": "Concession"
       },

@@ -294,7 +294,10 @@ export class HouseholdActorSheet extends ActorSheet {
       const path = dataset.path;
       let new_value = '';
       if (dataset.dtype === 'Boolean') {
-        if (dataset.value === 'false') {
+        if (dataset.path.includes('system.conditions')) {
+          this.actor.toggleCondition(path);
+          return;
+        } else if (dataset.value === 'false') {
           new_value = true;
         } else {
           new_value = false;
