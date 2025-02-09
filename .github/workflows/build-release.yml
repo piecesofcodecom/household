@@ -49,8 +49,7 @@ jobs:
 
       - name: Create Git Tag
         run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.com"
+          git remote set-url origin https://x-access-token:${{ secrets.REPO_SEC }}@github.com/piecesofcodecom/household.git
 
           git tag $TAG_NAME
           git push origin $TAG_NAME
@@ -61,4 +60,5 @@ jobs:
           tag_name: ${{ env.TAG_NAME }}
           body: ${{ env.RELEASE_BODY }}
           draft: false
+          token: ${{ secrets.REPO_SEC }}
           prerelease: ${{ env.IS_PRERELEASE }}
