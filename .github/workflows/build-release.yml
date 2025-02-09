@@ -18,7 +18,7 @@ jobs:
         run: |
           PR_TITLE="${{ github.event.pull_request.title }}"
           echo "Pull Request Title: $PR_TITLE"
-
+          
           # Regular expression for versioning: vX.Y.Z or vX.Y.Z-suffix
           if [[ ! "$PR_TITLE" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-beta|-test|-rc[0-9]*)?$ ]]; then
             echo "❌ ERROR: PR title must follow the format vX.Y.Z or vX.Y.Z-{beta,test,rc} (e.g., v1.0.0, v2.3.0-beta)"
@@ -46,19 +46,17 @@ jobs:
           echo "RELEASE_BODY<<EOF" >> $GITHUB_ENV
           echo "$DESCRIPTION" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
-
-      - name: Create Git Tag
+      
+      - name: Create Tag
         run: |
-          git remote set-url origin https://x-access-token:${{ secrets.REPO_SEC }}@github.com/piecesofcodecom/household.git
-
           git tag $TAG_NAME
           git push origin $TAG_NAME
 
-      - name: Create GitHub Release
+      - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ env.TAG_NAME }}
           body: ${{ env.RELEASE_BODY }}
           draft: false
-          token: ${{ secrets.REPO_SEC }}
           prerelease: ${{ env.IS_PRERELEASE }}
+          token: ${{ secrets.GITHUB_TOKEN }}
