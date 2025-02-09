@@ -823,7 +823,7 @@ export class HHDice extends foundry.dice.terms.Die {
 CONFIG.Dice.terms["6"] = HHDice;
 
 Hooks.once('diceSoNiceReady', (dice3d) => {
-  dice3d.addSystem({ id: "household", name: "Household" }, "default");
+  dice3d.addSystem({ id: "household", name: "Household", group: "household" }, "default");
   dice3d.addDicePreset({
     type: 'd6',
     labels: [
@@ -859,8 +859,8 @@ Hooks.once('diceSoNiceReady', (dice3d) => {
     "default",
   );
   
-  //dice3d.addSystem({ id: "garden", name: "Household Garden" }, "secondary");
-  /*dice3d.addDicePreset({
+  dice3d.addSystem({ id: "household-garden", name: "Household Garden", group: "household" }, "secondary");
+  dice3d.addDicePreset({
     type: 'd6',
     labels: [
       '/systems/household/assets/dice/face_1_gold.png',
@@ -877,7 +877,7 @@ Hooks.once('diceSoNiceReady', (dice3d) => {
       '/systems/household/assets/dice/face_5_bump.png',
       '/systems/household/assets/dice/face_6_bump.png'],
     colorset:'garden',
-    system: 'household',
+    system: 'household-garden',
     name: 'garden',
 
   });
@@ -886,14 +886,15 @@ Hooks.once('diceSoNiceReady', (dice3d) => {
       name: "garden",
       description: "Household Garden",
       category: "Colors",
-      foreground: ["#0d0d0d"],
-      background: ["#0e8005"],
-      outline: ["#db1515", "#1551db"],
-      material: "plastic",
+      foreground: ["white"],
+      background: ["#16bb26"],
+      outline: ["#078f1e", "#295525"],
+      material: "chrome",
+      texture: "fire",
       visibility: "visible",
     },
     "secondary",
-  );*/
+  );
 });
 
 Hooks.on("renderChatMessage", async (message, html, data) => {
