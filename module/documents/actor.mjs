@@ -277,7 +277,6 @@ export class HouseholdActor extends Actor {
    */
 
   _get_poll(field, skill, mod) {
-    console.warn(field)
     const field_dice = this.system.fields[field].value;
     const skill_dice = this.system.skills[skill].value;
     let dice_poll = (Number(field_dice) + Number(skill_dice) + Number(mod));
