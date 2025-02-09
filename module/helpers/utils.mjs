@@ -26,3 +26,14 @@ export function signed_number(number, zero = '+0') {
 		return `+${number}`;
 	}
 }
+
+export function capitalizeFirstLetter(string) {
+	return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+export const skills_list = {
+    "society": ["art", "charm", "eloquence", "etiquette", "grace"],
+    "academia": ["care", "craft", "culture", "insight", "investigation"],
+    "war": ["athletics", "authority", "fight", "strength", "will"],
+    "street": ["caution", "dexterity", "elusion", "exploration", "shoot"]
+  }

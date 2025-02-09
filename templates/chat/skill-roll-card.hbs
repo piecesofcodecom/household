@@ -1,7 +1,11 @@
 <div class="household chat-card item-card" data-actor-id="{{ actor.id }}">
     <h2 style="text-align: center; border: none; width: 100%">
         <!--{{localize (concat "HOUSEHOLD." reroll_message ".long") }}&nbsp;-->
-        <span class="ability-name">{{ localize (concat "HOUSEHOLD.Skill." ability ".long") }}</span>
+        <span class="ability-name">
+            <b style="color: {{getFieldColor ability}};">{{ localize (concat "HOUSEHOLD.Skill." ability ".long") }}</b>
+            <b style="color: {{getFieldColor field}}; ">{{ localize (concat "HOUSEHOLD.Field." field ".long") }}</b>
+
+            </span>
     </h2>
 
     {{#hasSuccess dice }}
@@ -16,6 +20,8 @@
         face=dice.face_display
         locked=dice.locked
         success=dice.success
+        field=@root/field
+        ability=@root/ability
         give_up=../give_up }}
         {{/when}}
         {{/when}}
