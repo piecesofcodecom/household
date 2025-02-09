@@ -3,6 +3,8 @@
  * Extend the base Actor document by defining a custom roll data structure which is ideal for the Simple system.
  * @extends {Actor}
  */
+import { capitalizeFirstLetter } from "../helpers/utils.mjs";
+
 export class HouseholdActor extends Actor {
   /** @override */
   prepareData() {
@@ -214,9 +216,9 @@ export class HouseholdActor extends Actor {
     }
 
     const templateData = {
-      ability: skill.charAt(0).toUpperCase() + skill.slice(1),
+      ability: capitalizeFirstLetter(skill),
       skill: skill,
-      field: field,
+      field: capitalizeFirstLetter(field),
       mod: mod,
       actor: this,
       dice: dice,
@@ -275,6 +277,7 @@ export class HouseholdActor extends Actor {
    */
 
   _get_poll(field, skill, mod) {
+    console.warn(field)
     const field_dice = this.system.fields[field].value;
     const skill_dice = this.system.skills[skill].value;
     let dice_poll = (Number(field_dice) + Number(skill_dice) + Number(mod));
@@ -282,7 +285,7 @@ export class HouseholdActor extends Actor {
 
   }
   async onReroll(field, skill, mod, keep_poll) {
-    const original_poll = this._get_poll(field, skill, mod);
+    const original_poll = this._get_poll(field.toLowerCase(), skill.toLowerCase(), mod);
     let initialValue = 0;
     const remove_from_poll = Object.entries(keep_poll).reduce(
       (accumulator, [key, currentValue]) => accumulator + currentValue,

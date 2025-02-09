@@ -13,7 +13,7 @@ import {
   characterData,
 } from "./sheets/actor-hud.mjs";
 import * as actions from "./helpers/actions.mjs";
-import { isGm } from "./helpers/utils.mjs";
+import { isGm, capitalizeFirstLetter, skills_list } from "./helpers/utils.mjs";
 
 function preparediceToChat(dice_poll, cancel_face = 0) {
   const success_label = {
@@ -140,13 +140,14 @@ Handlebars.registerHelper('getWeaponTypeIcon', function (raw_data) {
   return "empty-set";
 });
 
+
 Handlebars.registerHelper('getFieldColor', function (raw_data) {
   const field = raw_data.trim().toLowerCase();
-  if(field === 'society' || field === 'heart') return 'red';
-  if(field === 'academia' || field === 'diamond') return 'blue';
-  if(field === 'war' || field === 'club') return 'green';
-  if(field === 'street' || field === 'spade') return 'black';
-  return "red";
+  if(field === 'society' || field === 'heart' || skills_list["society"].includes(field)) return '#fd5c63';
+  if(field === 'academia' || field === 'diamond' || skills_list["academia"].includes(field)) return '#7CB9E8';
+  if(field === 'war' || field === 'club' || skills_list["war"].includes(field)) return '#32de84';
+  if(field === 'street' || field === 'spade' || skills_list["street"].includes(field)) return '#343434';
+  return "#343434";
 });
 
 Handlebars.registerHelper('doCheckIf', function (operand_1, operator, operand_2) {
@@ -499,9 +500,9 @@ Hooks.on('renderChatMessage', (message, html, data) => {
     const dice = preparediceToChat(current_poll, Number(face_gave_up));
     const successes = actor.prepareSuccessToChat(evaluation.poll_successes);
     const templateData = {
-      ability: "Art",
-      skill: 'art',
-      field: 'society',
+      ability: capitalizeFirstLetter(dataset.ability),
+      skill: dataset.ability,
+      field: capitalizeFirstLetter(dataset.field), 
       mod: 1,
       actor: actor,      
       dice: dice,
