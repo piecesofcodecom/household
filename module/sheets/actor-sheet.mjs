@@ -211,24 +211,24 @@ export class HouseholdActorSheet extends ActorSheet {
           "placeholder": game.i18n.localize('HOUSEHOLD.ActionI.long')
         },
         "action_2": {
-          "text": this.actor.system.actions.action_1,
-          "placeholder": game.i18n.localize('HOUSEHOLD.ActionI.long')
+          "text": this.actor.system.actions.action_2,
+          "placeholder": game.i18n.localize('HOUSEHOLD.ActionII.long')
         },
         "action_3": {
-          "text": this.actor.system.actions.action_1,
-          "placeholder": game.i18n.localize('HOUSEHOLD.ActionI.long')
+          "text": this.actor.system.actions.action_3,
+          "placeholder": game.i18n.localize('HOUSEHOLD.ActionIII.long')
         },
         "action_4": {
-          "text": this.actor.system.actions.action_1,
-          "placeholder": game.i18n.localize('HOUSEHOLD.ActionI.long')
+          "text": this.actor.system.actions.action_4,
+          "placeholder": game.i18n.localize('HOUSEHOLD.ActionIV.long')
         },
         "action_5": {
-          "text": this.actor.system.actions.action_1,
-          "placeholder": game.i18n.localize('HOUSEHOLD.ActionI.long')
+          "text": this.actor.system.actions.action_5,
+          "placeholder": game.i18n.localize('HOUSEHOLD.ActionV.long')
         },
         "action_6": {
-          "text": this.actor.system.actions.action_1,
-          "placeholder": game.i18n.localize('HOUSEHOLD.ActionI.long')
+          "text": this.actor.system.actions.action_6,
+          "placeholder": game.i18n.localize('HOUSEHOLD.ActionVI.long')
         }
       };
 
