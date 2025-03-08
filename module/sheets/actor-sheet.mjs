@@ -427,6 +427,7 @@ export class HouseholdActorSheet extends ActorSheet {
       roll.toMessage({
         speaker: ChatMessage.getSpeaker({ actor: this.actor }),
         flavor: await this.actor.showAction(roll.terms[0].results[0].result),
+        flags: { noChanges: true},
         rollMode: game.settings.get('core', 'rollMode'),
       });
       return;

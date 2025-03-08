@@ -899,7 +899,7 @@ Hooks.once('diceSoNiceReady', (dice3d) => {
 });
 
 Hooks.on("renderChatMessage", async (message, html, data) => {
-  if (! message.flags?.customCss) {
+  if (! message.flags?.customCss && !message.flags?.noChanges) {
     if (message.rolls.length > 0) {
       const roll = message.rolls[0];
       if (roll instanceof Roll) {
@@ -912,22 +912,9 @@ Hooks.on("renderChatMessage", async (message, html, data) => {
             });
           }
         }
-        
-        // const dice = roll.dice;
-        // const faces = dice.map((d) => d.faces);
-        // const total = dice.reduce((acc, d) => acc + d.total, 0);
-        // const facesCount = faces.reduce((acc, f) => {
-        //   acc[f] = (acc[f] || 0) + 1;
-        //   return acc;
-        // }, {});
-
-        //const diceToChat = preparediceToChat(facesCount);
-        //const diceString = JSON.stringify(diceToChat);
 
         const templateData = {
           dice: dice,
-          /*dice_string: diceString,
-          total: total,*/
         };
         const html = await renderTemplate("systems/household/templates/chat/dice-roll.hbs", templateData);
         message.update({ flavor: html, flags: { customCss: true } });
