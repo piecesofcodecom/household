@@ -29,9 +29,12 @@ export async function rollAction() {
   const actor = getActor(this.dataset.characterId);
   let roll = new Roll("1d6", actor.getRollData());
   await roll.evaluate();
+  const result = roll.terms[0].results[0].result;
+  const flavor = await actor.showAction(roll.terms[0].results[0].result);
   roll.toMessage({
     speaker: ChatMessage.getSpeaker({ actor: actor }),
-    flavor: await actor.showAction(roll.terms[0].results[0].result),
+    flavor: flavor,
+    flags: { noChanges: true},
     rollMode: game.settings.get('core', 'rollMode'),
   });
   return;
