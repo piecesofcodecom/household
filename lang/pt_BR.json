@@ -1,0 +1,361 @@
+{
+    "HOUSEHOLD": {
+        "AcesSleeve": {
+            "long": "Áses na Manga"
+        },
+        "actions": "Ações",
+        "ActionI": {
+            "long": "Ação I"
+        },
+        "ActionII": {
+            "long": "Ação II"
+        },
+        "ActionIII": {
+            "long": "Ação III"
+        },
+        "ActionIV": {
+            "long": "Ação IV"
+        },
+        "ActionV": {
+            "long": "Ação V"
+        },
+        "ActionVI": {
+            "long": "Ação VI"
+        },
+        "Actions": {
+            "long": "Ações"
+        },
+        "ActionTable": {
+            "long": "Tabela de Ações"
+        },
+        "AllIn": {
+            "long": "All-In"
+        },
+        "ApplyModifier": {
+            "long": "Aplicar Modificador"
+        },
+        "Available": {
+            "long": "Disponível"
+        },
+        "Basic": {
+            "long": "Básico"
+        },
+        "BasicOpponent": {
+            "long": "Oponente Básico"
+        },
+        "ChapterI": {
+            "long": "Capítulo I"
+        },
+        "ChapterII": {
+            "long": "Capítulo II"
+        },
+        "ChapterIII": {
+            "long": "Capítulo III"
+        },
+        "ChapterIV": {
+            "long": "Capítulo IV"
+        },
+        "ChapterV": {
+            "long": "Capítulo V"
+        },
+        "ChooseField": {
+            "long": "Escolha um Campo"
+        },
+        "Coins": {
+            "long": "Moedas"
+        },
+        "Conditions": {
+            "Broken": "Quebrado",
+            "Confused": "Confuso",
+            "Embarrassed": "Envergonhado",
+            "Frightened": "Assustado",
+            "Hurt": "Ferido",
+            "Poisoned": "Envenenado",
+            "Sick": "Doente",
+            "Tired": "Cansado",
+            "long": "Condições",
+            "On": "Ligado",
+            "Off": "Desligado"
+        },
+        "ConditionToggleMessage": "Troca a Condição <b>{condition}</b> para <b>{status}</b>",
+        "Concession": {
+            "long": "Concessão"
+        },
+        "Contract": {
+            "long": "Contrato"
+        },
+        "Contracts": {
+            "long": "Contratos"
+        },
+        "Counterpart": {
+            "long": "Contraparte"
+        },
+        "Critical": {
+            "long": "Crítico"
+        },
+        "CriticalOpponent": {
+            "long": "Oponente Crítico"
+        },
+        "Decorum": {
+            "Decent": "Decente",
+            "Elegant": "Elegante",
+            "Pompous": "Pomposo",
+            "Shabby": "Gasto",
+            "Uncouth": "Rude",
+            "long": "Decoro"
+        },
+        "Difficulty": {
+            "long": "Dificuldade"
+        },
+        "Edit": {
+            "ActionTable": {
+                "long": "Editar Tabela de Ações"
+            }
+        },
+        "Effect": {},
+        "Exhausted": {
+            "long": "Exausto"
+        },
+        "Experience": {
+            "long": "Experiência"
+        },
+        "Extreme": {
+            "long": "Extremo"
+        },
+        "Failure": {
+            "long": "Falha"
+        },
+        "Field": {
+            "Academia": {
+                "abbr": "aca",
+                "long": "Academia"
+            },
+            "Society": {
+                "abbr": "soc",
+                "long": "Sociedade"
+            },
+            "Street": {
+                "abbr": "rua",
+                "long": "Rua"
+            },
+            "War": {
+                "abbr": "gue",
+                "long": "Guerra"
+            },
+            "long": "Campo"
+        },
+        "Fields": {
+            "long": "Campos"
+        },
+        "Folk": {
+            "long": "Povo"
+        },
+        "FreeReRoll": {
+            "long": "Re-Rolagem Gratuita"
+        },
+        "Gadgets": {
+            "long": "Engenhocas"
+        },
+        "HasCompanion": {
+            "long": "Tem Companheiro"
+        },
+        "Homeland": {
+            "long": "Terra Natal"
+        },
+        "Impossible": {
+            "long": "Impossível"
+        },
+        "Item": {},
+        "Jackpot": {
+            "long": "Jackpot"
+        },
+        "LostSuccess": {
+            "long": "Escolha um Sucesso Perdido"
+        },
+        "Matches": {
+            "long": "Partidas"
+        },
+        "Memories": {
+            "long": "Memórias"
+        },
+        "Moves": {
+            "long": "Movimentos"
+        },
+        "open_sheet": "Abrir Ficha",
+        "Placeholders": {
+            "Contract": "Insira o Nome do Contrato.",
+            "Moves": "Insira a lista de movimentos. Eles devem ser separados por vírgulas.",
+            "Skills": "Insira a lista de habilidades. Eles devem ser separados por vírgulas.",
+            "Traits": "Insira a lista de traços. Eles devem ser separados por vírgulas."
+        },
+        "Price": {
+            "long": "Preço"
+        },
+        "Profession": {
+            "long": "Profissão"
+        },
+        "Prologue": {
+            "long": "Prólogo"
+        },
+        "ReRoll": {
+            "long": "Re-Rolar"
+        },
+        "RemainingDice": {
+            "long": "Outro Dado"
+        },
+        "Reroll": {
+            "long": "Re-Rolando"
+        },
+        "RollAbility": {
+            "long": "Rolar Habilidade"
+        },
+        "RollActions": {
+            "long": "Rolar Ação do Oponente"
+        },
+        "Rolling": {
+            "long": "Rolando"
+        },
+        "SheetLabels": {
+            "Actor": "Ficha de Personagem de Househood",
+            "Chapter": "Capítulos",
+            "Configuration": "Configuração",
+            "Description": "Descrição",
+            "Equipament": "Equipamento",
+            "General": "Geral",
+            "Item": "Ficha de Item de Househood",
+            "Main": "Principal",
+            "Name": "Nome",
+            "Others": "Decoro & Contratos",
+            "Requirements": "Requisitos",
+            "Skills": "Habilidades",
+            "Type": "Tipo"
+        },
+        "Skill": {
+            "Art": {
+                "abbr": "art",
+                "long": "Arte"
+            },
+            "Athletics": {
+                "abbr": "skill description from lang/<language>.json",
+                "long": "Atletismo"
+            },
+            "Authority": {
+                "abbr": "skill description from lang/<language>.json",
+                "long": "Autoridade"
+            },
+            "Care": {
+                "abbr": "care",
+                "long": "Cuidado"
+            },
+            "Caution": {
+                "abbr": "skill description from lang/<language>.json",
+                "long": "Cautela"
+            },
+            "Charm": {
+                "abbr": "char",
+                "long": "Charme"
+            },
+            "Craft": {
+                "abbr": "skill description from lang/<language>.json",
+                "long": "Construir"
+            },
+            "Culture": {
+                "abbr": "skill description from lang/<language>.json",
+                "long": "Cultura"
+            },
+            "Dexterity": {
+                "abbr": "skill description from lang/<language>.json",
+                "long": "Destreza"
+            },
+            "Eloquence": {
+                "abbr": "eloq",
+                "long": "Eloquência"
+            },
+            "Elusion": {
+                "abbr": "skill description from lang/<language>.json",
+                "long": "Evasão"
+            },
+            "Etiquette": {
+                "abbr": "etiq",
+                "long": "Etiqueta"
+            },
+            "Exploration": {
+                "abbr": "skill description from lang/<language>.json",
+                "long": "Exploração"
+            },
+            "Fight": {
+                "abbr": "skill description from lang/<language>.json",
+                "long": "Lutar"
+            },
+            "Grace": {
+                "abbr": "grac",
+                "long": "Graça"
+            },
+            "Insight": {
+                "abbr": "skill description from lang/<language>.json",
+                "long": "Intuição"
+            },
+            "Investigation": {
+                "abbr": "skill description from lang/<language>.json",
+                "long": "Investigação"
+            },
+            "Shoot": {
+                "abbr": "skill description from lang/<language>.json",
+                "long": "Atirar"
+            },
+            "Strength": {
+                "abbr": "skill description from lang/<language>.json",
+                "long": "Força"
+            },
+            "Will": {
+                "abbr": "skill description from lang/<language>.json",
+                "long": "Vontade"
+            },
+            "long": "Habilidade"
+        },
+        "stats": "Habilidades",
+        "Stress": {
+            "long": "Estresse"
+        },
+        "Success": {
+            "long": "Sucesso"
+        },
+        "TTT": {
+            "abbr": "CTT",
+            "long": "Coisas Terrivelmente Terríveis"
+        },
+        "Trait": {
+            "long": "Traço"
+        },
+        "Traits": {
+            "long": "Traços"
+        },
+        "Vocation": {
+            "long": "Vocação"
+        },
+        "Wealth": {
+            "long": "Fortuna"
+        },
+        "Weapons": {
+            "long": "Armas"
+        }
+    },
+    "TYPES": {
+        "Actor": {
+            "character": "Personagem",
+            "npc": "PNJ"
+        },
+        "Item": {
+            "item": "Item",
+            "gadget": "Engenhoca",
+            "weapon": "Arma",
+            "move": "Movimento",
+            "contract": "Contrato",
+            "trait": "Traço",
+            "profession": "Profissão",
+            "vocation": "Vocação",
+            "companion": "Companheiro",
+            "folk": "Povo"
+        }
+    }
+}
