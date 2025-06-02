@@ -620,11 +620,7 @@ export class HouseholdActor extends Actor {
   
         })
       },
-    });
-  
-  
-    //dialog.addEventListener('click', (event) => { console.log(event) } )
-  
+    });  
   }
 
   toggleCondition(path) {
