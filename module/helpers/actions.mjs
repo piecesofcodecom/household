@@ -2,46 +2,102 @@
 import { HOUSEHOLD } from './config.mjs'
 const { DialogV2 } = foundry.applications.api;
 
-function getActor(characterId) {
+async function getActor(characterId) {
+  console.log("Get Actor:", characterId);
   let actor = {}
   if (game.user.isGM) {
-    const token = canvas.tokens.get(characterId);
-    actor = token.actor;
+    const token = await canvas.tokens.get(characterId);
+    console.log("Token:", token);
+    if (token) {
+      actor = token.actor;
+    } else {
+      console.log("Get Actor by ID:", characterId);
+      actor = await game.actors.get(characterId);
+      console.log("Actor:", actor);
+    }
   } else {
-    actor = game.actors.find(actor => actor.isOwner);
+    actor = await game.actors.find(actor => actor.isOwner);
   }
   return actor;
 }
-export function openSheet() {
-  const actor = getActor(this.dataset.characterId);
+export async function openSheet() {
+  const actor = await getActor(this.dataset.characterId);
+  console.warn("ACtor:", actor);
   if (actor) {
     actor.sheet.render(true);
   }
 }
 
+export async function itemChat(e) {
+  const target = e.currentTarget;
+  console.warn("Show Data:", target.dataset);
+    let forward_event = {};
+    forward_event.currentTarget = target;
+    if (target.dataset?.subAction) {
+      const sub_action = target.dataset.subAction;
+      const parent = target.closest('.item-list')?.dataset;
+      console.warn("Parent Data:", parent?.dataset);
+      if (parent) {
+        forward_event.currentTarget.dataset.action = sub_action;
+        forward_event.currentTarget.dataset.itemId = parent.itemId;
+        forward_event.currentTarget.dataset.characterId = parent.characterId;
+        forward_event.currentTarget.dataset.object = parent.object;
+      }
+
+    }
+    console.warn("Forward Event:", forward_event.currentTarget.dataset);
+    useItem(forward_event);
+}
+
 export async function dialogRollSkill() {
   let guess;
-  const actor = getActor(this.dataset.characterId);
+  const actor = await getActor(this.dataset.characterId);
+  console.warn("ACTOR", actor);
   actor.dialogRollSkill(this.dataset);
 }
 
-export async function rollAction() {
-  const actor = getActor(this.dataset.characterId);
-  let roll = new Roll("1d6", actor.getRollData());
-  await roll.evaluate();
-  const result = roll.terms[0].results[0].result;
-  const flavor = await actor.showAction(roll.terms[0].results[0].result);
-  roll.toMessage({
-    speaker: ChatMessage.getSpeaker({ actor: actor }),
-    flavor: flavor,
-    flags: { noChanges: true},
-    rollMode: game.settings.get('core', 'rollMode'),
-  });
+export async function rollAction(e) {
+  if (e.currentTarget?.dataset?.type == 'attack') {
+    const dataset = e.currentTarget.closest('.item-list')?.dataset;
+    const actor = await getActor(dataset.characterId);
+    
+    console.warn("Attack Roll Triggered");
+    console.warn("Dataset:", dataset);
+    console.warn("Item ID:", dataset.itemId);
+    const item = actor.items.get(dataset.itemId);
+    if (item) {
+      console.warn("Item Found:", item.system);
+
+      dataset.label = item.system.field;
+      dataset.field = item.system.field;
+      dataset.key = item.system.skill;
+      dataset.itemId = item.id;
+      dataset.characterId = actor.id;
+      console.warn("Forwarded Dataset:", dataset);
+      actor.dialogRollSkill(dataset);
+
+
+    }
+  } else {
+    const actor = await getActor(this.dataset.characterId);
+    const dataset = e.currentTarget.dataset;
+    if (!actor) return;
+    let roll = new Roll("1d6", actor.getRollData());
+    await roll.evaluate();
+    const result = roll.terms[0].results[0].result;
+    const flavor = await actor.showAction(roll.terms[0].results[0].result);
+    roll.toMessage({
+      speaker: ChatMessage.getSpeaker({ actor: actor }),
+      flavor: flavor,
+      flags: { noChanges: true },
+      rollMode: game.settings.get('core', 'rollMode'),
+    });
+  }
   return;
 }
 
-export function selectToken() {
-  const actor = getActor(this.dataset.characterId);
+export async function selectToken() {
+  const actor = await getActor(this.dataset.characterId);
   if (!actor) return;
 
   const tokens = actor.getActiveTokens();
@@ -55,7 +111,7 @@ function getNestedValue(obj, path) {
 }
 
 export async function InputeditValue(e) {
-  const actor = getActor(this.dataset.characterId);
+  const actor = await getActor(this.dataset.characterId);
   if (this.value.trim() == '') return;
   if (this.dataset.dtype == "Number") {
     actor.update({ [this.dataset.path]: Number(this.value.trim()) })
@@ -65,7 +121,8 @@ export async function InputeditValue(e) {
 }
 
 export async function editValue(e) {
-  const actor = getActor(this.dataset.characterId);
+  e.stopPropagation();
+  const actor = await getActor(this.dataset.characterId);
   if (this.dataset.path.includes('conditions')) {
     actor.toggleCondition(this.dataset.path);
   } else if (this.dataset.dtype == "Number") {
@@ -79,18 +136,23 @@ export async function editValue(e) {
 }
 
 export async function useAce(e) {
-  const actor = getActor(this.dataset.characterId);
+  const actor = await getActor(this.dataset.characterId);
   const current_value = getNestedValue(actor, this.dataset.path);
   actor.update({ [this.dataset.path]: !current_value })
 }
 
 
 export async function useItem(e) {
+  let thisitem = this;
+  console.warn("E", e);
+  if (thisitem?.dataset == null) {
+    thisitem = e.currentTarget;
+  }
   let send_chat_message = true;
-  const actor = getActor(this.dataset.characterId);
-  const item = actor.items.get(this.dataset.itemId);
+  const actor = await getActor(thisitem.dataset.characterId);
+  const item = await actor.items.get(thisitem.dataset.itemId);
   let action, description;
-  if (item.type == "move" && this.dataset?.action == "use") {
+  if (item.type == "move" && thisitem.dataset?.action == "use") {
     description = item.system.description;
     if (!item.system.exhausted) {
       action = "Exhaust move";
@@ -107,7 +169,10 @@ export async function useItem(e) {
           }
         }
       }
+      console.warn("Fail count:", fail);
       if (fail == 1) {
+        console.log("Checking Joker");
+        console.warn(actor.system.aces.joker);
         if (actor.system.aces.joker) {
           actor.update({ [`system.aces.joker`]: false });
           fail -= 1;
@@ -151,12 +216,12 @@ export async function useItem(e) {
     };
 
     // Render the template
-    const renderedHTML = await renderTemplate(templatePath, data);
+    const renderedHTML = await foundry.applications.handlebars.renderTemplate(templatePath, data);
 
     // Send the rendered HTML to the chat
     ChatMessage.create({
       content: renderedHTML,
-      speaker: { alias: "Game Master" }
+      speaker: { alias: actor.name }
     });
   }
 
@@ -191,7 +256,7 @@ async function handleAttributeAction(event, actor, dataset) {
       actor: actor,
       timestamp: msg.timestamp
     };
-    const html = await renderTemplate("systems/household/templates/chat/skill-show-card.hbs", templateData);
+    const html = await foundry.applications.handlebars.renderTemplate("systems/household/templates/chat/skill-show-card.hbs", templateData);
     msg.update({ flavor: html });
   });
 
@@ -216,10 +281,16 @@ export async function setAttribute(e) {
 }
 
 export async function rollAbility(e) {
+  let thisitem = this;
+  console.warn("E", e);
+  if (thisitem?.dataset == null) {
+    thisitem = e.currentTarget;
+  }
 
-  const actor = getActor(this.dataset.characterId);
+  const actor = await getActor(thisitem.dataset.characterId);
+  console.warn("Actor 2:", actor);
   if (!actor) return;
-  handleAttributeAction(e, actor, this.dataset)
+  handleAttributeAction(e, actor, thisitem.dataset)
 
 }
 
@@ -246,7 +317,7 @@ async function handleSkillAction(event, actor, dataset) {
       timestamp: msg.timestamp
     };
     templateData.skill.label = game.i18n.localize(HOUSEHOLD.skills[dataset.label]);
-    const html = await renderTemplate("systems/household/templates/chat/skill-show-card.hbs", templateData);
+    const html = await foundry.applications.handlebars.renderTemplate("systems/household/templates/chat/skill-show-card.hbs", templateData);
     msg.update({ flavor: html });
   });
 }

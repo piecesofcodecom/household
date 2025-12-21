@@ -6,3 +6,5 @@ build/*.js
 styles/*.css
 package-lock.json
 css/*
+claude*
+.claude

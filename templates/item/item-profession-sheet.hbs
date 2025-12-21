@@ -1,57 +1,76 @@
-<form class="{{cssClass}}" autocomplete="off">
+<div class="item-sheet">
   <header class="sheet-header">
-    <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" />
+    <img class="profile-img" src="{{item.img}}" data-action="editImage" data-field="img" title="{{item.name}}" />
     <div class="header-fields">
-      <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="Name" /></h1>
-    </div>
+      <input class="item-name" name="name" type="text" value="{{item.name}}" placeholder="Name" data-dtype="String" />
+      <div class="" style="width: 100px">
+        <label class="resource-label">{{localize "HOUSEHOLD.HasCompanion.long"}}</label>
+        {{#if system.has_companion}}
+        <input type="checkbox" name="system.has_companion" value="{{system.has_companion}}" data-dtype="Boolean"
+          checked />
+        {{else}}
+        <input type="checkbox" name="system.has_companion" value="{{system.has_companion}}" data-dtype="Boolean" />
+        {{/if}}
+      </div>
   </header>
 
   {{!-- Sheet Tab Navigation --}}
   <nav class="sheet-tabs tabs" data-group="primary">
-    <a class="item" data-tab="description">{{localize "HOUSEHOLD.SheetLabels.Description"}}</a>
-    <a class="item" data-tab="configuration">{{localize "HOUSEHOLD.SheetLabels.Configuration"}}</a>
+    <a class="item" data-action="tab" data-tab="description" data-group="primary">{{localize
+      "HOUSEHOLD.SheetLabels.Description"}}</a>
+    <a class="item" data-action="tab" data-tab="configuration" data-group="primary">{{localize
+      "HOUSEHOLD.SheetLabels.Configuration"}}</a>
   </nav>
 
   {{!-- Sheet Body --}}
   <section class="sheet-body">
     {{!-- Description Tab --}}
-    <div class="tab" data-group="primary" data-tab="description">
-      {{editor
-        item.system.description
-        target='system.description'
-        button=true
-        editable=editable
-        engine='prosemirror'
-      }}
+    <div class="tab {{tabs.description.cssClass}}" data-group="primary" data-tab="description">
+      <div class="text-editor" style="height: 270px">
+        {{#if editable}}
+        <prose-mirror name="system.description" button="true" editable="{{editable}}" toggled="false"
+          value="{{system.description}}">
+          {{{descriptionHTML}}}
+        </prose-mirror>
+        {{else}}
+        {{{descriptionHTML}}}
+        {{/if}}
+      </div>
     </div>
 
-    <div class="tab fields" data-group="primary" data-tab="configuration">
+    <div class="tab fields {{tabs.configuration.cssClass}}" data-group="primary" data-tab="configuration">
+      <br />
       <div class="resource">
-          <label class="resource-label">{{localize "HOUSEHOLD.Field.long"}}</label>
-          <input type="text" name="system.field" value="{{system.field}}" data-dtype="String" />
+        <label class="resource-label">{{localize "HOUSEHOLD.Field.long"}}</label>
+        <select name="system.field">
+          <option value="" {{#ifEquals system.field "" }}selected="true"{{/ifEquals}}>Select one Field</option>
+          <option value="society" {{#ifEquals system.field "society" }}selected="true"{{/ifEquals}}>Society</option>
+          <option value="academia" {{#ifEquals system.field "academia" }}selected="true"{{/ifEquals}}>Academia</option>
+          <option value="war" {{#ifEquals system.field "war" }}selected="true"{{/ifEquals}}>War</option>
+          <option value="street" {{#ifEquals system.field "street" }}selected="true"{{/ifEquals}}>Street</option>
+        </select>
+        <!--input type="text" name="system.field" value="{{system.field}}" data-dtype="String" /-->
       </div>
+      <br />
       <div class="resource">
-          <label class="resource-label">{{localize "HOUSEHOLD.SheetLabels.Skills"}}</label>
-          <input type="text" name="system.skills" value="{{system.skills}}" data-dtype="String" placeholder="{{localize 'HOUSEHOLD.Placeholders.Skills'}}" />
+        <label class="resource-label">{{localize "HOUSEHOLD.SheetLabels.Skills"}}</label>
+        <input type="text" name="system.skills" value="{{system.skills}}" data-dtype="String"
+          placeholder="{{localize 'HOUSEHOLD.Placeholders.Skills'}}" />
       </div>
+      <br />
       <div class="resource">
-          <label class="resource-label">{{localize "HOUSEHOLD.Moves.long"}}</label>
-          <input type="text" name="system.moves" value="{{system.moves}}" data-dtype="String" placeholder="{{localize 'HOUSEHOLD.Placeholders.Moves'}}" />
+        <label class="resource-label">{{localize "HOUSEHOLD.Moves.long"}}</label>
+        <input type="text" name="system.moves" value="{{system.moves}}" data-dtype="String"
+          placeholder="{{localize 'HOUSEHOLD.Placeholders.Moves'}}" />
       </div>
+      <br />
       <div class="resource">
-          <label class="resource-label">{{localize "HOUSEHOLD.Traits.long"}}</label>
-          <input type="text" name="system.traits" value="{{system.traits}}" data-dtype="String" placeholder="{{localize 'HOUSEHOLD.Placeholders.Traits'}}" />
-      </div>
-      <div class="resource">
-          <label class="resource-label">{{localize "HOUSEHOLD.HasCompanion.long"}}</label>
-          {{#if system.has_companion}}
-            <input type="checkbox" name="system.has_companion" value="{{system.has_companion}}" data-dtype="Boolean" checked/>
-            {{else}}
-            <input type="checkbox" name="system.has_companion" value="{{system.has_companion}}" data-dtype="Boolean"/>
-            {{/if}}
+        <label class="resource-label">{{localize "HOUSEHOLD.Traits.long"}}</label>
+        <input type="text" name="system.traits" value="{{system.traits}}" data-dtype="String"
+          placeholder="{{localize 'HOUSEHOLD.Placeholders.Traits'}}" />
       </div>
     </div>
   </section>
-</form>
 
-{{log system}}
+  {{log system}}
+</div>

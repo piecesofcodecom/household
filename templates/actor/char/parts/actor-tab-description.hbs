@@ -1,0 +1,43 @@
+{{!-- Biography Tab --}}
+<section class="tab biography description-details {{tabs.description.cssClass}}" data-tab="description"
+  data-group="primary">
+  <h2 class="characteristic-title">{{localize "HOUSEHOLD.Memories.long"}}</h2>
+  <div class="resource">
+    <label class="resource-label">{{localize "HOUSEHOLD.Prologue.long"}}</label>
+    <input type="text" name="system.chapters.prologue" value="{{system.chapters.prologue}}" data-dtype="String" />
+  </div>
+  <div class="resource">
+    <label class="resource-label">{{localize "HOUSEHOLD.ChapterI.long"}}</label>
+    <input type="text" name="system.chapters.chapter1" value="{{system.chapters.chapter1}}" data-dtype="String" />
+  </div>
+  <div class="resource">
+    <label class="resource-label">{{localize "HOUSEHOLD.ChapterII.long"}}</label>
+    <input type="text" name="system.chapters.chapter2" value="{{system.chapters.chapter2}}" data-dtype="String" />
+  </div>
+  <div class="resource">
+    <label class="resource-label">{{localize "HOUSEHOLD.ChapterIII.long"}}</label>
+    <input type="text" name="system.chapters.chapter3_0" value="{{system.chapters.chapter3_0}}" data-dtype="String" />
+    <input type="text" name="system.chapters.chapter3_1" value="{{system.chapters.chapter3_1}}" data-dtype="String" />
+  </div>
+  <div class="resource">
+    <label class="resource-label">{{localize "HOUSEHOLD.ChapterIV.long"}}</label>
+    <input type="text" name="system.chapters.chapter4_0" value="{{system.chapters.chapter4_0}}" data-dtype="String" />
+    <input type="text" name="system.chapters.chapter4_1" value="{{system.chapters.chapter4_1}}" data-dtype="String" />
+  </div>
+  <div class="resource">
+    <label class="resource-label">{{localize "HOUSEHOLD.ChapterV.long"}}</label>
+    <input type="text" name="system.chapters.chapter5_0" value="{{system.chapters.chapter5_0}}" data-dtype="String" />
+    <input type="text" name="system.chapters.chapter5_1" value="{{system.chapters.chapter5_1}}" data-dtype="String" />
+  </div>
+  <h2 class="characteristic-title">{{localize "HOUSEHOLD.Experience.long"}}</h2>
+  <div class="text-editor" style="height: 320px">
+    {{#if editable}}
+    <prose-mirror name="system.biography" button="true" editable="{{editable}}" toggled="false"
+      value="{{system.biography}}">
+      {{{descriptionHTML}}}
+    </prose-mirror>
+    {{else}}
+    {{{descriptionHTML}}}
+    {{/if}}
+  </div>
+</section>

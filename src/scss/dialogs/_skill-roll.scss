@@ -1,0 +1,61 @@
+input.field-society[type=radio]:checked,
+input.field-war[type=radio]:checked,
+input.field-academia[type=radio]:checked,
+input.field-street[type=radio]:checked {
+    background-repeat: no-repeat !important;
+    background-size: cover !important;
+    -webkit-filter: none !important;
+}
+
+input.field-society[type=radio]:checked {
+    background-image: url(/systems/household/assets/sheet/suit-hearts-full.png) !important;
+}
+
+input.field-war[type=radio]:checked {
+    background-image: url(/systems/household/assets/sheet/suit-clubs-full.png) !important;
+}
+
+input.field-academia[type=radio]:checked {
+    background-image: url(/systems/household/assets/sheet/suit-diamonds-full.png) !important;
+}
+input.field-street[type=radio]:checked {
+    background-image: url(/systems/household/assets/sheet/suit-spades-full.png) !important;
+}
+
+input.field-society[type=radio],
+input.field-war[type=radio],
+input.field-academia[type=radio],
+input.field-street[type=radio] {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    vertical-align: middle;
+    border: none;
+
+}
+
+input.field-society[type=radio] {
+    background-image: url(/systems/household/assets/sheet/suit-hearts.png) !important;
+}
+
+input.field-war[type=radio] {
+    background-image: url(/systems/household/assets/sheet/suit-clubs.png) !important;
+}
+
+input.field-academia[type=radio] {
+    background-image: url(/systems/household/assets/sheet/suit-diamonds.png) !important;
+}
+input.field-street[type=radio] {
+    background-image: url(/systems/household/assets/sheet/suit-spades.png) !important;
+}
+
+h4, span {
+    color: var(--color-light-6);
+}
+
+.header-control.icon {
+    color: #000
+}

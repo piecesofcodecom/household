@@ -3,118 +3,221 @@ import {
   prepareActiveEffectCategories,
 } from '../helpers/effects.mjs';
 
+const { HandlebarsApplicationMixin } = foundry.applications.api;
+const { ItemSheetV2 } = foundry.applications.sheets;
+
 /**
- * Extend the basic ItemSheet with some very simple modifications
- * @extends {ItemSheet}
+ * Extend the basic ItemSheetV2 with Household-specific functionality
+ * @extends {ItemSheetV2}
  */
-export class HouseholdItemSheet extends ItemSheet {
-  /** @override */
-  static get defaultOptions() {
-    return foundry.utils.mergeObject(super.defaultOptions, {
-      classes: ['household', 'sheet', 'item'],
+export class HouseholdItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
+  /** @inheritDoc */
+  static DEFAULT_OPTIONS = {
+    classes: ['household', 'sheet', 'item'],
+    tag: 'form',
+    position: {
       width: 520,
-      height: 480,
+      height: 480
+    },
+    window: {
+      resizable: true
+    },
+    actions: {
+      customEdit: this.#onCustomEdit,
+      effectControl: this.#onEffectControl,
+      editImage: this.#onEditImage
+    },
+    form: {
+      submitOnChange: true,
+      closeOnSubmit: false
+    }
+  };
+
+  /** @inheritDoc */
+  static TABS = {
+    primary: {
       tabs: [
-        {
-          navSelector: '.sheet-tabs',
-          contentSelector: '.sheet-body',
-          initial: 'description',
-        },
+        { id: 'description', group: 'primary', label: 'HOUSEHOLD.SheetLabels.General' },
+        { id: 'configuration', group: 'primary', label: 'HOUSEHOLD.SheetLabels.Configuration' },
+        { id: 'attributes', group: 'primary', label: 'HOUSEHOLD.SheetLabels.Attributes' }
       ],
-    });
-  }
+      initial: 'description'
+    }
+  };
 
   /** @override */
-  get template() {
-    const path = 'systems/household/templates/item';
-    // Return a single sheet for all item types.
-    // return `${path}/item-sheet.hbs`;
+  static PARTS = {
+    // Individual item type templates
+    'item-item': {
+      template: 'systems/household/templates/item/item-item-sheet.hbs'
+    },
+    'item-gadget': {
+      template: 'systems/household/templates/item/item-gadget-sheet.hbs'
+    },
+    'item-weapon': {
+      template: 'systems/household/templates/item/item-weapon-sheet.hbs'
+    },
+    'item-move': {
+      template: 'systems/household/templates/item/item-move-sheet.hbs'
+    },
+    'item-contract': {
+      template: 'systems/household/templates/item/item-contract-sheet.hbs'
+    },
+    'item-trait': {
+      template: 'systems/household/templates/item/item-trait-sheet.hbs'
+    },
+    'item-profession': {
+      template: 'systems/household/templates/item/item-profession-sheet.hbs'
+    },
+    'item-vocation': {
+      template: 'systems/household/templates/item/item-vocation-sheet.hbs'
+    },
+    'item-companion': {
+      template: 'systems/household/templates/item/item-companion-sheet.hbs'
+    },
+    'item-folk': {
+      template: 'systems/household/templates/item/item-folk-sheet.hbs'
+    }
+  };
 
-    // Alternatively, you could use the following return statement to do a
-    // unique item sheet by type, like `weapon-sheet.hbs`.
-    return `${path}/item-${this.item.type}-sheet.hbs`;
+  /** @override */
+  _configureRenderOptions(options) {
+    super._configureRenderOptions(options);
+    // Set which part to render based on item type
+    options.parts = [`item-${this.document.type}`];
   }
 
   /* -------------------------------------------- */
 
-  /** @override */
-  getData() {
-    // Retrieve base data structure.
-    const context = super.getData();
+  /** @inheritDoc */
+  async _prepareContext(options) {
+    const context = await super._prepareContext(options);
 
-    // Use a safe clone of the item data for further operations.
-    const itemData = context.data;
-    // Retrieve the roll data for TinyMCE editors.
-    context.rollData = this.item.getRollData();
+    // Add the item to context for templates (ItemSheetV2 uses this.document)
+    context.item = this.document;
+    context.editable = this.isEditable;
 
-    // Add the item's data to context.data for easier access, as well as flags.
-    context.system = itemData.system;
-    if(itemData.type == 'weapon') {
+    // Retrieve the roll data for TinyMCE editors
+    context.rollData = this.document.getRollData();
+
+    // Add the item's data to context for easier access
+    context.system = this.document.system;
+
+    if (this.document.type === 'weapon') {
       context.system.field = context.system.field.toLowerCase();
       context.system.skill = context.system.skill.toLowerCase();
       context.fields = ['society', 'academia', 'war', 'street'];
-
     }
-    // change icon based on the type
-    if (itemData.img.includes('item-bag') ) {
-      if(itemData.type == "contract") {
-        this.item.update({'img': 'icons/sundries/documents/document-sealed-red-yellow.webp'})
-      } else if (itemData.type == "folk") {
-        this.item.update({'img': 'icons/environment/people/group.webp'})
-      } else if (itemData.type == "gadget") {
-        this.item.update({'img': 'icons/tools/instruments/chimes-wood-white.webp'})
-      } else if (itemData.type == "weapon") {
-        this.item.update({'img': 'icons/skills/melee/hand-grip-staff-teal.webp'})
-      } else if (itemData.type == "move") {
-        this.item.update({'img': 'icons/skills/movement/figure-running-gray.webp'})
-      } else if (itemData.type == "trait") {
-        this.item.update({'img': 'icons/skills/trades/academics-investigation-puzzles.webp'})
-      } else if (itemData.type == "profession") {
-        this.item.update({'img': 'icons/sundries/scrolls/scroll-bound-ruby-red.webp'})
-      } else if (itemData.type == "vocation") {
-        this.item.update({'img': 'icons/sundries/scrolls/scroll-worn-rolled-beige.webp'})
-      } else if (itemData.type == "companion") {
-        this.item.update({'img': 'icons/creatures/magical/construct-face-stone-pink.webp'})
+
+    // Change icon based on the type
+    if (this.document.img.includes('item-bag')) {
+      const iconMap = {
+        contract: 'icons/sundries/documents/document-sealed-red-yellow.webp',
+        folk: 'icons/environment/people/group.webp',
+        gadget: 'icons/tools/instruments/chimes-wood-white.webp',
+        weapon: 'icons/skills/melee/hand-grip-staff-teal.webp',
+        move: 'icons/skills/movement/figure-running-gray.webp',
+        trait: 'icons/skills/trades/academics-investigation-puzzles.webp',
+        profession: 'icons/sundries/scrolls/scroll-bound-ruby-red.webp',
+        vocation: 'icons/sundries/scrolls/scroll-worn-rolled-beige.webp',
+        companion: 'icons/creatures/magical/construct-face-stone-pink.webp'
+      };
+
+      const newIcon = iconMap[this.document.type];
+      if (newIcon) {
+        this.document.update({ img: newIcon });
       }
     }
-    context.flags = itemData.flags;
-    
+
+    context.flags = this.document.flags;
+
     // Prepare active effects for easier access
-    context.effects = prepareActiveEffectCategories(this.item.effects);
+    context.effects = prepareActiveEffectCategories(this.document.effects);
+
+    // Enrich HTML content for editors
+    const enrichmentOptions = {
+      secrets: this.document.isOwner,
+      relativeTo: this.document
+    };
+
+    // Enrich description for all item types
+    if (this.document.system.description) {
+      context.descriptionHTML = await foundry.applications.ux.TextEditor.implementation.enrichHTML(
+        this.document.system.description,
+        enrichmentOptions
+      );
+    }
+
+    // Enrich contract-specific fields
+    if (this.document.type === 'contract') {
+      if (this.document.system.concession?.details) {
+        context.concessionHTML = await foundry.applications.ux.TextEditor.implementation.enrichHTML(
+          this.document.system.concession.details,
+          enrichmentOptions
+        );
+      }
+      if (this.document.system.counterpart?.details) {
+        context.counterpartHTML = await foundry.applications.ux.TextEditor.implementation.enrichHTML(
+          this.document.system.counterpart.details,
+          enrichmentOptions
+        );
+      }
+    }
+
+    console.warn('Household | Item Sheet:', context.item);
 
     return context;
   }
 
   /* -------------------------------------------- */
 
-  /** @override */
-  activateListeners(html) {
-    super.activateListeners(html);
+  /**
+   * Handle custom edit actions
+   * @this {HouseholdItemSheet}
+   * @param {PointerEvent} event
+   * @param {HTMLElement} target
+   */
+  static async #onCustomEdit(event, target) {
+    event.preventDefault();
+    const dataset = target.dataset;
+    const path = dataset.path;
+    let newValue = "";
 
-    // Everything below here is only needed if the sheet is editable
-    if (!this.isEditable) return;
+    if (dataset.dtype === "Boolean") {
+      newValue = dataset.value !== 'true';
+    } else if (dataset.dtype === 'String') {
+      newValue = dataset.value;
+    }
 
-    // Roll handlers, click handlers, etc. would go here.
-    html.on('click', '.custom-edit', (ev) => {
-      const element = ev.target;
-      const dataset = element.dataset;
-      const path = dataset.path;
-      let new_value = "";
-      if(dataset.dtype === "Boolean") {
-        if (dataset.value === 'false') {
-          new_value = true;
-        } else {
-          new_value = false;
-        }
-      } else if (dataset.dtype === 'String') {
-        new_value = dataset.value;
-      }
-      this.item.update({[path]: new_value})
+    await this.document.update({ [path]: newValue });
+  }
+
+  /**
+   * Handle active effect control actions
+   * @this {HouseholdItemSheet}
+   * @param {PointerEvent} event
+   * @param {HTMLElement} target
+   */
+  static async #onEffectControl(event, target) {
+    await onManageActiveEffect(event, this.document);
+  }
+
+  /**
+   * Handle image editing
+   * @this {HouseholdItemSheet}
+   * @param {PointerEvent} event
+   * @param {HTMLElement} target
+   */
+  static async #onEditImage(event, target) {
+    const field = target.dataset.field || "img";
+    const current = foundry.utils.getProperty(this.document, field);
+
+    const fp = new foundry.applications.apps.FilePicker({
+      type: "image",
+      current: current,
+      callback: (path) => this.document.update({ [field]: path })
     });
 
-    // Active Effect management
-    html.on('click', '.effect-control', (ev) =>
-      onManageActiveEffect(ev, this.item)
-    );
+    fp.render(true);
   }
 }

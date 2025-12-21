@@ -95,6 +95,12 @@
         "CriticalOpponent": {
             "long": "Avversario Critico"
         },
+        "DialogTitles": {
+            "RollAbility": "Tiro Abilità",
+            "RollActions": "Tiro Azione Avversario",
+            "EditActionTable": "Modifica Tabella Azioni",
+            "SelectSkill": "Seleziona Abilità da Tiro"
+        },
         "Decorum": {
             "Decent": "Decente",
             "Elegant": "Elegante",

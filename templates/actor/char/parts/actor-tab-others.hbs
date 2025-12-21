@@ -1,0 +1,23 @@
+<section class="tab features other-details {{tabs.others.cssClass}}"
+         data-tab="others" data-group="primary">
+  <div>
+  <!-- Contracts -->
+  <h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.Contracts.long"}}
+    <button class="create-item-circle" data-action="itemCreate" data-type="contract"></button>
+  </h2>
+  {{> "systems/household/templates/actor/char/parts/actor-list-items.hbs" items=contracts type='contract'}}
+
+  <!-- Traits -->
+  <h2 class="characteristic-title">{{localize "HOUSEHOLD.Traits.long"}}
+    <button class="create-item-circle" data-action="itemCreate" data-type="trait"></button>
+  </h2>
+  {{> "systems/household/templates/actor/char/parts/actor-list-items.hbs" items=traits type='trait'}}
+  <br />
+
+  <!-- Moves -->
+  <h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.Moves.long"}}
+    <button class="create-item-circle" data-action="itemCreate" data-type="move"></button>
+  </h2>
+  {{> "systems/household/templates/actor/char/parts/actor-list-items.hbs" items=moves type='move'}}
+  </div>
+</section>

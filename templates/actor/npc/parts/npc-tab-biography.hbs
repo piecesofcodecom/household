@@ -1,0 +1,15 @@
+<section class="tab {{tabs.biography.cssClass}}" data-tab="{{tabs.biography.id}}" data-group="{{tabs.biography.group}}">
+  <!-- Description -->
+  <h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.SheetLabels.Description"}}</h2>
+  <div class="text-editor" style="height: 390px; padding-left: 50px;
+    padding-right: 50px;">
+    {{#if editable}}
+    <prose-mirror name="system.biography" button="true" editable="{{editable}}" toggled="false"
+      value="{{system.biography}}">
+      {{{descriptionHTML}}}
+    </prose-mirror>
+    {{else}}
+    {{{descriptionHTML}}}
+    {{/if}}
+  </div>
+</section>

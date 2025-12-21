@@ -26,24 +26,6 @@
     text-shadow: none;
 }
 
-.header_og {
-    border: none;
-    text-align: center;
-    width: 100%;
-    text-shadow: none;
-    color: rgb(48, 47, 47);
-    font-family: LHF_Encore, Beau Rivage, cursive;
-}
-
-.header_og {
-    border: none;
-    text-align: center;
-    width: 100%;
-    text-shadow: none;
-    color: rgb(48, 47, 47);
-    font-family: LHF_Encore, Beau Rivage, cursive;
-}
-
 .display-fields {
     display: flex;
     justify-content: center;
@@ -76,17 +58,28 @@
 
 /* Difficulty option */
 .difficulty-option {
-    border-radius: 25px;
-    border: 2px solid #171320;
     width: 32px;
     height: 32px;
-    display: flex
-;
-    align-items: center;
-    justify-content: center;
+    border-radius: 50%;
     text-align: center;
-    box-sizing: border-box;
+    font-size: 12px;
+    border: 1px solid var(--hh-border-strong);
+    background: var(--hh-bg-main);
+    color: var(--hh-accent-gold);
+    padding: 0;
+    -webkit-appearance: none;
+    appearance: none;
 }
+
+button[type=submit] {
+    background-color: var(--hh-accent-gold);
+    color: var(--hh-bg-panel);
+}
+
+button[type=submit] span {
+    color: var(--hh-bg-panel);
+}
+
 
 
 .collapsible-content {

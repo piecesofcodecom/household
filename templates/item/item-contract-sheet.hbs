@@ -1,57 +1,70 @@
-<form class="{{cssClass}}" autocomplete="off">
+<div class="item-sheet">
   <header class="sheet-header">
-    <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" />
+    <img class="profile-img" src="{{item.img}}" data-action="editImage" data-field="img" title="{{item.name}}" />
     <div class="header-fields">
-      <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="Name" /></h1>
-      
-        <div class="resource">
-          <label class="resource-label">{{localize "HOUSEHOLD.SheetLabels.Type"}}</label>
-          <input type="text" name="system.type" value="{{system.type}}" data-dtype="String" />
-        </div>
+      <input class="item-name" name="name" type="text" value="{{item.name}}" placeholder="Name" data-dtype="String" />
+      <div class="resource">
+        <label class="resource-label">{{localize "HOUSEHOLD.SheetLabels.Type"}}</label>
+        <input type="text" name="system.type" value="{{system.type}}" data-dtype="String" />
+      </div>
 
     </div>
   </header>
 
   {{!-- Sheet Tab Navigation --}}
   <nav class="sheet-tabs tabs" data-group="primary">
-    <a class="item" data-tab="description">{{localize "HOUSEHOLD.Concession.long"}}</a>
-    <a class="item" data-tab="attributes">{{localize "HOUSEHOLD.Counterpart.long"}}</a>
+    <a class="item" data-action="tab" data-tab="description" data-group="primary">{{localize
+      "HOUSEHOLD.Concession.long"}}</a>
+    <a class="item" data-action="tab" data-tab="attributes" data-group="primary">{{localize
+      "HOUSEHOLD.Counterpart.long"}}</a>
   </nav>
 
   {{!-- Sheet Body --}}
   <section class="sheet-body">
     {{!-- Description Tab --}}
-    <div class="tab" data-group="primary" data-tab="description">
-      <div class="resource">
-        <label class="resource-label">{{localize "HOUSEHOLD.SheetLabels.Name"}}</label>
+    <div class="tab {{tabs.description.cssClass}}" data-group="primary" data-tab="description">
+      <br />
+      <div class="resource" style="display: flex; gap: 1em;">
+        <label class="resource-label" style="flex: 1">{{localize "HOUSEHOLD.SheetLabels.Name"}}</label>
         <input type="text" name="system.concession.name" value="{{system.concession.name}}" data-dtype="String" />
       </div>
-      {{editor
-        item.system.concession.details
-        target='system.concession.details'
-        button=true
-        editable=editable
-        engine='prosemirror'
-      }}
+      <br />
+      <label class="resource-label">{{localize "HOUSEHOLD.SheetLabels.Description"}}</label>
+      <div class="text-editor" style="height: 190px;">
+        {{#if editable}}
+        <prose-mirror name="system.concession.details" button="true" editable="{{editable}}" toggled="false"
+          value="{{system.concession.details}}">
+          {{{concessionHTML}}}
+        </prose-mirror>
+        {{else}}
+        {{{concessionHTML}}}
+        {{/if}}
+      </div>
 
     </div>
 
     {{!-- Attributes Tab --}}
-    <div class="tab attributes" data-group="primary" data-tab="attributes">
+    <div class="tab attributes {{tabs.attributes.cssClass}}" data-group="primary" data-tab="attributes">
       {{!-- As you add new fields, add them in here! --}}
-      <div class="resource">
-        <label class="resource-label">{{localize "HOUSEHOLD.SheetLabels.Name"}}</label>
+       <br />
+     <div class="resource" style="display: flex; gap: 1em;">
+        <label class="resource-label" style="flex: 1">{{localize "HOUSEHOLD.SheetLabels.Name"}}</label>
         <input type="text" name="system.counterpart.name" value="{{system.counterpart.name}}" data-dtype="String" />
       </div>
-     {{editor
-        item.system.counterpart.details
-        target='system.counterpart.details'
-        button=true
-        editable=editable
-        engine='prosemirror'
-      }}
+       <br />
+       <label class="resource-label">{{localize "HOUSEHOLD.SheetLabels.Description"}}</label>
+      <div class="text-editor" style="height: 190px;">
+        {{#if editable}}
+        <prose-mirror name="system.counterpart.details" button="true" editable="{{editable}}" toggled="false"
+          value="{{system.counterpart.details}}">
+          {{{counterpartHTML}}}
+        </prose-mirror>
+        {{else}}
+        {{{counterpartHTML}}}
+        {{/if}}
+      </div>
     </div>
   </section>
-</form>
 
-{{log system}}
+  {{log system}}
+</div>

@@ -1,0 +1,47 @@
+<header class="sheet-header">
+  <img class="profile-img" src="{{actor.img}}" style="border: 0px; margin-right: 5px; cursor: pointer;" data-action="editImage" data-field="img" data-tooltip="Edit Image" title="{{actor.name}}" height="100" width="100" />
+  <div class="header-fields">
+    <h1 class="char-name" style="margin: 0"><input class="char-name" name="name" type="text" value="{{actor.name}}" placeholder="Name" style="font-size: smaller;" /></h1>
+    <div class="resources grid grid-7col" style="justify-items: center;
+    align-items: center;
+    text-align: center;">
+
+      <div class="resource flex-group-center grid-span-3"  style="margin: 0">
+        <div class="resource-content flexrow flex-center flex-between">
+          {{#when system.threat.level 'lteq' 1}}
+          <h4 class="characteristic-description" style="text-align: center; margin: 0;">{{localize "HOUSEHOLD.BasicOpponent.long"}}</h4>
+          {{else}}
+          <h4 class="characteristic-description" style="text-align: center; margin: 0;">{{localize "HOUSEHOLD.CriticalOpponent.long"}}</h4>
+          {{/when}}
+        </div>
+      </div>
+
+      <div class="resource flex-group-center grid-span-3">
+        <div class="">
+          {{#numLoop 5}}
+            {{#when ../system.threat.level 'gteq' this }}
+              {{#when ../system.threat.level 'eq' this }}
+                <input type="radio" class="input-hidden" id="{{../actor.id}}-threat_{{this}}" name="system.threat.level" value="{{reduceBy this 1}}" data-dtype="Number" data-character-id="{{../actor.id}}" >
+              {{else}}
+                <input type="radio" class="input-hidden" id="{{../actor.id}}-threat_{{this}}" name="system.threat.level" value="{{this}}" data-dtype="Number" data-character-id="{{../actor.id}}" >
+              {{/when}}
+               <label for="{{../actor.id}}-threat_{{this}}" style="cursor: pointer">
+                <i style="font-size: 1.0em; margin: 2px; color: #612877" class="fa-solid fa-spider"></i>
+              </label>
+            {{else}}
+              <input type="radio" class="input-hidden" id="{{../actor.id}}-threat_{{this}}" name="system.threat.level" value="{{this}}" data-dtype="Number" >
+                <label for="{{../actor.id}}-threat_{{this}}" style="cursor: pointer">
+                <i style="font-size: 1.0em; margin: 2px; color: #612877" class="fa-thin fa-spider"></i>
+              </label>
+            {{/when}}
+
+          {{/numLoop}}
+        </div>
+      </div>
+      <div class="resource flex-group-center">
+      <a class="item roll-action rollable" data-type="action" data-action="roll" title="{{localize "HOUSEHOLD.RollActions.long"}}"><i class="fa-solid fa-dice"></i></a>
+      </div>
+
+    </div>
+  </div>
+</header>

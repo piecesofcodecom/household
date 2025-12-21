@@ -96,6 +96,12 @@
         "CriticalOpponent": {
             "long": "Oponente Crítico"
         },
+        "DialogTitles": {
+            "RollAbility": "Rolar Habilidade",
+            "RollActions": "Rolar Ação do Oponente",
+            "EditActionTable": "Editar Tabela de Ações",
+            "SelectSkill": "Selecionar Habilidade para Rolar"
+        },
         "Decorum": {
             "Decent": "Decente",
             "Elegant": "Elegante",

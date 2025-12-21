@@ -1,0 +1,37 @@
+{{!-- Sheet Header --}}
+<header class="sheet-header">
+  <img class="profile-img" style="border: 0px; cursor: pointer;" src="{{actor.img}}" data-action="editImage" data-field="img" data-tooltip="Edit Image" title="{{actor.name}}" height="100"
+    width="100" />
+  <div class="header-fields">
+    <h1 class="charname"><input class="char-name" name="name" type="text" value="{{actor.name}}" placeholder="Name" />
+    </h1>
+    <div class="resources grid grid-4col">
+      <div class="resource__group">
+        <input class="form__field" type="text" name="system.folk" value="{{system.folk}}" placeholder=""
+          data-dtype="String" />
+        <label class="form__label" for="system.attributes.level.value">{{localize "HOUSEHOLD.Folk.long"}}</label>
+      </div>
+
+      <div class="resource__group">
+        <input class="form__field" type="text" name="system.homeland" value="{{system.homeland}}" placeholder=""
+          data-dtype="String" />
+        <label class="form__label" for="system.attributes.level.value" class="resource-label">{{localize
+          "HOUSEHOLD.Homeland.long"}}</label>
+      </div>
+
+      <div class="resource__group">
+        <input class="form__field" type="text" name="system.profession" value="{{system.profession}}" placeholder=""
+          data-dtype="String" />
+        <label class="form__label" for="system.attributes.level.value" class="resource-label">{{localize
+          "HOUSEHOLD.Profession.long"}}</label>
+      </div>
+
+      <div class="resource__group">
+        <input class="form__field" type="text" name="system.vocation" value="{{system.vocation}}" placeholder=""
+          data-dtype="String" />
+        <label class="form__label" for="system.attributes.level.value" class="resource-label">{{localize
+          "HOUSEHOLD.Vocation.long"}}</label>
+      </div>
+    </div>
+  </div>
+</header>

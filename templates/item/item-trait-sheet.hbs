@@ -1,8 +1,8 @@
-<form class="{{cssClass}}" autocomplete="off">
+<div class="item-sheet">
   <header class="sheet-header">
-    <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" />
+    <img class="profile-img" src="{{item.img}}" data-action="editImage" data-field="img" title="{{item.name}}" />
     <div class="header-fields">
-      <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="Name" /></h1>
+      <input class="item-name" name="name" type="text" value="{{item.name}}" placeholder="Name" data-dtype="String" />
       <div class="grid grid-1col">
       </div>
     </div>
@@ -10,27 +10,31 @@
 
   {{!-- Sheet Tab Navigation --}}
   <nav class="sheet-tabs tabs" data-group="primary">
-    <a class="item" data-tab="description">{{localize "HOUSEHOLD.SheetLabels.Description"}}</a>
+    <a class="item" data-action="tab" data-tab="description" data-group="primary">{{localize
+      "HOUSEHOLD.SheetLabels.Description"}}</a>
     <!--a class="item" data-tab="attributes">Attributes</a-->
   </nav>
 
   {{!-- Sheet Body --}}
   <section class="sheet-body">
     {{!-- Description Tab --}}
-    <div class="tab" data-group="primary" data-tab="description">
+    <div class="tab {{tabs.description.cssClass}}" data-group="primary" data-tab="description">
       {{!-- To render inline rolls in a TinyMCE editor, you need to pass the parent actor's (if any) roll data to the
       rollData prop. --}}
-      
-      <label class="resource-label my-title">{{localize "HOUSEHOLD.SheetLabels.Description"}}</label>    
-      {{editor
-        item.system.description
-        target='system.description'
-        button=true
-        editable=editable
-        engine='prosemirror'
-      }}
+      <br />
+      <label class="resource-label">{{localize "HOUSEHOLD.SheetLabels.Description"}}</label>
+      <div class="text-editor" style="height: 280px;">
+        {{#if editable}}
+        <prose-mirror name="system.description" button="true" editable="{{editable}}" toggled="false"
+          value="{{system.description}}">
+          {{{descriptionHTML}}}
+        </prose-mirror>
+        {{else}}
+        {{{descriptionHTML}}}
+        {{/if}}
+      </div>
     </div>
   </section>
-</form>
 
-{{log system}}
+  {{log system}}
+</div>

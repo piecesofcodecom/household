@@ -104,6 +104,12 @@
             "Uncouth": "Uncouth",
             "long": "Decorum"
         },
+        "DialogTitles": {
+            "RollAbility": "Roll Ability",
+            "RollActions": "Roll Opponent Action",
+            "EditActionTable": "Edit Action Table",
+            "SelectSkill": "Select Skill to Roll"
+        },
         "Difficulty": {
             "long": "Difficulty"
         },
@@ -313,7 +319,8 @@
             },
             "long": "Skill"
         },
-        "stats": "Abilities",
+        "stats": "Stats",
+        "skills": "Abilities",
         "Stress": {
             "long": "Stress"
         },

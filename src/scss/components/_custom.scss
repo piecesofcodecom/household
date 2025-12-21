@@ -1,15 +1,91 @@
+// Custom household icons
+.fa-household-heart,
+.fa-household-heart-full,
+.fa-household-diamond,
+.fa-household-diamond-full,
+.fa-household-club,
+.fa-household-club-full,
+.fa-household-spade,
+.fa-household-spade-full,
+.fa-household-home,
+.fa-household-contract,
+.fa-household-gear,
+.fa-household-memories,
+.fa-household-none {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  vertical-align: middle;
+  border: none;
+}
+
+.fa-household-heart {
+  background-image: url(/systems/household/assets/sheet/suit-hearts.png);
+}
+
+.fa-household-heart-full {
+  background-image: url(/systems/household/assets/sheet/suit-hearts-full.png);
+}
+
+.fa-household-none {
+  background-image: url(/systems/household/assets/dice/cancel.png);
+}
+
+.fa-household-diamond {
+  background-image: url(/systems/household/assets/sheet/suit-diamonds.png);
+}
+
+.fa-household-diamond-full {
+  background-image: url(/systems/household/assets/sheet/suit-diamonds-full.png);
+}
+
+.fa-household-club {
+  background-image: url(/systems/household/assets/sheet/suit-clubs.png);
+}
+
+.fa-household-club-full {
+  background-image: url(/systems/household/assets/sheet/suit-clubs-full.png);
+}
+
+.fa-household-spade {
+  background-image: url(/systems/household/assets/sheet/suit-spades.png);
+}
+
+.fa-household-spade-full {
+  background-image: url(/systems/household/assets/sheet/suit-spades-full.png);
+}
+
+.fa-household-home {
+  background-image: url(/systems/household/assets/sheet/icon-home.png);
+}
+
+.fa-household-contract {
+  background-image: url(/systems/household/assets/sheet/icon-contracts.png);
+}
+
+.fa-household-gear {
+  background-image: url(/systems/household/assets/sheet/icon-gear.png);
+}
+
+.fa-household-memories {
+  background-image: url(/systems/household/assets/sheet/icon-memories.png);
+}
+
 .item-form {
   font-family: "Roboto", sans-serif;
 }
 
 .sheet-header {
-  flex: 0 auto;
-  overflow: hidden;
+  /*flex: 0 auto;*/
+  /*overflow: hidden;*/
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: flex-start;
-  margin-bottom: 10px;
+  /*margin-bottom: 10px;*/
 }
 
 
@@ -18,23 +94,24 @@
   flex: 1;
 }
 
-.sheet-header h1.charname {
-  height: 50px;
-  padding: 0px;
-  margin: 5px 0;
-  border-bottom: 0;
-}
+// .sheet-header h1.charname {
+//   height: 50px;
+//   padding: 0px;
+//   margin: 5px 0;
+//   border-bottom: 0;
+// }
 
-.sheet-header h1.charname input {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-}
+// .sheet-header h1.charname input {
+//   width: 100%;
+//   height: 100%;
+//   margin: 0;
+// }
 
-.sheet-tabs {
-  flex: 0;
-  border: 0px;
-}
+// .sheet-tabs {
+//   flex: 0;
+//   border: 0px;
+//   backdrop-filter: blur(10px);
+// }
 
 .household.sheet.actor nav.tabs {
   --tab-full-width: 44px;
@@ -246,9 +323,10 @@
 
 .field-title {
   font-family: 'LHF_Encore', Beau Rivage, cursive;
-  font-size: 2.0em;
+  font-size: 1.4em;
   font-weight: 500;
   text-transform: capitalize;
+  color: var(--hh-accent-gold);
 }
 
 .characteristic-title {
@@ -259,7 +337,7 @@
   border: none;
   font-weight: bold;
   text-align: center;
-  color: black;
+  color: var(--hh-accent-gold);
 }
 
 .characteristic-description {
@@ -276,21 +354,26 @@
   content: "";
   display: block;
   background-image: url(/systems/household/assets/sheet/deco1.svg);
-  background-size: 350px, auto;
+  /*background-size: 350px, auto;*/
   background-repeat: no-repeat;
   background-position: center bottom;
   height: 20px;
   margin-bottom: 10px;
+  background-size: contain;
+  filter: invert(53%) sepia(51%) saturate(575%) hue-rotate(5deg) brightness(97%) contrast(92%);
 }
 
 .field-title:after {
   content: "";
   display: block;
   background-image: url(/systems/household/assets/sheet/deco2.svg);
-  background-size: 200px, auto;
+  /*background-size: 200px, auto;*/
   background-repeat: no-repeat;
-  background-position: left top;
+  background-position: center;
   height: 16px;
+  background-size: contain;
+  filter: invert(53%) sepia(51%) saturate(575%) hue-rotate(5deg) brightness(97%) contrast(92%);
+  margin-top: 5px;
 
 }
 
@@ -336,34 +419,34 @@ input[type=radio]+label>img {
 }
 
 .bg-heart {
-  background-image: url(/systems/household/assets/sheet/heart.svg);
+  background-image: url(/systems/household/assets/sheet/heart.png);
 }
 
 .bg-heart-filled {
-  background-image: url(/systems/household/assets/sheet/heart-filled.svg);
+  background-image: url(/systems/household/assets/sheet/heart-filled.png);
 }
 
 .bg-club {
-  background-image: url(/systems/household/assets/sheet/club.svg);
+  background-image: url(/systems/household/assets/sheet/club.png);
 }
 
 .bg-club-filled {
-  background-image: url(/systems/household/assets/sheet/club-filled.svg);
+  background-image: url(/systems/household/assets/sheet/club-filled.png);
 }
 
 .bg-diamond {
-  background-image: url(/systems/household/assets/sheet/diamond.svg);
+  background-image: url(/systems/household/assets/sheet/diamond.png);
 }
 
 .bg-diamond-filled {
-  background-image: url(/systems/household/assets/sheet/diamond-filled.svg);
+  background-image: url(/systems/household/assets/sheet/diamond-filled.png);
 }
 
 
 .bg-spade {
-  background-image: url(/systems/household/assets/sheet/spade.svg);
+  background-image: url(/systems/household/assets/sheet/spade.png);
 }
 
 .bg-spade-filled {
-  background-image: url(/systems/household/assets/sheet/spade-filled.svg);
+  background-image: url(/systems/household/assets/sheet/spade-filled.png);
 }
