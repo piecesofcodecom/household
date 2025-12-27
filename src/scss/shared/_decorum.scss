@@ -1,0 +1,78 @@
+// Decorum grid and butterfly input styles
+.decorum-text {
+  font-family: Cambria, Times, 'Times New Roman', serif;
+  font-size: small;
+  text-transform: uppercase;
+}
+
+.grid-decorum {
+  display: grid;
+  width: 100%;
+  height: 70px;
+  margin: auto;
+  grid-template-columns: 20% 20% 20% 20% 20%;
+  grid-template-rows: auto auto;
+  align-items: center;
+  justify-content: space-around;
+  align-content: space-evenly;
+  justify-items: center;
+  gap: 5px 2px;
+}
+
+.grid-decorum div {
+  text-align: center;
+}
+
+.logo-bg {
+  background: url(/systems/household/assets/official/logo_bg.png);
+  background-position: bottom 10px center;
+  background-repeat: no-repeat;
+  background-size: 200px 200px;
+}
+
+.logo-bg2 {
+  background: url(/systems/household/assets/official/logo_bg.png);
+  background-position: bottom 36px center;
+  background-repeat: no-repeat;
+  background-size: 200px 200px;
+}
+
+.decorum input[type="checkbox"] {
+  -webkit-appearance: initial;
+  appearance: initial;
+  background: url(/systems/household/assets/sheet/butterfly.svg);
+  background-repeat: no-repeat !important;
+  background-size: cover !important;
+  flex: 0 0 27px;
+  width: 27px;
+  height: 22px;
+  cursor: pointer;
+  transform: scale(1.4);
+}
+
+.decorum input[type="radio"] {
+  -webkit-appearance: initial;
+  appearance: initial;
+  background: url(/systems/household/assets/sheet/butterfly.svg);
+  background-repeat: no-repeat !important;
+  background-size: cover !important;
+  flex: 0 0 27px;
+  width: 27px;
+  height: 22px;
+  cursor: pointer;
+  transform: scale(1.4);
+}
+
+.decorum input[type="radio"]:checked {
+  background: url(/systems/household/assets/sheet/butterfly-filled.svg) !important;
+  -webkit-filter: none !important;
+  background-repeat: no-repeat !important;
+  background-size: cover !important;
+}
+
+.decorum input[type="checkbox"]:checked {
+  background: url(/systems/household/assets/sheet/butterfly-filled.svg) !important;
+  -webkit-filter: none !important;
+  background-repeat: no-repeat !important;
+  background-size: cover !important;
+}

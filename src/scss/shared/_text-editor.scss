@@ -1,0 +1,39 @@
+// Text editor rich content styles
+.text-editor {
+  color: var(--hh-text-main);
+  overflow-y: auto;
+}
+
+.text-editor h1,h2,h3,h4,h5,h6 {
+  color: var(--hh-accent-gold);
+}
+
+.text-editor a {
+  color: var(--hh-accent-teal);
+}
+
+.text-editor blockquote {
+  border-left: 4px solid var(--hh-accent-brass);
+}
+
+.text-editor ul, .text-editor ol {
+  padding-left: 20px;
+}
+
+.text-editor h1 {
+  font-size: 1.8rem;
+}
+
+.text-editor h2 {
+  font-size: 1.6rem;
+}
+
+.text-editor h3 {
+  font-size: 1.4rem;
+}
+
+.text-editor h4,
+.text-editor h5,
+.text-editor h6 {
+  font-size: 1.0rem;
+}

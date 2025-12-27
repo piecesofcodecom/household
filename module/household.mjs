@@ -907,7 +907,10 @@ async function renderCharacter() {
   }
   const data = characterData(actor, character.id);
   if (!data) return;
-  const scroll_1 = $('.character-actions-content').scrollTop();
+  let scroll_1 = $('.character-actions-content').scrollTop();
+  if (!scroll_1) {
+    scroll_1 = $('.npc-actions-content').scrollTop();
+  }
   const scroll_2 = $('.character-stats-content').scrollTop();
   const scroll_3 = $('.character-skills-content-society').scrollTop();
   const scroll_4 = $('.character-skills-content-academia').scrollTop();
@@ -950,6 +953,7 @@ async function renderCharacter() {
 
   elem.innerHTML = tpl;
   $('.character-actions-content').scrollTop(scroll_1);
+  $('.npc-actions-content').scrollTop(scroll_1);
   $('.character-stats-content').scrollTop(scroll_2);
   $('.character-skills-content-society').scrollTop(scroll_3);
   $('.character-skills-content-academia').scrollTop(scroll_4);

@@ -36,7 +36,7 @@
     </label>
     <label><a style=" float:right; margin-left: 5px;" class='item-control item-edit'
         title='{{localize "DOCUMENT.Update" type=' Item'}}' data-action="show" data-item-id="{{item._id}}"
-        data-character-id="{{@root.actor.id}}">
+        data-character-id="{{@root.id}}">
         <i class='fas fa-comment'></i>
       </a>
     </label> --}}
@@ -54,12 +54,12 @@
     {{#if item.system.field}}
     <label style="float:right; margin-left: 5px;margin-right: 5px">
       <i style="color: {{getFieldColor item.system.field}}"
-        class="fa-solid fa-{{getSuitFromField item.system.field}}"></i>
+        class="fa-household-{{getSuitFromField item.system.field}}-full"></i>
     </label>
     {{/if}}
     {{#when type 'eq' 'move' }}
    
-    <label class='item-control item' style="float:right; margin-left: 5px;margin-right: 15px"
+    <label class='item-control item' style="float:right; margin-left: 5px;margin-right: 15px; cursor: pointer;"
       for="move-{{item._id}}" data-item-id="{{item._id}}" data-character-id="{{@root/id}}" data-action="use">
     {{#if item.system.exhausted}}
       <i style="color: red" class="fa-regular fa-toggle-large-off" ></i>

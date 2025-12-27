@@ -31,9 +31,9 @@
         {{#each fields as |fd key|}}
         <div>
             <input type="radio" class="toggle-input field-option field field-{{key}} no-decor" data-key="{{key}}"
-                id="choose-{{key}}-{{@root/actor.id}}" name="field" value="{{key}}" {{#when key 'eq'
+                id="choose-{{key}}-{{@root/id}}" name="field" value="{{key}}" {{#when key 'eq'
                 @root/field}}checked{{/when}} />
-            <label class="field-label" for="choose-{{key}}-{{@root/actor.id}}">
+            <label class="field-label" for="choose-{{key}}-{{@root/id}}">
                 <span>x{{fd.value}}</span>
             </label>
         </div>

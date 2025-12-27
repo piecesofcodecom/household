@@ -491,9 +491,10 @@ export class HouseholdActor extends Actor {
   async dialogRollSkill(dataset) {
     let guess;
     const actor = this; //getActor(this.dataset.characterId);
-    console.warn("Actor 1:", actor.system);
+    console.warn("Actor 1:", actor.system.skills["shoot"]);
     const skill = actor.system.skills[dataset.key];
     if (dataset.key && skill) {
+      console.warn("DEU CERTO")
       skill.label = game.i18n.localize(CONFIG.HOUSEHOLD.skills[dataset.key])
     }
     const templateData = {
@@ -506,6 +507,7 @@ export class HouseholdActor extends Actor {
       actor: actor,
       //timestamp: msg.timestamp
     };
+    console.warn("TEMPLATE", templateData);
     const html = await foundry.applications.handlebars.renderTemplate("systems/household/templates/chat/dialog-skill-roll.hbs", templateData);
   
     const dialog = await foundry.applications.api.DialogV2.wait({

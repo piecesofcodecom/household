@@ -1,37 +1,7 @@
 {
   "permissions": {
     "allow": [
-      "Bash(for file in \"blood-splatter2.png\" \"profile-img-glass.png\" \"opponent-n-bg.png\" \"btn-create.png\" \"icon-home.png\" \"icon-memories.png\")",
-      "Bash(do echo -n \"$file: \")",
-      "Bash(done)",
-      "Bash(for file in \"profile-img-glass.png\" \"opponent-n-bg.png\" \"btn-create.png\" \"icon-home.png\" \"icon-memories.png\")",
-      "Bash(do echo \"=== $file ===\")",
-      "Bash(for file in \"ace-club.png\" \"ace-diamond.png\" \"ace-heart.png\" \"ace-spade.png\" \"ace-joker.png\")",
-      "Bash(do echo \"$file:\")",
-      "Bash(for i in 1 2 3 4 5)",
-      "Bash(do [ -f \"face_$i_alpha.png\" ])",
-      "Bash(move \"face_$i_alpha.png\" \"..\\\\..\\\\assets\\\\dice\"\" && echo \"Moved back face_$i_alpha.png\" || echo \"File face_$i_alpha.png not found \")",
-      "Bash(do if [ -f \"face_$i_alpha.png\" ])",
-      "Bash(then move \"face_$i_alpha.png\" \"../../assets/dice/\")",
-      "Bash(echo:*)",
-      "Bash(else echo \"File face_$i_alpha.png not found\")",
-      "Bash(fi)",
-      "Bash(for:*)",
-      "Bash(then mv \"face_$i_alpha.png\" \"../../assets/dice/\")",
-      "Bash(do if [ -f \"face_$i.png\" ])",
-      "Bash(then mv \"face_$i.png\" \"../../assets/dice/\")",
-      "Bash(do if [ -f \"face_$i_bump.png\" ])",
-      "Bash(then mv \"face_$i_bump.png\" \"../../assets/dice/\")",
-      "Bash(do if [ -f \"face_$i_gold.png\" ])",
-      "Bash(then mv \"face_$i_gold.png\" \"../../assets/dice/\")",
-      "Bash(if [ -f \"face_6_alpha.png\" ])",
-      "Bash(then mv \"face_6_alpha.png\" \"../../assets/dice/\")",
-      "Bash(if [ -f \"butterfly-filled-white.svg\" ])",
-      "Bash(then mv \"butterfly-filled-white.svg\" \"../../assets/sheet/\")",
-      "Bash(else echo \"butterfly-filled-white.svg not found\")",
-      "Bash(if [ -f \"deco4.png\" ])",
-      "Bash(then mv \"deco4.png\" \"../../assets/chat/\")",
-      "Bash(else echo \"deco4.png not found\")"
+      "Bash(npm run build-css:*)"
     ]
   }
 }

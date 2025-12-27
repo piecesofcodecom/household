@@ -1,0 +1,203 @@
+// HUD stats section - health, stress, aces, conditions, decorum
+.character-health,
+.npc-health,
+.character-attrs,
+.npc-attrs {
+  width: 200px;
+  height: 50px;
+  background: var(--gold-gradient);
+  border-radius: 5px;
+  border: 1px solid black;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+}
+
+.character-health {
+  margin-left: -25px;
+}
+
+.npc-health {
+  margin-left: -35px;
+}
+
+.character-attrs {
+  margin-right: -25px;
+}
+
+.npc-attrs {
+  margin-right: -35px;
+}
+
+.bar-wrapper {
+  width: 192px;
+  height: 42px;
+  background: #000000a6;
+  border-radius: 5px;
+  border: 1px solid black;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+  margin-top: 3px;
+  margin-left: 3px;
+  position: relative;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+}
+
+.character-health .bar {
+  position: absolute;
+  left: 1px;
+  top: 1px;
+  bottom: 1px;
+  width: 75%;
+  border-radius: 2px;
+  z-index: 2;
+  box-shadow: 0px 1px 0 1px rgba(255, 255, 255, 0.4) inset;
+}
+
+.character-health .bar.healthy,
+#party .character-health .bar.healthy {
+  background: linear-gradient(180deg, rgb(50, 197, 124) 0%, rgb(39, 160, 120) 100%);
+}
+
+.character-health .bar.hurt,
+#party .character-health .bar.hurt {
+  background: linear-gradient(180deg, rgb(243, 227, 9) 0%, rgb(202, 173, 8) 100%);
+}
+
+.character-health .bar.injured,
+#party .character-health .bar.injured {
+  background: linear-gradient(180deg, rgb(235, 151, 25) 0%, rgb(180, 106, 8) 100%);
+}
+
+.character-health .bar.critical,
+#party .character-health .bar.critical {
+  background: linear-gradient(180deg, rgb(243, 87, 60) 0%, rgb(141, 21, 5) 100%);
+}
+
+.character-health input {
+  color: #eeecec;
+  width: auto;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  text-shadow: 0 0 5px var(--text-shadow);
+  width: 60px;
+  text-align: center;
+  font-size: 1.4em;
+  z-index: 3;
+  background: transparent;
+}
+
+.character-health .divider {
+  flex: 1;
+  text-align: center;
+  padding-top: 2px;
+  z-index: 3;
+  text-shadow: 0 0 5px var(--text-shadow);
+}
+
+.character-attrs .attr {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.character-attrs .attr:not(:first-child)::after {
+  content: ' ';
+  height: 14px;
+  width: 1px;
+  background-color: var(--gold-dark);
+  left: 0;
+  top: 7px;
+  position: absolute;
+}
+
+.character-attrs .attr label {
+  font-weight: bold;
+  color: var(--gold);
+  letter-spacing: 0.1em;
+  font-size: 0.6em;
+  text-transform: uppercase;
+  line-height: 1em;
+}
+
+.character-attrs .attr span {
+  font-size: 1.0em;
+  line-height: 0.8em;
+  margin-top: 5px;
+}
+
+.hud-stress {
+  height: 40px;
+  position: relative;
+  z-index: 4;
+  border: 0;
+  text-align: center;
+  background-position: center;
+  width: 40px;
+  opacity: 0.7;
+  color: #eee;
+  background-repeat: no-repeat;
+  font-weight: bold;
+}
+
+.stress-square-green {
+  background: url("/systems/household/assets/sheet/square-green.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 80%;
+}
+
+.stress-square-red {
+  background: url("/systems/household/assets/sheet/square-red.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 80%;
+}
+
+
+// .stress-rosette {
+//   background: url("/systems/household/assets/sheet/rosette-small.png");
+//   background-position: center;
+//   background-repeat: no-repeat;
+//   background-size: cover;
+// }
+
+.grid-decorum {
+  align-content: space-evenly;
+  align-items: center;
+  display: grid;
+  gap: 2px 1px;
+  grid-template-columns: 20% 20% 20% 20% 20%;
+  grid-template-rows: auto auto;
+  height: 70px;
+  justify-content: space-around;
+  justify-items: center;
+  margin: auto;
+  width: 100%;
+}
+
+.characteristic-description {
+  font-family: 'LHF_Encore', Beau Rivage, cursive;
+  font-size: 1.6em;
+  font-weight: 100;
+  text-transform: capitalize;
+  border: none;
+  text-align: center;
+  color: black;
+}
+
+.conditions-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  /* 2 columns */
+  gap: 10px;
+  /* Spacing between items */
+}
+
+.condition {
+  padding-left: 10px;
+  color: black;
+
+}

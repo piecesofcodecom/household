@@ -92,28 +92,35 @@ export class HouseholdActorSheet extends HandlebarsApplicationMixin(ActorSheetV2
 
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
-
+    console.warn("DOC",this.document)
     // Use this.actor for ActorSheetV2
-    context.actor = this.actor;
-    context.system = this.actor.system;
-    context.flags = this.actor.flags;
-    context.items = this.actor.items.contents;
+    if (this.token) {
+      context.actor = this.token.actor;
+      context.id = this.token.id;
+    } else {
+      context.actor = this.actor;
+      context.id = this.actor.id;
+    }
+    
+    context.system = context.actor.system;
+    context.flags = context.actor.flags;
+    context.items = context.actor.items.contents;
     context.effects = prepareActiveEffectCategories(
-      this.actor.allApplicableEffects()
+      context.actor.allApplicableEffects()
     );
     context.editable = this.isEditable;
-    context.rollData = this.actor.getRollData();
+    context.rollData = context.actor.getRollData();
 
     // Prepare tabs configuration
     context.tabs = this._prepareTabs("primary");
     console.warn("Tabs Context:", context.tabs);
 
-    if (this.actor.type === 'character') {
+    if (context.actor.type === 'character') {
       this._prepareItems(context);
       this._prepareCharacterData(context);
     }
 
-    if (this.actor.type === 'npc') {
+    if (context.actor.type === 'npc') {
       this._prepareItems(context);
     }
 
@@ -272,6 +279,7 @@ export class HouseholdActorSheet extends HandlebarsApplicationMixin(ActorSheetV2
     const actor = this.document;
     if (target.dataset.object === 'actor') {
       const { path, value, dtype, object } = target.dataset;
+      console.warn("ACTOR", actor);
       console.log("Custom Edit:", path, value, dtype, object);
 
       // Special handling for conditions - call toggleCondition

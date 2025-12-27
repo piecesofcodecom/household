@@ -19,7 +19,7 @@ export class HouseholdNPCActorSheet extends HandlebarsApplicationMixin(ActorShee
     classes: ['household', 'sheet', 'npc', 'themed', 'theme-light'],
     tag: 'form',
     position: {
-      width: 421,
+      width: 511,
       height: 632
     },
     window: {
@@ -82,17 +82,23 @@ export class HouseholdNPCActorSheet extends HandlebarsApplicationMixin(ActorShee
 
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
+    if (this.token) {
+      context.actor = this.token.actor;
+      context.id = this.token.id;
+    } else {
+      context.actor = this.actor;
+      context.id = this.actor.id;
+    }
 
     // Use this.actor for ActorSheetV2
-    context.actor = this.actor;
-    context.system = this.actor.system;
-    context.flags = this.actor.flags;
-    context.items = this.actor.items.contents;
+    context.system = context.actor.system;
+    context.flags = context.actor.flags;
+    context.items = context.actor.items.contents;
     context.effects = prepareActiveEffectCategories(
-      this.actor.allApplicableEffects()
+      context.actor.allApplicableEffects()
     );
     context.editable = this.isEditable;
-    context.rollData = this.actor.getRollData();
+    context.rollData = context.actor.getRollData();
 
     // Prepare items for NPC
     this._prepareItems(context);
@@ -229,6 +235,7 @@ export class HouseholdNPCActorSheet extends HandlebarsApplicationMixin(ActorShee
   async _onCustomEdit(event, target) {
     const actor = this.document;
     if (target.dataset.object === 'actor') {
+      console.warn("ACTOR", actor);
       const { path, value, dtype, object } = target.dataset;
       console.log("Custom Edit:", path, value, dtype, object);
       let newValue = value;

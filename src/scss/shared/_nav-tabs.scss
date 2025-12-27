@@ -1,0 +1,16 @@
+// Custom navigation tabs
+nav.custom {
+  --tab-full-width: 44px;
+  --tab-inactive-width: 34px;
+  position: absolute;
+  left: 100%;
+  top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  z-index: -1;
+}
+
+nav.custom>[data-tab] {
+  padding: 5px 5px;
+}

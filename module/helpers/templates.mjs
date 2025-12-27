@@ -14,7 +14,6 @@ export const preloadHandlebarsTemplates = async function () {
     'systems/household/templates/actor/char/parts/actor-tab-description.hbs',
     'systems/household/templates/actor/char/parts/actor-tab-items.hbs',
     'systems/household/templates/actor/char/parts/actor-list-items.hbs',
-    'systems/household/templates/actor/char/parts/actor-list-all-items.hbs',
     'systems/household/templates/actor/char/parts/actor-features.hbs',
     'systems/household/templates/actor/char/parts/actor-others.hbs',
     // NPC actor partials

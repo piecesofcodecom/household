@@ -1,0 +1,13 @@
+// Custom scrollbar styles
+.item-list::-webkit-scrollbar {
+  width: 0px !important;
+  height: 0px !important;
+}
+
+.item-list::-webkit-scrollbar-button {
+  display: none !important;
+}
+
+[open] .sheet summary {
+  background-color: rgba(0, 0, 0, 0.2);
+}

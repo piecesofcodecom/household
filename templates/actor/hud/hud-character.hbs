@@ -232,25 +232,25 @@
         <div class="conditions-grid">
             <div class="condition editValue" data-character-id="{{@root/id}}" data-dtype="Boolean"
                 data-path="system.conditions.embarrassed">
-                <i class="fa-{{#if conditions.embarrassed}}solid{{else}}light{{/if}} fa-heart"
+                <i class="fa-household-heart{{#if conditions.embarrassed}}-full{{/if}}"
                     style="color: red"></i>&nbsp;{{localize "HOUSEHOLD.Conditions.Embarrassed"}}
             </div>
 
             <div class="condition editValue" data-character-id="{{@root/id}}" data-dtype="Boolean"
                 data-path="system.conditions.confused">
-                <i class="fa-{{#if conditions.confused}}solid{{else}}light{{/if}} fa-diamond"
+                <i class="fa-household-diamond{{#if conditions.confused}}-full{{/if}}"
                     style="color: blue"></i>&nbsp;{{localize "HOUSEHOLD.Conditions.Confused"}}
             </div>
 
             <div class="condition editValue" data-character-id="{{@root/id}}" data-dtype="Boolean"
                 data-path="system.conditions.hurt">
-                <i class="fa-{{#if conditions.hurt}}solid{{else}}light{{/if}} fa-club"
+                <i class="fa-household-club{{#if conditions.hurt}}-full{{/if}}"
                     style="color: green"></i>&nbsp;{{localize "HOUSEHOLD.Conditions.Hurt"}}
             </div>
 
             <div class="condition editValue" data-character-id="{{@root/id}}" data-dtype="Boolean"
                 data-path="system.conditions.frightened">
-                <i class="fa-{{#if conditions.frightened}}solid{{else}}light{{/if}} fa-spade"
+                <i class="fa-household-spade{{#if conditions.frightened}}-full{{/if}}"
                     style="color: black"></i>&nbsp;{{localize "HOUSEHOLD.Conditions.Frightened"}}
             </div>
 

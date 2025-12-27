@@ -1,0 +1,148 @@
+// HUD layout, positioning, and visibility
+html {
+  --gold: #FFDAC1;
+  --gold-dark: #F7D2AF;
+  --gold-toasted: #F0C3A3;
+  --gold-gradient: linear-gradient(180deg, var(--gold) 0%, var(--gold-toasted) 100%);
+  --text-shadow: rgba(0, 0, 0, 0.9);
+}
+
+.heart {
+  color: red;
+}
+
+.diamond {
+  color: blue;
+}
+
+.spades {
+  color: black;
+}
+
+.club {
+  color: green;
+}
+
+#navigation {
+  margin-left: 80px;
+}
+
+section.chat-sidebar .jump-to-bottom>a {
+  width: 335px;
+}
+
+.window-app.image-popout .window-content {
+  background: transparent;
+}
+
+.app.sidebar-popout .window-content {
+  background: none;
+}
+
+#players.hidden {
+  display: none !important;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  opacity: 0;
+}
+
+#players {
+  opacity: .2;
+  position: fixed;
+  bottom: .5rem;
+}
+
+#players:hover {
+  opacity: 1;
+}
+
+& {
+  left: calc(50% - 290px);
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  font-family: 'Vollkorn';
+  color: #eeecec;
+  padding-bottom: 1.2rem;
+}
+
+#frame,
+#glass-highlight,
+#grunge-texture-npc,
+#grunge-texture-char {
+  position: absolute;
+  background-size: cover;
+  background-position: center;
+  width: 100%;
+  height: 100%;
+}
+
+
+.char-frame {
+  background-image: url('/systems/household/assets/sheet/profile-img-frame.png');
+  filter: drop-shadow(0 0 5px black);
+
+}
+
+.npc-frame {
+  background-image: url('/systems/household/assets/sheet/enemy_frame.webp');
+  filter: drop-shadow(0 0 5px black);
+
+}
+
+#photo-mask {
+  position: absolute;
+  width: 69%;
+  height: 69%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  clip-path: circle(50% at 50% 50%);
+}
+
+.photo-subject {
+  width: auto;
+  height: 100%;
+  object-fit: cover;
+}
+
+.photo-subject img {
+  border: none;
+}
+
+#glass-highlight {
+  background-image: url('/systems/household/assets/sheet/profile-img-glass.png');
+  background-size: cover;
+  mix-blend-mode: screen;
+  opacity: 0.8;
+  filter: drop-shadow(0 0 5px black);
+}
+
+#grunge-texture-char {
+  background-image: url('/systems/household/assets/sheet/grunge_texture.png');
+  mix-blend-mode: multiply;
+  filter: sepia(50%);
+}
+
+#grunge-texture-npc {
+  background-image: url('/systems/household/assets/sheet/blood-splatter2.png');
+  mix-blend-mode: multiply;
+  filter: sepia(50%);
+}
+
+#grunge-texture-npc2 {
+  background-image: url('/systems/household/assets/sheet/blood-splatter.png');
+  mix-blend-mode: multiply;
+  filter: sepia(50%);
+}
+
+.editValue {
+  cursor: pointer;
+}

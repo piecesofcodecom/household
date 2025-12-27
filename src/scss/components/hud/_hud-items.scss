@@ -1,0 +1,23 @@
+// HUD items section - item lists and summaries displayed in HUD
+.item-summary-title {
+  opacity: 1.0;
+  vertical-align: middle;
+  height: 24px;
+  cursor: pointer;
+  color: var(--hh-text-main);
+}
+
+.item-control {
+  color: var(--hh-text-main);
+}
+
+.item-summary-icon {
+  float: left;
+  border: 0px;
+  width: 24px;
+  height: 24px;
+}
+
+details {
+  color: var(--hh-text-main);
+}

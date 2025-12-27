@@ -14,25 +14,25 @@ the rollData property. --}}
         {{#when ../system.stress.current 'gteq' this}}
         {{#when this 'in' ../system.crucial_boxes}}
         
-            <input id="stress-{{this}}-{{../actor.id}}" class="input-hidden" type="radio" max="2"
+            <input id="stress-{{this}}-{{../id}}" class="input-hidden" type="radio" max="2"
                 name="system.stress.current" value="{{reduceBy this 1}}" data-dtype="Number" />
-            <label class="label-stress stress-rosette-damage" for="stress-{{this}}-{{../actor.id}}">
+            <label class="label-stress stress-rosette-damage" for="stress-{{this}}-{{../id}}">
             </label>
         {{else}}
-            <input id="stress-{{this}}-{{../actor.id}}" class="input-hidden" type="radio" max="2"
+            <input id="stress-{{this}}-{{../id}}" class="input-hidden" type="radio" max="2"
                 name="system.stress.current" value="{{reduceBy this 1}}" data-dtype="Number" />
-            <label class="label-stress stress-square-damage" for="stress-{{this}}-{{../actor.id}}">
+            <label class="label-stress stress-square-damage" for="stress-{{this}}-{{../id}}">
             </label>
         {{/when}}
         {{else}}
         {{#when this 'in' ../system.crucial_boxes}}
-        <input id="stress-{{this}}-{{../actor.id}}" class="input-hidden" type="radio" max="2"
+        <input id="stress-{{this}}-{{../id}}" class="input-hidden" type="radio" max="2"
             name="system.stress.current" value="{{this}}" data-dtype="Number" />
-        <label class="label-stress stress-rosette" for="stress-{{this}}-{{../actor.id}}"> </label>
+        <label class="label-stress stress-rosette" for="stress-{{this}}-{{../id}}"> </label>
         {{else}}
-        <input id="stress-{{this}}-{{../actor.id}}" class="input-hidden" type="radio" max="2"
+        <input id="stress-{{this}}-{{../id}}" class="input-hidden" type="radio" max="2"
             name="system.stress.current" value="{{this}}" data-dtype="Number" />
-        <label class="label-stress stress-square" for="stress-{{this}}-{{../actor.id}}"> </label>
+        <label class="label-stress stress-square" for="stress-{{this}}-{{../id}}"> </label>
         {{/when}}
         {{/when}}
     </div>

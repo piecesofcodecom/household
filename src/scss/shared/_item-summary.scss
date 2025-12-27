@@ -1,0 +1,18 @@
+// Item summary title and icon styles
+.item-summary-title {
+  opacity: 1.0;
+  vertical-align: middle;
+  height: 24px;
+  cursor: pointer;
+}
+
+.item-summary-icon {
+  float: left;
+  border: 0px;
+  width: 24px;
+  height: 24px;
+}
+
+span .removebtn {
+  float: right;
+}

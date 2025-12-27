@@ -49,7 +49,7 @@ export async function itemChat(e) {
     useItem(forward_event);
 }
 
-export async function dialogRollSkill() {
+export async function dialogRollSkill(e) {
   let guess;
   const actor = await getActor(this.dataset.characterId);
   console.warn("ACTOR", actor);
@@ -143,6 +143,9 @@ export async function useAce(e) {
 
 
 export async function useItem(e) {
+  if (typeof e?.stopPropagation === "function") {
+    e.stopPropagation();
+  }
   let thisitem = this;
   console.warn("E", e);
   if (thisitem?.dataset == null) {
@@ -159,10 +162,13 @@ export async function useItem(e) {
       const suits = ["club", "diamond", "heart", "spade"];
       let fail = 0;
       let update_suits = [];
-
+      console.warn("ITEM",item.system.suits)
+      console.warn("ACtor",actor.system.aces)
       for (let suit of suits) {
         if (item.system.suits[suit]) {
+          console.warn("ATOR TEM?: ",suit)
           if (actor.system.aces[suit]) {
+            console.warn("TEM SIM")
             update_suits.push(suit);
           } else {
             fail += 1;

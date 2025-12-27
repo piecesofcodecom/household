@@ -1,5 +1,5 @@
 {{#each items as |item id|}}
-<details class='item-list' data-item-id='{{item._id}}' data-object="item" data-character-id="{{@root.actor.id}}"
+<details class='item-list' data-item-id='{{item._id}}' data-object="item" data-character-id="{{@root.id}}"
   class="default square" {{#multipleOf @index 2}} {{else}}style="background-color: rgba(0,0,0,0.1)" {{/multipleOf}}>
   <summary>
     <label style="margin-right: 10px;">
@@ -34,12 +34,12 @@
         <i class='fas fa-edit'></i>
       </a>
     </label>
-    <label><a style=" float:right; margin-left: 5px;" class='item-control item-edit'
+    {{!-- <label><a style=" float:right; margin-left: 5px;" class='item-control item-edit'
         title='{{localize "DOCUMENT.Update" type=' Item'}}' data-action="show" data-item-id="{{item._id}}"
-        data-character-id="{{@root.actor.id}}">
+        data-character-id="{{@root.id}}">
         <i class='fas fa-comment'></i>
       </a>
-    </label>
+    </label> --}}
     {{#if item.system.price}}
     <label class='' style="float:right; margin-left: 5px;margin-right: 15px">
       {{item.system.price}}
@@ -53,27 +53,26 @@
     {{/if}}
     {{#if item.system.field}}
     <label style="float:right; margin-left: 5px;margin-right: 5px">
-      <i style="color: {{getFieldColor item.system.field}}"
-        class="fa-solid fa-{{getSuitFromField item.system.field}}"></i>
+      <i style="color: {{getFieldColor item.system.field}}" class="fa-household-{{getSuitFromField item.system.field}}-full"></i>
     </label>
     {{/if}}
     {{#when type 'eq' 'move' }}
     {{#if item.system.exhausted}}
-    <input id="move-{{item._id}}" class="input-hidden custom-edit" type="radio" max="2" data-object="item"
-      data-action="customEdit" data-id="{{item._id}}" data-path="system.exhausted"
+    
+    <label class='item-control custom-edit' style="float:right; margin-left: 5px; margin-right: 15px" class=""
+      for="move-{{item._id}}" data-object="item"
+      data-action="customEdit" data-id="{{item._id}}" 
       data-value="{{item.system.exhausted}}" data-dtype="Boolean" data-item-id="{{item._id}}"
-      data-character-id="{{../actor.id}}" />
-    <label class='item-control' style="float:right; margin-left: 5px; margin-right: 15px" class=""
-      for="move-{{item._id}}">
+      data-character-id="{{../id}}">
       <i style="color: red" class="fa-regular fa-toggle-large-off"></i>
     </label>
     {{else}}
-    <input id="move-{{item._id}}" class="input-hidden custom-edit" type="radio" max="2" data-object="item"
-      data-action="customEdit" data-id="{{item._id}}" data-path="system.exhausted"
+    
+    <label class='item-control custom-edit' style="float:right; margin-left: 5px;margin-right: 15px" class=" "
+      for="move-{{item._id}}" data-object="item"
+      data-action="customEdit" data-id="{{item._id}}" 
       data-value="{{item.system.exhausted}}" data-dtype="Boolean" data-item-id="{{item._id}}"
-      data-character-id="{{../actor.id}}" />
-    <label class='item-control' style="float:right; margin-left: 5px;margin-right: 15px" class=" "
-      for="move-{{item._id}}">
+      data-character-id="{{../id}}">
       <i style="color: green" class="fa-regular fa-toggle-large-on"></i>
     </label>
     {{/if}}
