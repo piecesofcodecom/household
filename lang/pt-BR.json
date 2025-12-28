@@ -349,7 +349,8 @@
     "TYPES": {
         "Actor": {
             "character": "Personagem",
-            "npc": "PNJ"
+            "npc": "PNJ",
+            "opponent": "Opponent"
         },
         "Item": {
             "item": "Item",
@@ -363,5 +364,8 @@
             "companion": "Companheiro",
             "folk": "Povo"
         }
+    },
+     "MESSAGES": {
+        "Gaveup": "A re-rolagem não deu em nada! Você deve desistir de uma combinação."
     }
 }

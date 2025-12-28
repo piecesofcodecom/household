@@ -11,17 +11,28 @@ If you're new to **Household RPG**, a quickstart guide is available [here](https
 
 Please note that the images in the asset folder are sourced from the official game sheets and [Online Web Fonts](http://www.onlinewebfonts.com).
 
-## Char Sheet
-The image below displays the status of the character sheet (items are not included in the system; you will need to create them).
+## Sheets
+The system has two sheet types: Character and Opponent sheets (the NPC sheet will be removed from the system soon).
 
 ![Link Name](./readme/char1.png) 
 
-## Opponent Sheet
-The image below displays the status of the opponent sheet (items and actions are not included in the system; you will need to create them).
-
-![Link Name](./readme/opp.png)
+## Items
+The system has the specific item types:  Generic item", Gadget, Weapon", Move, Contract, Trait, Profession, Vocation, Companion, Folk
 
 ## Rolls
-The image below displays the status of the rolls (rolls, re-rolls, free-reroll, and all-in are supported).
+
+The system has dialog rolls to allow players to select skills and fields to roll
+![Link Name](./readme/dialog-roll.png) 
+
+Also the chat messages allow players to re-roll, free re-roll and all-in. The system keeps all re-rolls to the same message.
 
 ![Link Name](./readme/chat.png) 
+
+## Dice so Nice
+the system requires the dice so nice module and provides 2 type of dice.
+
+### Default Household Dice
+![Link Name](./readme/hh-dice.png)
+
+### Garden Household Dice
+![Link Name](./readme/hhg-dice.png)

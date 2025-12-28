@@ -3,17 +3,17 @@ import { HOUSEHOLD } from './config.mjs'
 const { DialogV2 } = foundry.applications.api;
 
 async function getActor(characterId) {
-  console.log("Get Actor:", characterId);
+  
   let actor = {}
   if (game.user.isGM) {
     const token = await canvas.tokens.get(characterId);
-    console.log("Token:", token);
+    
     if (token) {
       actor = token.actor;
     } else {
-      console.log("Get Actor by ID:", characterId);
+      
       actor = await game.actors.get(characterId);
-      console.log("Actor:", actor);
+      
     }
   } else {
     actor = await game.actors.find(actor => actor.isOwner);
@@ -22,7 +22,7 @@ async function getActor(characterId) {
 }
 export async function openSheet() {
   const actor = await getActor(this.dataset.characterId);
-  console.warn("ACtor:", actor);
+  
   if (actor) {
     actor.sheet.render(true);
   }
@@ -30,13 +30,13 @@ export async function openSheet() {
 
 export async function itemChat(e) {
   const target = e.currentTarget;
-  console.warn("Show Data:", target.dataset);
+  
     let forward_event = {};
     forward_event.currentTarget = target;
     if (target.dataset?.subAction) {
       const sub_action = target.dataset.subAction;
       const parent = target.closest('.item-list')?.dataset;
-      console.warn("Parent Data:", parent?.dataset);
+      
       if (parent) {
         forward_event.currentTarget.dataset.action = sub_action;
         forward_event.currentTarget.dataset.itemId = parent.itemId;
@@ -45,14 +45,14 @@ export async function itemChat(e) {
       }
 
     }
-    console.warn("Forward Event:", forward_event.currentTarget.dataset);
+    
     useItem(forward_event);
 }
 
 export async function dialogRollSkill(e) {
   let guess;
   const actor = await getActor(this.dataset.characterId);
-  console.warn("ACTOR", actor);
+  
   actor.dialogRollSkill(this.dataset);
 }
 
@@ -61,19 +61,19 @@ export async function rollAction(e) {
     const dataset = e.currentTarget.closest('.item-list')?.dataset;
     const actor = await getActor(dataset.characterId);
     
-    console.warn("Attack Roll Triggered");
-    console.warn("Dataset:", dataset);
-    console.warn("Item ID:", dataset.itemId);
+    
+    
+    
     const item = actor.items.get(dataset.itemId);
     if (item) {
-      console.warn("Item Found:", item.system);
+      
 
       dataset.label = item.system.field;
       dataset.field = item.system.field;
       dataset.key = item.system.skill;
       dataset.itemId = item.id;
       dataset.characterId = actor.id;
-      console.warn("Forwarded Dataset:", dataset);
+      
       actor.dialogRollSkill(dataset);
 
 
@@ -89,7 +89,12 @@ export async function rollAction(e) {
     roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: actor }),
       flavor: flavor,
-      flags: { noChanges: true },
+      flags: { 
+        household: {
+          noChanges: true,
+          customCss: true
+        }
+      },
       rollMode: game.settings.get('core', 'rollMode'),
     });
   }
@@ -147,7 +152,7 @@ export async function useItem(e) {
     e.stopPropagation();
   }
   let thisitem = this;
-  console.warn("E", e);
+  
   if (thisitem?.dataset == null) {
     thisitem = e.currentTarget;
   }
@@ -162,23 +167,23 @@ export async function useItem(e) {
       const suits = ["club", "diamond", "heart", "spade"];
       let fail = 0;
       let update_suits = [];
-      console.warn("ITEM",item.system.suits)
-      console.warn("ACtor",actor.system.aces)
+      
+      
       for (let suit of suits) {
         if (item.system.suits[suit]) {
-          console.warn("ATOR TEM?: ",suit)
+          
           if (actor.system.aces[suit]) {
-            console.warn("TEM SIM")
+            
             update_suits.push(suit);
           } else {
             fail += 1;
           }
         }
       }
-      console.warn("Fail count:", fail);
+      
       if (fail == 1) {
-        console.log("Checking Joker");
-        console.warn(actor.system.aces.joker);
+        
+        
         if (actor.system.aces.joker) {
           actor.update({ [`system.aces.joker`]: false });
           fail -= 1;
@@ -283,18 +288,18 @@ async function handleAttributeAction(event, actor, dataset) {
 }
 
 export async function setAttribute(e) {
-  console.log("setAttribute", this.dataset);
+  
 }
 
 export async function rollAbility(e) {
   let thisitem = this;
-  console.warn("E", e);
+  
   if (thisitem?.dataset == null) {
     thisitem = e.currentTarget;
   }
 
   const actor = await getActor(thisitem.dataset.characterId);
-  console.warn("Actor 2:", actor);
+  
   if (!actor) return;
   handleAttributeAction(e, actor, thisitem.dataset)
 

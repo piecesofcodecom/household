@@ -43,7 +43,7 @@
   <div class=" decorum-text  ">
     <span class="custom-system-label-root">
       <div class="custom-system-label-icons"></div>
-      <label for="decorum_2-{{id}}" class="custom-system-label custom-system-label-label" data-value="Shabby"
+      <label for="decorum_2-{{id}}" class="custom-system-label custom-system-label-label rollable" data-value="Shabby"
         data-name="">{{localize
         "HOUSEHOLD.Decorum.Shabby"}}</label>
     </span>
@@ -58,7 +58,7 @@
   <div class=" decorum-text  ">
     <span class="custom-system-label-root">
       <div class="custom-system-label-icons"></div>
-      <label for="decorum_4-{{id}}" class="custom-system-label custom-system-label-label" data-value="Elegant"
+      <label for="decorum_4-{{id}}" class="custom-system-label custom-system-label-label rollable" data-value="Elegant"
         data-name="">{{localize
         "HOUSEHOLD.Decorum.Elegant"}}</label>
     </span>
@@ -73,7 +73,7 @@
   <div class=" decorum-text  ">
     <span class="custom-system-label-root">
       <div class="custom-system-label-icons"></div>
-      <label for="decorum_1-{{id}}" class="custom-system-label custom-system-label-label" data-value="Uncouth"
+      <label for="decorum_1-{{id}}" class="custom-system-label custom-system-label-label rollable" data-value="Uncouth"
         data-name="">{{localize
         "HOUSEHOLD.Decorum.Uncouth"}}</label>
     </span>
@@ -88,7 +88,7 @@
   <div class=" decorum-text  ">
     <span class="custom-system-label-root">
       <div class="custom-system-label-icons"></div>
-      <label for="decorum_3-{{id}}" class="custom-system-label custom-system-label-label" data-value="Decent"
+      <label for="decorum_3-{{id}}" class="custom-system-label custom-system-label-label rollable" data-value="Decent"
         data-name="">{{localize
         "HOUSEHOLD.Decorum.Decent"}}</label>
     </span>
@@ -103,7 +103,7 @@
   <div class=" decorum-text  ">
     <span class="custom-system-label-root">
       <div class="custom-system-label-icons"></div>
-      <label for="decorum_5-{{id}}" class="custom-system-label custom-system-label-label" data-value="Pompous"
+      <label for="decorum_5-{{id}}" class="custom-system-label custom-system-label-label  rollable" data-value="Pompous"
         data-name="">{{localize
         "HOUSEHOLD.Decorum.Pompous"}}</label>
     </span>
@@ -149,7 +149,7 @@
       id="condition-embarrassed-{{id}}" data-action="customEdit" data-path="system.conditions.embarrassed"
       data-value="{{system.conditions.embarrassed}}" data-object="actor" data-dtype="Boolean" {{doCheck
       system.conditions.embarrassed}}>
-    <label for="condition-embarrassed-{{id}}">{{localize "HOUSEHOLD.Conditions.Embarrassed"}}</label>
+    <label class="rollable" for="condition-embarrassed-{{id}}">{{localize "HOUSEHOLD.Conditions.Embarrassed"}}</label>
   </div>
   <!-- end embarrassed -->
   <!-- frightened -->
@@ -158,7 +158,7 @@
       id="condition-frightened-{{id}}" data-action="customEdit" data-path="system.conditions.frightened"
       data-value="{{system.conditions.frightened}}" data-object="actor" data-dtype="Boolean" {{doCheck
       system.conditions.frightened}}>
-    <label for="condition-frightened-{{id}}">{{localize "HOUSEHOLD.Conditions.Frightened"}}</label>
+    <label class="rollable" for="condition-frightened-{{id}}">{{localize "HOUSEHOLD.Conditions.Frightened"}}</label>
   </div>
   <!-- end frightened -->
   <!-- poisoned -->
@@ -166,7 +166,7 @@
     <input type="checkbox" class="input-conditions" id="condition-poisoned-{{id}}" data-action="customEdit"
       data-path="system.conditions.poisoned" data-value="{{system.conditions.poisoned}}" data-object="actor"
       data-dtype="Boolean" {{doCheck system.conditions.poisoned}}>
-    <label for="condition-poisoned-{{id}}">{{localize "HOUSEHOLD.Conditions.Poisoned"}}</label>
+    <label class="rollable" for="condition-poisoned-{{id}}">{{localize "HOUSEHOLD.Conditions.Poisoned"}}</label>
   </div>
   <!-- end poisoned -->
   <!-- confused -->
@@ -175,7 +175,7 @@
       id="condition-confused-{{id}}" data-action="customEdit" data-path="system.conditions.confused"
       data-value="{{system.conditions.confused}}" data-object="actor" data-dtype="Boolean" {{doCheck
       system.conditions.confused}}>
-    <label for="condition-confused-{{id}}">{{localize "HOUSEHOLD.Conditions.Confused"}}</label>
+    <label class="rollable" for="condition-confused-{{id}}">{{localize "HOUSEHOLD.Conditions.Confused"}}</label>
   </div>
   <!-- end confused -->
   <!-- tired -->
@@ -183,7 +183,7 @@
     <input type="checkbox" class="input-conditions" id="condition-tired-{{id}}" data-action="customEdit"
       data-path="system.conditions.tired" data-value="{{system.conditions.tired}}" data-object="actor"
       data-dtype="Boolean" {{doCheck system.conditions.tired}}>
-    <label for="condition-tired-{{id}}">{{localize "HOUSEHOLD.Conditions.Tired"}}</label>
+    <label class="rollable" for="condition-tired-{{id}}">{{localize "HOUSEHOLD.Conditions.Tired"}}</label>
   </div>
   <!-- end tired -->
   <!-- broken -->
@@ -191,7 +191,7 @@
     <input type="checkbox" class="input-conditions" id="condition-broken-{{id}}" data-action="customEdit"
       data-path="system.conditions.broken" data-value="{{system.conditions.broken}}" data-object="actor"
       data-dtype="Boolean" {{doCheck system.conditions.broken}}>
-    <label for="condition-broken-{{id}}">{{localize "HOUSEHOLD.Conditions.Broken"}}</label>
+    <label class="rollable" for="condition-broken-{{id}}">{{localize "HOUSEHOLD.Conditions.Broken"}}</label>
   </div>
   <!-- end broken -->
   <!-- hurt -->
@@ -200,7 +200,7 @@
       id="condition-hurt-{{id}}" data-action="customEdit" data-path="system.conditions.hurt"
       data-value="{{system.conditions.hurt}}" data-object="actor" data-dtype="Boolean" {{doCheck
       system.conditions.hurt}}>
-    <label for="condition-hurt-{{id}}">{{localize "HOUSEHOLD.Conditions.Hurt"}}</label>
+    <label class="rollable" for="condition-hurt-{{id}}">{{localize "HOUSEHOLD.Conditions.Hurt"}}</label>
   </div>
   <!-- end hurt -->
   <!-- sick -->
@@ -208,7 +208,7 @@
     <input type="checkbox" class="input-conditions" id="condition-sick-{{id}}" data-action="customEdit"
       data-path="system.conditions.sick" data-value="{{system.conditions.sick}}" data-object="actor"
       data-dtype="Boolean" {{doCheck system.conditions.sick}}>
-    <label for="condition-sick-{{id}}">{{localize "HOUSEHOLD.Conditions.Sick"}}</label>
+    <label class="rollable" for="condition-sick-{{id}}">{{localize "HOUSEHOLD.Conditions.Sick"}}</label>
   </div>
   <!-- end sick -->
 </div>

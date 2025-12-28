@@ -4,7 +4,7 @@
         <h2 class="skill-name">{{ skill.label }}</h2>
         <input style="display: none" value="{{skill_key}}" id="skill" name="skill" />
         <div class="value-display">
-            <i class="suit-icon fa-household-{{skill.suit}}-full" alt="{{field}}" ></i>
+            <i class="suit-icon fa-household-{{skill.suit}}-full" alt="{{field}}"></i>
             <span>x{{skill.value}}</span>
         </div>
         {{else}}
@@ -19,7 +19,7 @@
 
             <input style="display: none" value="0" id="skill" name="skill" />
             <div class="value-display">
-                 <i class="suit-icon fa-household-none" alt="{{field}}" ></i>
+                <i class="suit-icon fa-household-none" alt="{{field}}"></i>
                 <span>x0</span>
             </div>
             {{/if}}
@@ -39,7 +39,12 @@
         </div>
         {{/each}}
     </div>
-
+    <h3 class="characteristic-title-dialog">
+        {{ localize "HOUSEHOLD.ApplyModifier.long" }}
+    </h3>
+    <div class="difficulty-container modifier-item">
+        <input class="difficulty-option" data-key="" id="modifier" name="modifier" value="0" readonly="">
+    </div>
     <!-- Collapsible extra Section -->
     {{!-- <h3 class="characteristic-title-dialog collapsible-header">
         Extras

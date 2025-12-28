@@ -111,7 +111,7 @@ export class HouseholdNPCActorSheet extends HandlebarsApplicationMixin(ActorShee
       relativeTo: this.document
     };
     // Enrich description for all item types
-    console.warn(this.document.system)
+    
     if (this.document.system.biography) {
       context.descriptionHTML = await foundry.applications.ux.TextEditor.implementation.enrichHTML(
         this.document.system.biography,
@@ -180,7 +180,7 @@ export class HouseholdNPCActorSheet extends HandlebarsApplicationMixin(ActorShee
   /* -------------------------------------------- */
 
   _onItemEdit(event, target) {
-    console.log("Edit Item:", target.dataset.itemId);
+    
     const item = this.document.items.get(target.dataset.itemId);
     item?.sheet?.render(true);
   }
@@ -235,16 +235,16 @@ export class HouseholdNPCActorSheet extends HandlebarsApplicationMixin(ActorShee
   async _onCustomEdit(event, target) {
     const actor = this.document;
     if (target.dataset.object === 'actor') {
-      console.warn("ACTOR", actor);
+      
       const { path, value, dtype, object } = target.dataset;
-      console.log("Custom Edit:", path, value, dtype, object);
+      
       let newValue = value;
       if (dtype === 'Boolean') newValue = value !== 'true';
       await actor.update({ [path]: newValue });
     } else if (target.dataset.object === 'item') {
       let ev = {}
       ev.currentTarget = target;
-      console.warn("Custom Edit Item:", target.dataset);
+      
       ev.currentTarget.dataset.action = "use";
       await actions.useItem(ev);
     }
@@ -267,7 +267,7 @@ export class HouseholdNPCActorSheet extends HandlebarsApplicationMixin(ActorShee
   async _onRoll(event, target) {
     const actor = this.document;
     const dataset = target.dataset;
-    console.warn("Roll DataSet:", dataset);
+    
 
     if (dataset.type === 'action') {
       const roll = await new Roll("1d6", actor.getRollData()).evaluate();
@@ -285,20 +285,20 @@ export class HouseholdNPCActorSheet extends HandlebarsApplicationMixin(ActorShee
       this.actor.dialogRollSkill(dataset);
 
     } else if (dataset.type == 'attack') {
-      console.warn("Attack Roll Triggered");
-      console.warn("Dataset:", dataset);
+      
+      
       const item_id = target.closest('.item-list')?.dataset.itemId;
-      console.warn("Item ID:", item_id);
+      
       const item = this.actor.items.get(item_id);
       if (item) {
-        console.warn("Item Found:", item.system);
+        
         
         dataset.label = item.system.field;
         dataset.field = item.system.field;
         dataset.key = item.system.skill;
         dataset.itemId = item.id;
         dataset.characterId = this.actor.id;
-        console.warn("Forwarded Dataset:", dataset);
+        
         this.actor.dialogRollSkill(dataset);
         
 
@@ -318,13 +318,13 @@ export class HouseholdNPCActorSheet extends HandlebarsApplicationMixin(ActorShee
 
   _onShow(event, target) {
     //this.document.dialogRollSkill(target.dataset);
-    console.warn("Show Data:", target.dataset);
+    
     let forward_event = {};
     forward_event.currentTarget = target;
     if (target.dataset?.subAction) {
       const sub_action = target.dataset.subAction;
       const parent = target.closest('.item-list')?.dataset;
-      console.warn("Parent Data:", parent?.dataset);
+      
       if (parent) {
         forward_event.currentTarget.dataset.action = sub_action;
         forward_event.currentTarget.dataset.itemId = parent.itemId;
@@ -333,7 +333,7 @@ export class HouseholdNPCActorSheet extends HandlebarsApplicationMixin(ActorShee
       }
 
     }
-    console.warn("Forward Event:", forward_event.currentTarget.dataset);
+    
     actions.useItem(forward_event);
   }
 
@@ -422,13 +422,13 @@ export class HouseholdNPCActorSheet extends HandlebarsApplicationMixin(ActorShee
         name: item.name,
         type: item.type,
         img: item.img,
-        system: duplicate(item.system)
+        system: foundry.utils.duplicate(item.system)
       }
       await this.document.createEmbeddedDocuments("Item", [newItemData]);
     }
 
     if (data.type !== "Item") return;
-    console.log("Dropped Item UUID:", data.uuid);
+    
     // await this.document.createEmbeddedDocuments("Item", [{
     //   name: item.name,
     //   type: item.type,

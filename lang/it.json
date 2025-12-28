@@ -343,7 +343,8 @@
     "TYPES": {
         "Actor": {
             "character": "Character",
-            "npc": "NPC"
+            "npc": "NPC",
+            "opponent": "Opponent"
         },
         "Item": {
             "item": "Articolo",
@@ -357,5 +358,8 @@
             "companion": "Compagno",
             "folk": "Populo"
         }
+    },
+     "MESSAGES": {
+        "Gaveup": "Il rilancio non ha dato nulla! Devi rinunciare a una combinazione."
     }
   }

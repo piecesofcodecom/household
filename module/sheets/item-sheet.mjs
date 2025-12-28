@@ -164,7 +164,7 @@ export class HouseholdItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) 
       }
     }
 
-    console.warn('Household | Item Sheet:', context.item);
+
 
     return context;
   }

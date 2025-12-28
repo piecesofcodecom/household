@@ -1,0 +1,14 @@
+<section class="start-encounter">
+  <h2>Choose the first turn for this encounter</h2>
+  <div>
+    <label for="firstTurn">First Turn:</label>
+    <select name="firstTurn" id="firstTurn" required>
+      {{#each turnOptions as |turn|}}
+        <option value="{{turn}}">{{turn}}</option>
+      {{/each}}
+    </select>
+  </div>
+  <div class="dialog-buttons">
+    <button type="submit">Start Encounter</button>
+  </div>
+</section>

@@ -350,7 +350,8 @@
     "TYPES": {
         "Actor": {
             "character": "Character",
-            "npc": "NPC"
+            "npc": "NPC",
+            "opponent": "Opponent"
         },
         "Item": {
             "item": "Item",
@@ -364,5 +365,8 @@
             "companion": "Companion",
             "folk": "Folk"
         }
+    },
+    "MESSAGES": {
+        "Gaveup": "The reroll gave nothing! You must give up a combination."
     }
 }

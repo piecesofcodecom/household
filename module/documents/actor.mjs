@@ -55,7 +55,7 @@ export class HouseholdActor extends Actor {
    * Prepare NPC type specific data.
    */
   _prepareNpcData(actorData) {
-    if (actorData.type !== 'npc') return;
+    if (actorData.type !== 'npc' && actorData.type !== 'opponent') return;
 
     // Make modifications to data here. For example:
     const systemData = actorData.system;
@@ -95,7 +95,7 @@ export class HouseholdActor extends Actor {
    * Prepare NPC roll data.
    */
   _getNpcRollData(data) {
-    if (this.type !== 'npc') return;
+    if (this.type !== 'npc' && this.type !== "opponent") return;
 
     // Process additional NPC data here.
   }
@@ -215,8 +215,8 @@ export class HouseholdActor extends Actor {
       allow_allin = allow_reroll = 0;
     }
 
-    console.log("skill:",skill)
-    console.log("field:",field)
+    
+    
     const templateData = {
       ability: capitalizeFirstLetter(skill),
       skill: skill,
@@ -242,8 +242,8 @@ export class HouseholdActor extends Actor {
       await game.dice3d.showForRoll(roll, game.user, true);
       //roll.render();
       const chatMessage = game.messages.get(message_id);
-      console.log("chatMessage:",chatMessage);
-      console.log("Chat ID:",message_id);
+      
+      
       await chatMessage.update({
         flavor: html
       });
@@ -491,10 +491,10 @@ export class HouseholdActor extends Actor {
   async dialogRollSkill(dataset) {
     let guess;
     const actor = this; //getActor(this.dataset.characterId);
-    console.warn("Actor 1:", actor.system.skills["shoot"]);
+    
     const skill = actor.system.skills[dataset.key];
     if (dataset.key && skill) {
-      console.warn("DEU CERTO")
+      
       skill.label = game.i18n.localize(CONFIG.HOUSEHOLD.skills[dataset.key])
     }
     const templateData = {
@@ -507,7 +507,7 @@ export class HouseholdActor extends Actor {
       actor: actor,
       //timestamp: msg.timestamp
     };
-    console.warn("TEMPLATE", templateData);
+    
     const html = await foundry.applications.handlebars.renderTemplate("systems/household/templates/chat/dialog-skill-roll.hbs", templateData);
   
     const dialog = await foundry.applications.api.DialogV2.wait({
@@ -617,20 +617,20 @@ export class HouseholdActor extends Actor {
         });
 
         $html.find(".skill-select-dropdown").on("change", (event) => {
-          console.log("Skill changed",event.currentTarget.value);
+          
           const selectedSkill = event.currentTarget.value; // Get the selected skill key
           const input_skill = $html.find('#skill'); // Find the hidden input for skill
           const icon_img = $html.find('.suit-icon'); // Find the icon image element
           if (input_skill.length > 0) {
-            console.log("Selected Skill:", selectedSkill);
+            
             input_skill.val(selectedSkill); // Update the hidden input value
             const skill_data = actor.system.skills[selectedSkill];
             if (skill_data) {
               const suit = skill_data.suit;
               const value = skill_data.value;
-              console.log("Skill Value:", value);   
+              
               $html.find('.value-display span').text(`x${value}`); // Update the skill value display
-              console.log("Skill Suit:", suit);   
+              
               icon_img.attr("class", `suit-icon fa-household-${suit}-full`);
             }
           }

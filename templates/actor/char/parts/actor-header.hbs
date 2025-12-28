@@ -6,7 +6,7 @@
   <!-- Image -->
   <img
     class="profile-img grid-span-1 grid-row-span-2"
-    src="household/Gwen%20Summers.png"
+    src="{{actor.img}}"
     data-action="editImage"
     data-field="img"
     title="Gwen Summers"
@@ -20,7 +20,7 @@
       class="char-name"
       name="name"
       type="text"
-      value="Gwen Summers"
+      value="{{actor.name}}"
       placeholder="Name"
     >
   </h1>
@@ -29,22 +29,22 @@
   <div class="resources grid grid-4col grid-span-4">
 
     <div class="resource__group">
-      <input class="form__field" name="system.folk" value="Boggart">
-      <label class="form__label">Folk - {{@root/id}}</label>
+      <input class="form__field" name="system.folk" value="{{actor.system.folk}}" type="text" data-dtype="String"/>
+      <label class="form__label">Folk</label>
     </div>
 
     <div class="resource__group">
-      <input class="form__field" name="system.homeland" value="Hearth">
+      <input class="form__field" name="system.homeland" value="{{actor.system.homeland}}" type="text" data-dtype="String"/>
       <label class="form__label">Homeland</label>
     </div>
 
     <div class="resource__group">
-      <input class="form__field" name="system.profession" value="Scholar">
+      <input class="form__field" name="system.profession" value="{{actor.system.profession}}" type="text" data-dtype="String"/>
       <label class="form__label">Profession</label>
     </div>
 
     <div class="resource__group">
-      <input class="form__field" name="system.vocation" value="Researcher">
+      <input class="form__field" name="system.vocation" value="{{actor.system.vocation}}" type="text" data-dtype="String"/>
       <label class="form__label">Vocation</label>
     </div>
 

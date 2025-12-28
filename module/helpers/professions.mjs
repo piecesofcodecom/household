@@ -57,13 +57,13 @@ async function chooseMove(actor, item) {
     let list_moves = item.system.moves.split(',')
     list_moves = list_moves.map(s => s.trim());
     if (item.system.has_companion) {
-        console.warn("has companion")
+        
         let companion = game.items.filter(el => el.type == "companion" && el.name.toLowerCase() == actor.system.companion.toLowerCase())
         if (HOUSEHOLD.premium) {
             const packs = game.packs.get(HOUSEHOLD.premium_name + '.equipments')
             const contents = await packs.getDocuments();
             const compendium_items = contents.filter(el => el.type === 'companion' && el.name.toLowerCase() == actor.system.companion.toLowerCase())
-            console.warn(compendium_items)
+            
             if (compendium_items.length > 0) {
                 companion = companion.concat(compendium_items)
             }
@@ -74,8 +74,8 @@ async function chooseMove(actor, item) {
         }
     }
     list_moves = list_moves.map(s => s.toLowerCase().trim());
-    console.warn("list moves:")
-    console.warn(list_moves)
+    
+    
 
     let collection_item = game.items.filter(el => el.type == 'move' && list_moves.includes(el.name.toLowerCase()))
     if (HOUSEHOLD.premium) {
@@ -339,9 +339,11 @@ async function addNewProfession(item, actor) {
                     trait_item = trait_item.concat(compendium_items)
                 }
             }
-
             if (trait_item.length > 0)
                 addItem(actor, trait_item[0].uuid)
+            else {
+                ui.notifications.warn("Trait not found: "+trait_list[0])
+            }
         }
         if (item.system.has_companion) {
             if (item.type == 'profession') {

@@ -1,0 +1,37 @@
+<div class="combat-tracker" style="text-align: center;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;">
+    <div class="combatant" style="text-align: center;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;">
+        {{#with (last turns)}}
+        {{#if isReactionTurn}}
+        <br />
+        <h2 class="characteristic-title active">Current Turn: Reaction</h2>
+        <img src="/systems/household/assets/sheet/icon-shield.png" style="width: 80%;" />
+        {{else}}
+        <br />
+        <h2 class="characteristic-title active">Current Turn: Action</h2>
+        <img src="/systems/household/assets/sheet/icon-gear.png" style="width: 80%;" />
+        {{/if}}
+        {{/with}}
+    </div>
+    {{!-- <ol class="combat-tracker plain">
+        {{doCheck this}}
+        {{#with (last turns)}}
+        {{#if isReactionTurn}}
+        <li>
+            <h2>IS ACtion</h2>
+        </li>
+        {{else}}
+        <li>
+            <h2>ISnt ACtion</h2>
+        </li>
+        {{/if}}
+        {{/with}}
+    </ol> --}}
+</div>

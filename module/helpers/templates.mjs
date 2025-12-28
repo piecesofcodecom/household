@@ -38,6 +38,11 @@ export const preloadHandlebarsTemplates = async function () {
     'systems/household/templates/chat/dialog-skill-roll.hbs',
     'systems/household/templates/chat/item-card.hbs',
     // Dialogs
-    "systems/household/templates/dialog/dialog-actions.hbs"
+    "systems/household/templates/dialog/dialog-actions.hbs",
+    "systems/household/templates/dialog/dialog-start-encounter.hbs",
+    // Sidebar
+    "systems/household/templates/sidebar/combat-tracker-header.hbs",
+    "systems/household/templates/sidebar/combat-tracker.hbs",
+    "systems/household/templates/sidebar/combat-tracker-footer.hbs"
   ]);
 };

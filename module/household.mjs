@@ -9,6 +9,11 @@ import { HouseholdItemSheet } from './sheets/item-sheet.mjs';
 import { preloadHandlebarsTemplates } from './helpers/templates.mjs';
 import { HOUSEHOLD } from './helpers/config.mjs';
 
+import { HouseholdCombat } from "./combat/HouseholdCombat.mjs";
+import { HouseholdCombatant } from "./combat/HouseholdCombatant.mjs";
+import { HouseholdCombatTracker } from "./combat/HouseholdCombatTracker.mjs";
+import { showHouseholdTurnOverlay } from "./combat/overlay.mjs";
+
 import {
   getCharacter,
   characterData,
@@ -57,7 +62,7 @@ Hooks.once('init', async function () {
     label: "HOUSEHOLD.SheetLabels.Actor"
   });
   foundry.documents.collections.Actors.registerSheet("household", HouseholdNPCActorSheet, {
-    types: ["npc"], // whatever actor types you support
+    types: ["npc", "opponent"], // whatever actor types you support
     makeDefault: true,
     label: "HOUSEHOLD.SheetLabels.Actor"
   });
@@ -73,6 +78,8 @@ Hooks.once('init', async function () {
     HouseholdItem,
     rollItemMacro,
   };
+
+
 
   $("body.game").append('<div id="player-character"></div>');
   $("body.game").append('<div id="party"></div>');
@@ -95,10 +102,17 @@ Hooks.once('init', async function () {
    * Set an initiative formula for the system
    * @type {String}
    */
-  CONFIG.Combat.initiative = {
-    formula: '1d20',
-    decimals: 2,
-  };
+  // CONFIG.Combat.initiative = {
+  //   formula: '1d20',
+  //   decimals: 2,
+  // };
+
+  // --------combats
+  CONFIG.Combat.initiative.formula = '1';
+  CONFIG.Combat.documentClass = HouseholdCombat;
+  CONFIG.ui.combat = HouseholdCombatTracker;
+  CONFIG.Combatant.documentClass = HouseholdCombatant;
+
 
   // Define custom Document classes
   // CONFIG.Actor.documentClass = HouseholdActor;
@@ -138,6 +152,12 @@ Handlebars.registerHelper("range", function (n, block) {
     accum += block.fn(i);
   }
   return accum;
+});
+Handlebars.registerHelper("last", function (array) {
+  if (!Array.isArray(array) || array.length === 0) {
+    return null;
+  }
+  return array[array.length - 1];
 });
 // If you need to add Handlebars helpers, here is a useful example:
 Handlebars.registerHelper('toLowerCase', function (str) {
@@ -346,6 +366,11 @@ Handlebars.registerHelper("firstWord", (str) => str.split(" ")[0]);
 
 // });
 
+Hooks.on("updateCombat", (combat, change, data) => {
+  if (data?.action != 'update') return;
+  showHouseholdTurnOverlay(combat.currentTurnType);
+});
+
 Hooks.on('renderChatMessageHTML', (message, html, data) => {
   // Get the chat log element
   if (message.flags.household?.customCss) {
@@ -364,16 +389,55 @@ Hooks.on('renderChatMessageHTML', (message, html, data) => {
   }
 });
 
+Hooks.on("updateSetting", async (setting, data, options, userId) => {
+  // Check if it's the combat tracker config
+  if (!game.user.isGM) return;
+  if (options?.action == "update") {
+    if (setting?.key === "core.combatTrackerConfig") {
+      const value = setting?.value?.turnMarker?.enabled;
+      if (value) {
+        const newConfig = {
+          ...setting.value,
+          turnMarker: {
+            ...setting.value.turnMarker,
+            enabled: false
+          }
+        };
+
+        // Save it back to the world settings
+        await game.settings.set("core", "combatTrackerConfig", newConfig);
+        ui.notifications.warn("Turn marker has been disabled. Household Combat does not support that configuration.");
+      }
+
+    }
+  }
+});
+
 Hooks.once('ready', async function () {
   // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
   Hooks.on('hotbarDrop', (bar, data, slot) => createItemMacro(data, slot));
-  console.warn("renderApplication");
   if (!isGm()) {
-    console.warn("dadas");
     await renderCharacter();
   }
 
   if (isGm()) {
+    const config = game.settings.get("core", "combatTrackerConfig");
+
+    if (config?.turnMarker?.enabled == true) {
+      // Update the turnMarker.enabled property
+      const newConfig = {
+        ...config,
+        turnMarker: {
+          ...config.turnMarker,
+          enabled: false
+        }
+      };
+
+      // Save it back to the world settings
+      await game.settings.set("core", "combatTrackerConfig", newConfig);
+
+      ui.notifications.warn("Turn marker has been disabled. Household Combat does not support that configuration.");
+    }
     $("#players").removeClass("hidden");
   } else {
     $("#players").addClass("hidden");
@@ -384,6 +448,25 @@ Hooks.once('ready', async function () {
  * Message Hooks
  */
 
+Hooks.on("getSceneControlButtons", (controls) => {
+  if (!game.user.isGM || !game.combat) return controls;
+
+  const tokens = controls.tokens;
+  if (!tokens) return;
+  controls.tokens.tools.nextRound = {
+    name: "nextRound",
+    title: "Next Round",
+    icon: "fa-solid fa-forward-step",
+    order: Object.keys(controls.tokens.tools).length,
+    button: true,
+    visible: game.user.isGM,
+    onChange: async () => {
+      console.warn("GOGO")
+      await game.combat.nextTurn();
+    }
+  };
+});
+
 Hooks.on('renderChatMessageHTML', (message, html, context) => {
   // make a new parser
   if (!message?.flags?.household?.customCss) return;
@@ -392,10 +475,9 @@ Hooks.on('renderChatMessageHTML', (message, html, context) => {
   const token = message.speaker.token;
   const level = CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER;
 
-  if ( !((actor.ownership?.[game.user.id] ?? 0) >= level) && !game.user.isGM) {
-    console.warn(actor);
+  if (!((actor.ownership?.[game.user.id] ?? 0) >= level) && !game.user.isGM) {
     return;
-  
+
   }
 
 
@@ -593,7 +675,6 @@ Hooks.on('renderChatMessageHTML', (message, html, context) => {
             html.querySelector("input, select, textarea, label").prop("disabled", true);
           }
         }
-        console.log("Updating chat message after give up with custom dice display. 22");
         message.update({ flavor: html, flags: { customCss: true } });
 
 
@@ -676,7 +757,7 @@ Hooks.on("household.onUpdateTokenRequest", async function () {
     await renderCharacter();
 })
 // Hooks.on("renderApplication", async function () {
-  
+
 // });
 
 Hooks.on("updateActor", async function (actor) {
@@ -763,7 +844,7 @@ function activatePlayerListeners(elem) {
   }
   const actions_menu = elem.querySelector('#player-character .actions-toggle');
   actions_menu.addEventListener("click", toggleActions);
-  
+
 
   const skills_menu = elem.querySelectorAll('#player-character .skills-toggle');
   skills_menu.forEach(sk => {
@@ -804,7 +885,7 @@ function toggleStats(e) {
 function toggleSkills(e) {
   e.stopPropagation();
   const fields = ['society', 'war', 'academia', 'street'];
-  const display_field = e.currentTarget.dataset?.display;  
+  const display_field = e.currentTarget.dataset?.display;
 
   $(".stats-toggle").removeClass("active");
   $(".actions-toggle").removeClass("active");
@@ -812,38 +893,27 @@ function toggleSkills(e) {
   $(".character-stats").removeClass("show");
 
   if (!display_field) {
-    console.warn("npc hud");
     $(".skills-toggle").toggleClass("active");
     $(".character-skills").toggleClass("show");
     return;
   }
 
-  
+
   var index = fields.indexOf(display_field);
   if (index > -1) {
     fields.splice(index, 1);
   }
-  console.warn("We need to display: ", display_field)
-  console.warn("We need to hidden:",fields)
-
-  
 
   $(`.character-skills-content-${display_field}`).toggleClass("show");
-  
 
   if ($(`.character-skills-content-${display_field}`).hasClass("show")) {
-     $(".character-skills").addClass("show");
-     $(`.${display_field}-skills-toggle`).addClass("active");
-  } else {
-     $(".character-skills").removeClass("show");
-     $(`.${display_field}-skills-toggle`).removeClass("active");
-  }
-  /*
- if ( !($("character-skills").hasClass("show"))) {
-    console.warn("toggle character-skills")
     $(".character-skills").addClass("show");
+    $(`.${display_field}-skills-toggle`).addClass("active");
+  } else {
+    $(".character-skills").removeClass("show");
+    $(`.${display_field}-skills-toggle`).removeClass("active");
   }
-  */
+
   fields.forEach(field => {
     $(`.character-skills-content-${field}`).removeClass("show");
     $(`.${field}-skills-toggle`).removeClass("active");
@@ -939,7 +1009,7 @@ async function renderCharacter() {
   let tpl;
 
 
-  if (actor.type == "npc") {
+  if (actor.type == "npc" || actor.type == "opponent") {
     tpl = await foundry.applications.handlebars.renderTemplate(
       "systems/household/templates/actor/hud/hud-npc.hbs",
       data
@@ -1054,8 +1124,6 @@ Hooks.on("renderChatMessageHTML", async (message, html, data) => {
   if (message.author.id !== game.user.id && !game.user.isGM && (message.blind == true)) {
     return;
   }
-  console.warn("renderChatMessageHTML Hook triggered.", message);
-  console.warn(message?.flags?.household?.customCss);
   if (!message?.flags?.household?.customCss && message?.flags?.household?.customCss !== undefined) return;
 
   if (message.whisper.length > 0 && !message.whisper.includes(game.user.id) && !game.user.isGM) {
@@ -1070,9 +1138,7 @@ Hooks.on("renderChatMessageHTML", async (message, html, data) => {
       if (roll instanceof Roll) {
         const dice = [];
         for (const term of roll.terms) {
-          console.log("Die type:", term);
           if (term?.faces != 6 && !(term instanceof foundry.dice.terms.OperatorTerm)) {
-            console.log("Ignore roll:", term?.faces);
             ignore_roll = true;
             break;
           }
@@ -1091,7 +1157,6 @@ Hooks.on("renderChatMessageHTML", async (message, html, data) => {
         };
         // ignore rolls that don't contain all d6
         if (!ignore_roll) {
-          console.log("Updating chat message with custom dice display.");
           const html = await foundry.applications.handlebars.renderTemplate("systems/household/templates/chat/dice-roll.hbs", templateData);
 
           await message.update({
