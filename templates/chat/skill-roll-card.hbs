@@ -205,11 +205,11 @@
     {{#ifNotEmpty free_roll_items}}
     <details class="free-reroll-items-container">
         <summary class="free-reroll-items-header">
-            Free-Reroll Options
+            {{localize "MESSAGES.RerollOptions"}}
         </summary>
         <ul class="free-reroll-items-list">
             {{#each @root.free_roll_items as |item key| }}
-            <li class="free-reroll-items-item open-item" data-item-id="{{item._id}}" data-action="open-item" data-character-id="{{@root.actor._id}}">
+            <li class="free-reroll-items-item open-item" data-item-id="{{item._id}}" data-action="open-item" data-character-id="{{@root.actor._id}}" data-tooltip="{{item.system.description}}">
                 <img src="{{item.img}}" alt="{{item.name}}">
                 <span>{{item.name}}</span>
             </li>

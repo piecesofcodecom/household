@@ -368,6 +368,7 @@
     },
      "MESSAGES": {
         "Gaveup": "A re-rolagem não deu em nada! Você deve desistir de uma combinação.",
-        "Actionroll": "Rolagem de Ação"
+        "Actionroll": "Rolagem de Ação",
+        "RerollOptions": "Opções de Re-Rolagem Gratuita"
     }
 }

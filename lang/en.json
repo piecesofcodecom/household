@@ -373,6 +373,7 @@
         "Stress": {
             "Reduce": "Reduce stress",
             "Increase": "Increase stress"
-        }
+        },
+        "RerollOptions": "Free Re-roll Options"
     }
 }

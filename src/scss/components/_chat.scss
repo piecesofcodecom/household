@@ -429,6 +429,10 @@ input[type=radio]:checked.field-street+label>img {
   background: var(--color-bg-option);
 }
 
+.free-reroll-items-container[open]>.free-reroll-items-header::before {
+  transform: rotate(90deg);
+}
+
 .free-reroll-items-header {
   padding: 6px 8px;
   cursor: pointer;
@@ -444,11 +448,12 @@ input[type=radio]:checked.field-street+label>img {
 .free-reroll-items-header::before {
   content: "▸";
   margin-right: 6px;
+  display: inline-block;
   transition: transform 0.2s ease;
+  transform-origin: center;
 }
 
-.free-reroll-items-container[open]
-.free-reroll-items-header::before {
+.free-reroll-items-container[open] .free-reroll-items-header::before {
   transform: rotate(90deg);
 }
 

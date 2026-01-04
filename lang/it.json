@@ -362,6 +362,7 @@
     },
      "MESSAGES": {
         "Gaveup": "Il rilancio non ha dato nulla! Devi rinunciare a una combinazione.",
-        "Actionroll": "Tiro Azione"
+        "Actionroll": "Tiro Azione",
+        "RerollOptions": "Opzioni Rilancio Gratuito"
     }
   }
