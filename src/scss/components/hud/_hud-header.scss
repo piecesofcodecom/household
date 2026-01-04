@@ -109,15 +109,18 @@
 
 .character-level {
   position: absolute;
-  bottom: -10px;
-  left: calc(50% - 23px);
+  bottom: 10px;
+  //left: calc(50% - 23px);
+  z-index: 10;
 }
 
 .npc-level {
   position: absolute;
   /*bottom: 20px;*/
-  top: calc(50% + 35px);
-  left: calc(50% - 19px);
+  top: calc(50% + 45px);
+  //left: calc(50% - 19px);
+  left: calc(50% - 32px);
+  z-index: 10;
 }
 
 

@@ -106,8 +106,10 @@
     font-family: LHF_Encore, Beau Rivage, cursive;
     font-size: 1.2rem;
     font-weight: 600;
-    text-align: center"><span class="hh-vs" style="font-size: 0.7em">Rolling</span> <b style="color: {{getFieldColor ability}};">{{ localize (concat "HOUSEHOLD.Skill."
-            ability ".long") }}</b> <span class="hh-vs" style="font-size: 0.7em">using</span> <b style="color: {{getFieldColor field}}; ">{{
+    text-align: center"><span class="hh-vs" style="font-size: 0.7em">Rolling</span> <b
+            style="color: {{getFieldColor ability}};">{{ localize (concat "HOUSEHOLD.Skill."
+            ability ".long") }}</b> <span class="hh-vs" style="font-size: 0.7em">using</span> <b
+            style="color: {{getFieldColor field}}; ">{{
             localize
             (concat "HOUSEHOLD.Field." field ".long") }}</b></h2>
 
@@ -148,10 +150,10 @@
 
                 {{/hasNoSuccess }}
             </div>
-             <hr class="hh-divider soft">
+            <hr class="hh-divider soft">
         </div>
     </div>
-    
+
     <!-- Outcome -->
     {{#when outcome 'eq' 'LostSuccess'}}
     <span style="
@@ -162,7 +164,8 @@
   color: #333;
   font-size: 1rem;
   margin: 4px 0;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);"> <i class="fa fa-triangle-exclamation" style="color:  #ff9800">  </i> {{localize "MESSAGES.Gaveup"}}</span>
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);"> <i class="fa fa-triangle-exclamation" style="color:  #ff9800"> </i>
+        {{localize "MESSAGES.Gaveup"}}</span>
     {{/when}}
     {{#when outcome 'eq' 'success'}}
     <i class="fa-solid fa-circle-check icon-success"></i>
@@ -173,7 +176,7 @@
     {{#when outcome 'eq' ''}}
     <div class="success-list" style="">
         {{#if successes }}
-        
+
         {{#each successes as |scc key|}}
         <span class="roll-suc roll-suc-{{scc.label}}">{{ scc.value }}x {{localize (concat "HOUSEHOLD." scc.label
             ".long")}}</span>
@@ -182,7 +185,7 @@
         {{/if}}
     </div>
     {{/when}}
-   
+
 
     <!-- Actions -->
     {{#if reroll}}
@@ -192,11 +195,29 @@
         data-poll_difficulty="{{poll_difficulty}}" data-dice="{{ dice_string }}"
         data-message-id="{{message_id}}">{{localize
         "HOUSEHOLD.ReRoll.long"}}</button>
+    {{/if}}
+    {{#if free_reroll}}
     <button class="reroll-button" data-rerolltype="free" data-currentpoll="{{currentpoll}}" data-field="{{field}}"
         data-skill="{{skill}}" data-mod="{{mod}}" data-current_success="{{poll_success}}"
         data-poll_difficulty="{{poll_difficulty}}" data-dice="{{ dice_string }}"
         data-message-id="{{message_id}}">{{localize
         "HOUSEHOLD.FreeReRoll.long"}}</button>
+    {{#ifNotEmpty free_roll_items}}
+    <details class="free-reroll-items-container">
+        <summary class="free-reroll-items-header">
+            Free-Reroll Options
+        </summary>
+        <ul class="free-reroll-items-list">
+            {{#each @root.free_roll_items as |item key| }}
+            <li class="free-reroll-items-item open-item" data-item-id="{{item._id}}" data-action="open-item" data-character-id="{{@root.actor._id}}">
+                <img src="{{item.img}}" alt="{{item.name}}">
+                <span>{{item.name}}</span>
+            </li>
+            {{/each}}
+        </ul>
+    </details>
+    {{/ifNotEmpty}}
+
     {{/if}}
     {{#if allin}}
     <br />
@@ -206,5 +227,6 @@
         data-message-id="{{message_id}}">{{localize
         "HOUSEHOLD.AllIn.long"}}</button>
     {{/if}}
+
 
 </div>

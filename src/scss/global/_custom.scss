@@ -150,3 +150,8 @@ input.no-decor::after {
 [open] .sheet summary {
   background-color: rgba(0, 0, 0, 0.2);
 }
+
+.combat-combatant:hover {
+  background: var(--hh-text-soft);
+  cursor: pointer;
+}

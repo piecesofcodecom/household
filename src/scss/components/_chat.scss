@@ -269,19 +269,19 @@ input[type="radio"].modifier-option:checked+label.mod-label-minus {
   border: 0;
   border-radius: 10%;
   box-shadow: 0 14px 28px rgba(0, 0, 0, .25), 0 10px 10px rgba(0, 0, 0, .22);
-  height: 24px;
+  height: 32px;
   margin-right: 10px;
-  width: 24px;
+  width: 32px;
 }
 
 .dice-face {
-  width: 24px;
-  height: 24px;
+  width: 32px;
+  height: 32px;
 }
 
 .dice-face img {
-  width: 24px;
-  height: 24px;
+  width: 32px;
+  height: 32px;
   border-radius: 10%;
   margin-right: 10px;
   box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
@@ -420,4 +420,60 @@ input[type=radio]:checked.field-street+label>img {
 
 .item-action {
   font-size: 1.0rem;
+}
+
+.free-reroll-items-container {
+  border: 1px solid var(--color-border-light-primary);
+  border-radius: 6px;
+  margin: 4px 0;
+  background: var(--color-bg-option);
+}
+
+.free-reroll-items-header {
+  padding: 6px 8px;
+  cursor: pointer;
+  font-weight: bold;
+  list-style: none;
+}
+
+/* remove default disclosure triangle */
+.free-reroll-items-header::-webkit-details-marker {
+  display: none;
+}
+
+.free-reroll-items-header::before {
+  content: "▸";
+  margin-right: 6px;
+  transition: transform 0.2s ease;
+}
+
+.free-reroll-items-container[open]
+.free-reroll-items-header::before {
+  transform: rotate(90deg);
+}
+
+.free-reroll-items-list {
+  list-style: none;
+  margin: 0;
+  padding: 6px 8px;
+}
+
+.free-reroll-items-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+}
+
+.free-reroll-items-item img {
+  width: 32px;
+  height: 32px;
+}
+
+.open-item {
+  cursor: pointer;
+}
+
+.open-item:hover {
+  background-color: rgb(227 224 203);
 }

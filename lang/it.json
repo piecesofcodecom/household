@@ -156,7 +156,8 @@
             "long": "Popolo"
         },
         "FreeReRoll": {
-            "long": "Rilancio in Sicurezza"
+            "long": "Rilancio in Sicurezza",
+            "short": "RS"
         },
         "Gadgets": {
             "long": "Marchingegni"
@@ -360,6 +361,7 @@
         }
     },
      "MESSAGES": {
-        "Gaveup": "Il rilancio non ha dato nulla! Devi rinunciare a una combinazione."
+        "Gaveup": "Il rilancio non ha dato nulla! Devi rinunciare a una combinazione.",
+        "Actionroll": "Tiro Azione"
     }
   }

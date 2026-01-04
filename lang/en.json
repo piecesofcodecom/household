@@ -157,7 +157,8 @@
             "long": "Folk"
         },
         "FreeReRoll": {
-            "long": "Free Re-Roll"
+            "long": "Free Re-Roll",
+            "short": "FR"
         },
         "Gadgets": {
             "long": "Gadgets"
@@ -367,6 +368,11 @@
         }
     },
     "MESSAGES": {
-        "Gaveup": "The reroll gave nothing! You must give up a combination."
+        "Gaveup": "The reroll gave nothing! You must give up a combination.",
+        "Actionroll": "Action Roll",
+        "Stress": {
+            "Reduce": "Reduce stress",
+            "Increase": "Increase stress"
+        }
     }
 }

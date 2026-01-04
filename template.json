@@ -188,6 +188,18 @@
         "action_5": "",
         "action_6": ""
       }
+    },
+    "opponent": {
+      "templates": ["base"],
+      "crucial_boxes": "",
+      "actions": {
+        "action_1": "",
+        "action_2": "",
+        "action_3": "",
+        "action_4": "",
+        "action_5": "",
+        "action_6": ""
+      }
     }
   },
   "Item": {
@@ -196,7 +208,8 @@
       "base": {
         "description": "",
         "trait": "",
-        "price": 0
+        "price": 0,
+        "free_reroll": false
       }
     },
     "item": {

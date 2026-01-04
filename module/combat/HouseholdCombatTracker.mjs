@@ -1,6 +1,7 @@
 // module/combat/HouseholdCombatTracker.js
 
 const { DialogV2, HandlebarsApplicationMixin } = foundry.applications.api;
+import * as actions from "../helpers/actions.mjs";
 
 export class HouseholdCombatTracker extends foundry.applications.sidebar.tabs.CombatTracker {
 
@@ -18,6 +19,44 @@ export class HouseholdCombatTracker extends foundry.applications.sidebar.tabs.Co
       "markActed": HouseholdCombatTracker.#onMarkActed
     }
   };
+
+  /** @override */
+  async _onRender(context, options) {
+    try {
+      await super._onRender(context, options);
+    } catch (error) {
+      CONFIG.logger.debug(`Custom combat tracker caught semi-expected render error: ${error}`)
+    }
+    const party = this.element.querySelectorAll('.combatant-act');
+    party.forEach(member => {
+      member.addEventListener("click", this._partyAct.bind(this));
+    });
+
+    const opponents = this.element.querySelectorAll('.roll-reaction');
+    opponents.forEach(opp => {
+       opp.addEventListener("click", this._opponentAct.bind(this));
+    });
+  }
+
+  async _opponentAct(event) {
+    const combatant_id = event.currentTarget.dataset.combatantId;
+    const combat = this.viewed;
+    if (!combat) return;
+    const combatant = combat.turns.find(item => item._id == combatant_id);
+    const dataset = event.currentTarget.dataset;
+    await actions.rollAction(event);
+    await combatant.setHasActed(true);
+    ui.combat.render(true);
+  }
+
+  async _partyAct(event) {
+    const combatant_id = event.currentTarget.dataset.combatantId;
+    const combat = this.viewed;
+    if (!combat) return;
+    const combatant = combat.turns.find(item => item._id == combatant_id);
+    combatant.setHasActed(event.currentTarget.checked);
+    ui.combat.render(true);
+  }
 
   /* -------------------------------------------- */
   /*  Context Preparation                         */
@@ -84,9 +123,14 @@ export class HouseholdCombatTracker extends foundry.applications.sidebar.tabs.Co
     await super._prepareTrackerContext(context, options);
 
     if (!this.viewed) return;
+    context.party = await this.viewed.turns.filter(item => item.actor.type === 'character');
+    context.opponents = await this.viewed.turns.filter(item => item.actor.type !== 'character');
+    context.isActionTurn = this.viewed.isActionTurn;
+    context.isReactionTurn = this.viewed.isReactionTurn;
+    context.hasCombat = true;
 
-    context.unacted = context.turns.filter(t => !t.hasActed);
-    context.acted = context.turns.filter(t => t.hasActed);
+//    context.unacted = context.turns.filter(t => !t.hasActed);
+  //  context.acted = context.turns.filter(t => t.hasActed);
   }
 
   async _prepareTurnContext(combat, combatant, index) {

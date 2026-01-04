@@ -3,11 +3,16 @@
     <img class="profile-img" src="{{item.img}}" data-action="editImage" data-field="img" title="{{item.name}}" />
     <div class="header-fields">
       <input class="item-name" name="name" type="text" value="{{item.name}}" placeholder="Name" data-dtype="String"/>
-      <div class="grid ">
+      <div class="grid grid-2col">
         <div class="resource">
            <label class="resource-label">{{localize "HOUSEHOLD.Contract.long"}}</label>
           <input type="text" name="system.contract" value="{{system.contract}}" data-dtype="String" placeholder="{{localize 'HOUSEHOLD.Placeholders.Contract'}}" />
       </div>
+      <div style="display: flex; align-items: center;">
+          <input class="resource-checkbox" id="{{item._id}}-free-reroll" type="checkbox" name="system.free_reroll"
+            value="{{system.free_reroll}}" data-dtype="Boolean" {{#if system.free_reroll}}checked{{/if}} />
+          <label for="{{item._id}}-free-reroll" class="resource-label">{{localize "HOUSEHOLD.FreeReRoll.long"}}</label>
+        </div>
     </div>
     </div>
   </header>

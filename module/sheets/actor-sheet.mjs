@@ -442,7 +442,7 @@ export class HouseholdActorSheet extends HandlebarsApplicationMixin(ActorSheetV2
   // and items with data-item-id. No manual setup needed.
 
   async _onDrop(event) {
-    const data = TextEditor.getDragEventData(event);
+    const data = foundry.applications.ux.TextEditor.implementation.getDragEventData(event);
 
     const item = await fromUuid(data.uuid);
     if (!item) return;

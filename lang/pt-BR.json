@@ -157,7 +157,8 @@
             "long": "Povo"
         },
         "FreeReRoll": {
-            "long": "Re-Rolagem Gratuita"
+            "long": "Re-Rolagem Gratuita",
+            "short": "RG"
         },
         "Gadgets": {
             "long": "Engenhocas"
@@ -366,6 +367,7 @@
         }
     },
      "MESSAGES": {
-        "Gaveup": "A re-rolagem não deu em nada! Você deve desistir de uma combinação."
+        "Gaveup": "A re-rolagem não deu em nada! Você deve desistir de uma combinação.",
+        "Actionroll": "Rolagem de Ação"
     }
 }

@@ -3,7 +3,7 @@
     <img class="profile-img" src="{{item.img}}" data-action="editImage" data-field="img" title="{{item.name}}" />
     <div class="header-fields">
       <input class="item-name" name="name" type="text" value="{{item.name}}" placeholder="Name" data-dtype="String"/>
-      <div class="grid grid-6col">
+      <div class="grid grid-7col">
        <div class="resource grid-5col">
           <label class="resource-label">{{localize "HOUSEHOLD.Trait.long"}}</label>
           <input class="" type="text" name="system.trait" value="{{system.trait}}" data-dtype="String" />
@@ -11,6 +11,13 @@
         <div class="resource">
           <label class="resource-label">{{localize "HOUSEHOLD.Price.long"}}</label>
           <input type="text" name="system.price" value="{{system.price}}" data-dtype="Number" />
+        </div>
+        <div class="resource" style="align-items: center;text-align: center; justify-self: center;"
+          data-tooltip="{{localize 'HOUSEHOLD.FreeReRoll.long'}}">
+          <label for="{{item._id}}-free-reroll" class="resource-label" style="justify-content: center;">{{localize
+            "HOUSEHOLD.FreeReRoll.short"}}</label>
+          <input class="resource-checkbox" id="{{item._id}}-free-reroll" type="checkbox" name="system.free_reroll"
+            value="{{system.free_reroll}}" data-dtype="Boolean" {{#if system.free_reroll}}checked{{/if}} />
         </div>
       </div>
     </div>

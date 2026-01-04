@@ -199,3 +199,55 @@ h6 {
 .prosemirror {
   height: 100%;
 }
+
+.form__field:focus {
+  ~.form__label {
+    position: absolute;
+    top: 0;
+    display: block;
+    transition: 0.2s;
+    font-size: medium;
+    color: #000000;
+    font-weight: 700;
+  }
+
+  padding-bottom: 6px;
+  font-weight: 700;
+  border-width: 3px;
+  border-image: linear-gradient(to right, var(--hh-border-soft), var(--hh-accent-gold));
+  border-image-slice: 1;
+}
+
+.form__field {
+
+  &:required,
+  &:invalid {
+    box-shadow: none;
+  }
+}
+
+.form__field {
+  font-family: inherit;
+  width: 100%;
+  border: 0;
+  border-bottom: 2px solid var(--hh-border-soft);
+
+  outline: 0;
+  font-size: medium;
+  color: #030303;
+  padding: 7px 0;
+  background: transparent;
+  transition: border-color 0.2s;
+
+  &::placeholder {
+    color: transparent;
+  }
+
+  &:placeholder-shown~.form__label {
+    font-size: medium;
+    color: #000;
+    cursor: text;
+    top: 18px;
+  }
+}
+

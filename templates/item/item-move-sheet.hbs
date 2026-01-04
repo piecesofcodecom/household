@@ -3,14 +3,23 @@
     <img class="profile-img" src="{{item.img}}" data-action="editImage" data-field="img" title="{{item.name}}" />
     <div class="header-fields">
       <input class="item-name" name="name" type="text" value="{{item.name}}" placeholder="Name" data-dtype="String" />
-      <div class="grid grid-4col" style="width: 100px">
-        {{#each item.system.suits as | value key | }}
-        <div class="resource">
-          <input type="radio" class="radio-suit-{{key}} no-decor" data-action="customEdit" data-value="{{value}}"
-            data-path="system.suits.{{key}}" data-dtype="Boolean" id="choose-{{key}}-{{../item.id}}" {{#if value}}
-            checked {{/if}} />
+      <div class="grid grid-3col">
+        <div class="grid-span-2" style="display: flex; align-items: center;">
+          {{#each item.system.suits as | value key | }}
+          <div class="resource">
+            <input type="radio" class="radio-suit-{{key}} no-decor" data-action="customEdit" data-value="{{value}}"
+              data-path="system.suits.{{key}}" data-dtype="Boolean" id="choose-{{key}}-{{../item.id}}" {{#if value}}
+              checked {{/if}} />
+          </div>
+          {{/each}}
         </div>
-        {{/each}}
+        <div class="resource" style="display: flex"
+          data-tooltip="{{localize 'HOUSEHOLD.FreeReRoll.long'}}">
+          <input class="resource-checkbox" id="{{item._id}}-free-reroll" type="checkbox" name="system.free_reroll"
+            value="{{system.free_reroll}}" data-dtype="Boolean" {{#if system.free_reroll}}checked{{/if}} />
+            <label for="{{item._id}}-free-reroll" class="resource-label" style="">{{localize
+            "HOUSEHOLD.FreeReRoll.long"}}</label>
+        </div>
       </div>
     </div>
   </header>

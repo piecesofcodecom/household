@@ -126,7 +126,8 @@ export class HouseholdActor extends Actor {
     }
     const templateData = {
       label: "Action " + roman[action],
-      description: this.system.actions[`action_${action}`]
+      description: this.system.actions[`action_${action}`],
+      threat: this.system.threat.level
     }
     return await foundry.applications.handlebars.renderTemplate("systems/household/templates/chat/action-show-card.hbs", templateData);
 
@@ -191,7 +192,7 @@ export class HouseholdActor extends Actor {
     }
     return dice_to_chat;
   }
-  async _sendToChat(roll, field, skill, mod, poll_difficulty, dice_poll, success_poll, outcome, is_reroll, is_allin, is_jackpot, allow_reroll, allow_allin, give_up, message_id = 0) {
+  async _sendToChat(roll, field, skill, mod, poll_difficulty, dice_poll, success_poll, outcome, is_reroll, is_allin, is_jackpot, allow_reroll, allow_free_reroll, allow_allin, give_up, message_id = 0) {
     //face=dice.face locked=dice.locked success=dice.success
 
     const dice = this.preparediceToChat(dice_poll);
@@ -200,6 +201,7 @@ export class HouseholdActor extends Actor {
     if (is_allin) {
       allow_allin = 0;
       allow_reroll = 0;
+      allow_free_reroll = 0;
     }
 
     // if there is no remaining dice, no buttons
@@ -214,6 +216,8 @@ export class HouseholdActor extends Actor {
     if (initialValue == 0) {
       allow_allin = allow_reroll = 0;
     }
+
+    const free_roll_items = this.items.filter(el => el.system.free_reroll == true);
 
     
     
@@ -230,12 +234,14 @@ export class HouseholdActor extends Actor {
       poll_success: JSON.stringify(success_poll),
       successes: successes,
       reroll: allow_reroll ? 1 : 0,
+      free_reroll: allow_free_reroll ? 1 : 0,
       allin: allow_allin ? 1 : 0,
       reroll_message: is_reroll ? "Reroll" : "Rolling",
       give_up: give_up ? "give_up" : "",
       give_up_face: 0,
       outcome: give_up ? "LostSuccess" : outcome,
       message_id: message_id || "MESSAGEID",
+      free_roll_items: free_roll_items
     };
     const html = await foundry.applications.handlebars.renderTemplate("systems/household/templates/chat/skill-roll-card.hbs", templateData);
     if (message_id) {
@@ -374,6 +380,10 @@ export class HouseholdActor extends Actor {
     const normilized_jackpot = 81;
     let allow_allin = true;
     let allow_reroll = true;
+    let allow_free_reroll = true;
+    if (is_free_reroll || is_reroll || is_allin) {
+      allow_free_reroll = false;
+    }
     let transformed_poll_result = {
       '1': 0,
       '2': 0,
@@ -480,6 +490,7 @@ export class HouseholdActor extends Actor {
       is_allin,
       is_jackpot,
       allow_reroll,
+      allow_free_reroll,
       allow_allin,
       give_up,
       message_id
@@ -497,11 +508,15 @@ export class HouseholdActor extends Actor {
       
       skill.label = game.i18n.localize(CONFIG.HOUSEHOLD.skills[dataset.key])
     }
+    const fields = actor.system.fields;
+    for (const [k, v] of Object.entries(fields)) {
+      v.label = game.i18n.localize(CONFIG.HOUSEHOLD.fields[k]) ?? k;
+    }
     const templateData = {
       ability: dataset.label,
       skill: skill,
       skill_key: dataset.key,
-      fields: actor.system.fields,
+      fields: fields,
       key: dataset.key,
       field: dataset.field,
       actor: actor,

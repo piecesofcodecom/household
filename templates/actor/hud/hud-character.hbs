@@ -26,7 +26,7 @@
                 <span class="name">{{skill.name}}</span>
                 <span class="mod">
                     {{skill.mod}}x<i
-                        class="fa-solid fa-{{skill.suit}} condition-icon-{{skill.suit}} {{skill.suit}}"></i>
+                        class="fa-household-{{skill.suit}}-full condition-icon-{{skill.suit}} {{skill.suit}}"></i>
                 </span>
             </li>
             {{/when}}
@@ -44,7 +44,7 @@
                 <span class="name">{{skill.name}}</span>
                 <span class="mod">
                     {{skill.mod}}x<i
-                        class="fa-solid fa-{{skill.suit}} condition-icon-{{skill.suit}} {{skill.suit}}"></i>
+                        class="fa-household-{{skill.suit}}-full condition-icon-{{skill.suit}} {{skill.suit}}"></i>
                 </span>
             </li>
             {{/when}}
@@ -62,7 +62,7 @@
                 <span class="name">{{skill.name}}</span>
                 <span class="mod">
                     {{skill.mod}}x<i
-                        class="fa-solid fa-{{skill.suit}} condition-icon-{{skill.suit}} {{skill.suit}}"></i>
+                        class="fa-household-{{skill.suit}}-full condition-icon-{{skill.suit}} {{skill.suit}}"></i>
                 </span>
             </li>
             {{/when}}
@@ -81,7 +81,7 @@
                     <label>{{ab.ab}}</label>
                     <span>
                         {{#range ab.value}}
-                        <i class="fa-solid fa-{{ab.suit}} condition-icon-{{ab.suit}} {{ab.suit}}"></i>
+                        <i class="fa-household-{{ab.suit}}-full condition-icon-{{ab.suit}} {{ab.suit}}"></i>
                         {{/range}}
                     </span>
                 </div>
@@ -113,24 +113,43 @@
             <div id="glass-highlight"></div>
             <div id="grunge-texture-char" style="opacity: {{getOpacyDecorum decorum}};"></div>
 
-            <div class="sheet" data-character-id="{{@root/id}}">
+            <div class="sheet sheet-open" data-character-id="{{@root/id}}">
                 {{localize "HOUSEHOLD.open_sheet"}}
             </div>
 
-            {{#if isCharacter}}
-            <div class="character-level">
-                <div class="character-level-badge">
-                    <input class="InputeditValue hud-stress stress-{{#when stress.current 'eq' stress.danger}}rosette{{else}}square-{{#when stress.current 'eq' 0}}green{{else}}red{{/when}}{{/when}}" style="
+
+        </div>
+        {{#if isCharacter}}
+        <div class="character-level" style="text-align: center;
+    align-items: center;
+    justify-content: center;
+    justify-items: center;
+    display: flex; z-index: 10">
+            <a class="{{#when stress.current 'gt' 0}}resource-label editValue{{/when}}"
+                data-path="system.stress.current" data-value="{{reduceBy stress.current 1}}"
+                data-character-id="{{@root/id}}"
+                data-dtype="Number">
+                <img src="systems/household/assets/sheet/btn-remove.png" style="filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.4));
+    width: 16px;">
+            </a>
+            <div class="character-level-badge">
+                <input
+                    class="InputeditValue hud-stress stress-{{#when stress.current 'eq' stress.danger}}rosette{{else}}square-{{#when stress.current 'eq' 0}}green{{else}}red{{/when}}{{/when}}"
+                    style="
     {{#when stress.current 'gteq' stress.max}}
          background-image: url(/systems/household/assets/sheet/overstressed.png);
-    {{/when}}" type="text"
-                        value="{{#when stress.current 'lteq' stress.max}}{{stress.current}}{{/when}}"
-                        data-path="system.stress.current" data-value="{{stress.current}}"
-                        data-character-id="{{@root/id}}">
-                </div>
+    {{/when}}" type="text" value="{{#when stress.current 'lteq' stress.max}}{{stress.current}}{{/when}}"
+                    data-path="system.stress.current" data-value="{{stress.current}}" data-character-id="{{@root/id}}">
             </div>
-            {{/if}}
+            <a class="{{#when stress.current 'lteq' stress.max}}resource-label editValue{{/when}}"
+                data-path="system.stress.current" data-value="{{increaseBy stress.current 1}}"
+                data-character-id="{{@root/id}}" data-dtype="Number">
+                 <img src="systems/household/assets/sheet/btn-create.png" style="filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.4));
+    width: 16px;">
+                
+            </a>
         </div>
+        {{/if}}
 
         <div class="character-health">
             <div class="bar-wrapper flexrow">
@@ -173,20 +192,32 @@
     </div>
 
     <div class="character-buttons grid grid-2col" style="gap: 120px; width: 100%; z">
-        <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 2fr)); gap: 5px; align-items: center; justify-items: center;">
-        <button class="skills-toggle society-skills-toggle {{#when societySkillsToggle 'noteq' ''}}{{tabs.societySkillsToggle}}{{/when}}" style="width: 40px;" data-display="society">{{localize
-            "HOUSEHOLD.Field.Society.abbr"}}</button>
-            <button class="skills-toggle academia-skills-toggle {{#when academiaSkillsToggle 'noteq' ''}}{{tabs.academiaSkillsToggle}}{{/when}}" style="width: 40px;"  data-display="academia">{{localize
-            "HOUSEHOLD.Field.Academia.abbr"}}</button>
-            <button class="skills-toggle war-skills-toggle {{#when warSkillsToggle 'noteq' ''}}{{tabs.warSkillsToggle}}{{/when}}" style="width: 40px;"  data-display="war">{{localize
-            "HOUSEHOLD.Field.War.abbr"}}</button>
-            <button class="skills-toggle street-skills-toggle {{#when streetSkillsToggle 'noteq' ''}}{{tabs.streetSkillsToggle}}{{/when}}" style="width: 40px;"  data-display="street">{{localize
-            "HOUSEHOLD.Field.Street.abbr"}}</button>
-            </div>
-        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; align-items: center; justify-items: center;">
-            <button class="actions-toggle {{#when actionsToggle 'noteq' ''}}{{tabs.actionsToggle}}{{/when}}" style="width: 70px;">{{localize
+        <div
+            style="display: grid; grid-template-columns: repeat(4, minmax(0, 2fr)); gap: 5px; align-items: center; justify-items: center;">
+            <button
+                class="skills-toggle society-skills-toggle {{#when societySkillsToggle 'noteq' ''}}{{tabs.societySkillsToggle}}{{/when}}"
+                style="width: 40px;" data-display="society">{{localize
+                "HOUSEHOLD.Field.Society.abbr"}}</button>
+            <button
+                class="skills-toggle academia-skills-toggle {{#when academiaSkillsToggle 'noteq' ''}}{{tabs.academiaSkillsToggle}}{{/when}}"
+                style="width: 40px;" data-display="academia">{{localize
+                "HOUSEHOLD.Field.Academia.abbr"}}</button>
+            <button
+                class="skills-toggle war-skills-toggle {{#when warSkillsToggle 'noteq' ''}}{{tabs.warSkillsToggle}}{{/when}}"
+                style="width: 40px;" data-display="war">{{localize
+                "HOUSEHOLD.Field.War.abbr"}}</button>
+            <button
+                class="skills-toggle street-skills-toggle {{#when streetSkillsToggle 'noteq' ''}}{{tabs.streetSkillsToggle}}{{/when}}"
+                style="width: 40px;" data-display="street">{{localize
+                "HOUSEHOLD.Field.Street.abbr"}}</button>
+        </div>
+        <div
+            style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; align-items: center; justify-items: center;">
+            <button class="actions-toggle {{#when actionsToggle 'noteq' ''}}{{tabs.actionsToggle}}{{/when}}"
+                style="width: 70px;">{{localize
                 "HOUSEHOLD.actions"}}</button>
-            <button class="stats-toggle {{#when statsToggle 'noteq' ''}}{{tabs.statsToggle}}{{/when}}" style="width: 70px;">{{localize
+            <button class="stats-toggle {{#when statsToggle 'noteq' ''}}{{tabs.statsToggle}}{{/when}}"
+                style="width: 70px;">{{localize
                 "HOUSEHOLD.stats"}}</button>
         </div>
     </div>
@@ -222,7 +253,7 @@
         {{/each}}
 
 
-        
+
     </div>
 </div>
 
@@ -281,7 +312,7 @@
 
 
 
-        
+
 
         <div class="actions-category">
             <h2 class="characteristic-title" style="text-align: center;">Decorum</h2>

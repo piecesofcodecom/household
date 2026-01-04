@@ -602,3 +602,46 @@ input[type="text"].char-name {
   color: #fff;
   /* Change icon color on hover */
 }
+
+/* Base checkbox */
+input.resource-checkbox[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+
+  width: 24px;
+  height: 24px;
+
+  background-color: transparent;
+  border: 2px solid var(--hh-accent-gold);
+  border-radius: 4px;
+
+  cursor: pointer;
+  position: relative;
+}
+
+/* Check mark */
+input.resource-checkbox[type="checkbox"]::after {
+  content: "";
+  position: absolute;
+   left: 5px;
+  top: 3px;
+
+  width: 7px;
+  height: 14px;
+
+  border: solid var(--hh-accent-gold);
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+
+  opacity: 0;
+}
+
+/* Checked state */
+input.resource-checkbox[type="checkbox"]:checked::after {
+  opacity: 1;
+}
+
+input.resource-checkbox[type="checkbox"]::before {
+  content: none !important;
+  display: none !important;
+}

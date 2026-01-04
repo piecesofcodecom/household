@@ -221,6 +221,10 @@ Handlebars.registerHelper('reduceBy', function (value, rd) {
   return Number(value) - Number(rd);
 });
 
+Handlebars.registerHelper('increaseBy', function (value, rd) {
+  return Number(value) + Number(rd);
+});
+
 Handlebars.registerHelper("multipleOf", function (value, multipler, options) {
   if ((Number(value) % Number(multipler)) == 0) {
     return options.fn(this);
@@ -449,7 +453,7 @@ Hooks.once('ready', async function () {
  */
 
 Hooks.on("getSceneControlButtons", (controls) => {
-  if (!game.user.isGM || !game.combat) return controls;
+  if (!game.user.isGM) return controls;
 
   const tokens = controls.tokens;
   if (!tokens) return;
@@ -461,8 +465,8 @@ Hooks.on("getSceneControlButtons", (controls) => {
     button: true,
     visible: game.user.isGM,
     onChange: async () => {
-      console.warn("GOGO")
-      await game.combat.nextTurn();
+      if (game?.combat)
+        await game.combat.nextTurn();
     }
   };
 });
@@ -489,8 +493,20 @@ Hooks.on('renderChatMessageHTML', (message, html, context) => {
   const rollAbility = html.querySelector('.roll-ability');
   const rerollButtons = html.querySelectorAll('.reroll-button') || [];
   const giveUp = html.querySelectorAll('.give_up') || [];
-
-
+  const open_items = html.querySelectorAll('.open-item') || [];
+  if (open_items.length > 0) {
+    open_items.forEach(open_item => {
+      open_item.addEventListener('click', async event => {
+        event.preventDefault();
+        const dataset = event.target.closest('.open-item').dataset;
+        const item = actor.items.get(dataset.itemId);
+        if (item) {
+          item.sheet.render(true);
+        }
+      })
+    })
+    
+  }
   if (fieldOption) {
     fieldOption.click(event => {
       event.preventDefault();
@@ -794,7 +810,7 @@ Hooks.on('deleteToken', async function () {
 })
 
 function activatePlayerListeners(elem) {
-  const sheet = elem.querySelector('#player-character .sheet');
+  const sheet = elem.querySelector('#player-character .sheet-open');
   sheet.addEventListener("click", actions.openSheet);
   setupHealthPointsTracker("#current-health");
 

@@ -3,19 +3,24 @@
     <img class="profile-img" src="{{item.img}}" data-action="editImage" data-field="img" title="{{item.name}}" />
     <div class="header-fields">
       <input class="item-name" name="name" type="text" value="{{item.name}}" placeholder="Name" data-dtype="String" />
-      <div class="grid ">
+      <div class="grid grid-3col">
         <div class="resource">
           <label class="resource-label">{{localize "HOUSEHOLD.Profession.long"}}</label>
           <input type="text" name="system.profession" value="{{system.profession}}" data-dtype="String" />
         </div>
-        <div class="resource">
-          <label class="resource-label">{{localize "HOUSEHOLD.HasCompanion.long"}}</label>
-          {{#if system.has_companion}}
-          <input type="checkbox" name="system.has_companion" value="{{system.has_companion}}" data-dtype="Boolean"
-            checked />
-          {{else}}
-          <input type="checkbox" name="system.has_companion" value="{{system.has_companion}}" data-dtype="Boolean" />
-          {{/if}}
+        <div style="    justify-self: center;
+    text-align: center;">
+    <label for="{{item._id}}-has-companion" class="resource-label">{{localize
+            "HOUSEHOLD.HasCompanion.long"}}</label>
+          <input class="resource-checkbox" id="{{item._id}}-has-companion" type="checkbox" name="system.has_companion"
+            value="{{system.has_companion}}" data-dtype="Boolean" {{#if system.has_companion}}checked{{/if}} />
+        </div>
+        <div style="    justify-self: center;
+    text-align: center;">
+    <label for="{{item._id}}-free-reroll" class="resource-label">{{localize "HOUSEHOLD.FreeReRoll.long"}}</label>
+          <input class="resource-checkbox" id="{{item._id}}-free-reroll" type="checkbox" name="system.free_reroll"
+            value="{{system.free_reroll}}" data-dtype="Boolean" {{#if system.free_reroll}}checked{{/if}} />
+          
         </div>
       </div>
   </header>

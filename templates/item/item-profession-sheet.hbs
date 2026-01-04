@@ -3,14 +3,18 @@
     <img class="profile-img" src="{{item.img}}" data-action="editImage" data-field="img" title="{{item.name}}" />
     <div class="header-fields">
       <input class="item-name" name="name" type="text" value="{{item.name}}" placeholder="Name" data-dtype="String" />
-      <div class="" style="width: 100px">
-        <label class="resource-label">{{localize "HOUSEHOLD.HasCompanion.long"}}</label>
-        {{#if system.has_companion}}
-        <input type="checkbox" name="system.has_companion" value="{{system.has_companion}}" data-dtype="Boolean"
-          checked />
-        {{else}}
-        <input type="checkbox" name="system.has_companion" value="{{system.has_companion}}" data-dtype="Boolean" />
-        {{/if}}
+      <div class="grid grid-2col">
+        <div style="display: flex">
+          <input class="resource-checkbox" id="{{item._id}}-has-companion" type="checkbox" name="system.has_companion"
+            value="{{system.has_companion}}" data-dtype="Boolean" {{#if system.has_companion}}checked{{/if}} />
+          <label for="{{item._id}}-has-companion" class="resource-label">{{localize
+            "HOUSEHOLD.HasCompanion.long"}}</label>
+        </div>
+        <div style="display: flex">
+          <input class="resource-checkbox" id="{{item._id}}-free-reroll" type="checkbox" name="system.free_reroll"
+            value="{{system.free_reroll}}" data-dtype="Boolean" {{#if system.free_reroll}}checked{{/if}} />
+          <label for="{{item._id}}-free-reroll" class="resource-label">{{localize "HOUSEHOLD.FreeReRoll.long"}}</label>
+        </div>
       </div>
   </header>
 
@@ -43,11 +47,11 @@
       <div class="resource">
         <label class="resource-label">{{localize "HOUSEHOLD.Field.long"}}</label>
         <select name="system.field">
-          <option value="" {{#ifEquals system.field "" }}selected="true"{{/ifEquals}}>Select one Field</option>
-          <option value="society" {{#ifEquals system.field "society" }}selected="true"{{/ifEquals}}>Society</option>
-          <option value="academia" {{#ifEquals system.field "academia" }}selected="true"{{/ifEquals}}>Academia</option>
-          <option value="war" {{#ifEquals system.field "war" }}selected="true"{{/ifEquals}}>War</option>
-          <option value="street" {{#ifEquals system.field "street" }}selected="true"{{/ifEquals}}>Street</option>
+          <option value="" {{#ifEquals system.field "" }}selected="true" {{/ifEquals}}>Select one Field</option>
+          <option value="society" {{#ifEquals system.field "society" }}selected="true" {{/ifEquals}}>Society</option>
+          <option value="academia" {{#ifEquals system.field "academia" }}selected="true" {{/ifEquals}}>Academia</option>
+          <option value="war" {{#ifEquals system.field "war" }}selected="true" {{/ifEquals}}>War</option>
+          <option value="street" {{#ifEquals system.field "street" }}selected="true" {{/ifEquals}}>Street</option>
         </select>
         <!--input type="text" name="system.field" value="{{system.field}}" data-dtype="String" /-->
       </div>

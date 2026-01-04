@@ -5,6 +5,7 @@ input.field-street[type=radio]:checked {
     background-repeat: no-repeat !important;
     background-size: cover !important;
     -webkit-filter: none !important;
+    filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.4));
 }
 
 input.field-society[type=radio]:checked {

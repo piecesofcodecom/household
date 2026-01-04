@@ -28,10 +28,12 @@
 
 .fa-household-heart-full {
   background-image: url(/systems/household/assets/sheet/suit-hearts-full.png);
+  filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.4));
 }
 
 .fa-household-none {
   background-image: url(/systems/household/assets/dice/cancel.png);
+  filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.4));
 }
 
 .fa-household-diamond {
@@ -40,6 +42,7 @@
 
 .fa-household-diamond-full {
   background-image: url(/systems/household/assets/sheet/suit-diamonds-full.png);
+  filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.4));
 }
 
 .fa-household-club {
@@ -48,6 +51,7 @@
 
 .fa-household-club-full {
   background-image: url(/systems/household/assets/sheet/suit-clubs-full.png);
+  filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.4));
 }
 
 .fa-household-spade {
@@ -56,6 +60,7 @@
 
 .fa-household-spade-full {
   background-image: url(/systems/household/assets/sheet/suit-spades-full.png);
+  filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.4));
 }
 
 .fa-household-home {

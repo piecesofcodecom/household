@@ -3,9 +3,16 @@
     <img class="profile-img" src="{{item.img}}" data-action="editImage" data-field="img" title="{{item.name}}" />
     <div class="header-fields">
       <input class="item-name" name="name" type="text" value="{{item.name}}" placeholder="Name" data-dtype="String" />
-      <div class="resource">
-        <label class="resource-label">{{localize "HOUSEHOLD.SheetLabels.Type"}}</label>
-        <input type="text" name="system.type" value="{{system.type}}" data-dtype="String" />
+      <div class="grid grid-2col">
+        <div class="resource">
+          <label class="resource-label">{{localize "HOUSEHOLD.SheetLabels.Type"}}</label>
+          <input type="text" name="system.type" value="{{system.type}}" data-dtype="String" />
+        </div>
+        <div style="display: flex; align-items: center;">
+          <input class="resource-checkbox" id="{{item._id}}-free-reroll" type="checkbox" name="system.free_reroll"
+            value="{{system.free_reroll}}" data-dtype="Boolean" {{#if system.free_reroll}}checked{{/if}} />
+          <label for="{{item._id}}-free-reroll" class="resource-label">{{localize "HOUSEHOLD.FreeReRoll.long"}}</label>
+        </div>
       </div>
 
     </div>
@@ -46,13 +53,13 @@
     {{!-- Attributes Tab --}}
     <div class="tab attributes {{tabs.attributes.cssClass}}" data-group="primary" data-tab="attributes">
       {{!-- As you add new fields, add them in here! --}}
-       <br />
-     <div class="resource" style="display: flex; gap: 1em;">
+      <br />
+      <div class="resource" style="display: flex; gap: 1em;">
         <label class="resource-label" style="flex: 1">{{localize "HOUSEHOLD.SheetLabels.Name"}}</label>
         <input type="text" name="system.counterpart.name" value="{{system.counterpart.name}}" data-dtype="String" />
       </div>
-       <br />
-       <label class="resource-label">{{localize "HOUSEHOLD.SheetLabels.Description"}}</label>
+      <br />
+      <label class="resource-label">{{localize "HOUSEHOLD.SheetLabels.Description"}}</label>
       <div class="text-editor" style="height: 190px;">
         {{#if editable}}
         <prose-mirror name="system.counterpart.details" button="true" editable="{{editable}}" toggled="false"

@@ -3,17 +3,17 @@ import { HOUSEHOLD } from './config.mjs'
 const { DialogV2 } = foundry.applications.api;
 
 async function getActor(characterId) {
-  
+
   let actor = {}
   if (game.user.isGM) {
     const token = await canvas.tokens.get(characterId);
-    
+
     if (token) {
       actor = token.actor;
     } else {
-      
+
       actor = await game.actors.get(characterId);
-      
+
     }
   } else {
     actor = await game.actors.find(actor => actor.isOwner);
@@ -22,7 +22,7 @@ async function getActor(characterId) {
 }
 export async function openSheet() {
   const actor = await getActor(this.dataset.characterId);
-  
+
   if (actor) {
     actor.sheet.render(true);
   }
@@ -30,29 +30,29 @@ export async function openSheet() {
 
 export async function itemChat(e) {
   const target = e.currentTarget;
-  
-    let forward_event = {};
-    forward_event.currentTarget = target;
-    if (target.dataset?.subAction) {
-      const sub_action = target.dataset.subAction;
-      const parent = target.closest('.item-list')?.dataset;
-      
-      if (parent) {
-        forward_event.currentTarget.dataset.action = sub_action;
-        forward_event.currentTarget.dataset.itemId = parent.itemId;
-        forward_event.currentTarget.dataset.characterId = parent.characterId;
-        forward_event.currentTarget.dataset.object = parent.object;
-      }
 
+  let forward_event = {};
+  forward_event.currentTarget = target;
+  if (target.dataset?.subAction) {
+    const sub_action = target.dataset.subAction;
+    const parent = target.closest('.item-list')?.dataset;
+
+    if (parent) {
+      forward_event.currentTarget.dataset.action = sub_action;
+      forward_event.currentTarget.dataset.itemId = parent.itemId;
+      forward_event.currentTarget.dataset.characterId = parent.characterId;
+      forward_event.currentTarget.dataset.object = parent.object;
     }
-    
-    useItem(forward_event);
+
+  }
+
+  useItem(forward_event);
 }
 
 export async function dialogRollSkill(e) {
   let guess;
   const actor = await getActor(this.dataset.characterId);
-  
+
   actor.dialogRollSkill(this.dataset);
 }
 
@@ -60,27 +60,22 @@ export async function rollAction(e) {
   if (e.currentTarget?.dataset?.type == 'attack') {
     const dataset = e.currentTarget.closest('.item-list')?.dataset;
     const actor = await getActor(dataset.characterId);
-    
-    
-    
-    
     const item = actor.items.get(dataset.itemId);
     if (item) {
-      
-
       dataset.label = item.system.field;
       dataset.field = item.system.field;
       dataset.key = item.system.skill;
       dataset.itemId = item.id;
       dataset.characterId = actor.id;
-      
       actor.dialogRollSkill(dataset);
-
-
     }
   } else {
-    const actor = await getActor(this.dataset.characterId);
-    const dataset = e.currentTarget.dataset;
+    let dataset = this?.dataset;
+
+    if (dataset == null) {
+      dataset = e.currentTarget.dataset;
+    }
+    const actor = await getActor(dataset.characterId);
     if (!actor) return;
     let roll = new Roll("1d6", actor.getRollData());
     await roll.evaluate();
@@ -89,7 +84,7 @@ export async function rollAction(e) {
     roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: actor }),
       flavor: flavor,
-      flags: { 
+      flags: {
         household: {
           noChanges: true,
           customCss: true
@@ -152,7 +147,7 @@ export async function useItem(e) {
     e.stopPropagation();
   }
   let thisitem = this;
-  
+
   if (thisitem?.dataset == null) {
     thisitem = e.currentTarget;
   }
@@ -167,23 +162,23 @@ export async function useItem(e) {
       const suits = ["club", "diamond", "heart", "spade"];
       let fail = 0;
       let update_suits = [];
-      
-      
+
+
       for (let suit of suits) {
         if (item.system.suits[suit]) {
-          
+
           if (actor.system.aces[suit]) {
-            
+
             update_suits.push(suit);
           } else {
             fail += 1;
           }
         }
       }
-      
+
       if (fail == 1) {
-        
-        
+
+
         if (actor.system.aces.joker) {
           actor.update({ [`system.aces.joker`]: false });
           fail -= 1;
@@ -288,18 +283,18 @@ async function handleAttributeAction(event, actor, dataset) {
 }
 
 export async function setAttribute(e) {
-  
+
 }
 
 export async function rollAbility(e) {
   let thisitem = this;
-  
+
   if (thisitem?.dataset == null) {
     thisitem = e.currentTarget;
   }
 
   const actor = await getActor(thisitem.dataset.characterId);
-  
+
   if (!actor) return;
   handleAttributeAction(e, actor, thisitem.dataset)
 
