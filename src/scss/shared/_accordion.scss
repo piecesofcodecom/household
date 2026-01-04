@@ -1,0 +1,48 @@
+// Details/Summary accordion styles
+details>summary {
+  list-style: none;
+}
+
+details>summary::marker,
+/* Latest Chrome, Edge, Firefox */
+details>summary::-webkit-details-marker
+
+/* Safari */
+  {
+  display: none;
+}
+
+details summary::-webkit-details-marker {
+  display: none;
+}
+
+details+details {
+  margin-top: 2px;
+}
+
+details p {
+  line-height: 1.7;
+  margin: 10px 0 0;
+  padding: 0 20px 15px;
+}
+
+details.square {
+  border-radius: 0;
+}
+
+details[open] {
+  transition: all 0.6s;
+  min-height: 100px;
+
+}
+
+summary {
+  outline: none;
+  font-size: 16px;
+  padding: 3px;
+
+}
+
+summary:selection {
+  background: transparent;
+}

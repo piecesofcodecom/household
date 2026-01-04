@@ -1,0 +1,80 @@
+// Custom household icons
+.fa-household-heart,
+.fa-household-heart-full,
+.fa-household-diamond,
+.fa-household-diamond-full,
+.fa-household-club,
+.fa-household-club-full,
+.fa-household-spade,
+.fa-household-spade-full,
+.fa-household-home,
+.fa-household-contract,
+.fa-household-gear,
+.fa-household-memories,
+.fa-household-none {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  vertical-align: middle;
+  border: none;
+}
+
+.fa-household-heart {
+  background-image: url(/systems/household/assets/sheet/suit-hearts.png);
+}
+
+.fa-household-heart-full {
+  background-image: url(/systems/household/assets/sheet/suit-hearts-full.png);
+  filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.4));
+}
+
+.fa-household-none {
+  background-image: url(/systems/household/assets/dice/cancel.png);
+  filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.4));
+}
+
+.fa-household-diamond {
+  background-image: url(/systems/household/assets/sheet/suit-diamonds.png);
+}
+
+.fa-household-diamond-full {
+  background-image: url(/systems/household/assets/sheet/suit-diamonds-full.png);
+  filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.4));
+}
+
+.fa-household-club {
+  background-image: url(/systems/household/assets/sheet/suit-clubs.png);
+}
+
+.fa-household-club-full {
+  background-image: url(/systems/household/assets/sheet/suit-clubs-full.png);
+  filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.4));
+}
+
+.fa-household-spade {
+  background-image: url(/systems/household/assets/sheet/suit-spades.png);
+}
+
+.fa-household-spade-full {
+  background-image: url(/systems/household/assets/sheet/suit-spades-full.png);
+  filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.4));
+}
+
+.fa-household-home {
+  background-image: url(/systems/household/assets/sheet/icon-home.png);
+}
+
+.fa-household-contract {
+  background-image: url(/systems/household/assets/sheet/icon-contracts.png);
+}
+
+.fa-household-gear {
+  background-image: url(/systems/household/assets/sheet/icon-gear.png);
+}
+
+.fa-household-memories {
+  background-image: url(/systems/household/assets/sheet/icon-memories.png);
+}

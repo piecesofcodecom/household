@@ -1,54 +1,134 @@
 // Add custom fonts by visiting and search https://fonts.google.com
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400;1,700&family=Vollkorn:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
 @font-face {
   font-family: 'LHF_Encore';
   src: url('/systems/household/fonts/lhf-encore-distressed.ttf');
 }
 
-// Import utilities.
+// /* Soft ambient shadow */
+// box-shadow: 0 2px 6px rgba(43, 42, 38, 0.25);
+
+// /* Raised card */
+// box-shadow: 0 4px 12px rgba(43, 42, 38, 0.35);
+
+// /* Inset (pressed wood) */
+// box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+
+// Base surfaces colors
+$paper-light: #F4EEDD; // clean parchment
+$paper-base: #EFE5CF; // default background
+$paper-dark: #E3D6B8; // inset / secondary panels
+
+// Text colors
+$text-main: #2B2A26; // primary ink
+$text-soft: #5E5A52; // secondary text
+$text-faded: #8A857A; // disabled, hints
+
+//Structural colors
+$wood-dark: #3A2C21;
+$wood-base: #6B4F3A;
+$wood-soft: #8A6A4F;
+$linen-line: #C7B89A;
+
+// accent
+$accent-gold: #C2A14D; // important, titles, highlights
+$accent-teal: #4F7C7A; // magic, focus, action
+$accent-red: #8E3B3B; // danger, stress, wounds
+$accent-green: #2F4B3F; // stealth, nature, calm
+$accent-brass: #9C8A5A; // NPCs, neutral actions
+
+// UI
+$state-hover: #EFE1B2;
+$state-active: #D6BF77;
+$state-disabled-bg: #EEE7D8;
+
+// ===========================================
+// Utils Layer (variables, tokens, mixins)
+// ===========================================
 @import 'utils/typography';
 @import 'utils/colors';
+@import 'utils/tokens';
 @import 'utils/mixins';
 @import 'utils/variables';
 
-/* Global styles */
-@import 'components/hud';
+// ===========================================
+// Global Layer (window, grid, flex, dialog)
+// ===========================================
 @import 'global/window';
 @import 'global/grid';
 @import 'global/flex';
 @import 'global/custom';
 
-.household-dialog {
-  @import 'global/dialog';
-  @import 'components/custom';
+// ===========================================
+// Shared Components (imported once, used everywhere)
+// ===========================================
+@import 'shared/icon-suits';
+@import 'shared/accordion';
+@import 'shared/item-summary';
+@import 'shared/create-button';
+@import 'shared/form-fields';
+@import 'shared/decorum';
+@import 'shared/conditions';
+@import 'shared/nav-tabs';
+@import 'shared/text-editor';
+@import 'shared/characteristic';
+@import 'shared/items-list';
+@import 'shared/scrollbars';
+@import 'shared/stress';
+
+// ===========================================
+// HUD (global scope)
+// ===========================================
+#player-character {
+  @import 'components/hud/hud-layout';
+  @import 'components/hud/hud-header';
+  @import 'components/hud/hud-actions';
+  @import 'components/hud/hud-stats';
+  @import 'components/hud/hud-items';
 }
 
-.dialog-skill-roll {
-  @import 'global/dialog';
-  @import 'components/dialog';
-}
-
-/* Styles limited to household sheets */
-.household {
-  @import 'components/forms';
-  @import 'components/resource';
-  @import 'components/items';
-  @import 'components/effects';
-  @import 'components/custom';
-}
-
-.dialog-skill-roll {
-  @import 'components/dialog';
-}
-
-
-.chat-message {
+// ===========================================
+// Chat (scoped to .flavor-text)
+// ===========================================
+.flavor-text {
   @import 'components/chat';
 }
 
-.sheet.item,
-.sheet.actor {
-  @import 'components/sheets';
+.household-custom-chat .message-content {
+  display: none;
 }
 
+// ===========================================
+// Dialog Scopes
+// ===========================================
+.household-dialog {
+  @import 'global/dialog';
+}
+
+.dialog-skill-roll {
+  @import 'global/dialog';
+  @import 'components/dialog';
+  @import 'dialogs/skill-roll';
+}
+
+// ===========================================
+// Sheet Scopes
+// ===========================================
+.household {
+  @import 'components/forms';
+  @import 'components/effects';
+}
+
+.application.sheet.household.item {
+  @import 'components/itemsheets';
+}
+
+.application.sheet.household.actor.themed.theme-light {
+  @import 'components/actorsheetlight';
+}
+
+.application.sheet.household.npc.themed.theme-light {
+  @import 'components/npcsheetlight';
+}

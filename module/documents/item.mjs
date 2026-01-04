@@ -10,6 +10,27 @@ export class HouseholdItem extends Item {
     // As with the actor class, items are documents that can have their data
     // preparation methods overridden (such as prepareBaseData()).
     super.prepareData();
+    if (this.img.includes('item-bag') ) {
+      if(this.type == "contract") {
+        this.update({'img': 'icons/sundries/documents/document-sealed-red-yellow.webp'})
+      } else if (this.type == "folk") {
+        this.update({'img': 'icons/environment/people/group.webp'})
+      } else if (this.type == "gadget") {
+        this.update({'img': 'icons/tools/instruments/chimes-wood-white.webp'})
+      } else if (this.type == "weapon") {
+        this.update({'img': 'icons/skills/melee/hand-grip-staff-teal.webp'})
+      } else if (this.type == "move") {
+        this.update({'img': 'icons/skills/movement/figure-running-gray.webp'})
+      } else if (this.type == "trait") {
+        this.update({'img': 'icons/skills/trades/academics-investigation-puzzles.webp'})
+      } else if (this.type == "profession") {
+        this.update({'img': 'icons/sundries/scrolls/scroll-bound-ruby-red.webp'})
+      } else if (this.type == "vocation") {
+        this.update({'img': 'icons/sundries/scrolls/scroll-worn-rolled-beige.webp'})
+      } else if (this.type == "companion") {
+        this.update({'img': 'icons/creatures/magical/construct-face-stone-pink.webp'})
+      }
+    }
   }
 
   /**
@@ -66,7 +87,7 @@ export class HouseholdItem extends Item {
           actor: this.actor,
           timestamp: msg.timestamp
         };
-        const html = await renderTemplate("systems/household/templates/chat/skill-show-card.hbs", templateData);
+        const html = await foundry.applications.handlebars.renderTemplate("systems/household/templates/chat/skill-show-card.hbs", templateData);
         msg.update( { flavor: html } );
       });
     }

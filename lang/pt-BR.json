@@ -96,6 +96,12 @@
         "CriticalOpponent": {
             "long": "Oponente Crítico"
         },
+        "DialogTitles": {
+            "RollAbility": "Rolar Habilidade",
+            "RollActions": "Rolar Ação do Oponente",
+            "EditActionTable": "Editar Tabela de Ações",
+            "SelectSkill": "Selecionar Habilidade para Rolar"
+        },
         "Decorum": {
             "Decent": "Decente",
             "Elegant": "Elegante",
@@ -151,7 +157,8 @@
             "long": "Povo"
         },
         "FreeReRoll": {
-            "long": "Re-Rolagem Gratuita"
+            "long": "Re-Rolagem Gratuita",
+            "short": "RG"
         },
         "Gadgets": {
             "long": "Engenhocas"
@@ -343,7 +350,8 @@
     "TYPES": {
         "Actor": {
             "character": "Personagem",
-            "npc": "PNJ"
+            "npc": "PNJ",
+            "opponent": "Opponent"
         },
         "Item": {
             "item": "Item",
@@ -357,5 +365,10 @@
             "companion": "Companheiro",
             "folk": "Povo"
         }
+    },
+     "MESSAGES": {
+        "Gaveup": "A re-rolagem não deu em nada! Você deve desistir de uma combinação.",
+        "Actionroll": "Rolagem de Ação",
+        "RerollOptions": "Opções de Re-Rolagem Gratuita"
     }
 }

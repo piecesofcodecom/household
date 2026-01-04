@@ -1,0 +1,18 @@
+:root {
+  --hh-bg-main: #{$paper-base};
+  --hh-bg-alt: #{$paper-dark};
+  --hh-bg-panel: #{$paper-light};
+  --hh-text-main: #{$text-main};
+  --hh-text-soft: #{$text-soft};
+  --hh-text-faded: #{$text-faded};
+  --hh-border-main: #{$wood-base};
+  --hh-border-strong: #{$wood-dark};
+  --hh-border-soft: #{$linen-line};
+  --hh-accent-gold: #{$accent-gold};
+  --hh-accent-teal: #{$accent-teal};
+  --hh-accent-red: #{$accent-red};
+  --hh-accent-green: #{$accent-green};
+  --hh-accent-brass: #{$accent-brass};
+  --hh-hover: #{$state-hover};
+  --hh-active: #{$state-active};
+}

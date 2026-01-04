@@ -2,4 +2,35 @@
 
     <h3 class="header_og">{{label}}</h3>
     <p>{{description}}</p>
+    {{!-- <h3 class="header_og" style="margin-top: 0; padding-top: 0">Challange</h3> --}}
+    <div class="">
+        <div class="resource flex-group-center" style="margin: 0">
+            <div class="resource-content flexrow flex-center flex-between">
+                {{#when threat 'lteq' 1}}
+                <h4 class="characteristic-description" style="text-align: center; ">{{localize
+                    "HOUSEHOLD.BasicOpponent.long"}}</h4>
+                {{else}}
+                <h4 class="characteristic-description" style="text-align: center; ">{{localize
+                    "HOUSEHOLD.CriticalOpponent.long"}}</h4>
+                {{/when}}
+            </div>
+        </div>
+
+        <div class="resource flex-group-center">
+            <div class="">
+                {{#numLoop 5}}
+                {{#when @root.threat 'gteq' this }}
+                
+                    <i style="font-size: 2.0em; margin: 2px; color: #612877" class="fa-solid fa-spider"></i>
+                
+                {{else}}
+                
+                    <i style="font-size: 2.0em; margin: 2px; color: #612877" class="fa-thin fa-spider"></i>
+                
+                {{/when}}
+
+                {{/numLoop}}
+            </div>
+        </div>
+    </div>
 </div>

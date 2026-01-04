@@ -1,0 +1,13 @@
+{{!-- Sheet Tab Navigation --}}
+<nav class="sheet-tabs tabs custom" data-group="{{tabs.primary.group}}" data-application-part="tabs">
+  {{#each tabs as |tab|}}
+    <a  data-action="tab" class="{{tab.cssClass}}" data-tab="{{tab.id}}" data-group="{{tab.group}}" title="{{localize tab.label}}">
+      {{#if (eq tab.id "general")}}<i class="fa-household-home"></i>{{/if}}
+      {{#if (eq tab.id "others")}}<i class="fa-household-contract"></i>{{/if}}
+      {{#if (eq tab.id "items")}}<i class="fa-household-gear"></i>{{/if}}
+      {{#if (eq tab.id "description")}}<i class="fa-household-memories"></i>{{/if}}
+    </a>
+  {{/each}}
+</nav>
+
+

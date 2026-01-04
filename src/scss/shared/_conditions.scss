@@ -1,0 +1,98 @@
+// Conditions grid and custom radio styles
+.conditions-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto auto;
+  gap: 5px;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 10px;
+  justify-items: center;
+  /* Centraliza os itens horizontalmente */
+  align-items: start;
+  /* Centraliza os itens verticalmente */
+}
+
+.condition-icon {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.condition-icon span {
+  margin-left: 10px;
+}
+
+.condition-icon i {
+  font-size: 20px;
+}
+
+.condition-icon-heart {
+  color: red;
+}
+
+.condition-icon-diamond {
+  color: blue;
+}
+
+.condition-icon-club {
+  color: green;
+}
+
+.condition-icon-spade {
+  color: black;
+}
+
+.custom-condition-radio[type="checkbox"]:checked,
+.custom-condition-radio[type="checkbox"]:not(:checked) {
+  position: absolute;
+  left: -9999px;
+}
+
+.custom-condition-radio[type="checkbox"]:checked+label,
+.custom-condition-radio[type="checkbox"]:not(:checked)+label {
+  position: relative;
+  padding-left: 28px;
+  cursor: pointer;
+  line-height: 20px;
+  color: #666;
+}
+
+.custom-condition-radio[type="checkbox"]:checked+label:before,
+.custom-condition-radio[type="checkbox"]:not(:checked)+label:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 18px;
+  height: 18px;
+  border: 1px solid #ddd;
+  border-radius: 100%;
+  background: #fff;
+}
+
+.custom-condition-radio[type="checkbox"]:checked+label:after,
+.custom-condition-radio[type="checkbox"]:not(:checked)+label:after {
+  content: '';
+  width: 16px;
+  height: 16px;
+  background: #fc055c;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  border-radius: 100%;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+}
+
+.custom-condition-radio[type="checkbox"]:not(:checked)+label:after {
+  opacity: 0;
+  -webkit-transform: scale(0);
+  transform: scale(0);
+}
+
+.custom-condition-radio[type="checkbox"]:checked+label:after {
+  opacity: 1;
+  -webkit-transform: scale(1);
+  transform: scale(1);
+}

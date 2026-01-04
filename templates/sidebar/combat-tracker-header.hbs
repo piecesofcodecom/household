@@ -1,0 +1,168 @@
+<header class="combat-tracker-header">
+  {{#if user.isGM}}
+
+    {{!-- Encounter Controls --}}
+    <nav class="encounters {{ css }}" aria-label="{{ localize 'COMBAT.NavLabel' }}">
+
+      {{!-- Cycle Display --}}
+      {{#if displayCycle}}
+        <button type="button" class="inline-control icon fa-solid fa-plus" data-action="createCombat"
+          data-tooltip aria-label="{{ localize 'COMBAT.Create' }}"></button>
+
+        <div class="cycle-combats">
+          <button type="button" class="inline-control icon fa-solid fa-caret-left" data-action="cycleCombat"
+            {{#if previousId}}data-combat-id="{{ previousId }}" {{else}}disabled{{/if}}
+            data-tooltip aria-label="{{ localize 'COMBAT.EncounterPrevious' }}"></button>
+          <div class="encounter-count">
+            <span class="value">{{ currentIndex }}</span>
+            <span class="separator">&sol;</span>
+            <span class="max">{{ combats.length }}</span>
+          </div>
+          <button type="button" class="inline-control icon fa-solid fa-caret-right" data-action="cycleCombat"
+            {{#if nextId}}data-combat-id="{{ nextId }}" {{else}}disabled{{/if}}
+            data-tooltip aria-label="{{ localize 'COMBAT.EncounterNext' }}"></button>
+        </div>
+
+        <button type="button" class="inline-control icon fa-solid fa-gear" data-action="trackerSettings"
+          data-tooltip aria-label="{{ localize 'COMBAT.Settings' }}"></button>
+
+        {{!-- Tabbed Display --}}
+      {{else if combats.length}}
+        <button type="button" class="inline-control icon fa-solid fa-plus" data-action="createCombat"
+          data-tooltip aria-label="{{ localize 'COMBAT.Create' }}"></button>
+        {{#each combats}}
+          <button type="button" class="inline-control {{#if active}}active{{/if}}" data-action="cycleCombat"
+            data-combat-id="{{ id }}">
+            {{ label }}
+          </button>
+        {{/each}}
+        <button type="button" class="inline-control icon fa-solid fa-gear" data-action="trackerSettings"
+          data-tooltip aria-label="{{ localize 'COMBAT.Settings' }}"></button>
+
+        {{!-- No Combats --}}
+      {{else}}
+        <button type="button" class="combat-control-lg" data-action="createCombat">
+          <i class="fa-solid fa-plus" inert></i>
+          <span>{{ localize 'COMBAT.Create' }}</span>
+        </button>
+
+      {{/if}}
+    </nav>
+  {{/if}}
+
+  {{#if combat.flags.torgeternity.activeCard}}
+    <img src="{{combat.flags.torgeternity.activeCard}}" style="object-fit:contain">
+  {{else}}
+    <img src="{{localize 'torgeternity.combat.dramaBack'}}" style="object-fit:contain">
+  {{/if}}
+  <nav class="encounters flexrow">
+    <button type="button" class="toggleDramatic icon fa-solid {{ifThen isDramatic 'fa-people-robbery' 'fa-person'}}"
+      data-action="toggleDramatic"
+      data-tooltip="<p>{{localize (concat 'torgeternity.dramaCard.' (ifThen isDramatic 'dramatic' 'standard'))}}<p>{{localize 'torgeternity.combat.toggleDramatic'}}"
+      {{disabled (not (and @root.user.isGM combat.turns))}}>
+    </button>
+    {{#if user.isGM}}
+      {{> dramaButtons faction=firstFaction conflict=firstConflict}}
+      {{> dramaButtons faction=secondFaction conflict=secondConflict}}
+    {{/if}}
+    <button type="button" class="dsr-counter" data-action="dsrCounter"
+      {{disabled (not (and @root.user.isGM combat.turns))}}>
+      <span class="dsr-token">
+        <span class="dsr-step">
+          {{#if combat.flags.torgeternity.dsrStage}}
+            {{localize "torgeternity.tokens.step"}}
+          {{else}}
+            {{localize "torgeternity.tokens.noDSR"}}
+          {{/if}}
+        </span>
+        <span class="dsr-step-number">
+          {{#if combat.flags.torgeternity.dsrStage}}
+            &nbsp;{{combat.flags.torgeternity.dsrStage}}
+          {{/if}}
+        </span>
+      </span>
+    </button>
+
+    {{!-- Combat Status --}}
+    <strong class="encounter-title">
+      {{#if combats.length}}
+        {{#if combat.round}}
+          {{ localize "COMBAT.Round" round=combat.round }}
+        {{else}}
+          {{ localize "COMBAT.NotStarted" }}
+        {{/if}}
+      {{else}}
+        {{ localize "COMBAT.None" }}
+      {{/if}}
+    </strong>
+
+    {{!-- Combat Controls --}}
+    <div class="control-buttons right flexrow">
+      <div class="spacer"></div>
+      <button type="button"
+        class="encounter-context-menu inline-control combat-control icon fa-solid fa-ellipsis-vertical"
+        {{#unless (and user.isGM hasCombat)}}disabled{{/unless}}></button>
+    </div>
+  </nav>
+
+  {{!-- {{#*inline "dramaButtons"}}
+    <div class="control-buttons right flexrow drama-{{faction}} {{TorgHidden (eq conflict 'none')}}">
+      <span
+        class="{{TorgHidden (eq conflict 'none')}}">{{localize (concat 'torgeternity.dramaCard.' faction 'Conflict')}}</span>
+      <button type="button"
+        class="ui-control toggle icon fa-solid fa-person-running-fast {{TorgHidden (ne conflict 'flurry')}}"
+        data-action="dramaFlurry"
+        data-tooltip="{{localize 'torgeternity.drama.flurryDesc' faction=(localize (concat 'torgeternity.combat.' faction))}}"
+        data-faction="{{faction}}" {{disabled (not combat.turns)}} />
+      <button type="button"
+        class="ui-control toggle icon fa-solid fa-heart-circle-plus {{TorgHidden (ne conflict 'inspiration')}}"
+        data-action="dramaInspiration"
+        data-tooltip="{{localize 'torgeternity.drama.inspirationDesc' faction=(localize (concat 'torgeternity.combat.' faction))}}"
+        data-faction="{{faction}}" {{disabled (not combat.turns)}} />
+      <button type="button" class="ui-control toggle icon fa-solid fa-up {{TorgHidden (ne conflict 'up')}}"
+        data-action="dramaUp"
+        data-tooltip="{{localize 'torgeternity.drama.upDesc' faction=(localize (concat 'torgeternity.combat.' faction))}}"
+        data-faction="{{faction}}" {{disabled (not combat.turns)}} />
+
+      <button type="button"
+        class="ui-control toggle icon fa-solid fa-face-confused {{TorgHidden (ne conflict 'confused')}}"
+        data-action="dramaConfused"
+        data-tooltip="{{localize 'torgeternity.drama.confusedDesc' faction=(localize (concat 'torgeternity.combat.' faction))}}"
+        data-faction="{{faction}}" {{disabled (not combat.turns)}} />
+      <button type="button"
+        class="ui-control toggle icon fa-solid fa-face-tired {{TorgHidden (ne conflict 'fatigued')}}"
+        data-action="dramaFatigued"
+        data-tooltip="{{localize 'torgeternity.drama.fatiguedDesc' faction=(localize (concat 'torgeternity.combat.' faction))}}"
+        data-faction="{{faction}}" {{disabled (not combat.turns)}} />
+      <button type="button"
+        class="ui-control toggle icon fa-solid fa-stocking {{TorgHidden (ne conflict 'setback')}}"
+        data-action="dramaSetback"
+        data-tooltip="{{localize 'torgeternity.drama.setbackDesc' faction=(localize (concat 'torgeternity.combat.' faction))}}"
+        data-faction="{{faction}}" {{disabled (not combat.turns)}} />
+      <button type="button"
+        class="ui-control toggle icon fa-solid fa-triangle-exclamation {{TorgHidden (ne conflict 'stymied')}}"
+        data-action="dramaStymied"
+        data-tooltip="{{localize 'torgeternity.drama.stymiedDesc' faction=(localize (concat 'torgeternity.combat.' faction))}}"
+        data-faction="{{faction}}" {{disabled (not combat.turns)}} />
+      <button type="button"
+        class="ui-control toggle icon fa-solid fa-water {{TorgHidden (ne conflict 'surge')}}"
+        data-action="dramaSurge"
+        data-tooltip="{{localize 'torgeternity.drama.surgeDesc' faction=(localize (concat 'torgeternity.combat.' faction))}}"
+        data-faction="{{faction}}" {{disabled (not combat.turns)}} />
+    </div>
+  {{/inline}} --}}
+
+  <div class="flexrow">
+    {{#if approvedActions}}
+      <p style="flex: 2">{{localize 'torgeternity.dramaCard.approvedActions'}}: {{approvedActions}}</p>
+    {{/if}}
+    {{#if dsrLine}}
+      <p style="flex: 1">{{localize 'torgeternity.dramaCard.dsrLine'}}: {{dsrLine}}</p>
+    {{/if}}
+  </div>
+  {{#if dramaRule}}
+    <div class="dramaRule">
+      <p>{{localize 'torgeternity.dramaCard.rule'}}: {{{dramaRule}}}</p>
+    </div>
+  {{/if}}
+</header>

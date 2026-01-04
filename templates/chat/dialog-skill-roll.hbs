@@ -1,37 +1,52 @@
 <div class="household dialog-skill-roll" data-actor-id="{{ actor.id }}">
     <div class="skill-details">
+        {{#if skill}}
         <h2 class="skill-name">{{ skill.label }}</h2>
         <input style="display: none" value="{{skill_key}}" id="skill" name="skill" />
         <div class="value-display">
-            <img src="/systems/household/assets/sheet/{{skill.suit}}-filled.svg" alt="{{this}}" />
+            <i class="suit-icon fa-household-{{skill.suit}}-full" alt="{{field}}"></i>
             <span>x{{skill.value}}</span>
         </div>
+        {{else}}
+        <select class="skill-select-dropdown" style="max-width: 160px;">
+            <option value="">{{localize "HOUSEHOLD.DialogTitles.SelectSkill"}}</option>
+            {{#each actor.system.skills as |sk key|}}
+            <option class="skill-option-item" data-key="{{key}}" value="{{key}}">
+                <span class="skill-option-label">{{sk.label}}</span>
+                <!--span class="skill-option-value">x{{sk.value}}</span-->
+            </option>
+            {{/each}}
+
+            <input style="display: none" value="0" id="skill" name="skill" />
+            <div class="value-display">
+                <i class="suit-icon fa-household-none" alt="{{field}}"></i>
+                <span>x0</span>
+            </div>
+            {{/if}}
     </div>
 
-    
+
     <h3 class="characteristic-title-dialog">{{localize "HOUSEHOLD.ChooseField.long" }}</h3>
     <div class="display-fields">
         {{#each fields as |fd key|}}
-            {{#when key 'eq' @root/field}}
-            <input type="radio" class="input-hidden toggle-input field-option field field-{{key}}" data-key="{{key}}"
-                id="choose-{{key}}-{{@root/actor.id}}" name="field" value="{{key}}" checked/>
-            <label class="field-label" for="choose-{{key}}-{{@root/actor.id}}">
-                <img src="/systems/household/assets/sheet/{{fd.suit}}-filled.svg" alt="" />
+        <div>
+            <input type="radio" class="toggle-input field-option field field-{{key}} no-decor" data-key="{{key}}"
+                id="choose-{{key}}-{{@root/id}}" name="field" value="{{key}}" {{#when key 'eq'
+                @root/field}}checked{{/when}} data-tooltip="{{fd.label}}" />
+            <label class="field-label" for="choose-{{key}}-{{@root/id}}" data-tooltip="{{fd.label}}">
                 <span>x{{fd.value}}</span>
             </label>
-            {{else}}
-            <input type="radio" class="input-hidden toggle-input field-option field field-{{key}}" data-key="{{key}}"
-                id="choose-{{key}}-{{@root/actor.id}}" name="field" value="{{key}}" />
-            <label class="field-label" for="choose-{{key}}-{{@root/actor.id}}">
-                <img src="/systems/household/assets/sheet/{{fd.suit}}.svg" alt="" />
-                <span>x{{fd.value}}</span>
-            </label>
-            {{/when}}
+        </div>
         {{/each}}
     </div>
-
+    <h3 class="characteristic-title-dialog">
+        {{ localize "HOUSEHOLD.ApplyModifier.long" }}
+    </h3>
+    <div class="difficulty-container modifier-item">
+        <input class="difficulty-option" data-key="" id="modifier" name="modifier" value="0" readonly="">
+    </div>
     <!-- Collapsible extra Section -->
-    <h3 class="characteristic-title-dialog collapsible-header">
+    {{!-- <h3 class="characteristic-title-dialog collapsible-header">
         Extras
     </h3>
     <div class="collapsible-content" style="display: block;">
@@ -41,29 +56,34 @@
         <div class="difficulty-container">
             <div class="difficulty-item">
                 <h4 class="difficulty-header">Basic</h4>
-                <input id="difficulty-basic" class="difficulty-option option-empty" type="text" data-key="2" data-label="basic" name="basic" placeholder="x0" readonly="">
+                <input id="difficulty-basic" class="difficulty-option option-empty" type="text" data-key="2"
+                    data-label="basic" name="basic" placeholder="x0" readonly="">
             </div>
             <div class="difficulty-item">
                 <h4 class="difficulty-header">Critical</h4>
-                <input id="difficulty-critical" class="difficulty-option option-empty" type="text" data-key="3" data-label="critical" name="critical" value="x0" readonly="">
+                <input id="difficulty-critical" class="difficulty-option option-empty" type="text" data-key="3"
+                    data-label="critical" name="critical" value="x0" readonly="">
             </div>
             <div class="difficulty-item">
                 <h4 class="difficulty-header">Extreme</h4>
-                <input id="difficulty-extreme" class="difficulty-option option-empty" type="text" data-key="4" data-label="extreme" name="extreme" value="x0" readonly="">
+                <input id="difficulty-extreme" class="difficulty-option option-empty" type="text" data-key="4"
+                    data-label="extreme" name="extreme" value="x0" readonly="">
             </div>
             <div class="difficulty-item">
                 <h4 class="difficulty-header">Impossible</h4>
-                <input id="difficulty-impossible" class="difficulty-option option-empty" type="text" data-key="5" data-label="impossible" name="impossible" value="x0" readonly="">
+                <input id="difficulty-impossible" class="difficulty-option option-empty" type="text" data-key="5"
+                    data-label="impossible" name="impossible" value="x0" readonly="">
             </div>
         </div>
 
 
         <h3 class="header_og">
-        {{ localize "HOUSEHOLD.ApplyModifier.long" }}
+            {{ localize "HOUSEHOLD.ApplyModifier.long" }}
         </h3>
-         <div class="difficulty-container modifier-item">
-            <input class="difficulty-option" data-key="" id="modifier" name="modifier"
-                value="0" readonly="">
+        <div class="difficulty-container modifier-item">
+            <input class="difficulty-option" data-key="" id="modifier" name="modifier" value="0" readonly="">
         </div>
-    </div>
+    </div> --}}
 </div>
+
+<!-- new layout for dice display in skill rolls -->

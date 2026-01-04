@@ -55,7 +55,7 @@ export class HouseholdActor extends Actor {
    * Prepare NPC type specific data.
    */
   _prepareNpcData(actorData) {
-    if (actorData.type !== 'npc') return;
+    if (actorData.type !== 'npc' && actorData.type !== 'opponent') return;
 
     // Make modifications to data here. For example:
     const systemData = actorData.system;
@@ -95,7 +95,7 @@ export class HouseholdActor extends Actor {
    * Prepare NPC roll data.
    */
   _getNpcRollData(data) {
-    if (this.type !== 'npc') return;
+    if (this.type !== 'npc' && this.type !== "opponent") return;
 
     // Process additional NPC data here.
   }
@@ -126,9 +126,10 @@ export class HouseholdActor extends Actor {
     }
     const templateData = {
       label: "Action " + roman[action],
-      description: this.system.actions[`action_${action}`]
+      description: this.system.actions[`action_${action}`],
+      threat: this.system.threat.level
     }
-    return await renderTemplate("systems/household/templates/chat/action-show-card.hbs", templateData);
+    return await foundry.applications.handlebars.renderTemplate("systems/household/templates/chat/action-show-card.hbs", templateData);
 
   }
 
@@ -191,7 +192,7 @@ export class HouseholdActor extends Actor {
     }
     return dice_to_chat;
   }
-  async _sendToChat(roll, field, skill, mod, poll_difficulty, dice_poll, success_poll, outcome, is_reroll, is_allin, is_jackpot, allow_reroll, allow_allin, give_up, message_id = 0) {
+  async _sendToChat(roll, field, skill, mod, poll_difficulty, dice_poll, success_poll, outcome, is_reroll, is_allin, is_jackpot, allow_reroll, allow_free_reroll, allow_allin, give_up, message_id = 0) {
     //face=dice.face locked=dice.locked success=dice.success
 
     const dice = this.preparediceToChat(dice_poll);
@@ -200,6 +201,7 @@ export class HouseholdActor extends Actor {
     if (is_allin) {
       allow_allin = 0;
       allow_reroll = 0;
+      allow_free_reroll = 0;
     }
 
     // if there is no remaining dice, no buttons
@@ -215,6 +217,10 @@ export class HouseholdActor extends Actor {
       allow_allin = allow_reroll = 0;
     }
 
+    const free_roll_items = this.items.filter(el => el.system.free_reroll == true);
+
+    
+    
     const templateData = {
       ability: capitalizeFirstLetter(skill),
       skill: skill,
@@ -228,20 +234,24 @@ export class HouseholdActor extends Actor {
       poll_success: JSON.stringify(success_poll),
       successes: successes,
       reroll: allow_reroll ? 1 : 0,
+      free_reroll: allow_free_reroll ? 1 : 0,
       allin: allow_allin ? 1 : 0,
       reroll_message: is_reroll ? "Reroll" : "Rolling",
       give_up: give_up ? "give_up" : "",
       give_up_face: 0,
-      outcome: give_up ? "LostSuccess" : outcome
+      outcome: give_up ? "LostSuccess" : outcome,
+      message_id: message_id || "MESSAGEID",
+      free_roll_items: free_roll_items
     };
-    const html = await renderTemplate("systems/household/templates/chat/skill-roll-card.hbs", templateData);
+    const html = await foundry.applications.handlebars.renderTemplate("systems/household/templates/chat/skill-roll-card.hbs", templateData);
     if (message_id) {
       await game.dice3d.showForRoll(roll, game.user, true);
       //roll.render();
       const chatMessage = game.messages.get(message_id);
-      const updatedHtml = html.replace(/data-message-id="MESSAGEID"/g, `data-message-id="${message_id}"`);
+      
+      
       await chatMessage.update({
-        flavor: updatedHtml
+        flavor: html
       });
     } else {
       let message = await roll.toMessage({
@@ -249,9 +259,15 @@ export class HouseholdActor extends Actor {
         flavor: html,
         rollMode: game.settings.get('core', 'rollMode'),
         flags: {
-          customCss: true // Add your CSS class here
+          household: {
+            customCss: true
+          }
         }
       })
+      const updatedHtml = html.replace(/data-message-id="MESSAGEID"/g, `data-message-id="${message_id}"`);
+      await message.update({
+        flavor: updatedHtml
+      });
       // const messageId = message.id;
       // const updatedHtml = html.replace(/data-message-id="MESSAGEID"/g, `data-message-id="${messageId}"`);
 
@@ -364,6 +380,10 @@ export class HouseholdActor extends Actor {
     const normilized_jackpot = 81;
     let allow_allin = true;
     let allow_reroll = true;
+    let allow_free_reroll = true;
+    if (is_free_reroll || is_reroll || is_allin) {
+      allow_free_reroll = false;
+    }
     let transformed_poll_result = {
       '1': 0,
       '2': 0,
@@ -470,6 +490,7 @@ export class HouseholdActor extends Actor {
       is_allin,
       is_jackpot,
       allow_reroll,
+      allow_free_reroll,
       allow_allin,
       give_up,
       message_id
@@ -481,19 +502,28 @@ export class HouseholdActor extends Actor {
   async dialogRollSkill(dataset) {
     let guess;
     const actor = this; //getActor(this.dataset.characterId);
+    
     const skill = actor.system.skills[dataset.key];
-    skill.label = game.i18n.localize(CONFIG.HOUSEHOLD.skills[dataset.key])
+    if (dataset.key && skill) {
+      
+      skill.label = game.i18n.localize(CONFIG.HOUSEHOLD.skills[dataset.key])
+    }
+    const fields = actor.system.fields;
+    for (const [k, v] of Object.entries(fields)) {
+      v.label = game.i18n.localize(CONFIG.HOUSEHOLD.fields[k]) ?? k;
+    }
     const templateData = {
       ability: dataset.label,
       skill: skill,
       skill_key: dataset.key,
-      fields: actor.system.fields,
+      fields: fields,
       key: dataset.key,
       field: dataset.field,
       actor: actor,
       //timestamp: msg.timestamp
     };
-    const html = await renderTemplate("systems/household/templates/chat/dialog-skill-roll.hbs", templateData);
+    
+    const html = await foundry.applications.handlebars.renderTemplate("systems/household/templates/chat/dialog-skill-roll.hbs", templateData);
   
     const dialog = await foundry.applications.api.DialogV2.wait({
       window: { title: "Roll" },
@@ -505,25 +535,30 @@ export class HouseholdActor extends Actor {
         label: "HOUSEHOLD.RollAbility.long",
         default: true,
         callback: (event, button, dialog) => {
+          const modifier_value = button.form.elements.modifier?.value ? button.form.elements.modifier.value : "0";
+          const basic_value = button.form.elements.basic?.value ? button.form.elements.basic.value : "0";
+          const critical_value = button.form.elements.critical?.value ? button.form.elements.critical.value : "0";
+          const extreme_value = button.form.elements.extreme?.value ? button.form.elements.extreme.value : "0";
+          const impossible_value = button.form.elements.impossible?.value ? button.form.elements.impossible.value : "0";
           const data = {
             field: button.form.elements.field.value,
             skill: button.form.elements.skill.value,
-            modifier: button.form.elements.modifier.value,
+            modifier: modifier_value,
             diff: {
-              '2': button.form.elements.basic.value,
-              '3': button.form.elements.critical.value,
-              '4': button.form.elements.extreme.value,
-              '5': button.form.elements.impossible.value
+              '2': basic_value,
+              '3': critical_value,
+              '4': extreme_value,
+              '5': impossible_value
             }
           }
           actor.onSkillRoll(
             button.form.elements.field.value,
             button.form.elements.skill.value,
-            button.form.elements.modifier.value, {
-            '2': button.form.elements.basic.value.replace("x", ""),
-            '3': button.form.elements.critical.value.replace("x", ""),
-            '4': button.form.elements.extreme.value.replace("x", ""),
-            '5': button.form.elements.impossible.value.replace("x", "")
+            modifier_value, {
+            '2': basic_value.replace("x", ""),
+            '3': critical_value.replace("x", ""),
+            '4': extreme_value.replace("x", ""),
+            '5': impossible_value.replace("x", "")
           })
         }
       }],
@@ -595,6 +630,27 @@ export class HouseholdActor extends Actor {
         $html.find('.difficulty-item').on('contextmenu', function (event) {
             event.preventDefault();
         });
+
+        $html.find(".skill-select-dropdown").on("change", (event) => {
+          
+          const selectedSkill = event.currentTarget.value; // Get the selected skill key
+          const input_skill = $html.find('#skill'); // Find the hidden input for skill
+          const icon_img = $html.find('.suit-icon'); // Find the icon image element
+          if (input_skill.length > 0) {
+            
+            input_skill.val(selectedSkill); // Update the hidden input value
+            const skill_data = actor.system.skills[selectedSkill];
+            if (skill_data) {
+              const suit = skill_data.suit;
+              const value = skill_data.value;
+              
+              $html.find('.value-display span').text(`x${value}`); // Update the skill value display
+              
+              icon_img.attr("class", `suit-icon fa-household-${suit}-full`);
+            }
+          }
+
+        });
   
         $html.find(".toggle-input").on("change", (event) => {
           const selectedInputId = event.target.id; // Get the ID of the selected input
@@ -610,7 +666,7 @@ export class HouseholdActor extends Actor {
                       // Update the image based on whether this input is checked
                       if (input.id === selectedInputId) {
                           if(!currentSrc.includes('-filled'))
-                            img.attr("src", currentSrc.replace('.svg', '-filled.svg')); // Set checked image for selected input
+                            img.attr("src", currentSrc.replace('.png', '-filled.png')); // Set checked image for selected input
                       } else {
                           img.attr("src", currentSrc.replace('-filled','')); // Reset image for other inputs
                       }
@@ -626,13 +682,14 @@ export class HouseholdActor extends Actor {
   toggleCondition(path) {
     const condition_value = path.split('.').reduce((acc, part) => acc && acc[part], this);
     const  condition_name = path.split('.').pop();
+    const actor = this;
     let messageContent = game.i18n.localize('HOUSEHOLD.ConditionToggleMessage');
     messageContent = messageContent.replace("{condition}", game.i18n.localize('HOUSEHOLD.Conditions.' + condition_name.charAt(0).toUpperCase() + condition_name.slice(1)));
     messageContent = messageContent.replace("{status}", !Boolean(condition_value) ? game.i18n.localize('HOUSEHOLD.Conditions.On') : game.i18n.localize('HOUSEHOLD.Conditions.Off'))
     ChatMessage.create({
       user: game.user.id, // The ID of the current user sending the message
       flavor: messageContent, // The message content
-      speaker: ChatMessage.getSpeaker() // Automatically sets the speaker as the current user or token
+      speaker: ChatMessage.getSpeaker({ actor }) // Automatically sets the speaker as the current user or token
     });
     this.update({ [path]: !Boolean(condition_value) })
   }

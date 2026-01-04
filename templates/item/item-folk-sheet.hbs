@@ -1,37 +1,47 @@
-<form class="{{cssClass}}" autocomplete="off">
+<div class="item-sheet">
   <header class="sheet-header">
-    <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" />
+    <img class="profile-img" src="{{item.img}}" data-action="editImage" data-field="img" title="{{item.name}}" />
     <div class="header-fields">
-      <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="Name" /></h1>
-      <div class="grid ">
+      <input class="item-name" name="name" type="text" value="{{item.name}}" placeholder="Name" data-dtype="String"/>
+      <div class="grid grid-2col">
         <div class="resource">
            <label class="resource-label">{{localize "HOUSEHOLD.Contract.long"}}</label>
           <input type="text" name="system.contract" value="{{system.contract}}" data-dtype="String" placeholder="{{localize 'HOUSEHOLD.Placeholders.Contract'}}" />
       </div>
+      <div style="display: flex; align-items: center;">
+          <input class="resource-checkbox" id="{{item._id}}-free-reroll" type="checkbox" name="system.free_reroll"
+            value="{{system.free_reroll}}" data-dtype="Boolean" {{#if system.free_reroll}}checked{{/if}} />
+          <label for="{{item._id}}-free-reroll" class="resource-label">{{localize "HOUSEHOLD.FreeReRoll.long"}}</label>
+        </div>
     </div>
     </div>
   </header>
 
   {{!-- Sheet Tab Navigation --}}
   <nav class="sheet-tabs tabs" data-group="primary">
-    <a class="item" data-tab="description">{{localize "HOUSEHOLD.SheetLabels.Description"}}</a>
+    <a class="item" data-action="tab" data-tab="description" data-group="primary">{{localize "HOUSEHOLD.SheetLabels.Description"}}</a>
   </nav>
 
   {{!-- Sheet Body --}}
   <section class="sheet-body">
     {{!-- Description Tab --}}
-    <div class="tab" data-group="primary" data-tab="description">
-      {{editor
-        item.system.description
-        target='system.description'
-        button=true
-        editable=editable
-        engine='prosemirror'
-      }}
+    <div class="tab {{tabs.description.cssClass}}" data-group="primary" data-tab="description">
+       <div class="text-editor" style="height: 270px;">
+      {{#if editable}}
+        <prose-mirror
+          name="system.description"
+          button="true"
+          editable="{{editable}}"
+          toggled="false"
+          value="{{system.description}}">
+          {{{descriptionHTML}}}
+        </prose-mirror>
+      {{else}}
+        {{{descriptionHTML}}}
+      {{/if}}
+      </div>
     </div>
-    
   </section>
-</form>
-
+</div>
 
 {{log system}}

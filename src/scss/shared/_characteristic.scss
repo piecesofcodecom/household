@@ -1,0 +1,56 @@
+// Characteristic title with decorative element
+.characteristic-title {
+  font-family: 'LHF_Encore', Beau Rivage, cursive;
+  font-size: 1.6em;
+  font-weight: 500 !important;
+  text-transform: capitalize;
+  border: none;
+  font-weight: bold;
+  text-align: center;
+  color: var(--hh-accent-gold);
+}
+
+.characteristic-description {
+  font-family: 'LHF_Encore', Beau Rivage, cursive;
+  font-size: 1.6em;
+  font-weight: 100;
+  text-transform: capitalize;
+  border: none;
+  text-align: center;
+  color: black;
+}
+
+.characteristic-title:after {
+  content: "";
+  display: block;
+  background-image: url(/systems/household/assets/sheet/deco1.svg);
+  /*background-size: 350px, auto;*/
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  height: 20px;
+  margin-bottom: 10px;
+  background-size: contain;
+  filter: invert(53%) sepia(51%) saturate(575%) hue-rotate(5deg) brightness(97%) contrast(92%);
+}
+
+.field-title {
+  font-family: 'LHF_Encore', Beau Rivage, cursive;
+  font-size: 1.4em;
+  font-weight: 500;
+  text-transform: capitalize;
+  color: var(--hh-accent-gold);
+}
+
+.field-title:after {
+  content: "";
+  display: block;
+  background-image: url(/systems/household/assets/sheet/deco2.svg);
+  /*background-size: 200px, auto;*/
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 16px;
+  background-size: contain;
+  filter: invert(53%) sepia(51%) saturate(575%) hue-rotate(5deg) brightness(97%) contrast(92%);
+  margin-top: 5px;
+
+}

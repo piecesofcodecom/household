@@ -104,6 +104,12 @@
             "Uncouth": "Uncouth",
             "long": "Decorum"
         },
+        "DialogTitles": {
+            "RollAbility": "Roll Ability",
+            "RollActions": "Roll Opponent Action",
+            "EditActionTable": "Edit Action Table",
+            "SelectSkill": "Select Skill to Roll"
+        },
         "Difficulty": {
             "long": "Difficulty"
         },
@@ -151,7 +157,8 @@
             "long": "Folk"
         },
         "FreeReRoll": {
-            "long": "Free Re-Roll"
+            "long": "Free Re-Roll",
+            "short": "FR"
         },
         "Gadgets": {
             "long": "Gadgets"
@@ -313,7 +320,8 @@
             },
             "long": "Skill"
         },
-        "stats": "Abilities",
+        "stats": "Stats",
+        "skills": "Abilities",
         "Stress": {
             "long": "Stress"
         },
@@ -343,7 +351,8 @@
     "TYPES": {
         "Actor": {
             "character": "Character",
-            "npc": "NPC"
+            "npc": "NPC",
+            "opponent": "Opponent"
         },
         "Item": {
             "item": "Item",
@@ -357,5 +366,14 @@
             "companion": "Companion",
             "folk": "Folk"
         }
+    },
+    "MESSAGES": {
+        "Gaveup": "The reroll gave nothing! You must give up a combination.",
+        "Actionroll": "Action Roll",
+        "Stress": {
+            "Reduce": "Reduce stress",
+            "Increase": "Increase stress"
+        },
+        "RerollOptions": "Free Re-roll Options"
     }
 }

@@ -1,4 +1,5 @@
 .window-app {
+  background: none;
   font-family: $font-primary;
 }
 
@@ -6,7 +7,15 @@
   &:hover,
   &:focus {
     color: #000;
-    text-shadow: 0 0 10px red;
+    text-shadow: 0 0 10px var(--hh-accent-gold);
     cursor: pointer;
   }
+}
+
+.window-content {
+    background: none;
+}
+
+.input-hidden {
+  display: none;
 }

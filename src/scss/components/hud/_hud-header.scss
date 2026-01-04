@@ -1,0 +1,178 @@
+// HUD character header section - avatar, name, folk, profession
+.character-actions .icon-button {
+  padding: 2px;
+  border: 1px solid gray;
+  border-radius: 0.25rem;
+  width: 24px;
+  text-align: center;
+}
+
+.character-actions .icon-button:hover {
+  color: #d72240;
+  border-color: #d72240;
+}
+
+.character-info a:hover {
+  text-shadow: 0 0 8px var(--gold-toasted);
+}
+
+.character-info textarea:focus {
+  outline: none;
+  box-shadow: 0 0 10px var(--gold-toasted);
+}
+
+.character-info ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(0, 0, 0, 0.2);
+}
+
+.character-info ::-webkit-scrollbar-thumb:hover {
+  background: var(--gold-toasted);
+  border-color: var(--gold-toasted);
+}
+
+.character-info .ve-window {
+  background: none;
+}
+
+.npc-picture {
+  width: 150px;
+  height: 150px;
+  /*background: var(--gold-gradient);*/
+  /*border: 1px solid black;*/
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.6), 1 0 0 rgba(255, 255, 255, 0.4) inset;
+  border-radius: 50%;
+  position: relative;
+  margin: 1em;
+  z-index: 10;
+}
+
+.npc-picture img {
+  background-size: cover;
+  width: 90px;
+  height: 90px;
+  margin-top: 4px;
+  margin-left: 4px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.npc-picture .sheet {
+  opacity: 0;
+}
+
+.npc-picture:hover .sheet {
+  opacity: 1;
+  height: 100px;
+  width: 100px;
+  border-radius: 50%;
+  top: 0;
+  left: 0;
+  position: absolute;
+  background: rgba(0, 0, 0, 0.7);
+  text-align: center;
+  line-height: 100px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.character-picture {
+  width: 120px;
+  height: 120px;
+  /*background: var(--gold-gradient);*/
+  /*border: 1px solid black;*/
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.6), 1 0 0 rgba(255, 255, 255, 0.4) inset;
+  border-radius: 50%;
+  position: relative;
+  margin: 1em;
+  z-index: 10;
+}
+
+.character-picture .sheet {
+  opacity: 0;
+}
+
+.character-picture:hover .sheet {
+  opacity: 1;
+  height: 90px;
+  width: 90px;
+  border-radius: 50%;
+  top: 15px;
+  left: 15px;
+  position: absolute;
+  background: rgba(0, 0, 0, 0.7);
+  text-align: center;
+  line-height: 100px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.character-level {
+  position: absolute;
+  bottom: 10px;
+  //left: calc(50% - 23px);
+  z-index: 10;
+}
+
+.npc-level {
+  position: absolute;
+  /*bottom: 20px;*/
+  top: calc(50% + 45px);
+  //left: calc(50% - 19px);
+  left: calc(50% - 32px);
+  z-index: 10;
+}
+
+
+.character-level-badge {
+  /*height: 26px;
+  position: absolute;*/
+  z-index: 4;
+}
+
+.character-level-badge::before {
+  content: ' ';
+  height: 18.5px;
+  width: 39.5px;
+  position: absolute;
+  bottom: 2.75px;
+  left: 2.75px;
+}
+
+.character-level span {
+  display: block;
+  background-color: black;
+  padding-right: 5px;
+  padding-left: 5px;
+  line-height: 26px;
+  text-align: center;
+  z-index: 5;
+  position: relative;
+  font-weight: bold;
+}
+
+.character-info {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.character-name {
+  font-size: 1.7em;
+  font-weight: bold;
+  text-align: center;
+  text-shadow: 0 0 5px var(--text-shadow);
+}
+
+.character-race-class {
+  font-weight: bold;
+  font-style: italic;
+  text-align: center;
+  text-shadow: 0 0 5px var(--text-shadow);
+}
+
+.character-info-top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

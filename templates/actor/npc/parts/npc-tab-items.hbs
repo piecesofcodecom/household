@@ -1,0 +1,20 @@
+<section class="tab {{tabs.items.cssClass}}" data-tab="{{tabs.items.id}}" data-group="{{tabs.items.group}}">
+  <h2 class="characteristic-title" style="margin:0">{{localize "HOUSEHOLD.SheetLabels.General"}}
+    <button class="create-item-circle" data-action="itemCreate" data-type="item"></button>
+  </h2>
+  <div style="height: 76px; overflow: auto">
+    {{> "systems/household/templates/actor/char/parts/actor-list-items.hbs" items=gear type='item'}}
+  </div>
+  <h2 class="characteristic-title" style="margin:0">{{localize "HOUSEHOLD.Weapons.long"}}
+    <button class="create-item-circle" data-action="itemCreate" data-type="weapon"></button>
+  </h2>
+  <div style="height: 76px; overflow: auto">
+    {{> "systems/household/templates/actor/char/parts/actor-list-items.hbs" items=weapons type='weapon'}}
+  </div>
+  <h2 class="characteristic-title" style="margin:0">{{localize "HOUSEHOLD.Gadgets.long"}}
+      <button class="create-item-circle" data-action="itemCreate" data-type="gadget"></button>
+  </h2>
+  <div style="height: 76px; overflow: auto">
+    {{> "systems/household/templates/actor/char/parts/actor-list-items.hbs" items=gadgets type='gadget'}}
+  </div>
+</section>

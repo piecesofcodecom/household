@@ -3,10 +3,16 @@ import { HouseholdActor } from './documents/actor.mjs';
 import { HouseholdItem } from './documents/item.mjs';
 // Import sheet classes.
 import { HouseholdActorSheet } from './sheets/actor-sheet.mjs';
+import { HouseholdNPCActorSheet } from './sheets/actor-npc-sheet.mjs';
 import { HouseholdItemSheet } from './sheets/item-sheet.mjs';
 // Import helper/utility classes and constants.
 import { preloadHandlebarsTemplates } from './helpers/templates.mjs';
 import { HOUSEHOLD } from './helpers/config.mjs';
+
+import { HouseholdCombat } from "./combat/HouseholdCombat.mjs";
+import { HouseholdCombatant } from "./combat/HouseholdCombatant.mjs";
+import { HouseholdCombatTracker } from "./combat/HouseholdCombatTracker.mjs";
+import { showHouseholdTurnOverlay } from "./combat/overlay.mjs";
 
 import {
   getCharacter,
@@ -14,6 +20,7 @@ import {
 } from "./sheets/actor-hud.mjs";
 import * as actions from "./helpers/actions.mjs";
 import { isGm, capitalizeFirstLetter, skills_list } from "./helpers/utils.mjs";
+import { move } from 'fs-extra';
 
 function preparediceToChat(dice_poll, cancel_face = 0) {
   const success_label = {
@@ -42,8 +49,28 @@ function preparediceToChat(dice_poll, cancel_face = 0) {
 /* -------------------------------------------- */
 /*  Init Hook                                   */
 /* -------------------------------------------- */
- 
+
 Hooks.once('init', async function () {
+  CONFIG.Actor.documentClass = HouseholdActor;
+  CONFIG.Item.documentClass = HouseholdItem;
+  // Unregister old sheets if needed
+  foundry.documents.collections.Actors.unregisterSheet("household", foundry.applications.sheets.ActorSheet);
+  // Register your new V2 sheet
+  foundry.documents.collections.Actors.registerSheet("household", HouseholdActorSheet, {
+    types: ["character"], // whatever actor types you support
+    makeDefault: true,
+    label: "HOUSEHOLD.SheetLabels.Actor"
+  });
+  foundry.documents.collections.Actors.registerSheet("household", HouseholdNPCActorSheet, {
+    types: ["npc", "opponent"], // whatever actor types you support
+    makeDefault: true,
+    label: "HOUSEHOLD.SheetLabels.Actor"
+  });
+  foundry.documents.collections.Items.registerSheet("household", HouseholdItemSheet, {
+    types: ["item", "weapon", "gadget", "move", "contract", "trait", "folk", "companion", "profession", "vocation"], // all your item types
+    makeDefault: true,
+    label: "HOUSEHOLD.SheetLabels.Item"
+  });
   // Add utility classes to the global game object so that they're more easily
   // accessible in global contexts.
   game.household = {
@@ -52,11 +79,13 @@ Hooks.once('init', async function () {
     rollItemMacro,
   };
 
+
+
   $("body.game").append('<div id="player-character"></div>');
   $("body.game").append('<div id="party"></div>');
 
   // await loadTemplates([
-    
+
   // ]);
 
   //activatePlayerListeners();
@@ -73,31 +102,38 @@ Hooks.once('init', async function () {
    * Set an initiative formula for the system
    * @type {String}
    */
-  CONFIG.Combat.initiative = {
-    formula: '1d20',
-    decimals: 2,
-  };
+  // CONFIG.Combat.initiative = {
+  //   formula: '1d20',
+  //   decimals: 2,
+  // };
+
+  // --------combats
+  CONFIG.Combat.initiative.formula = '1';
+  CONFIG.Combat.documentClass = HouseholdCombat;
+  CONFIG.ui.combat = HouseholdCombatTracker;
+  CONFIG.Combatant.documentClass = HouseholdCombatant;
+
 
   // Define custom Document classes
-  CONFIG.Actor.documentClass = HouseholdActor;
-  CONFIG.Item.documentClass = HouseholdItem;
+  // CONFIG.Actor.documentClass = HouseholdActor;
+  // CONFIG.Item.documentClass = HouseholdItem;
 
   // Active Effects are never copied to the Actor,
   // but will still apply to the Actor from within the Item
   // if the transfer property on the Active Effect is true.
   CONFIG.ActiveEffect.legacyTransferral = false;
 
-  // Register sheet application classes
-  Actors.unregisterSheet('core', ActorSheet);
-  Actors.registerSheet('household', HouseholdActorSheet, {
-    makeDefault: true,
-    label: 'HOUSEHOLD.SheetLabels.Actor',
-  });
-  Items.unregisterSheet('core', ItemSheet);
-  Items.registerSheet('household', HouseholdItemSheet, {
-    makeDefault: true,
-    label: 'HOUSEHOLD.SheetLabels.Item',
-  });
+  // Register sheet application classes V1
+  // foundry.documents.collections.Actors.unregisterSheet('core', foundry.appv1.sheets.ActorSheet);
+  // foundry.documents.collections.Actors.registerSheet('household', HouseholdActorSheet, {
+  //   makeDefault: true,
+  //   label: 'HOUSEHOLD.SheetLabels.Actor',
+  // });
+  // foundry.documents.collections.Items.unregisterSheet('core', foundry.appv1.sheets.ItemSheet);
+  // foundry.documents.collections.Items.registerSheet('household', HouseholdItemSheet, {
+  //   makeDefault: true,
+  //   label: 'HOUSEHOLD.SheetLabels.Item',
+  // });
 
   // Preload Handlebars templates.
   return preloadHandlebarsTemplates();
@@ -106,12 +142,22 @@ Hooks.once('init', async function () {
 /* -------------------------------------------- */
 /*  Handlebars Helpers                          */
 /* -------------------------------------------- */
+Handlebars.registerHelper('ifEquals', function (arg1, arg2, options) {
+  return (arg1 === arg2) ? options.fn(this) : options.inverse(this);
+});
+
 Handlebars.registerHelper("range", function (n, block) {
   let accum = "";
   for (let i = 0; i < n; ++i) {
     accum += block.fn(i);
   }
   return accum;
+});
+Handlebars.registerHelper("last", function (array) {
+  if (!Array.isArray(array) || array.length === 0) {
+    return null;
+  }
+  return array[array.length - 1];
 });
 // If you need to add Handlebars helpers, here is a useful example:
 Handlebars.registerHelper('toLowerCase', function (str) {
@@ -125,73 +171,77 @@ Handlebars.registerHelper('doCheck', function (data) {
 
 Handlebars.registerHelper('getSuitFromField', function (raw_data) {
   const field = raw_data.trim().toLowerCase();
-  if(field === 'society' || field === 'heart') return 'heart';
-  if(field === 'academia' || field === 'diamond') return 'diamond';
-  if(field === 'war' || field === 'club') return 'club';
-  if(field === 'street' || field === 'spade') return 'spade';
+  if (field === 'society' || field === 'heart') return 'heart';
+  if (field === 'academia' || field === 'diamond') return 'diamond';
+  if (field === 'war' || field === 'club') return 'club';
+  if (field === 'street' || field === 'spade') return 'spade';
   return "empty-set";
 });
 
 Handlebars.registerHelper('getWeaponTypeIcon', function (raw_data) {
   const type = raw_data.trim().toLowerCase();
-  if(type.includes('melee')) return 'fa-hand-back-fist';
-  if(type.includes('ranged')) return 'fa-bullseye';
-  if(type.includes('dueling')) return 'fa-swords';
+  if (type.includes('melee')) return 'fa-hand-back-fist';
+  if (type.includes('ranged')) return 'fa-bullseye';
+  if (type.includes('dueling')) return 'fa-swords';
   return "empty-set";
 });
 
 
 Handlebars.registerHelper('getFieldColor', function (raw_data) {
   const field = raw_data.trim().toLowerCase();
-  if(field === 'society' || field === 'heart' || skills_list["society"].includes(field)) return '#fd5c63';
-  if(field === 'academia' || field === 'diamond' || skills_list["academia"].includes(field)) return '#7CB9E8';
-  if(field === 'war' || field === 'club' || skills_list["war"].includes(field)) return '#32de84';
-  if(field === 'street' || field === 'spade' || skills_list["street"].includes(field)) return '#343434';
+  if (field === 'society' || field === 'heart' || skills_list["society"].includes(field)) return '#fd5c63';
+  if (field === 'academia' || field === 'diamond' || skills_list["academia"].includes(field)) return '#7CB9E8';
+  if (field === 'war' || field === 'club' || skills_list["war"].includes(field)) return '#32de84';
+  if (field === 'street' || field === 'spade' || skills_list["street"].includes(field)) return '#343434';
   return "#343434";
 });
 
 Handlebars.registerHelper('doCheckIf', function (operand_1, operator, operand_2) {
-  
+
   let operators = {                     //  {{#when <operand1> 'eq' <operand2>}}
-    'eq': (l,r) => l == r,              //  {{/when}}
-    'noteq': (l,r) => l != r,
-    'gt': (l,r) => (+l) > (+r),                        // {{#when var1 'eq' var2}}
-    'gteq': (l,r) => ((+l) > (+r)) || (l == r),        //               eq
-    'lt': (l,r) => (+l) < (+r),                        // {{else when var1 'gt' var2}}
-    'lteq': (l,r) => ((+l) < (+r)) || (l == r),        //               gt
-    'or': (l,r) => l || r,                             // {{else}}
-    'and': (l,r) => l && r,                            //               lt
-    '%': (l,r) => (l % r) === 0,
-    'in': (l,r) => r.split(',').includes(l)                        // {{/when}
+    'eq': (l, r) => l == r,              //  {{/when}}
+    'noteq': (l, r) => l != r,
+    'gt': (l, r) => (+l) > (+r),                        // {{#when var1 'eq' var2}}
+    'gteq': (l, r) => ((+l) > (+r)) || (l == r),        //               eq
+    'lt': (l, r) => (+l) < (+r),                        // {{else when var1 'gt' var2}}
+    'lteq': (l, r) => ((+l) < (+r)) || (l == r),        //               gt
+    'or': (l, r) => l || r,                             // {{else}}
+    'and': (l, r) => l && r,                            //               lt
+    '%': (l, r) => (l % r) === 0,
+    'in': (l, r) => r.split(',').includes(l)                        // {{/when}
   }
-  
-  let result = operators[operator](operand_1,operand_2);
-  if(result) return "checked";
+
+  let result = operators[operator](operand_1, operand_2);
+  if (result) return "checked";
   return "";
 });
 
 
 Handlebars.registerHelper('reduceBy', function (value, rd) {
-  return Number(value)-Number(rd);
+  return Number(value) - Number(rd);
 });
 
-Handlebars.registerHelper("multipleOf", function(value, multipler, options) {
+Handlebars.registerHelper('increaseBy', function (value, rd) {
+  return Number(value) + Number(rd);
+});
+
+Handlebars.registerHelper("multipleOf", function (value, multipler, options) {
   if ((Number(value) % Number(multipler)) == 0) {
     return options.fn(this);
   }
   return options.inverse(this);
 });
 
-Handlebars.registerHelper('stressPercentage', function(stress) {
+Handlebars.registerHelper('stressPercentage', function (stress) {
   if (!stress || stress.max === 0) {
     return 1;
   }
-  
-  const percentage = 1- ((stress.max - stress.current) / stress.max);
+
+  const percentage = 1 - ((stress.max - stress.current) / stress.max);
   return percentage; // Clamping the value between 0 and 100
 });
 
-Handlebars.registerHelper('getOpacyDecorum', function(decorum) {
+Handlebars.registerHelper('getOpacyDecorum', function (decorum) {
   // Example logic: adjust as needed
 
   if (decorum == 1) {
@@ -211,23 +261,23 @@ Handlebars.registerHelper('getOpacyDecorum', function(decorum) {
   }
 });
 
-Handlebars.registerHelper("when", function(operand_1, operator, operand_2, options) {
+Handlebars.registerHelper("when", function (operand_1, operator, operand_2, options) {
   let operators = {                     //  {{#when <operand1> 'eq' <operand2>}}
-    'eq': (l,r) => l == r,              //  {{/when}}
-    'noteq': (l,r) => l != r,
-    'gt': (l,r) => (+l) > (+r),                        // {{#when var1 'eq' var2}}
-    'gteq': (l,r) => ((+l) > (+r)) || (l == r),        //               eq
-    'lt': (l,r) => (+l) < (+r),                        // {{else when var1 'gt' var2}}
-    'lteq': (l,r) => ((+l) < (+r)) || (l == r),        //               gt
-    'or': (l,r) => l || r,                             // {{else}}
-    'and': (l,r) => l && r,                            //               lt
-    '%': (l,r) => (l % r) === 0,
-    'in': (l,r) => r.split(',').includes(String(l))                          // {{/when}}
+    'eq': (l, r) => l == r,              //  {{/when}}
+    'noteq': (l, r) => l != r,
+    'gt': (l, r) => (+l) > (+r),                        // {{#when var1 'eq' var2}}
+    'gteq': (l, r) => ((+l) > (+r)) || (l == r),        //               eq
+    'lt': (l, r) => (+l) < (+r),                        // {{else when var1 'gt' var2}}
+    'lteq': (l, r) => ((+l) < (+r)) || (l == r),        //               gt
+    'or': (l, r) => l || r,                             // {{else}}
+    'and': (l, r) => l && r,                            //               lt
+    '%': (l, r) => (l % r) === 0,
+    'in': (l, r) => r.split(',').includes(String(l))                          // {{/when}}
   }
-  
-  let result = operators[operator](operand_1,operand_2);
-  if(result) return options.fn(this); 
-  return options.inverse(this);       
+
+  let result = operators[operator](operand_1, operand_2);
+  if (result) return options.fn(this);
+  return options.inverse(this);
 });
 
 Handlebars.registerHelper('numLoop', function (num, options) {
@@ -242,24 +292,24 @@ Handlebars.registerHelper('numLoop', function (num, options) {
 
 Handlebars.registerHelper('hasSuccess', function (obj, options) {
   let initialValue = 0;
-    Object.entries(obj).reduce(
-      (accumulator, [key,currentValue]) => { obj[key].locked ? initialValue +=1 : 0 },
-      {},
-    );
-  if(initialValue)
+  Object.entries(obj).reduce(
+    (accumulator, [key, currentValue]) => { obj[key].locked ? initialValue += 1 : 0 },
+    {},
+  );
+  if (initialValue)
     return options.fn(this);
   return options.inverse(this);
 });
 
 Handlebars.registerHelper('hasNoSuccess', function (obj, options) {
   let initialValue = 0;
-    Object.entries(obj).reduce(
-      (accumulator, [key,currentValue]) => { !obj[key].locked ? initialValue +=1 : 0 },
-      {},
-    );
-    if(initialValue)
-      return options.fn(this);
-    return options.inverse(this);
+  Object.entries(obj).reduce(
+    (accumulator, [key, currentValue]) => { !obj[key].locked ? initialValue += 1 : 0 },
+    {},
+  );
+  if (initialValue)
+    return options.fn(this);
+  return options.inverse(this);
 });
 
 Handlebars.registerHelper("ifNotEmpty", (input, block) => {
@@ -284,10 +334,17 @@ const actionTypeNames = {
 
 Handlebars.registerHelper('trimString', function (str, maxSize) {
   if (str.length > maxSize) {
-      return str.substring(0, maxSize) + '...';  // Append ellipsis if truncated
+    return str.substring(0, maxSize) + '...';  // Append ellipsis if truncated
   } else {
-      return str;
+    return str;
   }
+});
+
+Handlebars.registerHelper('ifLength', function (array, length, options) {
+  if (array.length === length) {
+    return options.fn(this); // block executes
+  }
+  return options.inverse(this); // else block
 });
 
 Handlebars.registerHelper("actionTypeName", (type) => {
@@ -309,8 +366,20 @@ Handlebars.registerHelper("firstWord", (str) => str.split(" ")[0]);
 /*  Ready Hook                                  */
 /* -------------------------------------------- */
 
-Hooks.on('renderChatMessage', (message, html, data) => {
+// Hooks.on("preCreateItem", (item, data, options, userId) => {
+
+// });
+
+Hooks.on("updateCombat", (combat, change, data) => {
+  if (data?.action != 'update') return;
+  showHouseholdTurnOverlay(combat.currentTurnType);
+});
+
+Hooks.on('renderChatMessageHTML', (message, html, data) => {
   // Get the chat log element
+  if (message.flags.household?.customCss) {
+    html.classList.add("household-custom-chat");
+  }
   const chatLog = document.querySelector('#chat-log');
   if (chatLog) {
     // Scroll to the bottom
@@ -324,217 +393,312 @@ Hooks.on('renderChatMessage', (message, html, data) => {
   }
 });
 
-Hooks.once('ready', function () {
+Hooks.on("updateSetting", async (setting, data, options, userId) => {
+  // Check if it's the combat tracker config
+  if (!game.user.isGM) return;
+  if (options?.action == "update") {
+    if (setting?.key === "core.combatTrackerConfig") {
+      const value = setting?.value?.turnMarker?.enabled;
+      if (value) {
+        const newConfig = {
+          ...setting.value,
+          turnMarker: {
+            ...setting.value.turnMarker,
+            enabled: false
+          }
+        };
+
+        // Save it back to the world settings
+        await game.settings.set("core", "combatTrackerConfig", newConfig);
+        ui.notifications.warn("Turn marker has been disabled. Household Combat does not support that configuration.");
+      }
+
+    }
+  }
+});
+
+Hooks.once('ready', async function () {
   // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
   Hooks.on('hotbarDrop', (bar, data, slot) => createItemMacro(data, slot));
+  if (!isGm()) {
+    await renderCharacter();
+  }
+
+  if (isGm()) {
+    const config = game.settings.get("core", "combatTrackerConfig");
+
+    if (config?.turnMarker?.enabled == true) {
+      // Update the turnMarker.enabled property
+      const newConfig = {
+        ...config,
+        turnMarker: {
+          ...config.turnMarker,
+          enabled: false
+        }
+      };
+
+      // Save it back to the world settings
+      await game.settings.set("core", "combatTrackerConfig", newConfig);
+
+      ui.notifications.warn("Turn marker has been disabled. Household Combat does not support that configuration.");
+    }
+    $("#players").removeClass("hidden");
+  } else {
+    $("#players").addClass("hidden");
+  }
 });
 
 /**
  * Message Hooks
  */
 
-Hooks.on('renderDialog', (dialog, html, content) => {
-  html.find('.profession-select').click(async function(event) {
-    const description = event.currentTarget.parentNode.querySelector('#profession-description-popup');
-    let item = await fromUuid(event.target.value);
+Hooks.on("getSceneControlButtons", (controls) => {
+  if (!game.user.isGM) return controls;
 
-    if (item) {
-      if (Object.keys(item).length > 0) {
-        description.innerHTML = "";
-        description.textContent = "";
-        description.innerHTML = item.system.description;
-      }
+  const tokens = controls.tokens;
+  if (!tokens) return;
+  controls.tokens.tools.nextRound = {
+    name: "nextRound",
+    title: "Next Round",
+    icon: "fa-solid fa-forward-step",
+    order: Object.keys(controls.tokens.tools).length,
+    button: true,
+    visible: game.user.isGM,
+    onChange: async () => {
+      if (game?.combat)
+        await game.combat.nextTurn();
     }
+  };
+});
 
-  })
-})
-/*
-Other Hooks */
-Hooks.on('renderChatMessage', (message, html, data) => {
+Hooks.on('renderChatMessageHTML', (message, html, context) => {
   // make a new parser
-  if (! message.flags?.customCss) return;
+  if (!message?.flags?.household?.customCss) return;
   const parser = new DOMParser();
-  const actor = message.speaker.actor;
+  const actor = game.actors.get(message.speaker.actor);
   const token = message.speaker.token;
-   
+  const level = CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER;
+
+  if (!((actor.ownership?.[game.user.id] ?? 0) >= level) && !game.user.isGM) {
+    return;
+
+  }
+
 
   // convert html string into DOM
   const documentRoll = parser.parseFromString(message.flavor, "text/html");
-
-  html.find('.field-option').click(event => {
-    event.preventDefault();
-    const dataset = event.target.dataset;
-    const collection = documentRoll.getElementsByClassName('field-option')
-    for (let i = 0; i < collection.length; i++) {
-      if(collection[i].id == event.target.id) {
-        collection[i].setAttribute('checked', 'checked');
-      } else {
-        collection[i].removeAttribute('checked');
-      }
-    }
-    const serializer = new XMLSerializer();
-    const serializedString = serializer.serializeToString(documentRoll);
-    message.update({ flavor: serializedString });
-  });
-  html.find('.difficulty-option').on('change', event => {
-    event.preventDefault();
-    //const element = event.target;
-    //const dataset = event.target.dataset;
-    const collection = documentRoll.getElementsByClassName('difficulty-option')
-    for (let i = 0; i < collection.length; i++) {
-      if(collection[i].id == event.target.id) {
-        collection[i].placeholder = event.target.value;
-        collection[i].value = '';
-        if(event.target.value > 0 ) {
-          collection[i].classList.add('option-selected')
-          collection[i].classList.remove('option-empty')
-        } else {
-          collection[i].classList.remove('option-selected')
-          collection[i].classList.add('option-empty')
-
+  const fieldOption = html.querySelector('.field-option');
+  const difficultyOption = html.querySelector('.difficulty-option');
+  const modifierOption = html.querySelector('.modifier-option');
+  const rollAbility = html.querySelector('.roll-ability');
+  const rerollButtons = html.querySelectorAll('.reroll-button') || [];
+  const giveUp = html.querySelectorAll('.give_up') || [];
+  const open_items = html.querySelectorAll('.open-item') || [];
+  if (open_items.length > 0) {
+    open_items.forEach(open_item => {
+      open_item.addEventListener('click', async event => {
+        event.preventDefault();
+        const dataset = event.target.closest('.open-item').dataset;
+        const item = actor.items.get(dataset.itemId);
+        if (item) {
+          item.sheet.render(true);
         }
-      }
-    }
-    const serializer = new XMLSerializer();
-    const serializedString = serializer.serializeToString(documentRoll);
-    message.update({ flavor: serializedString });
-  });
-
-  html.find('.modifier-option').click(event => {
-    event.preventDefault();
-    const dataset = event.target.dataset;
-    const collection = documentRoll.getElementsByClassName('modifier-option')
-    for (let i = 0; i < collection.length; i++) {
-      if(collection[i].id == event.target.id) {
-        collection[i].setAttribute('checked', 'checked');
-      } else {
-        collection[i].removeAttribute('checked');
-      }
-    }
-    const serializer = new XMLSerializer();
-    const serializedString = serializer.serializeToString(documentRoll);
-    message.update({ flavor: serializedString });
-  });
-  
-  html.find('.roll-ability').click(event => {
-    event.preventDefault();
-    const element = documentRoll.getElementById('roll-button');
-
-    let mod = 0;
-    const modifier_collection = documentRoll.getElementsByClassName('modifier-option')    
-    for (let i = 0; i < modifier_collection.length; i++) {
-      if(modifier_collection[i].checked) {
-        mod = modifier_collection[i].getAttribute('value');
-      }
-    }
-  
-    let field = '';
-    const field_collection = documentRoll.getElementsByClassName('field-option')
-    for (let i = 0; i < field_collection.length; i++) {
-      if(field_collection[i].checked) {
-        field = field_collection[i].getAttribute('data-key');
-      }
-    }
-    const difficulty = {
-      '2': 0,
-      '3': 0,
-      '4': 0,
-      '5': 0
-    }
-    const difficulty_collection = documentRoll.getElementsByClassName('difficulty-option')
-    for (let i = 0; i < difficulty_collection.length; i++) {
-      const key = String(difficulty_collection[i].getAttribute('data-key'))
-      difficulty[key] = difficulty_collection[i].getAttribute('placeholder')
-    }
-
-    const dataset = element.dataset;
-    const actor = game.actors.get(message.speaker.actor)
-    const skill = dataset.key
-    actor.onSkillRoll(field, skill, mod, difficulty);  
-  });
-  
-  html.find('.reroll-button').click(event => {
+      })
+    })
+    
+  }
+  if (fieldOption) {
+    fieldOption.click(event => {
       event.preventDefault();
       const dataset = event.target.dataset;
-      const reroll_type = dataset.rerolltype;
-      
-      let free_reroll = false;
-      let normal_reroll = false;
-      let all_in = false;
-      if(reroll_type === 'normal') {
-        normal_reroll = true;
-      } else if(reroll_type == 'allin') {
-        all_in = true;
-      } else {
-        free_reroll = true;
+      const collection = documentRoll.getElementsByClassName('field-option')
+      for (let i = 0; i < collection.length; i++) {
+        if (collection[i].id == event.target.id) {
+          collection[i].setAttribute('checked', 'checked');
+        } else {
+          collection[i].removeAttribute('checked');
+        }
       }
-      const actor = game.actors.get(message.speaker.actor)
-      const poll_difficulty = JSON.parse(dataset.poll_difficulty)
-      const current_poll = JSON.parse(dataset.currentpoll)
-      const current_success = JSON.parse(dataset.current_success)
-      const keep_success = item => (
-        Object
-          .keys(item)
-          .filter(key => item[key] > 1)
-          .reduce((newObj, key) => {
-            newObj[key] = item[key];
-            return newObj;
-          }, {})
-      );
-    const keep_poll = keep_success(current_poll);
-    const message_id = dataset.messageId;
-    actor.onSkillRoll(dataset.field, dataset.skill, dataset.mod, poll_difficulty, keep_poll, normal_reroll, free_reroll, all_in, current_success, message_id)
-  });
-
-  html.find('.give_up').click(async event => {
-    event.preventDefault();
-    // TODO refazer essa parte
-    const dataset = event.target.dataset;
-    const face_gave_up = dataset.face;
-    const current_poll = JSON.parse(dataset.currentpoll)
-    let clone_current_poll = { ...current_poll }
-    clone_current_poll[face_gave_up] = 0;
-    const actor = game.actors.get(message.speaker.actor)
-    const  poll_difficulty = JSON.parse(dataset.poll_difficulty);
-    const evaluation = actor.evaluatePoll(clone_current_poll, poll_difficulty);
-    const dice = preparediceToChat(current_poll, Number(face_gave_up));
-    const successes = actor.prepareSuccessToChat(evaluation.poll_successes);
-    const templateData = {
-      ability: capitalizeFirstLetter(dataset.ability),
-      skill: dataset.ability,
-      field: capitalizeFirstLetter(dataset.field), 
-      mod: 1,
-      actor: actor,      
-      dice: dice,
-      currentpoll: JSON.stringify(current_poll),
-      dice_string: JSON.stringify(dice),
-      poll_difficulty: JSON.stringify(poll_difficulty),
-      poll_success: JSON.stringify({}),
-      successes: successes,
-      reroll: 0,
-      allin: 0,
-      reroll_message: "Rolling",
-      give_up: "give_up",
-      give_up_face: face_gave_up,
-      outcome: evaluation.outcome 
-    };
-    const html = await renderTemplate("systems/household/templates/chat/skill-roll-card.hbs", templateData);
-    message.update({ flavor: html });
-    
-
-  
-  });
-  if(game.version.includes('11.')) {
-    if (message.user.id !== game.user.id && !game.user.isGM) {
-      // Disable or hide input fields
-      html.find("input, select, textarea, label").prop("disabled", true);
-    }
-  } else {
-    if (message.author.id !== game.user.id && !game.user.isGM) {
-      // Disable or hide input fields
-      html.find("input, select, textarea, label").prop("disabled", true);
-    }
+      const serializer = new XMLSerializer();
+      const serializedString = serializer.serializeToString(documentRoll);
+      message.update({ flavor: serializedString, flags: { customCss: true } });
+    });
   }
+  if (difficultyOption) {
+    difficultyOption.on('change', event => {
+      event.preventDefault();
+      //const element = event.target;
+      //const dataset = event.target.dataset;
+      const collection = documentRoll.getElementsByClassName('difficulty-option')
+      for (let i = 0; i < collection.length; i++) {
+        if (collection[i].id == event.target.id) {
+          collection[i].placeholder = event.target.value;
+          collection[i].value = '';
+          if (event.target.value > 0) {
+            collection[i].classList.add('option-selected')
+            collection[i].classList.remove('option-empty')
+          } else {
+            collection[i].classList.remove('option-selected')
+            collection[i].classList.add('option-empty')
+
+          }
+        }
+      }
+      const serializer = new XMLSerializer();
+      const serializedString = serializer.serializeToString(documentRoll);
+      message.update({ flavor: serializedString, flags: { customCss: true } });
+    });
+  }
+
+  if (modifierOption) {
+    modifierOption.click(event => {
+      event.preventDefault();
+      const dataset = event.target.dataset;
+      const collection = documentRoll.getElementsByClassName('modifier-option')
+      for (let i = 0; i < collection.length; i++) {
+        if (collection[i].id == event.target.id) {
+          collection[i].setAttribute('checked', 'checked');
+        } else {
+          collection[i].removeAttribute('checked');
+        }
+      }
+      const serializer = new XMLSerializer();
+      const serializedString = serializer.serializeToString(documentRoll);
+      message.update({ flavor: serializedString, flags: { customCss: true } });
+    });
+  }
+
+
+  if (rollAbility) {
+    rollAbility.click(event => {
+      event.preventDefault();
+      const element = documentRoll.getElementById('roll-button');
+
+      let mod = 0;
+      const modifier_collection = documentRoll.getElementsByClassName('modifier-option')
+      for (let i = 0; i < modifier_collection.length; i++) {
+        if (modifier_collection[i].checked) {
+          mod = modifier_collection[i].getAttribute('value');
+        }
+      }
+
+      let field = '';
+      const field_collection = documentRoll.getElementsByClassName('field-option')
+      for (let i = 0; i < field_collection.length; i++) {
+        if (field_collection[i].checked) {
+          field = field_collection[i].getAttribute('data-key');
+        }
+      }
+      const difficulty = {
+        '2': 0,
+        '3': 0,
+        '4': 0,
+        '5': 0
+      }
+      const difficulty_collection = documentRoll.getElementsByClassName('difficulty-option')
+      for (let i = 0; i < difficulty_collection.length; i++) {
+        const key = String(difficulty_collection[i].getAttribute('data-key'))
+        difficulty[key] = difficulty_collection[i].getAttribute('placeholder')
+      }
+
+      const dataset = element.dataset;
+      const skill = dataset.key
+      actor.onSkillRoll(field, skill, mod, difficulty);
+    });
+  }
+
+  if (rerollButtons.length > 0) {
+    rerollButtons.forEach(button => {
+      button.addEventListener('click', event => {
+        event.preventDefault();
+        const dataset = event.target.dataset;
+        const reroll_type = dataset.rerolltype;
+
+        let free_reroll = false;
+        let normal_reroll = false;
+        let all_in = false;
+        if (reroll_type === 'normal') {
+          normal_reroll = true;
+        } else if (reroll_type == 'allin') {
+          all_in = true;
+        } else {
+          free_reroll = true;
+        }
+        const poll_difficulty = JSON.parse(dataset.poll_difficulty)
+        const current_poll = JSON.parse(dataset.currentpoll)
+        const current_success = JSON.parse(dataset.current_success)
+        const keep_success = item => (
+          Object
+            .keys(item)
+            .filter(key => item[key] > 1)
+            .reduce((newObj, key) => {
+              newObj[key] = item[key];
+              return newObj;
+            }, {})
+        );
+        const keep_poll = keep_success(current_poll);
+        const message_id = dataset.messageId;
+        actor.onSkillRoll(dataset.field, dataset.skill, dataset.mod, poll_difficulty, keep_poll, normal_reroll, free_reroll, all_in, current_success, message_id)
+      });
+    });
+  }
+
+  if (giveUp.length > 0) {
+    giveUp.forEach(button => {
+      button.addEventListener('click', async event => {
+        event.preventDefault();
+        // TODO refazer essa parte
+        const dataset = event.target.dataset;
+        const dice_list = event.target.closest('.dice-list').dataset;
+        const face_gave_up = dataset.face;
+        const current_poll = JSON.parse(dataset.currentpoll)
+        let clone_current_poll = { ...current_poll }
+        clone_current_poll[face_gave_up] = 0;
+        const poll_difficulty = JSON.parse(dataset.poll_difficulty);
+        const evaluation = actor.evaluatePoll(clone_current_poll, poll_difficulty);
+        const dice = preparediceToChat(current_poll, Number(face_gave_up));
+        const successes = actor.prepareSuccessToChat(evaluation.poll_successes);
+
+        const templateData = {
+          ability: capitalizeFirstLetter(dice_list.abilityName),
+          skill: dataset.ability,
+          field: capitalizeFirstLetter(dice_list.fieldName),
+          mod: 1,
+          actor: actor,
+          dice: dice,
+          currentpoll: JSON.stringify(current_poll),
+          dice_string: JSON.stringify(dice),
+          poll_difficulty: JSON.stringify(poll_difficulty),
+          poll_success: JSON.stringify({}),
+          successes: successes,
+          reroll: 0,
+          allin: 0,
+          reroll_message: "Rolling",
+          give_up: "give_up",
+          give_up_face: face_gave_up,
+          outcome: evaluation.outcome,
+          message_id: message._id
+        };
+        const html = await foundry.applications.handlebars.renderTemplate("systems/household/templates/chat/skill-roll-card.hbs", templateData);
+        if (game.version.includes('11.')) {
+          if (message.author.id !== game.user.id && !game.user.isGM) {
+            // Disable or hide input fields
+            html.querySelector("input, select, textarea, label").prop("disabled", true);
+          }
+        } else {
+          if (message.author.id !== game.user.id && !game.user.isGM) {
+            // Disable or hide input fields
+            html.querySelector("input, select, textarea, label").prop("disabled", true);
+          }
+        }
+        message.update({ flavor: html, flags: { customCss: true } });
+
+
+
+      });
+    });
+  }
+
 });
 
 /* -------------------------------------------- */
@@ -604,20 +768,13 @@ function rollItemMacro(itemUuid) {
 }
 
 /** HUD FUNCTIUONS */
-Hooks.on("household.onUpdateTokenRequest", async function() {
+Hooks.on("household.onUpdateTokenRequest", async function () {
   if (!game.user.isGM)
     await renderCharacter();
 })
-Hooks.on("renderApplication", async function () {
-  if (!game.user.isGM)
-    await renderCharacter();
+// Hooks.on("renderApplication", async function () {
 
-  if (isGm()) {
-    $("#players").removeClass("hidden");
-  } else {
-    $("#players").addClass("hidden");
-  }
-});
+// });
 
 Hooks.on("updateActor", async function (actor) {
   if (actor.id === getCharacter()?.id) {
@@ -653,10 +810,10 @@ Hooks.on('deleteToken', async function () {
 })
 
 function activatePlayerListeners(elem) {
-  const sheet = elem.querySelector('#player-character .sheet');
+  const sheet = elem.querySelector('#player-character .sheet-open');
   sheet.addEventListener("click", actions.openSheet);
   setupHealthPointsTracker("#current-health");
-  
+
   const skills = elem.querySelectorAll('#player-character .skill');
 
   const editvalues = elem.querySelectorAll("#player-character .editValue");
@@ -669,11 +826,16 @@ function activatePlayerListeners(elem) {
     item.addEventListener("input", actions.InputeditValue);
   }
 
-  const rollaction = elem.querySelector('#player-character .roll-action');
-  if (rollaction) {
-    rollaction.addEventListener('click', actions.rollAction);
+  const rollaction = elem.querySelectorAll('#player-character .roll-action');
+  for (let item of rollaction) {
+    item.addEventListener('click', actions.rollAction);
   }
- 
+
+  const itemsChat = elem.querySelectorAll('#player-character .item-chat');
+  for (let item of itemsChat) {
+    item.addEventListener('click', actions.itemChat);
+  }
+
   const decorum = elem.querySelectorAll('#player-character .decorum');
   const items = elem.querySelectorAll('#player-character .item');
   for (let item of items) {
@@ -688,36 +850,90 @@ function activatePlayerListeners(elem) {
   for (let dec of decorum) {
     dec.addEventListener("click", actions.setAttribute);
   }
-  
-  for(let skill of skills) {
+
+  for (let skill of skills) {
     skill.addEventListener("click", actions.dialogRollSkill);
   }
   const abilities = elem.querySelectorAll('#player-character .ability')
-  for(let ability of abilities) {
+  for (let ability of abilities) {
     ability.addEventListener("click", actions.rollAbility);
   }
   const actions_menu = elem.querySelector('#player-character .actions-toggle');
   actions_menu.addEventListener("click", toggleActions);
 
+
+  const skills_menu = elem.querySelectorAll('#player-character .skills-toggle');
+  skills_menu.forEach(sk => {
+    sk.addEventListener("click", toggleSkills);
+  });
+
+
   const stats_menu = elem.querySelector('#player-character .stats-toggle');
-  stats_menu.addEventListener("click", toggleStats);
-  
+  if (stats_menu)
+    stats_menu.addEventListener("click", toggleStats);
+
 }
 
 function toggleActions(e) {
   e.stopPropagation();
   $(".character-actions").toggleClass("show");
-  $(".stats-toggle").removeClass("active");
   $(".actions-toggle").toggleClass("active");
+  //$(".stats-toggle").toggleClass("active");
+
+  $(".skills-toggle").removeClass("active");
+  $(".stats-toggle").removeClass("active");
   $(".character-stats").removeClass("show");
+  $(".character-skills").removeClass("show");
+
 }
 
 function toggleStats(e) {
   e.stopPropagation();
   $(".character-stats").toggleClass("show");
   $(".stats-toggle").toggleClass("active");
+
+  $(".skills-toggle").removeClass("active");
   $(".actions-toggle").removeClass("active");
   $(".character-actions").removeClass("show");
+  $(".character-skills").removeClass("show");
+}
+
+function toggleSkills(e) {
+  e.stopPropagation();
+  const fields = ['society', 'war', 'academia', 'street'];
+  const display_field = e.currentTarget.dataset?.display;
+
+  $(".stats-toggle").removeClass("active");
+  $(".actions-toggle").removeClass("active");
+  $(".character-actions").removeClass("show");
+  $(".character-stats").removeClass("show");
+
+  if (!display_field) {
+    $(".skills-toggle").toggleClass("active");
+    $(".character-skills").toggleClass("show");
+    return;
+  }
+
+
+  var index = fields.indexOf(display_field);
+  if (index > -1) {
+    fields.splice(index, 1);
+  }
+
+  $(`.character-skills-content-${display_field}`).toggleClass("show");
+
+  if ($(`.character-skills-content-${display_field}`).hasClass("show")) {
+    $(".character-skills").addClass("show");
+    $(`.${display_field}-skills-toggle`).addClass("active");
+  } else {
+    $(".character-skills").removeClass("show");
+    $(`.${display_field}-skills-toggle`).removeClass("active");
+  }
+
+  fields.forEach(field => {
+    $(`.character-skills-content-${field}`).removeClass("show");
+    $(`.${field}-skills-toggle`).removeClass("active");
+  })
 }
 
 function setupHealthPointsTracker(element) {
@@ -762,7 +978,7 @@ function setupHealthPointsTracker(element) {
 async function renderCharacter() {
   const elem = document.getElementById("player-character");
   if (!elem) return;
-  
+
 
   const character = getCharacter();
   if (!character) {
@@ -772,41 +988,63 @@ async function renderCharacter() {
   }
 
   let actor = character;
-  if (character instanceof TokenDocument || character instanceof Token) {
+  if (character instanceof TokenDocument || character instanceof foundry.canvas.placeables.Token) {
     actor = character.actor;
-  } 
+  }
   const data = characterData(actor, character.id);
   if (!data) return;
-  const scroll_1 = $('.character-actions-content').scrollTop();
-  const scroll_2 = $('.character-stats-content').scrollTop();
-  data["tabs"] = {
-    characterStats: $(".character-stats").length > 0 ? ($(".character-stats").attr("class")).replace("character-stats") : "",
-    statsToggle: $(".stats-toggle").length > 0 ? ($(".stats-toggle").attr("class")).replace("stats-toggle") : "",
-    actionsToggle: $(".actions-toggle").length > 0 ? ($(".actions-toggle").attr("class")).replace("actions-toggle") : "",
-    characterActions: $(".character-actions").length > 0 ? ($(".character-actions").attr("class")).replace("character-actions") : "",
+  let scroll_1 = $('.character-actions-content').scrollTop();
+  if (!scroll_1) {
+    scroll_1 = $('.npc-actions-content').scrollTop();
   }
-  data["tabs"].characterStats = data["tabs"].characterStats.trim().replace('undefined','')
-  data["tabs"].statsToggle = data["tabs"].statsToggle.trim().replace('undefined','')
-  data["tabs"].actionsToggle = data["tabs"].actionsToggle.trim().replace('undefined','')
-  data["tabs"].characterActions = data["tabs"].characterActions.trim().replace('undefined','')
+  const scroll_2 = $('.character-stats-content').scrollTop();
+  const scroll_3 = $('.character-skills-content-society').scrollTop();
+  const scroll_4 = $('.character-skills-content-academia').scrollTop();
+  const scroll_5 = $('.character-skills-content-war').scrollTop();
+  const scroll_6 = $('.character-skills-content-street').scrollTop();
+  data["tabs"] = {
+    characterSkills: $(".character-skills").length > 0 ? ($(".character-skills").attr("class")).replace("character-skills", "") : "",
+    characterStats: $(".character-stats").length > 0 ? ($(".character-stats").attr("class")).replace("character-stats", "") : "",
+    societySkillsToggle: $(".society-skills-toggle").length > 0 ? ($(".society-skills-toggle").attr("class")).replace("society-skills-toggle", "").replace("skills-toggle", "") : "",
+    academiaSkillsToggle: $(".academia-skills-toggle").length > 0 ? ($(".academia-skills-toggle").attr("class")).replace("academia-skills-toggle", "").replace("skills-toggle", "") : "",
+    warSkillsToggle: $(".war-skills-toggle").length > 0 ? ($(".war-skills-toggle").attr("class")).replace("war-skills-toggle", "").replace("skills-toggle", "") : "",
+    streetSkillsToggle: $(".street-skills-toggle").length > 0 ? ($(".street-skills-toggle").attr("class")).replace("street-skills-toggle", "").replace("skills-toggle", "") : "",
+    statsToggle: $(".stats-toggle").length > 0 ? ($(".stats-toggle").attr("class")).replace("stats-toggle", "") : "",
+    actionsToggle: $(".actions-toggle").length > 0 ? ($(".actions-toggle").attr("class")).replace("actions-toggle", "") : "",
+    characterActions: $(".character-actions").length > 0 ? ($(".character-actions").attr("class")).replace("character-actions", "") : "",
+  }
+  data["tabs"].characterSkills = data["tabs"].characterSkills.trim().replace('undefined', '')
+  data["tabs"].characterStats = data["tabs"].characterStats.trim().replace('undefined', '')
+  data["tabs"].societySkillsToggle = data["tabs"].societySkillsToggle.trim().replace('undefined', '')
+  data["tabs"].academiaSkillsToggle = data["tabs"].academiaSkillsToggle.trim().replace('undefined', '')
+  data["tabs"].warSkillsToggle = data["tabs"].warSkillsToggle.trim().replace('undefined', '')
+  data["tabs"].streetSkillsToggle = data["tabs"].streetSkillsToggle.trim().replace('undefined', '')
+  data["tabs"].statsToggle = data["tabs"].statsToggle.trim().replace('undefined', '')
+  data["tabs"].actionsToggle = data["tabs"].actionsToggle.trim().replace('undefined', '')
+  data["tabs"].characterActions = data["tabs"].characterActions.trim().replace('undefined', '')
   let tpl;
 
-   
-  if (actor.type == "npc") {
-    tpl = await renderTemplate(
-      "systems/household/templates/actor/hud-npc.hbs",
+
+  if (actor.type == "npc" || actor.type == "opponent") {
+    tpl = await foundry.applications.handlebars.renderTemplate(
+      "systems/household/templates/actor/hud/hud-npc.hbs",
       data
     );
   } else {
-    tpl = await renderTemplate(
-      "systems/household/templates/actor/hud-character.hbs",
+    tpl = await foundry.applications.handlebars.renderTemplate(
+      "systems/household/templates/actor/hud/hud-character.hbs",
       data
     );
   }
 
   elem.innerHTML = tpl;
   $('.character-actions-content').scrollTop(scroll_1);
+  $('.npc-actions-content').scrollTop(scroll_1);
   $('.character-stats-content').scrollTop(scroll_2);
+  $('.character-skills-content-society').scrollTop(scroll_3);
+  $('.character-skills-content-academia').scrollTop(scroll_4);
+  $('.character-skills-content-war').scrollTop(scroll_5);
+  $('.character-skills-content-street').scrollTop(scroll_6);
   activatePlayerListeners(elem);
 }
 /** DICE */
@@ -835,17 +1073,17 @@ Hooks.once('diceSoNiceReady', (dice3d) => {
       '/systems/household/assets/dice/face_5.png',
       '/systems/household/assets/dice/face_6.png'],
     bumpMaps: [
-      '/systems/household/assets/dice/face_1_bump.png', 
-      '/systems/household/assets/dice/face_2_bump.png', 
-      '/systems/household/assets/dice/face_3_bump.png', 
-      '/systems/household/assets/dice/face_4_bump.png', 
+      '/systems/household/assets/dice/face_1_bump.png',
+      '/systems/household/assets/dice/face_2_bump.png',
+      '/systems/household/assets/dice/face_3_bump.png',
+      '/systems/household/assets/dice/face_4_bump.png',
       '/systems/household/assets/dice/face_5_bump.png',
       '/systems/household/assets/dice/face_6_bump.png'],
-    colorset:'household',
+    colorset: 'household',
     system: 'household',
 
   });
-  
+
   dice3d.addColorset(
     {
       name: "household",
@@ -859,7 +1097,7 @@ Hooks.once('diceSoNiceReady', (dice3d) => {
     },
     "default",
   );
-  
+
   dice3d.addSystem({ id: "household-garden", name: "Household Garden", group: "household" }, "secondary");
   dice3d.addDicePreset({
     type: 'd6',
@@ -871,13 +1109,13 @@ Hooks.once('diceSoNiceReady', (dice3d) => {
       '/systems/household/assets/dice/face_5_gold.png',
       '/systems/household/assets/dice/face_6_gold.png'],
     bumpMaps: [
-      '/systems/household/assets/dice/face_1_bump.png', 
-      '/systems/household/assets/dice/face_2_bump.png', 
-      '/systems/household/assets/dice/face_3_bump.png', 
-      '/systems/household/assets/dice/face_4_bump.png', 
+      '/systems/household/assets/dice/face_1_bump.png',
+      '/systems/household/assets/dice/face_2_bump.png',
+      '/systems/household/assets/dice/face_3_bump.png',
+      '/systems/household/assets/dice/face_4_bump.png',
       '/systems/household/assets/dice/face_5_bump.png',
       '/systems/household/assets/dice/face_6_bump.png'],
-    colorset:'garden',
+    colorset: 'garden',
     system: 'household-garden',
     name: 'garden',
 
@@ -898,41 +1136,78 @@ Hooks.once('diceSoNiceReady', (dice3d) => {
   );
 });
 
-Hooks.on("renderChatMessage", async (message, html, data) => {
-  if (! message.flags?.customCss && !message.flags?.noChanges) {
+Hooks.on("renderChatMessageHTML", async (message, html, data) => {
+  if (message.author.id !== game.user.id && !game.user.isGM && (message.blind == true)) {
+    return;
+  }
+  if (!message?.flags?.household?.customCss && message?.flags?.household?.customCss !== undefined) return;
+
+  if (message.whisper.length > 0 && !message.whisper.includes(game.user.id) && !game.user.isGM) {
+    return;
+  }
+
+  if (!message?.flags?.household?.customCss && !message?.flags?.household?.noChanges) {
     if (message.rolls.length > 0) {
       const roll = message.rolls[0];
+      // ignore roll if the roll has any other dice than d6
+      let ignore_roll = false;
       if (roll instanceof Roll) {
         const dice = [];
         for (const term of roll.terms) {
+          if (term?.faces != 6 && !(term instanceof foundry.dice.terms.OperatorTerm)) {
+            ignore_roll = true;
+            break;
+          }
           for (const die of term.results) {
             dice.push({
               face: die.result,
               locked: false
             });
+
+
           }
         }
 
         const templateData = {
           dice: dice,
         };
-        const html = await renderTemplate("systems/household/templates/chat/dice-roll.hbs", templateData);
-        message.update({ flavor: html, flags: { customCss: true } });
-        //message.flags.customCss = true;
+        // ignore rolls that don't contain all d6
+        if (!ignore_roll) {
+          const html = await foundry.applications.handlebars.renderTemplate("systems/household/templates/chat/dice-roll.hbs", templateData);
+
+          await message.update({
+            flavor: html, flags: {
+              household: {
+                customCss: false
+              }
+            }
+          });
+          return;
+        }
       }
     }
   } else {
-    const messageId = message.id;
-      //const updatedHtml = html.replace(/data-message-id="MESSAGEID"/g, `data-message-id="${messageId}"`);
-      html.find('button').each(function(index) {
-        $(this).attr('data-message-id', messageId);
-    });
-      // Update the chat message with the new HTML
-      // await message.update({
-      //   flavor: updatedHtml
-      // });
+    const messageId = message._id;
+    //const updatedHtml = html.replace(/data-message-id="MESSAGEID"/g, `data-message-id="${messageId}"`);
+    const buttons = html.querySelectorAll('button') ? [...html.querySelectorAll('button')] : [];
+    if (buttons.length > 0) {
+      buttons.forEach(function (index) {
+        index.setAttribute('data-message-id', messageId);
+      });
+    }
+  }
+
+
+
+  // If no flavor exists, create one
+  if (!message?.flags?.household?.customCss) {
+    html.classList.add("show-content");
+    const content = html.querySelector(".message-content");
+    if (content) content.style.setProperty("display", "block", "important");
+
   }
 });
+
 
 
 

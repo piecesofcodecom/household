@@ -1,0 +1,32 @@
+.label-stress {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  color: white;
+
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  padding: 3px 6px;
+  border-radius: 3px;
+  transition: all .3s ease-out;
+}
+
+.stress-square {
+  background-image: url('/systems/household/assets/sheet/square-green.png');
+}
+
+.stress-rosette {
+  background-image: url('/systems/household/assets/sheet/rosette-green.png');
+}
+
+.stress-rosette-damage {
+  background-image: url('/systems/household/assets/sheet/rosette-red.png');
+}
+
+.stress-square-damage {
+  background-image: url('/systems/household/assets/sheet/square-red.png');
+}

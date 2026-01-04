@@ -1,0 +1,101 @@
+<section class="tab features general-details {{tabs.general.cssClass}}"
+         data-tab="general" data-group="primary">
+  <div class="grid grid-3col">
+  <aside class="sidebar ">
+
+    {{!-- The grid classes are defined in scss/global/_grid.scss. To use,
+    use both the "grid" and "grid-Ncol" class where "N" can be any number
+    from 1 to 12 and will create that number of columns. --}}
+    <div class="fields flexcol" style="gap: 3px">
+      {{#each system.fields as |ability key|}}
+      <div class="field-title">
+        <div class="field flexrow flex-group-center">
+          <label for="system.fields.{{key}}.value" class="resource-label flexlarge align-left">
+            {{ability.label}}
+          </label>
+          <div class="flexrow flex-group-right">
+            {{#numLoop 2}}
+            <input id="{{key}}-{{this}}-{{@root.id}}" class="fa-household-{{ability.suit}}{{#when ability.value 'gteq' this}}-full{{/when}} no-decor" type="radio" max="2" name="system.fields.{{key}}.value"
+              value="{{this}}" data-dtype="Number" data-action="customEdit" data-object="actor" data-value="{{this}}" data-path="system.fields.{{key}}.value" />
+            {{/numLoop}}
+          </div>
+        </div>
+      </div>
+      {{#each ../system.skills as |skill ky|}}
+
+      {{#when skill.field 'eq' key }}
+      <div class="skill flexrow flex-group-center">
+        <label for="system.skills.{{ky}}.value" class="resource-label message-item flexlarge align-left rollable"
+          data-action="roll" data-type="skill" data-field="{{key}}" data-key="{{ky}}" data-label="{{skill.label}}">{{skill.label}}</label>
+        {{#numLoop 4}}
+          <input id="{{ky}}-{{this}}-{{@root.id}}" class="fa-household-{{ability.suit}}{{#when skill.value 'gteq' this}}-full{{/when}} no-decor" type="radio" max="2" name="system.skills.{{ky}}.value"
+            value="{{this}}" data-dtype="Number" data-action="customEdit" data-value="{{this}}" data-path="system.skills.{{ky}}.value" data-value="{{this}}" data-object="actor" />
+        {{/numLoop}}
+      </div>
+      {{/when}}
+      {{/each}}
+
+      {{/each}}
+
+    </div>
+          {{!-- <!-- Aces up the sleeve -->
+      <div class="field-title">
+        <div class="field flexrow flex-group-center">
+          <label for="" class="resource-label flexlarge align-left">
+            {{localize "HOUSEHOLD.AcesSleeve.long"}}
+          </label>
+        </div>
+      </div>
+      {{#each system.aces as | value key|}}
+      <input type="radio" class="no-decor input-hidden" id="aces-{{key}}-{{../id}}" data-dtype="Boolean"
+        name="system.aces.{{key}}" checked="{{value}}" />
+      {{/each}}
+      <div class="" style="height: 70px; 
+  justify-content: center; margin-left: 20%; padding-top: 5px; border: 0px solid #000">
+
+        <label for="aces-heart-{{id}}" class="aces-card aces-card-1">
+
+          {{#if system.aces.heart}}
+          <img class="aces-card-img" src="/systems/household/assets/sheet/ace-heart-filled.png">
+          {{else}}
+          <img class="aces-card-img" src="/systems/household/assets/sheet/ace-heart.png">
+          {{/if}}
+        </label>
+
+        <label for="aces-diamond-{{id}}" class="aces-card aces-card-2">
+          {{#if system.aces.diamond}}
+          <img class="aces-card-img" src="/systems/household/assets/sheet/ace-diamond-filled.png">
+          {{else}}
+          <img class="aces-card-img" src="/systems/household/assets/sheet/ace-diamond.png">
+          {{/if}}
+        </label>
+        <label for="aces-club-{{id}}" class="aces-card aces-card-3">
+          {{#if system.aces.club}}
+          <img class="aces-card-img" src="/systems/household/assets/sheet/ace-club-filled.png">
+          {{else}}
+          <img class="aces-card-img" src="/systems/household/assets/sheet/ace-club.png">
+          {{/if}}
+        </label>
+        <label for="aces-spade-{{id}}" class="aces-card aces-card-4">
+          {{#if system.aces.spade}}
+          <img class="aces-card-img" src="/systems/household/assets/sheet/ace-spade-filled.png">
+          {{else}}
+          <img class="aces-card-img" src="/systems/household/assets/sheet/ace-spade.png">
+          {{/if}}
+        </label>
+        <label for="aces-joker-{{id}}" class="aces-card aces-card-5">
+          {{#if system.aces.joker}}
+          <img class="aces-card-img" src="/systems/household/assets/sheet/ace-joker-filled.png">
+          {{else}}
+          <img class="aces-card-img" src="/systems/household/assets/sheet/ace-joker.png">
+          {{/if}}
+        </label>
+      </div>
+      <!-- Aces up the sleeve end --> --}}
+  </aside>
+
+  <section class="main grid-span-2 " style="margin-top: -12px">
+    {{> "systems/household/templates/actor/char/parts/actor-tab-general-right.hbs"}}
+  </section>
+  </div>
+</section>

@@ -1,0 +1,84 @@
+<div class="combat-tracker" style="text-align: center;
+    display: flex;
+    flex-direction: column;">
+    {{#if hasCombat}}
+    <div class="combatant" style="text-align: center;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;">
+        {{#if isReactionTurn}}
+        <br />
+        <h3 class="">Current Turn: Reaction</h3>
+        {{!-- <img src="/systems/household/assets/sheet/icon-shield.png" style="width: 80%;" /> --}}
+        {{else}}
+        <br />
+        <h3 class="">Current Turn: Action</h3>
+        {{!-- <img src="/systems/household/assets/sheet/icon-gear.png" style="width: 80%;" /> --}}
+        {{/if}}
+
+    </div>
+
+    <ol class="combat-tracker plain">
+        <li class="flexrow">
+            <h2 class="characteristic-title active">The Party</h2>
+        </li>
+        {{#each @root.party as |value key| }}
+        <li class="flexrow grid grid-5col combat-combatant" data-combatant-id="{{value._id}}" data-action="activateCombatant">
+            <span style="display: flex;
+  justify-content: center; /* horizontal */
+  align-items: center;     /* vertical */">
+                <img style="width: 32px; height: 32px" src="{{value.img}}" />
+            </span>
+            <span class="grid-span-3">
+                {{value.name}}
+            </span>
+            <span>
+                {{#if @root.isReactionTurn}}
+                <i class="fa fa-shield"></i>
+                {{else}}
+                {{#if @root.user.isGM }}
+                <input class="combatant-act" type="checkbox" data-action="act" data-combatant-id="{{value._id}}"
+                    data-tooltip="Has acted this turn?" {{#if value.hasActed}}checked{{/if}}>
+                {{else}}
+                <input type="checkbox" id="played" name="played" value="played" data-tooltip="Has acted this turn?"
+                    readonly {{#if value.hasActed}}checked{{/if}}>
+                {{/if}}
+                {{/if}}
+            </span>
+        </li>
+        {{/each}}
+        <li class="flexrow">
+            <h2 class="characteristic-title active">The Opponents</h2>
+        </li>
+        {{#each @root.opponents as |value key| }}
+        <li class="flexrow grid grid-5col combat-combatant" data-combatant-id="{{value._id}}" data-action="activateCombatant">
+            <span style="display: flex;
+  justify-content: center; /* horizontal */
+  align-items: center;     /* vertical */">
+                <img style="width: 32px; height: 32px" src="{{value.img}}" />
+            </span>
+            <span class="grid-span-3">
+                {{value.name}}
+            </span>
+            <span>
+                {{#if @root.isReactionTurn}}
+                {{#if @root.user.isGM }}
+                {{#if value.canAct}}
+                <a class="roll-reaction" data-type="action" data-action="roll" data-combatant-id="{{value._id}}"
+                    data-character-id="{{value.actor._id}}" title="Roll Opponent Action"><i
+                        class="fa-solid fa-dice"></i></a>
+                {{else}}
+                <i style="color: var(--hh-accent-red)" class="fa-solid fa-dice" data-tooltip="Already acted"></i>
+                {{/if}}
+                {{/if}}
+                {{else}}
+                <span style="font-size: smaller; font-style: italic;" data-tooltip="Waiting for the Reaction turn"><i
+                        class="fa fa-hourglass"></i></span>
+                {{/if}}
+            </span>
+        </li>
+        {{/each}}
+    </ol>
+    {{/if}}
+</div>

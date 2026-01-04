@@ -1,0 +1,47 @@
+{{!-- If you want TinyMCE editors to output inline rolls when rendered, you need to pass the actor's roll data to
+the rollData property. --}}
+<h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.Stress.long"}}</h2>
+<a style=" float:right; margin-left: 5px;" class='npc-popup-item-edit' title='' data-dtype="Number"
+        data-path="system.stress.max" data-label="Stress" data-crucial_boxes="{{actor.system.crucial_boxes}}" data-value="{{actor.system.stress.max}}">
+        <i class='fas fa-edit'></i>
+    </a>
+<div style="margin: 0rem; padding: 1rem 1rem; text-align: center;">
+    {{#numLoop system.stress.max}}
+    <div style="display: inline-block;
+  border: 0px solid red;
+  padding: 0.5rem 0.5rem;
+  vertical-align: middle;">
+        {{#when ../system.stress.current 'gteq' this}}
+        {{#when this 'in' ../system.crucial_boxes}}
+        
+            <input id="stress-{{this}}-{{../id}}" class="input-hidden" type="radio" max="2"
+                name="system.stress.current" value="{{reduceBy this 1}}" data-dtype="Number" />
+            <label class="label-stress stress-rosette-damage" for="stress-{{this}}-{{../id}}">
+            </label>
+        {{else}}
+            <input id="stress-{{this}}-{{../id}}" class="input-hidden" type="radio" max="2"
+                name="system.stress.current" value="{{reduceBy this 1}}" data-dtype="Number" />
+            <label class="label-stress stress-square-damage" for="stress-{{this}}-{{../id}}">
+            </label>
+        {{/when}}
+        {{else}}
+        {{#when this 'in' ../system.crucial_boxes}}
+        <input id="stress-{{this}}-{{../id}}" class="input-hidden" type="radio" max="2"
+            name="system.stress.current" value="{{this}}" data-dtype="Number" />
+        <label class="label-stress stress-rosette" for="stress-{{this}}-{{../id}}"> </label>
+        {{else}}
+        <input id="stress-{{this}}-{{../id}}" class="input-hidden" type="radio" max="2"
+            name="system.stress.current" value="{{this}}" data-dtype="Number" />
+        <label class="label-stress stress-square" for="stress-{{this}}-{{../id}}"> </label>
+        {{/when}}
+        {{/when}}
+    </div>
+    {{/numLoop}}
+</div>
+
+
+<h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.Moves.long"}}</h2>
+{{> "systems/household/templates/actor/char/parts/actor-list-items.hbs" items=moves type="move"}}
+<h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.Traits.long"}}</h2>
+{{> "systems/household/templates/actor/char/parts/actor-list-items.hbs" items=traits type="trait"}}
+{{editor system.biography target="system.biography" rollData=rollData button=true owner=owner editable=editable}}

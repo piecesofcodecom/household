@@ -1,0 +1,275 @@
+<!--Stress-->
+<h2 class="characteristic-title" style="text-align: center; margin-top: 10px;">{{localize "HOUSEHOLD.Stress.long"}}</h2>
+<div class="flexrow">
+  {{#numLoop system.stress.max}}
+  <div class=''>
+    {{#when ../system.stress.current 'gteq' this}}
+    {{#when this 'eq' ../system.stress.danger}}
+    <input id="stress-{{this}}-{{../id}}" class="input-hidden" type="radio" max="2" name="system.stress.current"
+      value="{{reduceBy this 1}}" data-dtype="Number"/>
+    <label class="label-stress stress-rosette-damage" for="stress-{{this}}-{{../id}}">
+    </label>
+    {{else}}
+    <input id="stress-{{this}}-{{../id}}" class="input-hidden" type="radio" max="2" name="system.stress.current"
+      value="{{reduceBy this 1}}" data-dtype="Number"/>
+    <label class="label-stress stress-square-damage" for="stress-{{this}}-{{../id}}">
+    </label>
+    {{/when}}
+    {{else}}
+    {{#when this 'eq' ../system.stress.danger}}
+    <input id="stress-{{this}}-{{../id}}" class="input-hidden" type="radio" max="2" name="system.stress.current"
+      value="{{this}}" data-dtype="Number"/>
+    <label class="label-stress stress-rosette" for="stress-{{this}}-{{../id}}"> </label>
+    {{else}}
+    <input id="stress-{{this}}-{{../id}}" class="input-hidden" type="radio" max="2" name="system.stress.current"
+      value="{{this}}" data-dtype="Number"/>
+    <label class="label-stress stress-square" for="stress-{{this}}-{{../id}}"> </label>
+    {{/when}}
+    {{/when}}
+  </div>
+  {{/numLoop}}
+</div>
+
+<!-- Decorum -->
+<h2 class="characteristic-title">{{localize "HOUSEHOLD.Decorum.long"}}</h2>
+
+<div class=" grid-decorum  flex-group-center ">
+  <div class=" decorum_1 decorum">
+    <input type="radio" class="no-decor" id="decorum_1-{{id}}" data-value="1"
+      data-dtype="Number" data-path="system.decorum" data-object="actor"
+      data-action="customEdit" {{doCheckIf system.decorum 'eq' 1}}>
+  </div>
+
+  <div class=" decorum-text  ">
+    <span class="custom-system-label-root">
+      <div class="custom-system-label-icons"></div>
+      <label for="decorum_2-{{id}}" class="custom-system-label custom-system-label-label rollable" data-value="Shabby"
+        data-name="">{{localize
+        "HOUSEHOLD.Decorum.Shabby"}}</label>
+    </span>
+  </div>
+
+  <div class="decorum_3 decorum">
+    <input type="radio" class="no-decor" id="decorum_3-{{id}}" data-dtype="Number"
+      {{doCheckIf system.decorum 'eq' 3}} data-value="3" data-path="system.decorum"
+      data-object="actor" data-action="customEdit">
+  </div>
+
+  <div class=" decorum-text  ">
+    <span class="custom-system-label-root">
+      <div class="custom-system-label-icons"></div>
+      <label for="decorum_4-{{id}}" class="custom-system-label custom-system-label-label rollable" data-value="Elegant"
+        data-name="">{{localize
+        "HOUSEHOLD.Decorum.Elegant"}}</label>
+    </span>
+  </div>
+
+  <div class=" decorum_5 decorum  ">
+    <input type="radio" class="no-decor" id="decorum_5-{{id}}" data-dtype="Number"
+      data-value="5" data-path="system.decorum" data-object="actor"
+      data-action="customEdit" {{doCheckIf system.decorum 'gteq' 5}}>
+  </div>
+
+  <div class=" decorum-text  ">
+    <span class="custom-system-label-root">
+      <div class="custom-system-label-icons"></div>
+      <label for="decorum_1-{{id}}" class="custom-system-label custom-system-label-label rollable" data-value="Uncouth"
+        data-name="">{{localize
+        "HOUSEHOLD.Decorum.Uncouth"}}</label>
+    </span>
+  </div>
+
+  <div class=" decorum_2 decorum  ">
+    <input type="radio" class="no-decor" id="decorum_2-{{id}}" data-dtype="Number"
+      data-value="2" data-path="system.decorum" data-object="actor"
+      data-action="customEdit" {{doCheckIf system.decorum 'eq' 2}}>
+  </div>
+
+  <div class=" decorum-text  ">
+    <span class="custom-system-label-root">
+      <div class="custom-system-label-icons"></div>
+      <label for="decorum_3-{{id}}" class="custom-system-label custom-system-label-label rollable" data-value="Decent"
+        data-name="">{{localize
+        "HOUSEHOLD.Decorum.Decent"}}</label>
+    </span>
+  </div>
+
+  <div class=" decorum_4 decorum  ">
+    <input type="radio" class="no-decor" id="decorum_4-{{id}}" data-dtype="Number"
+      data-value="4" data-path="system.decorum" data-object="actor"
+      data-action="customEdit" {{doCheckIf system.decorum 'eq' 4}}>
+  </div>
+
+  <div class=" decorum-text  ">
+    <span class="custom-system-label-root">
+      <div class="custom-system-label-icons"></div>
+      <label for="decorum_5-{{id}}" class="custom-system-label custom-system-label-label  rollable" data-value="Pompous"
+        data-name="">{{localize
+        "HOUSEHOLD.Decorum.Pompous"}}</label>
+    </span>
+  </div>
+</div>
+
+
+<!-- Terrible Terrible Things -->
+<h2 class="characteristic-title">{{localize "HOUSEHOLD.TTT.long"}}</h2>
+<div class="flexrow">
+  {{#numLoop 5}}
+
+  {{#when ../system.ttt 'gteq' this}}
+  <input class="input-hidden" type="radio" id="ttt-{{this}}-{{../id}}" data-value="{{reduceBy this 1}}"
+    data-dtype="Number" data-path="system.ttt" data-object="actor" data-action="customEdit">
+  <div class="ttt-icon">
+    <label style=" align-items: center;" for="ttt-{{this}}-{{../id}}">
+      <img class="custom-edit" width="28" height="28" style="border: 0px"
+        src="/systems/household/assets/sheet/ttt{{this}}-filled.svg" data-value="{{reduceBy this 1}}"
+        data-dtype="Number" data-path="system.ttt">
+    </label>
+  </div>
+  {{else}}
+  <input class="input-hidden" type="radio" id="ttt-{{this}}-{{../id}}" data-value="{{this}}" data-dtype="Number"
+    data-path="system.ttt" data-object="actor" data-action="customEdit">
+  <div class="ttt-icon">
+
+    <label style=" align-items: center;" for="ttt-{{this}}-{{../id}}">
+      <img class="custom-edit" width="28" height="28" data-value="{{this}}" data-dtype="Number" data-path="system.ttt"
+        style="border: 0px" src="/systems/household/assets/sheet/ttt{{this}}.svg">
+    </label>
+  </div>
+  {{/when}}
+  {{/numLoop}}
+</div>
+
+<!-- conditions -->
+<h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.Conditions.long"}}</h2>
+<div class="conditions-grid flex-group-center">
+  <!-- embarrassed -->
+  <div>
+    <input type="checkbox" class="fa-household-heart{{#if system.conditions.embarrassed}}-full{{/if}} no-decor"
+      id="condition-embarrassed-{{id}}" data-action="customEdit" data-path="system.conditions.embarrassed"
+      data-value="{{system.conditions.embarrassed}}" data-object="actor" data-dtype="Boolean" {{doCheck
+      system.conditions.embarrassed}}>
+    <label class="rollable" for="condition-embarrassed-{{id}}">{{localize "HOUSEHOLD.Conditions.Embarrassed"}}</label>
+  </div>
+  <!-- end embarrassed -->
+  <!-- frightened -->
+  <div>
+    <input type="checkbox" class="fa-household-spade{{#if system.conditions.frightened}}-full{{/if}} no-decor"
+      id="condition-frightened-{{id}}" data-action="customEdit" data-path="system.conditions.frightened"
+      data-value="{{system.conditions.frightened}}" data-object="actor" data-dtype="Boolean" {{doCheck
+      system.conditions.frightened}}>
+    <label class="rollable" for="condition-frightened-{{id}}">{{localize "HOUSEHOLD.Conditions.Frightened"}}</label>
+  </div>
+  <!-- end frightened -->
+  <!-- poisoned -->
+  <div>
+    <input type="checkbox" class="input-conditions" id="condition-poisoned-{{id}}" data-action="customEdit"
+      data-path="system.conditions.poisoned" data-value="{{system.conditions.poisoned}}" data-object="actor"
+      data-dtype="Boolean" {{doCheck system.conditions.poisoned}}>
+    <label class="rollable" for="condition-poisoned-{{id}}">{{localize "HOUSEHOLD.Conditions.Poisoned"}}</label>
+  </div>
+  <!-- end poisoned -->
+  <!-- confused -->
+  <div>
+    <input type="checkbox" class="fa-household-diamond{{#if system.conditions.confused}}-full{{/if}} no-decor"
+      id="condition-confused-{{id}}" data-action="customEdit" data-path="system.conditions.confused"
+      data-value="{{system.conditions.confused}}" data-object="actor" data-dtype="Boolean" {{doCheck
+      system.conditions.confused}}>
+    <label class="rollable" for="condition-confused-{{id}}">{{localize "HOUSEHOLD.Conditions.Confused"}}</label>
+  </div>
+  <!-- end confused -->
+  <!-- tired -->
+  <div>
+    <input type="checkbox" class="input-conditions" id="condition-tired-{{id}}" data-action="customEdit"
+      data-path="system.conditions.tired" data-value="{{system.conditions.tired}}" data-object="actor"
+      data-dtype="Boolean" {{doCheck system.conditions.tired}}>
+    <label class="rollable" for="condition-tired-{{id}}">{{localize "HOUSEHOLD.Conditions.Tired"}}</label>
+  </div>
+  <!-- end tired -->
+  <!-- broken -->
+  <div>
+    <input type="checkbox" class="input-conditions" id="condition-broken-{{id}}" data-action="customEdit"
+      data-path="system.conditions.broken" data-value="{{system.conditions.broken}}" data-object="actor"
+      data-dtype="Boolean" {{doCheck system.conditions.broken}}>
+    <label class="rollable" for="condition-broken-{{id}}">{{localize "HOUSEHOLD.Conditions.Broken"}}</label>
+  </div>
+  <!-- end broken -->
+  <!-- hurt -->
+  <div>
+    <input type="checkbox" class="fa-household-club{{#if system.conditions.hurt}}-full{{/if}} no-decor"
+      id="condition-hurt-{{id}}" data-action="customEdit" data-path="system.conditions.hurt"
+      data-value="{{system.conditions.hurt}}" data-object="actor" data-dtype="Boolean" {{doCheck
+      system.conditions.hurt}}>
+    <label class="rollable" for="condition-hurt-{{id}}">{{localize "HOUSEHOLD.Conditions.Hurt"}}</label>
+  </div>
+  <!-- end hurt -->
+  <!-- sick -->
+  <div>
+    <input type="checkbox" class="input-conditions" id="condition-sick-{{id}}" data-action="customEdit"
+      data-path="system.conditions.sick" data-value="{{system.conditions.sick}}" data-object="actor"
+      data-dtype="Boolean" {{doCheck system.conditions.sick}}>
+    <label class="rollable" for="condition-sick-{{id}}">{{localize "HOUSEHOLD.Conditions.Sick"}}</label>
+  </div>
+  <!-- end sick -->
+</div>
+<!-- end conditions -->
+<!-- Aces up the sleeve -->
+<h2 class="characteristic-title" style="text-align: center;"> {{localize "HOUSEHOLD.AcesSleeve.long"}}</h2>
+
+{{#each system.aces as | value key|}}
+<input type="checkbox" class="no-decor input-hidden" id="aces-{{key}}-{{../id}}" data-dtype="Boolean"
+  data-action="customEdit" data-path="system.aces.{{key}}" data-value="{{value}}" data-object="actor" {{#if value}}
+  checked{{/if}} />
+
+
+{{/each}}
+<div class="" style="height: 70px; 
+  justify-content: center; margin-left: 30%; padding-top: 5px; border: 0px solid #000">
+
+  <label for="aces-heart-{{id}}" class="aces-card aces-card-1">
+
+    {{#if system.aces.heart}}
+    <img class="aces-card-img" src="/systems/household/assets/sheet/ace-heart-filled.png">
+    {{else}}
+    <img class="aces-card-img" src="/systems/household/assets/sheet/ace-heart.png">
+    {{/if}}
+  </label>
+
+  <label for="aces-diamond-{{id}}" class="aces-card aces-card-2">
+    {{#if system.aces.diamond}}
+    <img class="aces-card-img" src="/systems/household/assets/sheet/ace-diamond-filled.png">
+    {{else}}
+    <img class="aces-card-img" src="/systems/household/assets/sheet/ace-diamond.png">
+    {{/if}}
+  </label>
+  <label for="aces-club-{{id}}" class="aces-card aces-card-3">
+    {{#if system.aces.club}}
+    <img class="aces-card-img" src="/systems/household/assets/sheet/ace-club-filled.png">
+    {{else}}
+    <img class="aces-card-img" src="/systems/household/assets/sheet/ace-club.png">
+    {{/if}}
+  </label>
+  <label for="aces-spade-{{id}}" class="aces-card aces-card-4">
+    {{#if system.aces.spade}}
+    <img class="aces-card-img" src="/systems/household/assets/sheet/ace-spade-filled.png">
+    {{else}}
+    <img class="aces-card-img" src="/systems/household/assets/sheet/ace-spade.png">
+    {{/if}}
+  </label>
+  <label for="aces-joker-{{id}}" class="aces-card aces-card-5">
+    {{#if system.aces.joker}}
+    <img class="aces-card-img" src="/systems/household/assets/sheet/ace-joker-filled.png">
+    {{else}}
+    <img class="aces-card-img" src="/systems/household/assets/sheet/ace-joker.png">
+    {{/if}}
+  </label>
+</div>
+<!-- Aces up the sleeve end -->
+<!--br /-->
+<!-- sheet summary -->
+{{!-- <h2 class="characteristic-title" style="text-align: center;">Summary of Items</h2>
+<div style="overflow: auto; max-height: 150px;">
+  {{> "systems/household/templates/actor/char/parts/actor-list-all-items.hbs" items=all_items }}
+</div> --}}
+
+<!-- sheet summary end -->

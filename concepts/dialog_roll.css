@@ -23,7 +23,7 @@
     right: 10px;
     bottom: 10px;
     border: 20px solid transparent;
-    border-image: url('assets/frames/deco4.svg') 30 round;
+    border-image: url('assets/frames/deco4.png') 30 round;
     pointer-events: none;
 }
 

@@ -95,6 +95,12 @@
         "CriticalOpponent": {
             "long": "Avversario Critico"
         },
+        "DialogTitles": {
+            "RollAbility": "Tiro Abilità",
+            "RollActions": "Tiro Azione Avversario",
+            "EditActionTable": "Modifica Tabella Azioni",
+            "SelectSkill": "Seleziona Abilità da Tiro"
+        },
         "Decorum": {
             "Decent": "Decente",
             "Elegant": "Elegante",
@@ -150,7 +156,8 @@
             "long": "Popolo"
         },
         "FreeReRoll": {
-            "long": "Rilancio in Sicurezza"
+            "long": "Rilancio in Sicurezza",
+            "short": "RS"
         },
         "Gadgets": {
             "long": "Marchingegni"
@@ -337,7 +344,8 @@
     "TYPES": {
         "Actor": {
             "character": "Character",
-            "npc": "NPC"
+            "npc": "NPC",
+            "opponent": "Opponent"
         },
         "Item": {
             "item": "Articolo",
@@ -351,5 +359,10 @@
             "companion": "Compagno",
             "folk": "Populo"
         }
+    },
+     "MESSAGES": {
+        "Gaveup": "Il rilancio non ha dato nulla! Devi rinunciare a una combinazione.",
+        "Actionroll": "Tiro Azione",
+        "RerollOptions": "Opzioni Rilancio Gratuito"
     }
   }

@@ -1,0 +1,142 @@
+// Items list and header shared styles
+// Section Header
+.items-header {
+  height: 28px;
+  margin: 2px 0;
+  padding: 0;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.05);
+  border: 2px groove #eeede0;
+  font-weight: bold;
+  > * {
+    font-size: 14px;
+    text-align: center;
+  }
+  .item-name {
+    font-weight: bold;
+    padding-left: 5px;
+    text-align: left;
+    display: flex;
+  }
+}
+
+// -----------------------------------------
+// Items Lists
+// -----------------------------------------
+
+.items-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  color: #444;
+
+  // Child lists
+  .item-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  // Item Name
+  .item-name {
+    flex: 2;
+    margin: 0;
+    overflow: hidden;
+    font-size: 13px;
+    text-align: left;
+    align-items: center;
+    display: flex;
+    h3, h4 {
+      margin: 0;
+      white-space: nowrap;
+      overflow-x: hidden;
+    }
+  }
+
+  // Control Buttons
+  .item-controls {
+    display: flex;
+    flex: 0 0 100px;
+    justify-content: flex-end;
+    a {
+      font-size: 12px;
+      text-align: center;
+      margin: 0 6px;
+    }
+  }
+
+  // Individual Item
+  .item {
+    align-items: center;
+    padding: 0 2px;
+    border-bottom: 1px solid #c9c7b8;
+    &:last-child { border-bottom: none; }
+    .item-name {
+      color: #191813;
+      .item-image {
+        flex: 0 0 30px;
+        height: 30px;
+        background-size: 30px;
+        border: none;
+        margin-right: 5px;
+      }
+    }
+  }
+
+  .item-prop {
+    text-align: center;
+    border-left: 1px solid #c9c7b8;
+    border-right: 1px solid #c9c7b8;
+    font-size: 12px;
+  }
+
+  // Section Header (nested version)
+  .items-header {
+    height: 28px;
+    margin: 2px 0;
+    padding: 0;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.05);
+    border: 2px groove #eeede0;
+    font-weight: bold;
+    > * {
+      font-size: 12px;
+      text-align: center;
+    }
+    .item-name {
+      padding-left: 5px;
+      text-align: left;
+    }
+  }
+}
+
+.item-formula {
+  flex: 0 0 100px;
+  padding: 0 8px;
+}
+
+.item-trait {
+  flex: 0 0 220px;
+  padding: 0 8px;
+}
+
+.resource-label {
+  font-weight: bold;
+}
+
+.item-list {
+  border-color: #f2bebb;
+  border-bottom: 1px solid;
+  cursor: pointer;
+  transition: background 0.3s;
+  border-radius: 4px;
+  max-height: 250px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #ddd !important;
+  transform-origin: top center;
+  transform: rotate(0.1deg);
+  transition: all 0.3s;
+}

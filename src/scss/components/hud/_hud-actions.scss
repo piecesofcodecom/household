@@ -1,0 +1,301 @@
+// HUD actions panel - action buttons, skills, and their interactions
+.character-actions,
+.character-stats,
+.npc-stats,
+.character-skills {
+  background: var(--gold-gradient);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+  padding: 3px;
+  border: 1px solid black;
+  border-radius: 5px;
+  width: 300px;
+  margin-top: -1.5em;
+  display: none;
+}
+
+.character-actions.show {
+  display: block;
+  position: absolute;
+  z-index: 11;
+  bottom: 130px;
+  left: calc(50% - 40px);
+}
+
+.character-stats.show,
+.npc-stats.show {
+  display: block;
+  position: absolute;
+  z-index: 11;
+  bottom: 130px;
+  left: calc(50% - 40px);
+}
+
+.character-stats,
+.npc-stats {
+  margin-left: 2em;
+}
+
+.character-skills.show {
+  display: block;
+  position: absolute;
+  z-index: 11;
+  bottom: 130px;
+  left: calc(50% - 290px);
+}
+
+.character-skills {
+  margin-right: 2em;
+}
+
+.character-actions {
+  margin-left: 2em;
+}
+
+.character-actions-content,
+.npc-actions-content,
+.npc-skills-content,
+.character-stats-content,
+.character-skills-content-academia,
+.character-skills-content-war,
+.character-skills-content-society,
+.character-skills-content-street,
+.character-skills-content {
+  
+  border: 1px solid black;
+  max-height: 350px;
+  overflow-y: auto;
+  border-radius: 5px;
+}
+
+.character-actions-content,
+.character-stats-content,
+.character-skills-content-academia,
+.character-skills-content-war,
+.character-skills-content-society,
+.character-skills-content-street,
+.character-skills-content {
+  background-image: url('/systems/household/assets/sheet/sheet_bg.webp');
+   background-size: cover;
+}
+
+.npc-actions-content,
+.npc-skills-content {
+background-image: url('/systems/household/assets/sheet/opponent-n-bg.png');
+  background-size: cover;
+}
+
+
+.character-skills-content-academia,
+.character-skills-content-war,
+.character-skills-content-society,
+.character-skills-content-street {
+  display: none;
+}
+
+.character-actions h4,
+.character-stats h4,
+.character-skills h4 {
+  font-weight: bold;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-family: 'Vollkorn';
+  font-size: 0.7em;
+  padding: 0.3em 1em;
+  margin-top: 0.5em;
+}
+
+.character-stats h4 {
+  text-align: center;
+}
+
+.character-skills h4 {
+  text-align: center;
+}
+
+.action {
+  display: flex;
+  align-items: center;
+  padding: 0.5em 1em;
+  cursor: pointer;
+  transition: all 200ms ease-in-out;
+
+  justify-content: space-between;
+
+  flex-wrap: wrap;
+}
+
+.action .item-left {
+  display: flex;
+  align-items: center;
+  color: black;
+}
+
+.action .item-right {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+}
+
+.action img {
+  margin-right: 5px;
+}
+
+.action:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.action+.action {
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.action img {
+  height: 25px;
+  width: 25px;
+  object-fit: cover;
+  border: 1px solid var(--gold);
+  box-shadow: 0 -1px 0 1px black inset;
+  border-radius: 3px;
+}
+
+.action span {
+  font-weight: bold;
+  padding-left: 1em;
+  letter-spacing: 0.05em;
+}
+
+.abilities {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.ability {
+  width: 21%;
+  margin-bottom: 2px;
+}
+
+.ability:not(:first-child):not(:nth-child(5)) {
+  margin-left: 4%;
+  text-align: center;
+}
+
+.ability-wrapper {
+  /*border: 1px solid var(--gold-dark);*/
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5em;
+  /*border-radius: 3px 3px 0 0;*/
+  transition: all 200ms ease-in-out;
+}
+
+/*.ability-wrapper:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}*/
+
+.ability .name {
+  font-size: 0.8em;
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 0.1em;
+  color: var(--gold);
+}
+
+.ability .mod {
+  font-size: 1.4em;
+  text-transform: uupercase;
+  font-weight: bold;
+  letter-spacing: 0.1em;
+  line-height: 1em;
+  display: flex;
+  justify-content: flex-start;
+  gap: 5px;
+}
+
+.ability .save {
+  border-radius: 0 0 3px 3px;
+  background-color: var(--gold-dark);
+  color: #eeecec;
+  font-family: 'Vollkorn';
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 0.7em;
+  padding: 0.2em 0.5em;
+  display: block;
+  margin-top: -1px;
+  letter-spacing: 0.1em;
+  margin-bottom: 1em;
+  cursor: pointer;
+  transition: all 200ms ease-in-out;
+  text-align: center;
+}
+
+.ability .save:hover {
+  background-color: var(--gold);
+}
+
+.skills {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+.society {
+  background-image: url(/systems/household/assets/dice/face_3_alpha.png);
+}
+
+.academia {
+  background-image: url(/systems/household/assets/dice/face_4_alpha.png);
+}
+
+.war {
+  background-image: url(/systems/household/assets/dice/face_5_alpha.png);
+}
+
+.street {
+  background-image: url(/systems/household/assets/dice/face_6_alpha.png);
+}
+
+.skill {
+  display: flex;
+  align-items: center;
+  padding: 0.5em 1em;
+  cursor: pointer;
+  transition: all 200ms ease-in-out;
+  font-weight: bold;
+  color: black;
+  text-transform: capitalize;
+}
+
+.skill:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.skill+.skill {
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.skill .name {
+  flex: 1;
+}
+
+.character-buttons {
+  // display: flex;
+  align-items: center;
+  justify-content: center;
+  // margin-top: -30px;
+  // margin-bottom: 5px;
+  gap: 120px;
+  margin-top: -40px;
+}
+
+.rollable:hover {
+  animation: textShadow 1s infinite;
+}

@@ -1,0 +1,49 @@
+<h2 class="characteristic-title">{{localize "HOUSEHOLD.Traits.long"}}</h2>
+{{> "systems/household/templates/actor/char/parts/actor-list-items.hbs" items=traits type='trait'}}
+
+
+
+
+
+<!--Stress-->
+<h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.Stress.long"}}</h2>
+<div class="flexrow">
+  {{#numLoop system.stress.max}}
+    <div class=''>
+      {{#when ../system.stress.current 'gteq' this}}
+        {{#when this 'eq' ../system.stress.danger}}
+          <input id="stress-{{this}}-{{../id}}" 
+                 class="input-hidden" 
+                 type="radio" max="2" 
+                 name="system.stress.current"
+                 value="{{reduceBy this 1}}"
+                 data-dtype="Number" />
+          <label class="label-stress stress-rosette-damage" 
+                 for="stress-{{this}}-{{../id}}">
+          </label>
+        {{else}}
+        <input id="stress-{{this}}-{{../id}}" 
+               class="input-hidden"
+               type="radio" max="2"
+               name="system.stress.current"
+               value="{{reduceBy this 1}}"
+               data-dtype="Number" />
+        <label class="label-stress stress-square-damage" 
+               for="stress-{{this}}-{{../id}}">
+        </label>
+        {{/when}}
+      {{else}}
+        {{#when this 'eq' ../system.stress.danger}}
+          <input id="stress-{{this}}-{{../id}}" class="input-hidden" type="radio" max="2" name="system.stress.current"
+            value="{{this}}" data-dtype="Number" />
+          <label class="label-stress stress-rosette" for="stress-{{this}}-{{../id}}"> </label>
+        {{else}}
+          <input id="stress-{{this}}-{{../id}}" class="input-hidden" type="radio" max="2" name="system.stress.current"
+            value="{{this}}" data-dtype="Number" />
+          <label class="label-stress stress-square" for="stress-{{this}}-{{../id}}"> </label>
+        {{/when}}
+      {{/when}}
+    </div>
+  {{/numLoop}}
+</div>
+

@@ -179,7 +179,7 @@ export function characterData(c, tokenId) {
   let threat = {};
   let crucial_boxes = [];
   let conditions = {};
-  if (c.type == "npc") {
+  if (c.type == "npc" || c.type == "opponent") {
     actions = c.system.actions;
     threat = c.system.threat;
     crucial_boxes = c.system.crucial_boxes;

@@ -17,6 +17,7 @@
   "readme": "README.md",
   "bugs": "https://github.com/piecesofcodecom/household/issues",
   "changelog": "CHANGELOG.md",
+  "background": "systems/household/assets/default_world.jpg",
   "media": [
         {
             "type": "cover",
@@ -25,14 +26,13 @@
         },
         {
             "type": "setup",
-            "url": "systems/household/assets/official/system_bg.webp",
-            "thumbnail": "systems/household/assets/default_world.jpg"
+            "thumbnail": "systems/household/assets/official/system_bg.webp"
         }
     ],
   "version": "placeholder",
   "compatibility": {
-    "minimum": 11,
-    "verified": "12.331"
+    "minimum": 13,
+    "verified": "13.351"
   },
   "esmodules": ["build/household.min.js"],
   "styles": ["styles/household.css"],

@@ -3,25 +3,46 @@
 [![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/snagov)
 
 # Household RPG
-Welcome to the unofficial implementation of the Household RPG for Foundry VTT.
+Welcome to the unofficial Foundry VTT implementation for the Household RPG.
 
-**Household RPG** is a trademark of Two Little Mice. This system includes all the dice rolls and character sheets you need, but to access the complete rules and item lists, you'll need to purchase the official books. For more details, visit [Two Little Mice](https://twolittlemice.net/).
+**Household RPG** is a trademark of Two Little Mice. While this system provides the necessary dice mechanics and character sheets for gameplay, the complete rules and item compendiums are available in the official books. For more information, please visit the [Two Little Mice website](https://twolittlemice.net/).
 
-If you're new to **Household RPG**, a quickstart guide is available [here](https://www.drivethrurpg.com/en/product/421014/household-quickstart).
+A quickstart guide for new players is available [here](https://www.drivethrurpg.com/en/product/421014/household-quickstart).
 
 Please note that the images in the asset folder are sourced from the official game sheets and [Online Web Fonts](http://www.onlinewebfonts.com).
 
-## Char Sheet
-The image below displays the status of the character sheet (items are not included in the system; you will need to create them).
+## Sheets
+The system offers two types of sheets: Character sheets and Opponent sheets. The old NPC sheet is being phased out and will be removed in a future update.
 
-![Link Name](./readme/char1.png) 
+![Character Sheet](./readme/char1.png) 
 
-## Opponent Sheet
-The image below displays the status of the opponent sheet (items and actions are not included in the system; you will need to create them).
-
-![Link Name](./readme/opp.png)
+## Item Types
+The system includes the following item types:
+- Generic Item
+- Gadget
+- Weapon
+- Move
+- Contract
+- Trait
+- Profession
+- Vocation
+- Companion
+- Folk
 
 ## Rolls
-The image below displays the status of the rolls (rolls, re-rolls, free-reroll, and all-in are supported).
+The system features a roll dialog that allows players to select which skills and fields to use for their rolls.
 
-![Link Name](./readme/chat.png) 
+![Roll Dialog](./readme/dialog-roll.png) 
+
+Chat messages include options for players to re-roll, use a free re-roll, or go "all-in." All subsequent re-rolls are consolidated into the original chat message to keep the log clean.
+
+![Chat Rolls](./readme/chat.png) 
+
+## Dice So Nice
+This system requires the [Dice So Nice](https://foundryvtt.com/packages/dice-so-nice/) module and includes two custom dice themes.
+
+### Default Household Dice
+![Default Household Dice](./readme/hh-dice.png)
+
+### Household Garden Dice
+![Household Garden Dice](./readme/hhg-dice.png)
