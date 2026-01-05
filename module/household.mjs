@@ -237,7 +237,7 @@ Handlebars.registerHelper('stressPercentage', function (stress) {
     return 1;
   }
 
-  const percentage = 1 - ((stress.max - stress.current) / stress.max);
+  const percentage = 1 - ((stress.max - stress.value) / stress.max);
   return percentage; // Clamping the value between 0 and 100
 });
 

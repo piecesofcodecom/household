@@ -113,7 +113,7 @@
     justify-items: center;
     display: flex;">
                 <div>
-                    <a class="{{#when stress.current 'gt' 0}}resource-label editValue{{/when}}" data-path="system.stress.current" data-value="{{reduceBy stress.current 1}}"
+                    <a class="{{#when stress.value 'gt' 0}}resource-label editValue{{/when}}" data-path="system.stress.value" data-value="{{reduceBy stress.value 1}}"
                         data-character-id="{{@root/id}}" data-tooltip="{{localize "MESSAGES.Stress.Reduce"}}" data-dtype="Number">
                     <i  class="fa fa-minus-circle" aria-hidden="true" style="filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.4));
     font-size: large;"></i>
@@ -121,16 +121,16 @@
                 </div>
                 <div class="character-level-badge">
                     <input
-                        class="InputeditValue hud-stress stress-{{#when stress.current 'in' crucial_boxes}}rosette{{else}}square-{{#when stress.current 'eq' 0}}green{{else}}red{{/when}}{{/when}}"
+                        class="InputeditValue hud-stress stress-{{#when stress.value 'in' crucial_boxes}}rosette{{else}}square-{{#when stress.value 'eq' 0}}green{{else}}red{{/when}}{{/when}}"
                         style="
-    {{#when stress.current 'gteq' stress.max}}
+    {{#when stress.value 'gteq' stress.max}}
          background-image: url(/systems/household/assets/sheet/overstressed.png);
-    {{/when}}" type="text" value="{{#when stress.current 'lteq' stress.max}}{{stress.current}}{{/when}}"
-                        data-path="system.stress.current" data-value="{{stress.current}}"
+    {{/when}}" type="text" value="{{#when stress.value 'lteq' stress.max}}{{stress.value}}{{/when}}"
+                        data-path="system.stress.value" data-value="{{stress.value}}"
                         data-character-id="{{@root/id}}">
                 </div>
                 <div>
-                   <a class="{{#when stress.current 'lt' stress.max}}resource-label editValue{{/when}}" data-path="system.stress.current" data-value="{{increaseBy stress.current 1}}"
+                   <a class="{{#when stress.value 'lt' stress.max}}resource-label editValue{{/when}}" data-path="system.stress.value" data-value="{{increaseBy stress.value 1}}"
                         data-character-id="{{@root/id}}" data-tooltip="{{localize "MESSAGES.Stress.Increase"}}" data-dtype="Number">
                     <i  class="fa fa-plus-circle" aria-hidden="true" style="filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.4));
     font-size: large;"></i>
