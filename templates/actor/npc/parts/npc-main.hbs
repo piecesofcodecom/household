@@ -11,27 +11,27 @@ the rollData property. --}}
   border: 0px solid red;
   padding: 0.5rem 0.5rem;
   vertical-align: middle;">
-        {{#when ../system.stress.current 'gteq' this}}
+        {{#when ../system.stress.value 'gteq' this}}
         {{#when this 'in' ../system.crucial_boxes}}
         
             <input id="stress-{{this}}-{{../id}}" class="input-hidden" type="radio" max="2"
-                name="system.stress.current" value="{{reduceBy this 1}}" data-dtype="Number" />
+                name="system.stress.value" value="{{reduceBy this 1}}" data-dtype="Number" />
             <label class="label-stress stress-rosette-damage" for="stress-{{this}}-{{../id}}">
             </label>
         {{else}}
             <input id="stress-{{this}}-{{../id}}" class="input-hidden" type="radio" max="2"
-                name="system.stress.current" value="{{reduceBy this 1}}" data-dtype="Number" />
+                name="system.stress.value" value="{{reduceBy this 1}}" data-dtype="Number" />
             <label class="label-stress stress-square-damage" for="stress-{{this}}-{{../id}}">
             </label>
         {{/when}}
         {{else}}
         {{#when this 'in' ../system.crucial_boxes}}
         <input id="stress-{{this}}-{{../id}}" class="input-hidden" type="radio" max="2"
-            name="system.stress.current" value="{{this}}" data-dtype="Number" />
+            name="system.stress.value" value="{{this}}" data-dtype="Number" />
         <label class="label-stress stress-rosette" for="stress-{{this}}-{{../id}}"> </label>
         {{else}}
         <input id="stress-{{this}}-{{../id}}" class="input-hidden" type="radio" max="2"
-            name="system.stress.current" value="{{this}}" data-dtype="Number" />
+            name="system.stress.value" value="{{this}}" data-dtype="Number" />
         <label class="label-stress stress-square" for="stress-{{this}}-{{../id}}"> </label>
         {{/when}}
         {{/when}}

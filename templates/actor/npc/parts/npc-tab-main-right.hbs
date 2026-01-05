@@ -17,25 +17,24 @@
     gap: 10px;">
     {{#numLoop system.stress.max}}
     <div class=''>
-      {{#when ../system.stress.current 'gteq' this}}
-      <input id="stress-{{this}}-{{../id}}" class="input-hidden" type="radio" max="2" name="system.stress.current"
+      {{#when ../system.stress.value 'gteq' this}}
+      <input id="stress-{{this}}-{{../id}}" class="input-hidden" type="radio" max="2" name="system.stress.value"
         value="{{reduceBy this 1}}" data-dtype="Number" />
-      {{#when this 'in' ../system.crucial_boxes}}
-      <label class="label-stress stress-rosette-damage" for="stress-{{this}}-{{../id}}">
-      </label>
+        {{#when this 'in' ../system.crucial_boxes}}
+        <label class="label-stress stress-rosette" for="stress-{{this}}-{{../id}}">
+        </label>
+        {{else}}
+        <label class="label-stress stress-square" for="stress-{{this}}-{{../id}}">
+        </label>
+        {{/when}}
       {{else}}
-      <label class="label-stress stress-square-damage" for="stress-{{this}}-{{../id}}">
-      </label>
-      {{/when}}
-      {{else}}
-      <input id="stress-{{this}}-{{../id}}" class="input-hidden" type="radio" max="2" name="system.stress.current"
+      <input id="stress-{{this}}-{{../id}}" class="input-hidden" type="radio" max="2" name="system.stress.value"
         value="{{this}}" data-dtype="Number" />
-      {{#when this 'in' ../system.crucial_boxes}}
-
-      <label class="label-stress stress-rosette" for="stress-{{this}}-{{../id}}"> </label>
-      {{else}}
-      <label class="label-stress stress-square" for="stress-{{this}}-{{../id}}"> </label>
-      {{/when}}
+        {{#when this 'in' ../system.crucial_boxes}}
+        <label class="label-stress stress-rosette-damage" for="stress-{{this}}-{{../id}}"> </label>
+        {{else}}
+        <label class="label-stress stress-square-damage" for="stress-{{this}}-{{../id}}"> </label>
+        {{/when}}
       {{/when}}
     </div>
     {{/numLoop}}

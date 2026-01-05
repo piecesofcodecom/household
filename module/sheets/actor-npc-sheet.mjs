@@ -221,6 +221,7 @@ export class HouseholdNPCActorSheet extends HandlebarsApplicationMixin(ActorShee
           callback: (html) => {
             const new_value = Number(html.find("input#newvalue").val());
             this.actor.update({ [path]: new_value });
+            this.actor.update({ ["system.stress.value"]: new_value });
             const crucial_boxes = html.find("input#crucial_boxes").val();
             if (crucial_boxes) {
               this.actor.update({ 'system.crucial_boxes': crucial_boxes });
