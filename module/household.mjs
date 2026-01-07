@@ -360,7 +360,19 @@ Handlebars.registerHelper("abilityName", (id) =>
 
 Handlebars.registerHelper("firstWord", (str) => str.split(" ")[0]);
 
+Handlebars.registerHelper('math', function (a, operator, b) {
+  a = Number(a);
+  b = Number(b);
 
+  switch (operator) {
+    case '+': return a + b;
+    case '-': return a - b;
+    case '*': return a * b;
+    case '/': return b !== 0 ? a / b : 0;
+    default:
+      throw new Error(`Unknown operator: ${operator}`);
+  }
+});
 
 /* -------------------------------------------- */
 /*  Ready Hook                                  */
