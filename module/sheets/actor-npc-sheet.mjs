@@ -6,7 +6,7 @@ import { HOUSEHOLD } from '../helpers/config.mjs';
 import { addProfession } from "../helpers/professions.mjs";
 import * as actions from "../helpers/actions.mjs";
 
-const { HandlebarsApplicationMixin } = foundry.applications.api;
+const { HandlebarsApplicationMixin, DialogV2 } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets
 
 export class HouseholdNPCActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
@@ -212,25 +212,26 @@ export class HouseholdNPCActorSheet extends HandlebarsApplicationMixin(ActorShee
       html = `Total Stress Boxes ${html}<br />Crucial Box positions: <input id="crucial_boxes" value="${crucial_boxes}" placeholder="example: 3,6,8">`;
     }
 
-    return Dialog.wait({
-      title: `Edit ${label}`,
+    return DialogV2.prompt({
+      window: {
+        title: `Edit ${label}`,
+        contentClasses: ["household-dialog-class"]
+      },
       content: html,
-      buttons: {
-        button1: {
-          label: "Save",
-          callback: (html) => {
-            const new_value = Number(html.find("input#newvalue").val());
-            this.actor.update({ [path]: new_value });
-            this.actor.update({ ["system.stress.value"]: new_value });
-            const crucial_boxes = html.find("input#crucial_boxes").val();
-            if (crucial_boxes) {
-              this.actor.update({ 'system.crucial_boxes': crucial_boxes });
-            }
-          },
-          icon: `<i class="fas fa-save"></i>`
+      ok: {
+        icon: "fas fa-save",
+        label: "Save",
+        callback: (event, button) => {
+          const new_value = Number(button.form.elements.newvalue.value);
+          this.actor.update({ [path]: new_value });
+          this.actor.update({ ["system.stress.value"]: new_value });
+          const crucial_boxes = button.form.elements.crucial_boxes?.value;
+          if (crucial_boxes) {
+            this.actor.update({ 'system.crucial_boxes': crucial_boxes });
+          }
         }
       }
-    }).render(true);
+    });
   }
 
   async _onCustomEdit(event, target) {
