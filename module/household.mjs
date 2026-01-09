@@ -235,9 +235,8 @@ Handlebars.registerHelper("multipleOf", function (value, multipler, options) {
 Handlebars.registerHelper('stressPercentage', function (stress) {
   if (!stress || stress.max === 0) {
     return 1;
-  }
-
-  const percentage = 1 - ((stress.max - stress.value) / stress.max);
+  } 
+  const percentage = ((stress.max - stress.value) / stress.max);
   return percentage; // Clamping the value between 0 and 100
 });
 
