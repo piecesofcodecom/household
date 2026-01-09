@@ -121,9 +121,9 @@
                 </div>
                 <div class="character-level-badge">
                     <input
-                        class="InputeditValue hud-stress stress-{{#when stress.value 'in' crucial_boxes}}rosette{{else}}square-{{#when stress.value 'eq' 0}}green{{else}}red{{/when}}{{/when}}"
+                        class="InputeditValue hud-stress stress-{{#when stress.value 'in' crucial_boxes}}rosette{{else}}square-{{#when stress.value 'eq' stress.max}}green{{else}}red{{/when}}{{/when}}"
                         style="
-    {{#when stress.value 'gteq' stress.max}}
+    {{#when stress.value 'eq' 0}}
          background-image: url(/systems/household/assets/sheet/overstressed.png);
     {{/when}}" type="text" value="{{#when stress.value 'lteq' stress.max}}{{stress.value}}{{/when}}"
                         data-path="system.stress.value" data-value="{{stress.value}}"

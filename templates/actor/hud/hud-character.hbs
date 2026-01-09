@@ -134,14 +134,14 @@
             </a>
             <div class="character-level-badge">
                 <input
-                    class="InputeditValue hud-stress stress-{{#when stress.value 'eq' stress.danger}}rosette{{else}}square-{{#when stress.value 'eq' 0}}green{{else}}red{{/when}}{{/when}}"
+                    class="InputeditValue hud-stress stress-{{#when stress.value 'eq' stress.danger}}rosette{{else}}square-{{#when stress.value 'eq' stress.max}}green{{else}}red{{/when}}{{/when}}"
                     style="
-    {{#when stress.value 'gteq' stress.max}}
+    {{#when stress.value 'eq' 0}}
          background-image: url(/systems/household/assets/sheet/overstressed.png);
     {{/when}}" type="text" value="{{#when stress.value 'lteq' stress.max}}{{stress.value}}{{/when}}"
                     data-path="system.stress.value" data-value="{{stress.value}}" data-character-id="{{@root/id}}">
             </div>
-            <a class="{{#when stress.value 'lteq' stress.max}}resource-label editValue{{/when}}"
+            <a class="{{#when stress.value 'lt' stress.max}}resource-label editValue{{/when}}"
                 data-path="system.stress.value" data-value="{{increaseBy stress.value 1}}"
                 data-character-id="{{@root/id}}" data-dtype="Number">
                  <img src="systems/household/assets/sheet/btn-create.png" style="filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.4));
