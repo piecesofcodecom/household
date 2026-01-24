@@ -1,22 +1,15 @@
 {{#when  face 'eq' 0}}
 <div class="dice-face">
-  <!--span class="dot dot-{{success}}"-->
     <img src="systems/household/assets/dice/cancel.png" data-poll_difficulty="{{poll_difficulty}}" data-currentpoll="{{currentpoll}}" data-face="{{face}}" data-lock="{{locked}}"/>
-  <!--/span-->
 </div>
 {{/when}}
 
 {{#when  face 'gt' 0}}
 <div class="dice-face {{give_up}}" data-ability="{{ability}}" data-field="{{field}}" data-poll_difficulty="{{poll_difficulty}}" data-currentpoll="{{currentpoll}}" data-face="{{face}}" data-lock="{{locked}}">
-    <!--span class="dot dot-{{success}}" 
-      data-poll_difficulty="{{poll_difficulty}}" data-currentpoll="{{currentpoll}}" data-face="{{face}}" data-lock="{{locked}}">
-    </span-->
-    <!--span class="dot dot-{{success}}"-->
     {{#when  face 'gt' 6}}
       <span class="dice-face-other" >{{face}}</span>
     {{else}}
       <img class="dice-face" src="systems/household/assets/dice/face_{{face}}.png" data-poll_difficulty="{{poll_difficulty}}" data-currentpoll="{{currentpoll}}" data-face="{{face}}" data-lock="{{locked}}"/>
       {{/when}}
-    <!--/span-->
   </div>
 {{/when}}
