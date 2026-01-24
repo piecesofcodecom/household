@@ -219,8 +219,11 @@ export class HouseholdActor extends Actor {
 
     const free_roll_items = this.items.filter(el => el.system.free_reroll == true);
 
-    
-    
+    let cancel_all = false;
+    if (is_allin && (outcome == "Failure")) {
+      cancel_all = true;
+    }
+
     const templateData = {
       ability: capitalizeFirstLetter(skill),
       skill: skill,
@@ -241,15 +244,17 @@ export class HouseholdActor extends Actor {
       give_up_face: 0,
       outcome: give_up ? "LostSuccess" : outcome,
       message_id: message_id || "MESSAGEID",
-      free_roll_items: free_roll_items
+      free_roll_items: free_roll_items,
+      cancel_all: cancel_all,
+      is_jackpot: is_jackpot
     };
     const html = await foundry.applications.handlebars.renderTemplate("systems/household/templates/chat/skill-roll-card.hbs", templateData);
     if (message_id) {
       await game.dice3d.showForRoll(roll, game.user, true);
       //roll.render();
       const chatMessage = game.messages.get(message_id);
-      
-      
+
+
       await chatMessage.update({
         flavor: html
       });
@@ -428,7 +433,8 @@ export class HouseholdActor extends Actor {
 
     } else {
       allow_allin = false;
-      skill_roll = await this._skillRoll(field, skill, mod)
+      skill_roll = await this._skillRoll(field, skill, mod);
+
       original_poll_result = skill_roll.poll;
       roll = skill_roll.roll;
 
@@ -462,20 +468,25 @@ export class HouseholdActor extends Actor {
       outcome = 'Success'
     }
     let give_up = false;
+    if (is_reroll || is_free_reroll) {
+      if (normalized_success <= normalized_original_success) {
+        allow_allin = false;
+      } else {
+        allow_allin = true;
+      }
+    }
     if (normalized_success <= normalized_original_success && (is_reroll || is_allin)) {
       if (is_allin) {
         give_up = false;
-        allow_allin = true;
         outcome = 'Failure';
         Object.keys(poll_successes).forEach((item) => {
           poll_successes[item] = 0
         })
       } else {
         give_up = true;
-        allow_allin = false;
       }
     }
-    if (normalized_difficult == 0) outcome = ''
+    if (normalized_difficult == 0 && !is_allin) outcome = ''
 
     this._sendToChat(
       roll,
@@ -502,10 +513,10 @@ export class HouseholdActor extends Actor {
   async dialogRollSkill(dataset) {
     let guess;
     const actor = this; //getActor(this.dataset.characterId);
-    
+
     const skill = actor.system.skills[dataset.key];
     if (dataset.key && skill) {
-      
+
       skill.label = game.i18n.localize(CONFIG.HOUSEHOLD.skills[dataset.key])
     }
     const fields = actor.system.fields;
@@ -522,9 +533,9 @@ export class HouseholdActor extends Actor {
       actor: actor,
       //timestamp: msg.timestamp
     };
-    
+
     const html = await foundry.applications.handlebars.renderTemplate("systems/household/templates/chat/dialog-skill-roll.hbs", templateData);
-  
+
     const dialog = await foundry.applications.api.DialogV2.wait({
       window: { title: "Roll" },
       content: html,
@@ -571,117 +582,117 @@ export class HouseholdActor extends Actor {
         $html.find(".collapsible-header").on("click", (event) => {
           const header = event.currentTarget;
           const content = header.nextElementSibling;
-  
+
           if (content.style.display === "block") {
             content.style.display = "none";
           } else {
             content.style.display = "block";
           }
         });
-  
+
         $html.find('.difficulty-item').on('mousedown', function (event) {
           // Prevent the default context menu on right-click
           if (event.button === 2) event.preventDefault();
-          
+
           // Find the input inside the clicked difficulty-item
           const input = $(this).find('.difficulty-option');
-          
+
           // Get the current input value
           let currentValue = parseInt(input.val().replace('x', '')) || 0;
-      
+
           // Increase or decrease based on the mouse button
           if (event.button === 0) {
-              // Left-click: Increase value
-              currentValue++;
+            // Left-click: Increase value
+            currentValue++;
           } else if (event.button === 2) {
-              // Right-click: Decrease value, but ensure it doesn't go below 0
-              currentValue = Math.max(0, currentValue - 1);
+            // Right-click: Decrease value, but ensure it doesn't go below 0
+            currentValue = Math.max(0, currentValue - 1);
           }
-      
+
           // Update the input value
           input.val(`x${currentValue}`);
         });
-  
+
         $html.find('.modifier-item').on('mousedown', function (event) {
           // Prevent the default context menu on right-click
           if (event.button === 2) event.preventDefault();
-          
+
           // Find the input inside the clicked difficulty-item
           const input = $(this).find('.difficulty-option');
-          
+
           // Get the current input value
           let currentValue = parseInt(input.val());
-      
+
           // Increase or decrease based on the mouse button
           if (event.button === 0) {
-              // Left-click: Increase value not more than +3
-              //currentValue++;
-              currentValue = Math.min(3, Math.max(0, currentValue + 1));
+            // Left-click: Increase value not more than +3
+            //currentValue++;
+            currentValue = Math.min(3, Math.max(0, currentValue + 1));
           } else if (event.button === 2) {
-              // Right-click: Decrease value, but ensure it doesn't go below -3
-              currentValue = Math.max(-3, currentValue - 1);
+            // Right-click: Decrease value, but ensure it doesn't go below -3
+            currentValue = Math.max(-3, currentValue - 1);
           }
-      
+
           // Update the input value
           input.val(currentValue);
         });
-        
+
         // Optional: Prevent default context menu entirely (for all right-clicks on the inputs)
         $html.find('.difficulty-item').on('contextmenu', function (event) {
-            event.preventDefault();
+          event.preventDefault();
         });
 
         $html.find(".skill-select-dropdown").on("change", (event) => {
-          
+
           const selectedSkill = event.currentTarget.value; // Get the selected skill key
           const input_skill = $html.find('#skill'); // Find the hidden input for skill
           const icon_img = $html.find('.suit-icon'); // Find the icon image element
           if (input_skill.length > 0) {
-            
+
             input_skill.val(selectedSkill); // Update the hidden input value
             const skill_data = actor.system.skills[selectedSkill];
             if (skill_data) {
               const suit = skill_data.suit;
               const value = skill_data.value;
-              
+
               $html.find('.value-display span').text(`x${value}`); // Update the skill value display
-              
+
               icon_img.attr("class", `suit-icon fa-household-${suit}-full`);
             }
           }
 
         });
-  
+
         $html.find(".toggle-input").on("change", (event) => {
           const selectedInputId = event.target.id; // Get the ID of the selected input
-  
+
           // Iterate through all toggle inputs
           $html.find(".toggle-input").each((index, input) => {
-              const label = $html.find(`label[for="${input.id}"]`); // Find the associated label
-              if (label.length > 0) {
-                  const img = label.find("img"); // Find the <img> inside the label
-                
-                  if (img.length > 0) {
-                    const currentSrc = img.attr("src");
-                      // Update the image based on whether this input is checked
-                      if (input.id === selectedInputId) {
-                          if(!currentSrc.includes('-filled'))
-                            img.attr("src", currentSrc.replace('.png', '-filled.png')); // Set checked image for selected input
-                      } else {
-                          img.attr("src", currentSrc.replace('-filled','')); // Reset image for other inputs
-                      }
-                  }
+            const label = $html.find(`label[for="${input.id}"]`); // Find the associated label
+            if (label.length > 0) {
+              const img = label.find("img"); // Find the <img> inside the label
+
+              if (img.length > 0) {
+                const currentSrc = img.attr("src");
+                // Update the image based on whether this input is checked
+                if (input.id === selectedInputId) {
+                  if (!currentSrc.includes('-filled'))
+                    img.attr("src", currentSrc.replace('.png', '-filled.png')); // Set checked image for selected input
+                } else {
+                  img.attr("src", currentSrc.replace('-filled', '')); // Reset image for other inputs
+                }
               }
+            }
           });
-  
+
         })
       },
-    });  
+    });
   }
 
   toggleCondition(path) {
     const condition_value = path.split('.').reduce((acc, part) => acc && acc[part], this);
-    const  condition_name = path.split('.').pop();
+    const condition_name = path.split('.').pop();
     const actor = this;
     let messageContent = game.i18n.localize('HOUSEHOLD.ConditionToggleMessage');
     messageContent = messageContent.replace("{condition}", game.i18n.localize('HOUSEHOLD.Conditions.' + condition_name.charAt(0).toUpperCase() + condition_name.slice(1)));

@@ -35,7 +35,7 @@
     "verified": "13.351"
   },
   "esmodules": ["build/household.min.js"],
-  "styles": ["styles/household.css"],
+  "styles": ["css/household.css"],
   "languages": [
     {
       "lang": "en",
