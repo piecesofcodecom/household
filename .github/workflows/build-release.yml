@@ -39,13 +39,13 @@ jobs:
             echo "IS_PRERELEASE=false" >> $GITHUB_ENV
           fi
 
-      - name: Extract PR Description
-        id: pr_info
-        run: |
-          DESCRIPTION="${{ github.event.pull_request.body }}"
-          echo "RELEASE_BODY<<EOF" >> $GITHUB_ENV
-          echo "$DESCRIPTION" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
+      # - name: Extract PR Description
+      #   id: pr_info
+      #   run: |
+      #     DESCRIPTION="${{ github.event.pull_request.body }}"
+      #     echo "RELEASE_BODY<<EOF" >> $GITHUB_ENV
+      #     echo "$DESCRIPTION" >> $GITHUB_ENV
+      #     echo "EOF" >> $GITHUB_ENV
 
       - name: Create Git Tag
         run: |
