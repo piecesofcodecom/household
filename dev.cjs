@@ -12,7 +12,7 @@ const itemsToCopy = [
   'lang',
   'fonts',
   'README.md',
-  'styles',
+  'css',
   'templates',
   'system.json',
   'template.json'
