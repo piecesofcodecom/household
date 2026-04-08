@@ -194,7 +194,6 @@ export class HouseholdActor extends Actor {
   }
   async _sendToChat(roll, field, skill, mod, poll_difficulty, dice_poll, success_poll, outcome, is_reroll, is_allin, is_jackpot, allow_reroll, allow_free_reroll, allow_allin, give_up, message_id = 0) {
     //face=dice.face locked=dice.locked success=dice.success
-
     const dice = this.preparediceToChat(dice_poll);
     const successes = this.prepareSuccessToChat(success_poll);
 
@@ -224,11 +223,15 @@ export class HouseholdActor extends Actor {
       cancel_all = true;
     }
 
+    if (!mod || isNaN(mod)) {
+      mod = 0;
+    }
+
     const templateData = {
       ability: capitalizeFirstLetter(skill),
       skill: skill,
       field: capitalizeFirstLetter(field),
-      mod: mod,
+      modifierroll: mod,
       actor: this,
       dice: dice,
       currentpoll: JSON.stringify(dice_poll),
@@ -380,6 +383,7 @@ export class HouseholdActor extends Actor {
     '4': 0,
     '5': 0
   }, keep_poll = false, is_reroll = false, is_free_reroll = false, is_allin = false, original_poll_success = {}, message_id = 0) {
+    mod = Number(mod) || 0;
     const normalized_difficult = this._normilize(poll_difficulty);
     const normalized_original_success = this._normilize(original_poll_success);
     const normilized_jackpot = 81;

@@ -589,7 +589,7 @@ Hooks.on('renderChatMessageHTML', (message, html, context) => {
       const modifier_collection = documentRoll.getElementsByClassName('modifier-option')
       for (let i = 0; i < modifier_collection.length; i++) {
         if (modifier_collection[i].checked) {
-          mod = modifier_collection[i].getAttribute('value');
+          mod = Number(modifier_collection[i].getAttribute('value'));
         }
       }
 
@@ -649,7 +649,7 @@ Hooks.on('renderChatMessageHTML', (message, html, context) => {
         );
         const keep_poll = keep_success(current_poll);
         const message_id = dataset.messageId;
-        actor.onSkillRoll(dataset.field, dataset.skill, dataset.mod, poll_difficulty, keep_poll, normal_reroll, free_reroll, all_in, current_success, message_id)
+        actor.onSkillRoll(dataset.field, dataset.skill, Number(dataset.mod), poll_difficulty, keep_poll, normal_reroll, free_reroll, all_in, current_success, message_id)
       });
     });
   }
@@ -674,7 +674,7 @@ Hooks.on('renderChatMessageHTML', (message, html, context) => {
           ability: capitalizeFirstLetter(dice_list.abilityName),
           skill: dataset.ability,
           field: capitalizeFirstLetter(dice_list.fieldName),
-          mod: 1,
+          modifierroll: 1,
           actor: actor,
           dice: dice,
           currentpoll: JSON.stringify(current_poll),
