@@ -129,14 +129,14 @@
     {{#if reroll}}
     <br />
     <button class="reroll-button" data-rerolltype="normal" data-currentpoll="{{currentpoll}}" data-field="{{field}}"
-        data-skill="{{skill}}" data-mod="{{mod}}" data-current_success="{{poll_success}}"
+        data-skill="{{skill}}" data-mod="{{modifierroll}}" data-current_success="{{poll_success}}"
         data-poll_difficulty="{{poll_difficulty}}" data-dice="{{ dice_string }}"
         data-message-id="{{message_id}}">{{localize
         "HOUSEHOLD.ReRoll.long"}}</button>
     {{/if}}
     {{#if free_reroll}}
     <button class="reroll-button" data-rerolltype="free" data-currentpoll="{{currentpoll}}" data-field="{{field}}"
-        data-skill="{{skill}}" data-mod="{{mod}}" data-current_success="{{poll_success}}"
+        data-skill="{{skill}}" data-mod="{{modifierroll}}" data-current_success="{{poll_success}}"
         data-poll_difficulty="{{poll_difficulty}}" data-dice="{{ dice_string }}"
         data-message-id="{{message_id}}">{{localize
         "HOUSEHOLD.FreeReRoll.long"}}</button>
