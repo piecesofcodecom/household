@@ -251,7 +251,6 @@ export class HouseholdActor extends Actor {
       cancel_all: cancel_all,
       is_jackpot: is_jackpot
     };
-    console.log(templateData);
     const html = await foundry.applications.handlebars.renderTemplate("systems/household/templates/chat/skill-roll-card.hbs", templateData);
     if (message_id) {
       await game.dice3d.showForRoll(roll, game.user, true);
