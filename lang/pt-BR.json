@@ -368,6 +368,7 @@
     },
      "MESSAGES": {
         "Gaveup": "A re-rolagem não deu em nada! Você deve desistir de uma combinação.",
+        "AllInFailed": "All In falhou! A re-rolagem não concedeu nenhum Sucesso melhor ou extra.",
         "Actionroll": "Rolagem de Ação",
         "RerollOptions": "Opções de Re-Rolagem Gratuita"
     }

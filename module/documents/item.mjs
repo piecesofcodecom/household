@@ -4,32 +4,38 @@
  */
 export class HouseholdItem extends Item {
   /**
-   * Augment the basic Item data model with additional dynamic data.
+   * Default item artwork per type, used when no image is chosen at creation.
+   * @type {Record<string, string>}
    */
-  prepareData() {
-    // As with the actor class, items are documents that can have their data
-    // preparation methods overridden (such as prepareBaseData()).
-    super.prepareData();
-    if (this.img.includes('item-bag') ) {
-      if(this.type == "contract") {
-        this.update({'img': 'icons/sundries/documents/document-sealed-red-yellow.webp'})
-      } else if (this.type == "folk") {
-        this.update({'img': 'icons/environment/people/group.webp'})
-      } else if (this.type == "gadget") {
-        this.update({'img': 'icons/tools/instruments/chimes-wood-white.webp'})
-      } else if (this.type == "weapon") {
-        this.update({'img': 'icons/skills/melee/hand-grip-staff-teal.webp'})
-      } else if (this.type == "move") {
-        this.update({'img': 'icons/skills/movement/figure-running-gray.webp'})
-      } else if (this.type == "trait") {
-        this.update({'img': 'icons/skills/trades/academics-investigation-puzzles.webp'})
-      } else if (this.type == "profession") {
-        this.update({'img': 'icons/sundries/scrolls/scroll-bound-ruby-red.webp'})
-      } else if (this.type == "vocation") {
-        this.update({'img': 'icons/sundries/scrolls/scroll-worn-rolled-beige.webp'})
-      } else if (this.type == "companion") {
-        this.update({'img': 'icons/creatures/magical/construct-face-stone-pink.webp'})
-      }
+  static DEFAULT_IMAGES = {
+    contract: 'icons/sundries/documents/document-sealed-red-yellow.webp',
+    folk: 'icons/environment/people/group.webp',
+    gadget: 'icons/tools/instruments/chimes-wood-white.webp',
+    weapon: 'icons/skills/melee/hand-grip-staff-teal.webp',
+    move: 'icons/skills/movement/figure-running-gray.webp',
+    trait: 'icons/skills/trades/academics-investigation-puzzles.webp',
+    profession: 'icons/sundries/scrolls/scroll-bound-ruby-red.webp',
+    vocation: 'icons/sundries/scrolls/scroll-worn-rolled-beige.webp',
+    companion: 'icons/creatures/magical/construct-face-stone-pink.webp',
+  };
+
+  /**
+   * Assign a type-specific default image at creation time.
+   *
+   * This logic used to live in prepareData() and call this.update(), but
+   * mutating a document during data preparation re-enters the parent Actor's
+   * prepare cycle and throws "ActiveEffect application phase 'initial' has
+   * already completed" on Foundry v13+/v14. Setting the source here runs once,
+   * at creation, with no re-entrancy.
+   * @override
+   */
+  async _preCreate(data, options, user) {
+    const allowed = await super._preCreate(data, options, user);
+    if (allowed === false) return false;
+
+    const fallback = this.constructor.DEFAULT_IMAGES[this.type];
+    if (fallback && (!this.img || this.img.includes('item-bag'))) {
+      this.updateSource({ img: fallback });
     }
   }
 

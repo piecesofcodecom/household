@@ -1,6 +1,6 @@
 {
   "Actor": {
-    "types": ["character", "npc", "opponent"],
+    "types": ["character", "opponent"],
     "templates": {
       "base": {
         "stress": {
@@ -177,18 +177,6 @@
           }
       }
     },
-    "npc": {
-      "templates": ["base"],
-      "crucial_boxes": "",
-      "actions": {
-        "action_1": "",
-        "action_2": "",
-        "action_3": "",
-        "action_4": "",
-        "action_5": "",
-        "action_6": ""
-      }
-    },
     "opponent": {
       "templates": ["base"],
       "crucial_boxes": "",
@@ -199,6 +187,9 @@
         "action_4": "",
         "action_5": "",
         "action_6": ""
+      },
+      "threat": {
+        "level": 1
       }
     }
   },

@@ -4,6 +4,7 @@
  * @extends {Actor}
  */
 import { capitalizeFirstLetter } from "../helpers/utils.mjs";
+import * as HHRoll from "../helpers/roll.mjs";
 
 export class HouseholdActor extends Actor {
   /** @override */
@@ -52,14 +53,12 @@ export class HouseholdActor extends Actor {
   }
 
   /**
-   * Prepare NPC type specific data.
+   * Prepare Opponent type specific data.
    */
   _prepareNpcData(actorData) {
-    if (actorData.type !== 'npc' && actorData.type !== 'opponent') return;
+    if (actorData.type !== 'opponent') return;
 
-    // Make modifications to data here. For example:
-    const systemData = actorData.system;
-    systemData.xp = systemData.cr * systemData.cr * 100;
+    // Opponent-specific derived data goes here.
   }
 
   /**
@@ -95,24 +94,13 @@ export class HouseholdActor extends Actor {
    * Prepare NPC roll data.
    */
   _getNpcRollData(data) {
-    if (this.type !== 'npc' && this.type !== "opponent") return;
+    if (this.type !== "opponent") return;
 
-    // Process additional NPC data here.
+    // Process additional opponent roll data here.
   }
 
   _getFormula(dice_poll, reroll = false) {
-    let formula = "1d6 + 1d6";
-    if (reroll) {
-      formula = "1d6";
-      dice_poll -= 1;
-    } else {
-      dice_poll -= 2;
-    }
-
-    for (let i = 0; i < dice_poll && i < 7; i++) {
-      formula += " + 1d6"
-    }
-    return formula;
+    return HHRoll.buildRollFormula(dice_poll, { reroll });
   }
 
   async showAction(action) {
@@ -134,63 +122,18 @@ export class HouseholdActor extends Actor {
   }
 
   async _skillRoll(field, skill, mod = 0) {
-    const field_dice = this.system.fields[field].value;
-    const skill_dice = this.system.skills[skill].value;
-    let dice_poll = (Number(field_dice) + Number(skill_dice) + Number(mod));
-    const formula = this._getFormula(dice_poll);
-
-    let roll = new Roll(formula)
-    await roll.evaluate()
-    return {
-      poll: Array.from(Object.values(roll.terms).filter(item => item instanceof foundry.dice.terms.Die)),
-      roll: roll
-    };
-
+    const dice_poll = HHRoll.dicePoolSize(this.system.fields[field].value, this.system.skills[skill].value, mod);
+    const roll = new Roll(HHRoll.buildRollFormula(dice_poll));
+    await roll.evaluate();
+    return { poll: roll.dice, roll };
   }
 
   prepareSuccessToChat(success_poll) {
-    const success_label = {
-      '2': 'Basic',
-      '3': 'Critical',
-      '4': 'Extreme',
-      '5': 'Impossible',
-      '6': 'Jackpot'
-    };
-    let succ_to_chat = [];
-    for (let [key, value] of Object.entries(success_poll)) {
-      if (Number(value) > 0) {
-        succ_to_chat.push({
-          code: Number(key),
-          label: success_label[key],
-          value: value
-        })
-      }
-    }
-    return succ_to_chat;
+    return HHRoll.successesToChat(success_poll);
   }
 
   preparediceToChat(dice_poll, cancel_face = 0) {
-    const success_label = {
-      '2': 'basic',
-      '3': 'critical',
-      '4': 'extreme',
-      '5': 'impossible',
-      '6': 'jackpot'
-    };
-    let dice_to_chat = [];
-    for (let [key, value] of Object.entries(dice_poll)) {
-      if (value > 0) {
-        for (let j = 0; j < value; j++) {
-          dice_to_chat.push({
-            face: Number(key),
-            success: value > 1 ? success_label[value] : 'none',
-            locked: dice_poll[key] > 1 ? true : false,
-            face_display: Number(key) === Number(cancel_face) ? 0 : Number(key),
-          })
-        }
-      }
-    }
-    return dice_to_chat;
+    return HHRoll.diceToChat(dice_poll, cancel_face);
   }
   async _sendToChat(roll, field, skill, mod, poll_difficulty, dice_poll, success_poll, outcome, is_reroll, is_allin, is_jackpot, allow_reroll, allow_free_reroll, allow_allin, give_up, message_id = 0) {
     //face=dice.face locked=dice.locked success=dice.success
@@ -203,17 +146,9 @@ export class HouseholdActor extends Actor {
       allow_free_reroll = 0;
     }
 
-    // if there is no remaining dice, no buttons
-
-
-    let initialValue = 0;
-    Object.entries(dice).reduce(
-      (accumulator, [key, currentValue]) => { !dice[key].locked ? initialValue += 1 : 0 },
-      {},
-    );
-
-    if (initialValue == 0) {
-      allow_allin = allow_reroll = 0;
+    // if there are no unlocked dice left, nothing can be re-rolled
+    if (!HHRoll.hasRerollableDice(dice)) {
+      allow_allin = allow_reroll = allow_free_reroll = 0;
     }
 
     const free_roll_items = this.items.filter(el => el.system.free_reroll == true);
@@ -287,13 +222,7 @@ export class HouseholdActor extends Actor {
   }
 
   _normilize(array) {
-    let factor = 1;
-    let total = 0;
-    for (let [key, value] of Object.entries(array)) {
-      total += (Number(value) * factor)
-      factor = factor * 3
-    }
-    return total;
+    return HHRoll.normalizePoll(array);
   }
 
   /**
@@ -301,28 +230,16 @@ export class HouseholdActor extends Actor {
    */
 
   _get_poll(field, skill, mod) {
-    const field_dice = this.system.fields[field].value;
-    const skill_dice = this.system.skills[skill].value;
-    let dice_poll = (Number(field_dice) + Number(skill_dice) + Number(mod));
-    return dice_poll;
-
+    return HHRoll.dicePoolSize(this.system.fields[field].value, this.system.skills[skill].value, mod);
   }
+
   async onReroll(field, skill, mod, keep_poll) {
     const original_poll = this._get_poll(field.toLowerCase(), skill.toLowerCase(), mod);
-    let initialValue = 0;
-    const remove_from_poll = Object.entries(keep_poll).reduce(
-      (accumulator, [key, currentValue]) => accumulator + currentValue,
-      initialValue,
-    );
-    const for_this_poll = Number(original_poll) - Number(remove_from_poll);
-    const formula = this._getFormula(Number(for_this_poll), true);
-    let roll = new Roll(formula)
-    await roll.evaluate()
-    return {
-      poll: Array.from(Object.values(roll.terms).filter(item => item instanceof foundry.dice.terms.Die)),
-      roll: roll
-    };
-
+    const remove_from_poll = Object.values(keep_poll).reduce((sum, n) => sum + Number(n), 0);
+    const for_this_poll = Number(original_poll) - remove_from_poll;
+    const roll = new Roll(HHRoll.buildRollFormula(for_this_poll, { reroll: true }));
+    await roll.evaluate();
+    return { poll: roll.dice, roll };
   }
 
   /**
@@ -343,38 +260,14 @@ export class HouseholdActor extends Actor {
    */
 
   evaluatePoll(transformed_poll_result, poll_difficulty) {
-    const normalized_difficult = this._normilize(poll_difficulty);
-    const poll_successes = {
-      '2': 0,
-      '3': 0,
-      '4': 0,
-      '5': 0,
-      '6': 0
-    }
-    let outcome = 'Failure';
-    for (let i = 1; i < 7; i++) {
-      const index = String(i);
-      if (transformed_poll_result[index] > 1) {
-        const idx = String(transformed_poll_result[index])
-        poll_successes[idx] += 1;
-      }
-    }
-    let is_jackpot = false;
-    const normalized_success = this._normilize(poll_successes)
-    if (poll_successes['6'] > 0 && normalized_success >= normilized_jackpot) {
-      outcome = 'Jackpot';
-      is_jackpot = true;
-    } else if (normalized_difficult <= normalized_success) {
-      outcome = 'Success'
-    }
-    if (normalized_difficult == 0) outcome = '';
+    const { pollSuccesses, outcome, isJackpot } = HHRoll.evaluateRoll(transformed_poll_result, poll_difficulty);
     return {
       poll_difficulty,
       transformed_poll_result,
-      poll_successes,
+      poll_successes: pollSuccesses,
       outcome,
-      is_jackpot,
-    }
+      is_jackpot: isJackpot,
+    };
   }
 
   async onSkillRoll(field, skill, mod, poll_difficulty = {
@@ -384,113 +277,33 @@ export class HouseholdActor extends Actor {
     '5': 0
   }, keep_poll = false, is_reroll = false, is_free_reroll = false, is_allin = false, original_poll_success = {}, message_id = 0) {
     mod = Number(mod) || 0;
-    const normalized_difficult = this._normilize(poll_difficulty);
-    const normalized_original_success = this._normilize(original_poll_success);
-    const normilized_jackpot = 81;
-    let allow_allin = true;
-    let allow_reroll = true;
-    let allow_free_reroll = true;
-    if (is_free_reroll || is_reroll || is_allin) {
-      allow_free_reroll = false;
-    }
-    let transformed_poll_result = {
-      '1': 0,
-      '2': 0,
-      '3': 0,
-      '4': 0,
-      '5': 0,
-      '6': 0
-    };
+    const rollType = HHRoll.rollTypeFromFlags({ isReroll: is_reroll, isFreeReroll: is_free_reroll, isAllIn: is_allin });
+    const normalized_original_success = HHRoll.normalizePoll(original_poll_success);
 
-    const poll_successes = {
-      '2': 0,
-      '3': 0,
-      '4': 0,
-      '5': 0,
-      '6': 0
-    }
-    let original_success = {}
-    let original_poll_difficulty = {}
-
-    let outcome = 'Failure';
-    let skill_roll = {};
-    let roll = {};
-    let original_poll_result = [];
-    if (is_reroll || is_free_reroll || is_allin) {
-      allow_reroll = false;
-      skill_roll = await this.onReroll(field, skill, mod, keep_poll)
-      original_poll_result = skill_roll.poll;
-      roll = skill_roll.roll;
-
-      original_poll_result.forEach(die => {
-        const results = die.results
-        for (let i = 0; i < results.length; i++) {
-          if (results[i].active) {
-            transformed_poll_result[results[i].result] += 1;
-          }
-        }
-      });
-      const merged_poll = Object.entries(transformed_poll_result).reduce(
-        (accumulator, [key, value]) => ({ ...accumulator, [key]: (accumulator[key] || 0) + value })
-        , { ...keep_poll });
-      transformed_poll_result = merged_poll;
-
+    // Roll the dice. A reroll/free-reroll/all-in keeps the locked Successes and
+    // rerolls the rest; an initial roll rolls the whole pool.
+    let skill_roll;
+    let transformed_poll_result;
+    if (rollType !== HHRoll.ROLL_TYPES.INITIAL) {
+      skill_roll = await this.onReroll(field, skill, mod, keep_poll);
+      transformed_poll_result = HHRoll.mergePolls(keep_poll, HHRoll.tallyDiceFaces(skill_roll.poll));
     } else {
-      allow_allin = false;
       skill_roll = await this._skillRoll(field, skill, mod);
+      transformed_poll_result = HHRoll.tallyDiceFaces(skill_roll.poll);
+    }
+    const roll = skill_roll.roll;
 
-      original_poll_result = skill_roll.poll;
-      roll = skill_roll.roll;
+    // Score the result and decide which options it allows.
+    const evaluation = HHRoll.evaluateRoll(transformed_poll_result, poll_difficulty, { isAllIn: is_allin });
+    const options = HHRoll.decideRollOptions(rollType, evaluation.normalizedSuccess, normalized_original_success);
 
-      original_poll_result.forEach(die => {
-        const results = die.results
-        for (let i = 0; i < results.length; i++) {
-          if (results[i].active) {
-            transformed_poll_result[results[i].result] += 1;
-          }
-        }
-      });
-
+    let outcome = evaluation.outcome;
+    let poll_successes = evaluation.pollSuccesses;
+    // An all-in that did not improve is a total failure: wipe the Successes.
+    if (options.allInFailure) {
+      outcome = 'Failure';
+      poll_successes = { '2': 0, '3': 0, '4': 0, '5': 0, '6': 0 };
     }
-    for (let i = 1; i < 7; i++) {
-      const index = String(i);
-      if (transformed_poll_result[index] > 1) {
-        const idx = String(transformed_poll_result[index])
-        poll_successes[idx] += 1;
-      }
-    }
-    let is_jackpot = false;
-    const normalized_success = this._normilize(poll_successes)
-    if (normalized_success === 0) {
-      allow_reroll = false;
-    }
-
-    if (poll_successes['6'] > 0 && normalized_success >= normilized_jackpot) {
-      outcome = 'Jackpot';
-      is_jackpot = true;
-    } else if (normalized_difficult <= normalized_success) {
-      outcome = 'Success'
-    }
-    let give_up = false;
-    if (is_reroll || is_free_reroll) {
-      if (normalized_success <= normalized_original_success) {
-        allow_allin = false;
-      } else {
-        allow_allin = true;
-      }
-    }
-    if (normalized_success <= normalized_original_success && (is_reroll || is_allin)) {
-      if (is_allin) {
-        give_up = false;
-        outcome = 'Failure';
-        Object.keys(poll_successes).forEach((item) => {
-          poll_successes[item] = 0
-        })
-      } else {
-        give_up = true;
-      }
-    }
-    if (normalized_difficult == 0 && !is_allin) outcome = ''
 
     this._sendToChat(
       roll,
@@ -503,11 +316,11 @@ export class HouseholdActor extends Actor {
       outcome,
       is_reroll,
       is_allin,
-      is_jackpot,
-      allow_reroll,
-      allow_free_reroll,
-      allow_allin,
-      give_up,
+      evaluation.isJackpot,
+      options.allowReroll,
+      options.allowFreeReroll,
+      options.allowAllIn,
+      options.giveUp,
       message_id
     );
 

@@ -50,17 +50,24 @@ export class HouseholdActorSheet extends HandlebarsApplicationMixin(ActorSheetV2
     tabs: {
       template: "systems/household/templates/actor/char/parts/actor-tabs-nav.hbs"
     },
+    // `scrollable: [""]` makes ApplicationV2 preserve/restore the scroll position
+    // of the part's own root element (the `.tab` section, which has overflow:auto)
+    // across re-renders, so editing a field no longer jumps the sheet to the top.
     general: {
-      template: "systems/household/templates/actor/char/parts/actor-tab-general.hbs"
+      template: "systems/household/templates/actor/char/parts/actor-tab-general.hbs",
+      scrollable: [""]
     },
     others: {
-      template: "systems/household/templates/actor/char/parts/actor-tab-others.hbs"
+      template: "systems/household/templates/actor/char/parts/actor-tab-others.hbs",
+      scrollable: [""]
     },
     description: {
-      template: "systems/household/templates/actor/char/parts/actor-tab-description.hbs"
+      template: "systems/household/templates/actor/char/parts/actor-tab-description.hbs",
+      scrollable: [""]
     },
     items: {
-      template: "systems/household/templates/actor/char/parts/actor-tab-items.hbs"
+      template: "systems/household/templates/actor/char/parts/actor-tab-items.hbs",
+      scrollable: [""]
     }
   };
 
@@ -144,9 +151,9 @@ export class HouseholdActorSheet extends HandlebarsApplicationMixin(ActorSheetV2
   /* -------------------------------------------- */
 
   _prepareCharacterData(context) {
-    if (context.actor.img === 'icons/svg/mystery-man.svg') {
-      context.actor.img = '/systems/household/assets/sheet/bg-transparent.png';
-    }
+    // if (context.actor.img === 'icons/svg/mystery-man.svg') {
+    //   context.actor.img = '/systems/household/assets/sheet/bg-transparent.png';
+    // }
 
     for (const [k, v] of Object.entries(context.system.fields)) {
       v.label = game.i18n.localize(CONFIG.HOUSEHOLD.fields[k]) ?? k;

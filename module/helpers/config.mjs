@@ -1,32 +1,25 @@
 export const HOUSEHOLD = {};
 
 /**
- * The set of Ability Scores used within the system.
+ * The four fields, mapped to their localization keys.
  * @type {Object}
  */
-HOUSEHOLD.abilities = {
-  str: 'HOUSEHOLD.Ability.Str.long',
-  dex: 'HOUSEHOLD.Ability.Dex.long',
-  con: 'HOUSEHOLD.Ability.Con.long',
-  int: 'HOUSEHOLD.Ability.Int.long',
-  wis: 'HOUSEHOLD.Ability.Wis.long',
-  cha: 'HOUSEHOLD.Ability.Cha.long',
-};
-
-HOUSEHOLD.abilityAbbreviations = {
-  str: 'HOUSEHOLD.Ability.Str.abbr',
-  dex: 'HOUSEHOLD.Ability.Dex.abbr',
-  con: 'HOUSEHOLD.Ability.Con.abbr',
-  int: 'HOUSEHOLD.Ability.Int.abbr',
-  wis: 'HOUSEHOLD.Ability.Wis.abbr',
-  cha: 'HOUSEHOLD.Ability.Cha.abbr',
-};
-
 HOUSEHOLD.fields = {
   society: 'HOUSEHOLD.Field.Society.long',
   academia: 'HOUSEHOLD.Field.Academia.long',
   war: 'HOUSEHOLD.Field.War.long',
   street: 'HOUSEHOLD.Field.Street.long'
+};
+
+/**
+ * The card suit associated with each field. Skills inherit their field's suit.
+ * @type {Object}
+ */
+HOUSEHOLD.fieldSuits = {
+  society: 'heart',
+  academia: 'diamond',
+  war: 'club',
+  street: 'spade'
 };
 
 HOUSEHOLD.skills = {
