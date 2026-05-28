@@ -1,4 +1,4 @@
-export default class PunkapocalypticDataModel extends foundry.abstract.TypeDataModel {
+export default class HouseholdDataModel extends foundry.abstract.TypeDataModel {
   /**
    * Convert the schema to a plain object.
    * 

@@ -23,11 +23,7 @@
     margin: 0;
     padding: 0;
 ">
-    <span style="    text-align: center;
-    font-size: medium;
-    font-weight: bold;
-    margin-top: 1em;">ALL IN — FAILED</span>
-    <span>You pushed your luck and went All In, but the final roll did not grant any better or extra Successes.</span>
+    {{> "systems/household/templates/chat/parts/all-in-failed.hbs"}}
     {{/if}}
     {{#if is_jackpot}}
     <hr style="
@@ -94,16 +90,7 @@
 
     <!-- Outcome -->
     {{#when outcome 'eq' 'LostSuccess'}}
-    <span style="
-  /*border-left: 4px solid #ff9800;*/ /* Orange accent to highlight */
-  padding: 8px 12px;
-  border-radius: 6px;
-  font-weight: bold;
-  color: #333;
-  font-size: 1rem;
-  margin: 4px 0;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);"> <i class="fa fa-triangle-exclamation" style="color:  #ff9800"> </i>
-        {{localize "MESSAGES.Gaveup"}}</span>
+    {{> "systems/household/templates/chat/parts/give-up-notice.hbs"}}
     {{/when}}
     {{#when outcome 'eq' 'success'}}
     <i class="fa-solid fa-circle-check icon-success"></i>

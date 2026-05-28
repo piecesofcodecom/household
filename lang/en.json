@@ -369,6 +369,7 @@
     },
     "MESSAGES": {
         "Gaveup": "The reroll gave nothing! You must give up a combination.",
+        "AllInFailed": "All In failed! The re-roll granted no better or extra Success.",
         "Actionroll": "Action Roll",
         "Stress": {
             "Reduce": "Reduce stress",

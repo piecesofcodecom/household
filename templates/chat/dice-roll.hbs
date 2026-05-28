@@ -1,8 +1,50 @@
 <div class="household chat-card item-card" data-actor-id="{{ actor.id }}">
     <div class="dice-list">
     {{#each dice as |dice value|}}
-     {{> "systems/household/templates/chat/parts/dice/faces.html" face=dice.face locked=dice.locked
+     {{#if dice.locked}}
+     {{!-- A locked die is a Success: when give_up is active it can be clicked to give it up. --}}
+     {{> "systems/household/templates/chat/parts/dice/faces.html" face=dice.face_display locked=dice.locked
+        success=dice.success give_up=../give_up currentpoll=../currentpoll }}
+     {{else}}
+     {{> "systems/household/templates/chat/parts/dice/faces.html" face=dice.face_display locked=dice.locked
         success=dice.success }}
+     {{/if}}
     {{/each}}
     </div>
+
+    {{#if all_in_failed}}
+    {{> "systems/household/templates/chat/parts/all-in-failed.hbs"}}
+    {{/if}}
+
+    {{#if successes}}
+    <div class="success-list">
+        {{#each successes as |scc key|}}
+        <span class="roll-suc roll-suc-{{scc.label}}">{{ scc.value }}x {{localize (concat "HOUSEHOLD." scc.label
+            ".long")}}</span>
+        {{/each}}
+    </div>
+    {{/if}}
+
+    {{#if give_up}}
+    {{> "systems/household/templates/chat/parts/give-up-notice.hbs"}}
+    {{/if}}
+
+    <!-- Re-roll options. A plain /roll has no known difficulty, so there is no
+         pass/fail outcome — only the re-roll / free re-roll / all-in choices,
+         shown according to roll.mjs eligibility. -->
+    {{#if allow_reroll}}
+    <button class="reroll-button" data-rerolltype="normal" data-currentpoll="{{currentpoll}}"
+        data-current_success="{{poll_success}}" data-message-id="{{message_id}}">{{localize
+        "HOUSEHOLD.ReRoll.long"}}</button>
+    {{/if}}
+    {{#if allow_free_reroll}}
+    <button class="reroll-button" data-rerolltype="free" data-currentpoll="{{currentpoll}}"
+        data-current_success="{{poll_success}}" data-message-id="{{message_id}}">{{localize
+        "HOUSEHOLD.FreeReRoll.long"}}</button>
+    {{/if}}
+    {{#if allow_allin}}
+    <button class="reroll-button" data-rerolltype="allin" data-currentpoll="{{currentpoll}}"
+        data-current_success="{{poll_success}}" data-message-id="{{message_id}}">{{localize
+        "HOUSEHOLD.AllIn.long"}}</button>
+    {{/if}}
 </div>

@@ -5,9 +5,14 @@ import { HouseholdItem } from './documents/item.mjs';
 import { HouseholdActorSheet } from './sheets/actor-sheet.mjs';
 import { HouseholdNPCActorSheet } from './sheets/actor-npc-sheet.mjs';
 import { HouseholdItemSheet } from './sheets/item-sheet.mjs';
+// Import data models.
+import { HouseholdCharacter, HouseholdOpponent } from './data/_module.mjs';
 // Import helper/utility classes and constants.
 import { preloadHandlebarsTemplates } from './helpers/templates.mjs';
 import { HOUSEHOLD } from './helpers/config.mjs';
+// Pure roll-logic helpers (not yet wired into the live roll path; exposed for testing).
+import * as HouseholdRoll from './helpers/roll.mjs';
+import { isMacroBarVisible, setMacroBarVisible } from './helpers/hud.mjs';
 
 import { HouseholdCombat } from "./combat/HouseholdCombat.mjs";
 import { HouseholdCombatant } from "./combat/HouseholdCombatant.mjs";
@@ -53,6 +58,9 @@ function preparediceToChat(dice_poll, cancel_face = 0) {
 Hooks.once('init', async function () {
   CONFIG.Actor.documentClass = HouseholdActor;
   CONFIG.Item.documentClass = HouseholdItem;
+  // Register actor data models (schemas live here; template.json mirrors them).
+  CONFIG.Actor.dataModels.character = HouseholdCharacter;
+  CONFIG.Actor.dataModels.opponent = HouseholdOpponent;
   // Unregister old sheets if needed
   foundry.documents.collections.Actors.unregisterSheet("household", foundry.applications.sheets.ActorSheet);
   // Register your new V2 sheet
@@ -62,7 +70,7 @@ Hooks.once('init', async function () {
     label: "HOUSEHOLD.SheetLabels.Actor"
   });
   foundry.documents.collections.Actors.registerSheet("household", HouseholdNPCActorSheet, {
-    types: ["npc", "opponent"], // whatever actor types you support
+    types: ["opponent"], // the old `npc` type was merged into `opponent`
     makeDefault: true,
     label: "HOUSEHOLD.SheetLabels.Actor"
   });
@@ -77,6 +85,7 @@ Hooks.once('init', async function () {
     HouseholdActor,
     HouseholdItem,
     rollItemMacro,
+    roll: HouseholdRoll,
   };
 
 
@@ -386,24 +395,6 @@ Hooks.on("updateCombat", (combat, change, data) => {
   showHouseholdTurnOverlay(combat.currentTurnType);
 });
 
-Hooks.on('renderChatMessageHTML', (message, html, data) => {
-  // Get the chat log element
-  if (message.flags.household?.customCss) {
-    html.classList.add("household-custom-chat");
-  }
-  const chatLog = document.querySelector('#chat-log');
-  if (chatLog) {
-    // Scroll to the bottom
-    const observer = new MutationObserver(() => {
-      chatLog.scrollTo({
-        top: chatLog.scrollHeight,
-        behavior: 'smooth'
-      });
-    });
-    observer.observe(chatLog, { childList: true });
-  }
-});
-
 Hooks.on("updateSetting", async (setting, data, options, userId) => {
   // Check if it's the combat tracker config
   if (!game.user.isGM) return;
@@ -431,6 +422,33 @@ Hooks.on("updateSetting", async (setting, data, options, userId) => {
 Hooks.once('ready', async function () {
   // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
   Hooks.on('hotbarDrop', (bar, data, slot) => createItemMacro(data, slot));
+
+  // One-time migration: the `npc` actor type was merged into `opponent`.
+  // Convert any leftover npc actors so they keep working. Idempotent: once
+  // converted there are no npc actors left, so this no-ops on later loads.
+  if (game.user.isGM) {
+    const legacyNpcs = game.actors.filter((a) => a.type === "npc");
+    for (const actor of legacyNpcs) {
+      try {
+        // Changing a Document's type requires force-replacing the system field.
+        // Carry over the existing source data; the Opponent model fills in any
+        // new defaults (e.g. threat.level). Prefer the v14 ForcedReplacement
+        // operator, falling back to the legacy "==" key on older v13 builds.
+        const sourceSystem = actor.toObject().system ?? {};
+        const ForcedReplacement = foundry.data?.operators?.ForcedReplacement;
+        const changes = ForcedReplacement
+          ? { type: "opponent", system: ForcedReplacement.create(sourceSystem) }
+          : { type: "opponent", "==system": sourceSystem };
+        await actor.update(changes);
+      } catch (err) {
+        console.error(`Household | Failed to migrate npc actor "${actor.name}" to opponent.`, err);
+      }
+    }
+    if (legacyNpcs.length > 0) {
+      ui.notifications.info(`Household: migrated ${legacyNpcs.length} NPC actor(s) to Opponent.`);
+    }
+  }
+
   if (!isGm()) {
     await renderCharacter();
   }
@@ -464,10 +482,23 @@ Hooks.once('ready', async function () {
  */
 
 Hooks.on("getSceneControlButtons", (controls) => {
-  if (!game.user.isGM) return controls;
-
   const tokens = controls.tokens;
   if (!tokens) return;
+
+  // HUD <-> macro hotbar toggle, available to every user.
+  controls.tokens.tools.householdHudToggle = {
+    name: "householdHudToggle",
+    title: "Toggle HUD / Macro Bar",
+    icon: "fa-solid fa-grip",
+    order: Object.keys(controls.tokens.tools).length,
+    toggle: true,
+    active: isMacroBarVisible(),
+    visible: true,
+    onChange: (event, active) => setMacroBarVisible(active)
+  };
+
+  if (!game.user.isGM) return controls;
+
   controls.tokens.tools.nextRound = {
     name: "nextRound",
     title: "Next Round",
@@ -482,15 +513,19 @@ Hooks.on("getSceneControlButtons", (controls) => {
   };
 });
 
-Hooks.on('renderChatMessageHTML', (message, html, context) => {
-  // make a new parser
-  if (!message?.flags?.household?.customCss) return;
+/**
+ * Wire the interactive skill-roll card (the `customCss` flavor): field /
+ * difficulty / modifier pickers, the roll button, re-roll buttons and the
+ * give-up dice. Only the actor's owner (or a GM) may act on it.
+ * @param {ChatMessage} message
+ * @param {HTMLElement} html
+ */
+function wireSkillRollCard(message, html) {
   const parser = new DOMParser();
   const actor = game.actors.get(message.speaker.actor);
-  const token = message.speaker.token;
   const level = CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER;
 
-  if (!((actor.ownership?.[game.user.id] ?? 0) >= level) && !game.user.isGM) {
+  if (!((actor?.ownership?.[game.user.id] ?? 0) >= level) && !game.user.isGM) {
     return;
 
   }
@@ -710,7 +745,7 @@ Hooks.on('renderChatMessageHTML', (message, html, context) => {
     });
   }
 
-});
+}
 
 /* -------------------------------------------- */
 /*  Hotbar Macros                               */
@@ -1147,76 +1182,239 @@ Hooks.once('diceSoNiceReady', (dice3d) => {
   );
 });
 
-Hooks.on("renderChatMessageHTML", async (message, html, data) => {
-  if (message.author.id !== game.user.id && !game.user.isGM && (message.blind == true)) {
+/* -------------------------------------------- */
+/*  Plain /roll re-roll handling (roll.mjs)     */
+/* -------------------------------------------- */
+
+/**
+ * Render (or re-render) the Household card for a plain /roll into a message.
+ * Plain rolls have no difficulty, so there is no pass/fail outcome — only the
+ * re-roll options, scored entirely via roll.mjs (no actor / field / skill).
+ * @param {ChatMessage} message
+ * @param {object} opts
+ * @param {Record<string, number>} opts.tally        merged face counts {1..6}
+ * @param {string} opts.rollType                      HouseholdRoll.ROLL_TYPES value
+ * @param {number} [opts.originalNorm=0]              normalized Successes before this roll
+ * @param {number} [opts.cancelFace=0]                a Success face the player gave up (shown cancelled, dropped from the score)
+ * @param {boolean} [opts.finalized=false]            true once a Success was given up: the interaction is over (no re-rolls / no give-up prompt)
+ */
+async function renderPlainRollCard(message, { tally, rollType, originalNorm = 0, cancelFace = 0, finalized = false }) {
+  const R = HouseholdRoll;
+  // When a Success was given up, drop that face before scoring.
+  const scoredPoll = cancelFace ? { ...tally, [cancelFace]: 0 } : tally;
+  const evaluation = R.evaluateRoll(scoredPoll, {});
+  // After giving up a Success there is nothing left to do — no re-rolls, no prompt.
+  const options = finalized
+    ? { allowReroll: false, allowFreeReroll: false, allowAllIn: false, giveUp: false, allInFailure: false }
+    : R.decideRollOptions(rollType, evaluation.normalizedSuccess, originalNorm);
+  const dice = R.diceToChat(tally, cancelFace);
+  const rerollable = R.hasRerollableDice(dice);
+
+  // An all-in that did not improve wipes every Success.
+  const pollSuccesses = options.allInFailure
+    ? { "2": 0, "3": 0, "4": 0, "5": 0, "6": 0 }
+    : evaluation.pollSuccesses;
+
+  const templateData = {
+    dice,
+    successes: R.successesToChat(pollSuccesses),
+    allow_reroll: options.allowReroll && rerollable,
+    allow_free_reroll: options.allowFreeReroll && rerollable,
+    allow_allin: options.allowAllIn && rerollable,
+    all_in_failed: options.allInFailure,
+    give_up: options.giveUp ? "give_up" : "",
+    currentpoll: JSON.stringify(tally),
+    poll_success: JSON.stringify(pollSuccesses),
+    message_id: message.id
+  };
+  const html = await foundry.applications.handlebars.renderTemplate(
+    "systems/household/templates/chat/dice-roll.hbs",
+    templateData
+  );
+  await message.update({
+    flavor: html,
+    flags: { household: { customCss: false, plainRoll: true } }
+  });
+}
+
+/**
+ * Re-roll a plain /roll using roll.mjs: keep the Successes, re-roll the rest,
+ * merge, and re-render the card with the next set of options.
+ * @param {ChatMessage} message
+ * @param {string} rerollType  the button's data-rerolltype ("normal"|"free"|"allin")
+ * @param {Record<string, number>} currentPoll  the face counts shown on the card
+ */
+async function rerollPlainRoll(message, rerollType, currentPoll) {
+  const R = HouseholdRoll;
+  const rollType = R.rollTypeFromButton(rerollType);
+
+  const keep = R.keepSuccessfulFaces(currentPoll);
+  const total = Object.values(currentPoll).reduce((sum, n) => sum + Number(n), 0);
+  const kept = Object.values(keep).reduce((sum, n) => sum + Number(n), 0);
+  const rerollCount = total - kept;
+  const originalNorm = R.normalizePoll(R.countSuccesses(currentPoll));
+
+  // Nothing to re-roll (every die is already a locked Success): do nothing
+  // rather than rolling a phantom die that would grow the pool.
+  if (rerollCount <= 0) return;
+
+  const roll = new Roll(R.buildRollFormula(rerollCount, { reroll: true }));
+  await roll.evaluate();
+  if (game.dice3d) await game.dice3d.showForRoll(roll, game.user, true);
+
+  const merged = R.mergePolls(keep, R.tallyDiceFaces(roll.dice));
+  await renderPlainRollCard(message, { tally: merged, rollType, originalNorm });
+}
+
+/**
+ * Give up a Success on a plain /roll card: drop the clicked face and re-render
+ * the card in its finalized state (the given-up die shown cancelled, no further
+ * re-rolls). Mirrors the give-up flow on skill-roll cards, but with no
+ * difficulty / outcome (plain rolls have neither).
+ * @param {ChatMessage} message
+ * @param {string|number} face  the Success face to give up (the die's value)
+ * @param {Record<string, number>} currentPoll  the face counts shown on the card
+ */
+async function giveUpPlainRoll(message, face, currentPoll) {
+  await renderPlainRollCard(message, {
+    tally: currentPoll,
+    rollType: HouseholdRoll.ROLL_TYPES.REROLL,
+    cancelFace: Number(face),
+    finalized: true
+  });
+}
+
+/**
+ * Wire the re-roll buttons (and the give-up dice) on plain /roll cards to the
+ * roll.mjs flow.
+ * @param {ChatMessage} message
+ * @param {HTMLElement} html
+ */
+function wirePlainRollCard(message, html) {
+  html.querySelectorAll(".reroll-button").forEach((button) => {
+    button.addEventListener("click", async (event) => {
+      event.preventDefault();
+      const ds = event.currentTarget.dataset;
+      await rerollPlainRoll(message, ds.rerolltype, JSON.parse(ds.currentpoll));
+    });
+  });
+
+  // When a re-roll did not improve, Success dice carry the .give_up class and
+  // become clickable to give one up (see dice-roll.hbs / faces.html).
+  html.querySelectorAll(".give_up").forEach((die) => {
+    die.addEventListener("click", async (event) => {
+      event.preventDefault();
+      const ds = event.currentTarget.dataset;
+      await giveUpPlainRoll(message, ds.face, JSON.parse(ds.currentpoll));
+    });
+  });
+}
+
+/* -------------------------------------------- */
+/*  Chat card render dispatch (single hook)     */
+/* -------------------------------------------- */
+
+// One MutationObserver keeps the chat log pinned to the bottom as messages (and
+// their async card updates) change its height. Created once and reused — the
+// previous code attached a fresh observer on every message render, leaking one
+// per message.
+let _chatLogObserver = null;
+function pinChatLogToBottom() {
+  if (_chatLogObserver) return;
+  const chatLog = document.querySelector("#chat-log");
+  if (!chatLog) return;
+  _chatLogObserver = new MutationObserver(() => {
+    chatLog.scrollTo({ top: chatLog.scrollHeight, behavior: "smooth" });
+  });
+  _chatLogObserver.observe(chatLog, { childList: true });
+}
+
+/** Whether the current user may interact with (re-roll on) a message's card. */
+function canActOnMessage(message) {
+  return message.author?.id === game.user.id || game.user.isGM;
+}
+
+/** Whether a whisper hides this message from the current user. */
+function isMessageHidden(message) {
+  return message.whisper.length > 0 && !message.whisper.includes(game.user.id) && !game.user.isGM;
+}
+
+/** Stamp every button on a (re-rendered) card with the real message id. */
+function rewriteButtonMessageIds(message, html) {
+  html.querySelectorAll("button").forEach((button) => {
+    button.setAttribute("data-message-id", message._id);
+  });
+}
+
+/** Reveal the content of a plain (non-card) chat message. */
+function revealMessageContent(html) {
+  html.classList.add("show-content");
+  const content = html.querySelector(".message-content");
+  if (content) content.style.setProperty("display", "block", "important");
+}
+
+/**
+ * Turn a brand-new plain `/roll` of pure d6s into a Household plain-roll card.
+ * Other rolls (a numeric modifier, non-d6 dice) are left untouched.
+ * @param {ChatMessage} message
+ * @returns {Promise<boolean>}  true if the message was rendered as a card
+ */
+async function tryRenderPlainRoll(message) {
+  if (!message.rolls.length) return false;
+  const roll = message.rolls[0];
+  if (!(roll instanceof Roll)) return false;
+  const pureD6 = roll.terms.every(
+    (term) => term?.faces == 6 || term instanceof foundry.dice.terms.OperatorTerm
+  );
+  if (!pureD6) return false;
+
+  // A plain /roll of d6s is treated as an initial Household roll with an unknown
+  // difficulty: scored for Successes and offered re-roll options, but with no
+  // pass/fail outcome. See renderPlainRollCard / rerollPlainRoll.
+  const tally = HouseholdRoll.tallyDiceFaces(roll.dice);
+  await renderPlainRollCard(message, {
+    tally,
+    rollType: HouseholdRoll.ROLL_TYPES.INITIAL,
+    originalNorm: 0
+  });
+  return true;
+}
+
+/**
+ * Single entry point for rendering Household chat cards, dispatching by the
+ * message's `household` flags:
+ *   - `customCss` → the interactive skill-roll card,
+ *   - `plainRoll` → the interactive plain /roll card,
+ *   - neither     → a fresh message: maybe convert a pure-d6 /roll into a card,
+ *                   otherwise just reveal its content.
+ * Replaces the four separate renderChatMessageHTML hooks this file used to have.
+ */
+Hooks.on("renderChatMessageHTML", async (message, html) => {
+  const flags = message.flags?.household ?? {};
+
+  // Always: mark custom cards and keep the log scrolled to the bottom.
+  if (flags.customCss) html.classList.add("household-custom-chat");
+  pinChatLogToBottom();
+
+  // Interactive skill-roll card (wireSkillRollCard does its own ownership check).
+  if (flags.customCss) {
+    rewriteButtonMessageIds(message, html);
+    wireSkillRollCard(message, html);
     return;
   }
-  if (!message?.flags?.household?.customCss && message?.flags?.household?.customCss !== undefined) return;
 
-  if (message.whisper.length > 0 && !message.whisper.includes(game.user.id) && !game.user.isGM) {
+  // Interactive plain /roll card.
+  if (flags.plainRoll) {
+    if (canActOnMessage(message) && !isMessageHidden(message)) wirePlainRollCard(message, html);
     return;
   }
 
-  if (!message?.flags?.household?.customCss && !message?.flags?.household?.noChanges) {
-    if (message.rolls.length > 0) {
-      const roll = message.rolls[0];
-      // ignore roll if the roll has any other dice than d6
-      let ignore_roll = false;
-      if (roll instanceof Roll) {
-        const dice = [];
-        for (const term of roll.terms) {
-          if (term?.faces != 6 && !(term instanceof foundry.dice.terms.OperatorTerm)) {
-            ignore_roll = true;
-            break;
-          }
-          for (const die of term.results) {
-            dice.push({
-              face: die.result,
-              locked: false
-            });
-
-
-          }
-        }
-
-        const templateData = {
-          dice: dice,
-        };
-        // ignore rolls that don't contain all d6
-        if (!ignore_roll) {
-          const html = await foundry.applications.handlebars.renderTemplate("systems/household/templates/chat/dice-roll.hbs", templateData);
-
-          await message.update({
-            flavor: html, flags: {
-              household: {
-                customCss: false
-              }
-            }
-          });
-          return;
-        }
-      }
-    }
-  } else {
-    const messageId = message._id;
-    //const updatedHtml = html.replace(/data-message-id="MESSAGEID"/g, `data-message-id="${messageId}"`);
-    const buttons = html.querySelectorAll('button') ? [...html.querySelectorAll('button')] : [];
-    if (buttons.length > 0) {
-      buttons.forEach(function (index) {
-        index.setAttribute('data-message-id', messageId);
-      });
-    }
-  }
-
-
-
-  // If no flavor exists, create one
-  if (!message?.flags?.household?.customCss) {
-    html.classList.add("show-content");
-    const content = html.querySelector(".message-content");
-    if (content) content.style.setProperty("display", "block", "important");
-
-  }
+  // A fresh message with no Household flags. Respect blind/whisper before
+  // turning a /roll into a card or revealing plain content.
+  if (message.blind === true && !canActOnMessage(message)) return;
+  if (isMessageHidden(message)) return;
+  if (!flags.noChanges && await tryRenderPlainRoll(message)) return;
+  revealMessageContent(html);
 });
 
 

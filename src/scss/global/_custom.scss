@@ -1,10 +1,17 @@
-#hotbar {
+// The Household HUD replaces the macro hotbar by default. The scene-control
+// toggle adds `.household-macro-bar` to <body> to swap them (see helpers/hud.mjs).
+body:not(.household-macro-bar) #hotbar {
   display: none;
   width: 0;
   height: 0;
   overflow: hidden;
   visibility: hidden;
   opacity: 0;
+}
+
+// When the macro bar is shown, hide the Household HUD so they don't overlap.
+body.household-macro-bar #player-character {
+  display: none;
 }
 
 .show {

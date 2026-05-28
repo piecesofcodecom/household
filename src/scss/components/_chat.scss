@@ -144,6 +144,24 @@ input[type="radio"].modifier-option:checked+label.mod-label-minus {
   font-weight: bold;
 }
 
+/* Shared boxed notice for the "give up a Success" / "All In failed" messages,
+   used by both the skill-roll card and the plain /roll card so they match. */
+.hh-roll-notice {
+  display: block;
+  text-align: center;
+  padding: 8px 12px;
+  margin: 4px 0;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 1rem;
+  color: #333;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  i {
+    color: #ff9800;
+  }
+}
+
 .icon-lost_success {
   font-size: 48px;
   color: yellow

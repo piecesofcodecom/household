@@ -50,17 +50,23 @@ export class HouseholdNPCActorSheet extends HandlebarsApplicationMixin(ActorShee
     tabs: {
       template: "systems/household/templates/actor/npc/parts/npc-tabs.hbs"
     },
+    // `scrollable: [""]` preserves/restores the scroll position of each `.tab`
+    // section (overflow:auto) across re-renders so edits don't jump to the top.
     main: {
-      template: "systems/household/templates/actor/npc/parts/npc-tab-main-right.hbs"
+      template: "systems/household/templates/actor/npc/parts/npc-tab-main-right.hbs",
+      scrollable: [""]
     },
     actions: {
-      template: "systems/household/templates/actor/npc/parts/npc-tab-actions.hbs"
+      template: "systems/household/templates/actor/npc/parts/npc-tab-actions.hbs",
+      scrollable: [""]
     },
     items: {
-      template: "systems/household/templates/actor/npc/parts/npc-tab-items.hbs"
+      template: "systems/household/templates/actor/npc/parts/npc-tab-items.hbs",
+      scrollable: [""]
     },
     biography: {
-      template: "systems/household/templates/actor/npc/parts/npc-tab-biography.hbs"
+      template: "systems/household/templates/actor/npc/parts/npc-tab-biography.hbs",
+      scrollable: [""]
     }
   };
 

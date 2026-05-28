@@ -38,7 +38,7 @@ export class HouseholdCombat extends Combat {
     const { turnIndex, turnOrder } = this.flags.household;
     if (turnIndex === 0) {
       if (turnOrder[1] == 'reaction') {
-        this.combatants.filter(combatant => combatant.actor?.type === 'npc')
+        this.combatants.filter(combatant => combatant.actor?.type === 'opponent')
           .forEach(combatant => {
             combatant.token?.object?.renderFlags.set({ refreshTurnMarker: true });
           });

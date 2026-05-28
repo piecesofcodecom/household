@@ -362,6 +362,7 @@
     },
      "MESSAGES": {
         "Gaveup": "Il rilancio non ha dato nulla! Devi rinunciare a una combinazione.",
+        "AllInFailed": "All-In fallito! Il rilancio non ha concesso alcun Successo migliore o aggiuntivo.",
         "Actionroll": "Tiro Azione",
         "RerollOptions": "Opzioni Rilancio Gratuito"
     }

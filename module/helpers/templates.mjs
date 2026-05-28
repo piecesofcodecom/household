@@ -31,6 +31,8 @@ export const preloadHandlebarsTemplates = async function () {
     "systems/household/templates/actor/hud/hud-npc.hbs",
     // Chat parts
     'systems/household/templates/chat/parts/dice/faces.html',
+    'systems/household/templates/chat/parts/give-up-notice.hbs',
+    'systems/household/templates/chat/parts/all-in-failed.hbs',
     'systems/household/templates/chat/skill-roll-card.hbs',
     'systems/household/templates/chat/dice-roll.hbs',
     'systems/household/templates/chat/skill-show-card.hbs',
