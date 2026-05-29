@@ -18,7 +18,7 @@ export default class HouseholdCharacter extends HouseholdActorBase {
     schema.fields = new fields.SchemaField(
       Object.keys(HOUSEHOLD.fields).reduce((obj, field) => {
         obj[field] = new fields.SchemaField({
-          value: new fields.NumberField({ ...requiredInteger, initial: 1, min: 0 }),
+          value: new fields.NumberField({ ...requiredInteger, initial: 1, min: 1 }),
           suit: new fields.StringField({ required: true, blank: false, initial: HOUSEHOLD.fieldSuits[field] }),
         });
         return obj;
@@ -30,7 +30,7 @@ export default class HouseholdCharacter extends HouseholdActorBase {
       Object.entries(skills_list).reduce((obj, [field, skills]) => {
         for (const skill of skills) {
           obj[skill] = new fields.SchemaField({
-            value: new fields.NumberField({ ...requiredInteger, initial: 1, min: 0 }),
+            value: new fields.NumberField({ ...requiredInteger, initial: 1, min: 1 }),
             field: new fields.StringField({ required: true, blank: false, initial: field }),
             suit: new fields.StringField({ required: true, blank: false, initial: HOUSEHOLD.fieldSuits[field] }),
           });

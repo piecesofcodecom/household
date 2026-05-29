@@ -15,8 +15,8 @@
           </label>
           <div class="flexrow flex-group-right">
             {{#numLoop 2}}
-            <input id="{{key}}-{{this}}-{{@root.id}}" class="fa-household-{{ability.suit}}{{#when ability.value 'gteq' this}}-full{{/when}} no-decor" type="radio" max="2" name="system.fields.{{key}}.value"
-              value="{{this}}" data-dtype="Number" data-action="customEdit" data-object="actor" data-value="{{this}}" data-path="system.fields.{{key}}.value" />
+            <input id="{{key}}-{{this}}-{{@root.id}}" class="fa-household-{{ability.suit}}{{#when ability.value 'gteq' this}}-full{{/when}} no-decor" type="radio" name="system.fields.{{key}}.value"
+              value="{{this}}" data-dtype="Number" {{doCheckIf ability.value 'eq' this}} />
             {{/numLoop}}
           </div>
         </div>
@@ -28,8 +28,8 @@
         <label for="system.skills.{{ky}}.value" class="resource-label message-item flexlarge align-left rollable"
           data-action="roll" data-type="skill" data-field="{{key}}" data-key="{{ky}}" data-label="{{skill.label}}">{{skill.label}}</label>
         {{#numLoop 4}}
-          <input id="{{ky}}-{{this}}-{{@root.id}}" class="fa-household-{{ability.suit}}{{#when skill.value 'gteq' this}}-full{{/when}} no-decor" type="radio" max="2" name="system.skills.{{ky}}.value"
-            value="{{this}}" data-dtype="Number" data-action="customEdit" data-value="{{this}}" data-path="system.skills.{{ky}}.value" data-value="{{this}}" data-object="actor" />
+          <input id="{{ky}}-{{this}}-{{@root.id}}" class="fa-household-{{ability.suit}}{{#when skill.value 'gteq' this}}-full{{/when}} no-decor" type="radio" name="system.skills.{{ky}}.value"
+            value="{{this}}" data-dtype="Number" {{doCheckIf skill.value 'eq' this}} />
         {{/numLoop}}
       </div>
       {{/when}}

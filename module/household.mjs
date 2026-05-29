@@ -61,6 +61,12 @@ Hooks.once('init', async function () {
   // Register actor data models (schemas live here; template.json mirrors them).
   CONFIG.Actor.dataModels.character = HouseholdCharacter;
   CONFIG.Actor.dataModels.opponent = HouseholdOpponent;
+  // Deprecated alias: `npc` was merged into `opponent`. It is kept registered
+  // (mapped to the Opponent model) only so leftover npc actors in existing
+  // worlds still load and can be migrated to `opponent` in the `ready` hook.
+  // Remove this, the npc template.json type, and the npc sheet registration in
+  // a future release once worlds have migrated.
+  CONFIG.Actor.dataModels.npc = HouseholdOpponent;
   // Unregister old sheets if needed
   foundry.documents.collections.Actors.unregisterSheet("household", foundry.applications.sheets.ActorSheet);
   // Register your new V2 sheet
@@ -70,7 +76,7 @@ Hooks.once('init', async function () {
     label: "HOUSEHOLD.SheetLabels.Actor"
   });
   foundry.documents.collections.Actors.registerSheet("household", HouseholdNPCActorSheet, {
-    types: ["opponent"], // the old `npc` type was merged into `opponent`
+    types: ["opponent", "npc"], // `npc` kept only so legacy actors load until migrated to `opponent`
     makeDefault: true,
     label: "HOUSEHOLD.SheetLabels.Actor"
   });
@@ -427,6 +433,10 @@ Hooks.once('ready', async function () {
   // Convert any leftover npc actors so they keep working. Idempotent: once
   // converted there are no npc actors left, so this no-ops on later loads.
   if (game.user.isGM) {
+    // `npc` is kept registered (as an Opponent-model alias) so these actors load
+    // normally into game.actors and can be updated here. Updating an off-collection
+    // (invalid) document does not work in v14, so registration is what makes this
+    // migration possible.
     const legacyNpcs = game.actors.filter((a) => a.type === "npc");
     for (const actor of legacyNpcs) {
       try {
