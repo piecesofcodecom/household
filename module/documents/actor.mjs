@@ -8,16 +8,21 @@ import * as HHRoll from "../helpers/roll.mjs";
 
 export class HouseholdActor extends Actor {
   /** @override */
-  prepareData() {
-    // Prepare data for the actor. Calling the super version of this executes
-    // the following, in order: data reset (to clear active effects),
-    // prepareBaseData(), prepareEmbeddedDocuments() (including active effects),
-    // prepareDerivedData().
-    super.prepareData();
-  }
+  // prepareData() {
+  //   // Prepare data for the actor. Calling the super version of this executes
+  //   // the following, in order: data reset (to clear active effects),
+  //   // prepareBaseData(), prepareEmbeddedDocuments() (including active effects),
+  //   // prepareDerivedData().
+  //   super.prepareData();
+  // }
 
   /** @override */
   prepareBaseData() {
+    // v14: the base Actor#prepareBaseData runs _clearData(), which resets the
+    // per-cycle ActiveEffect phase tracker (_completedActiveEffectPhases). Skipping
+    // super here makes applyActiveEffects("initial") throw "phase already completed"
+    // on every re-prepare after the first. Always call super.
+    super.prepareBaseData();
     // Data modifications in this step occur before processing embedded
     // documents or derived data.
   }
@@ -32,6 +37,7 @@ export class HouseholdActor extends Actor {
    * is queried and has a roll executed directly from it).
    */
   prepareDerivedData() {
+    super.prepareDerivedData();
     const actorData = this;
     const systemData = actorData.system;
     const flags = actorData.flags.household || {};
