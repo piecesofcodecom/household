@@ -1,7 +1,7 @@
 import {
   onManageActiveEffect,
   prepareActiveEffectCategories,
-} from '../helpers/effects.mjs';
+} from '../../helpers/effects.mjs';
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ItemSheetV2 } = foundry.applications.sheets;

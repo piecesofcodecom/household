@@ -1,13 +1,13 @@
+/*
+* Player character data model.
+* Mirrors the `character` type in template.json. The field/skill structure is
+* generated from HOUSEHOLD.fields + HOUSEHOLD.fieldSuits (config.mjs) and
+* skills_list (utils.mjs) so the mapping lives in one place.
+*/
 import HouseholdActorBase from "./base-actor.mjs";
 import { HOUSEHOLD } from "../helpers/config.mjs";
 import { skills_list } from "../helpers/utils.mjs";
 
-/**
- * Player character data model.
- * Mirrors the `character` type in template.json. The field/skill structure is
- * generated from HOUSEHOLD.fields + HOUSEHOLD.fieldSuits (config.mjs) and
- * skills_list (utils.mjs) so the mapping lives in one place.
- */
 export default class HouseholdCharacter extends HouseholdActorBase {
   static defineSchema() {
     const fields = foundry.data.fields;
