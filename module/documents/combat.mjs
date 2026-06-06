@@ -1,4 +1,4 @@
-// module/combat/HouseholdCombat.js
+// module/documents/combat.mjs
 export class HouseholdCombat extends Combat {
 
   /* -------------------------------------------- */

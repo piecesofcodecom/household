@@ -1,4 +1,4 @@
-// module/combat/HouseholdCombatant.js
+// module/documents/combatant.mjs
 
 export class HouseholdCombatant extends Combatant {
 

@@ -1,7 +1,7 @@
 import {
   onManageActiveEffect,
   prepareActiveEffectCategories,
-} from '../helpers/effects.mjs';
+} from '../../helpers/effects.mjs';
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ItemSheetV2 } = foundry.applications.sheets;
@@ -212,7 +212,7 @@ export class HouseholdItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) 
     const field = target.dataset.field || "img";
     const current = foundry.utils.getProperty(this.document, field);
 
-    const fp = new foundry.applications.apps.FilePicker({
+    const fp = new foundry.applications.apps.FilePicker.implementation({
       type: "image",
       current: current,
       callback: (path) => this.document.update({ [field]: path })

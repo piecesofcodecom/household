@@ -1,7 +1,5 @@
-// module/combat/HouseholdCombatTracker.js
-
 const { DialogV2, HandlebarsApplicationMixin } = foundry.applications.api;
-import * as actions from "../helpers/actions.mjs";
+import * as actions from "../../helpers/actions.mjs";
 
 export class HouseholdCombatTracker extends foundry.applications.sidebar.tabs.CombatTracker {
 

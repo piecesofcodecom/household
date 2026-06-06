@@ -1,9 +1,9 @@
+/*
+* Shared base for all Household actor types.
+* Mirrors the `base` template in template.json (stress + biography).
+*/
 import HouseholdDataModel from "./base-model.mjs";
 
-/**
- * Shared base for all Household actor types.
- * Mirrors the `base` template in template.json (stress + biography).
- */
 export default class HouseholdActorBase extends HouseholdDataModel {
   static defineSchema() {
     const fields = foundry.data.fields;
