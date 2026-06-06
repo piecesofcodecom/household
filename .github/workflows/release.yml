@@ -71,9 +71,6 @@ jobs:
       - name: Install dependencies
         run: npm ci || npm install
 
-      - name: Build bundle
-        run: npm run release
-
       - name: Stamp manifest with version and release URLs
         run: |
           REPO="${{ github.repository }}"
@@ -89,6 +86,9 @@ jobs:
             "$MANIFEST" > "$tmp" && mv "$tmp" "$MANIFEST"
           echo "Stamped $MANIFEST:"
           jq '{id, version, url, manifest, download}' "$MANIFEST"
+
+      - name: Build bundle
+        run: npm run release
 
       - name: Package release zip
         run: cd release && zip -r "../$PACKAGE_ZIP" "$MANIFEST" LICENSE $PACKAGE_ITEMS
