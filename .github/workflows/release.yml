@@ -72,7 +72,7 @@ jobs:
         run: npm ci || npm install
 
       - name: Build bundle
-        run: npm run build
+        run: npm run release
 
       - name: Stamp manifest with version and release URLs
         run: |
