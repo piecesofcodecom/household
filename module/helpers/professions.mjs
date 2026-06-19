@@ -1,18 +1,49 @@
 import { HOUSEHOLD } from "./config.mjs";
 const { DialogV2 } = foundry.applications.api;
+
+/**
+ * Resolve an item reference to a Document. `ref` is either a UUID (contains a
+ * dot) or a legacy item name. Names are looked up by type in world items and
+ * the matching premium compendium. Returns null if unresolved or type-mismatched.
+ */
+async function resolveItemRef(ref, type) {
+    if (!ref) return null;
+    if (ref.includes('.')) {
+        const doc = await fromUuid(ref);
+        return doc?.type === type ? doc : null;
+    }
+    const lower = ref.toLowerCase();
+    let doc = game.items.find(el => el.type === type && el.name.toLowerCase() === lower);
+    if (doc) return doc;
+    if (HOUSEHOLD.premium) {
+        const suffix = type === 'move' ? 'moves' : type === 'trait' ? 'traits' : 'equipments';
+        const pack = game.packs.get(HOUSEHOLD.premium_name + '.' + suffix);
+        if (pack) {
+            const contents = await pack.getDocuments();
+            doc = contents.find(el => el.type === type && el.name.toLowerCase() === lower);
+            if (doc) return doc;
+        }
+    }
+    return null;
+}
+
 async function addMove(actor, itemUuid, _item) {
     addItem(actor, itemUuid)
 
     //Time to pick vocation
     if (_item.type == 'profession') {
-        let collection_vocations = game.items.filter(el => el.type === 'vocation' && el.system.profession.toLowerCase() == _item.name.toLowerCase());
+        // Vocations now reference their profession by UUID; match by resolved name
+        // (with legacy name fallback) against the profession just added.
+        const professionNameLower = _item.name.toLowerCase();
+        let candidates = game.items.filter(el => el.type === 'vocation');
         if (HOUSEHOLD.premium) {
             const packs = game.packs.get(HOUSEHOLD.premium_name + '.character')
             const contents = await packs.getDocuments();
-            const compendium_items = contents.filter(el => el.type === 'vocation' && el.system.profession.toLowerCase() == _item.name.toLowerCase())
-            if (compendium_items.length > 0) {
-                collection_vocations = collection_vocations.concat(compendium_items)
-            }
+            candidates = candidates.concat(contents.filter(el => el.type === 'vocation'))
+        }
+        let collection_vocations = [];
+        for (const el of candidates) {
+            if (await itemMatchesProfession(el, professionNameLower)) collection_vocations.push(el)
         }
         let html = '<form><div class="f-group"><select class="profession-select" id="vocation" name="vocation"><option value"" selected>Select your Vocation</option>';
 
@@ -54,36 +85,31 @@ async function addMove(actor, itemUuid, _item) {
 
 }
 async function chooseMove(actor, item) {
-    let list_moves = item.system.moves.split(',')
-    list_moves = list_moves.map(s => s.trim());
+    // The profession's own moves are stored as references (UUIDs, or names on
+    // un-migrated items). Gather them plus the companion's, then resolve all.
+    let move_refs = [...(item.system.moves ?? [])];
     if (item.system.has_companion) {
-        
+
         let companion = game.items.filter(el => el.type == "companion" && el.name.toLowerCase() == actor.system.companion.toLowerCase())
         if (HOUSEHOLD.premium) {
             const packs = game.packs.get(HOUSEHOLD.premium_name + '.equipments')
             const contents = await packs.getDocuments();
             const compendium_items = contents.filter(el => el.type === 'companion' && el.name.toLowerCase() == actor.system.companion.toLowerCase())
-            
+
             if (compendium_items.length > 0) {
                 companion = companion.concat(compendium_items)
             }
         }
         if (companion.length > 0) {
-            let comp_moves = companion[0].system.moves.split(',')
-            list_moves = list_moves.concat(comp_moves)
+            move_refs = move_refs.concat(companion[0].system.moves ?? [])
         }
     }
-    list_moves = list_moves.map(s => s.toLowerCase().trim());
-    
-    
 
-    let collection_item = game.items.filter(el => el.type == 'move' && list_moves.includes(el.name.toLowerCase()))
-    if (HOUSEHOLD.premium) {
-        const packs = game.packs.get(HOUSEHOLD.premium_name + '.moves')
-        const contents = await packs.getDocuments();
-        const compendium_items = contents.filter(el => el.type == 'move' && list_moves.includes(el.name.toLowerCase()))
-        if (compendium_items.length > 0) {
-            collection_item = collection_item.concat(compendium_items)
+    let collection_item = [];
+    for (const ref of move_refs) {
+        const moveItem = await resolveItemRef(ref, 'move');
+        if (moveItem && !collection_item.some(m => m.uuid === moveItem.uuid)) {
+            collection_item.push(moveItem);
         }
     }
     const dialog_title = item.system.has_companion ? "Select a Move from your Companion" : "Select a Move from your Profession";
@@ -124,26 +150,21 @@ async function chooseMove(actor, item) {
 }
 
 async function chooseTrait(actor, item) {
-    //validate moves before ask
-    let list_traits = item.system.traits.split(',')
-    list_traits = list_traits.map(s => s.trim());
+    // The vocation's own traits are stored as references (UUIDs, or names on
+    // un-migrated items). Gather them plus the companion's, then resolve all.
+    let trait_refs = [...(item.system.traits ?? [])];
     if (item.system.has_companion) {
         const companion = game.items.filter(el => el.type == "companion" && el.name.toLowerCase() == actor.system.companion.toLowerCase())
         if (companion.length > 0) {
-            let comp_traits = companion[0].system.traits.split(',')
-            comp_traits = comp_traits.map(s => s.trim());
-            list_traits = list_traits.concat(comp_traits)
+            trait_refs = trait_refs.concat(companion[0].system.traits ?? [])
         }
     }
-    list_traits = list_traits.map(s => s.toLowerCase().trim());
 
-    let collection = game.items.filter(el => el.type == 'trait' && list_traits.includes(el.name.toLowerCase()))
-    if (HOUSEHOLD.premium) {
-        const packs = game.packs.get(HOUSEHOLD.premium_name + '.traits')
-        const contents = await packs.getDocuments();
-        const compendium_items = contents.filter(el => el.type == 'trait' && list_traits.includes(el.name.toLowerCase()))
-        if (compendium_items.length > 0) {
-            collection = collection.concat(compendium_items)
+    let collection = [];
+    for (const ref of trait_refs) {
+        const traitItem = await resolveItemRef(ref, 'trait');
+        if (traitItem && !collection.some(t => t.uuid === traitItem.uuid)) {
+            collection.push(traitItem);
         }
     }
     const dialog_title = item.system.has_companion ? "Select a Trait from your Vocation/Companion" : "Select a Trait from your Vocation";
@@ -252,15 +273,30 @@ async function raiseError(message) {
     });
 }
 
+/**
+ * Whether an item (companion or vocation) belongs to a given profession. These
+ * now store their profession as a UUID; resolve it and compare names. Falls back
+ * to a direct name comparison for legacy (un-migrated) name-based values.
+ */
+async function itemMatchesProfession(item, professionNameLower) {
+    const prof = item.system.profession;
+    if (!prof) return false;
+    if (!prof.includes('.')) return prof.toLowerCase() == professionNameLower; // legacy name
+    const resolved = await fromUuid(prof);
+    return resolved?.name?.toLowerCase() == professionNameLower;
+}
+
 async function selectCompanion(actor, item) {
-    let items = game.items.filter(el => el.type == 'companion' && el.system.profession.toLowerCase() == item.name.toLowerCase())
+    const professionNameLower = item.name.toLowerCase();
+    let candidates = game.items.filter(el => el.type == 'companion')
     if (HOUSEHOLD.premium) {
         const packs = game.packs.get(HOUSEHOLD.premium_name + '.equipments')
         const contents = await packs.getDocuments();
-        const compendium_items = contents.filter(el => el.type == 'companion' && el.system.profession.toLowerCase() == item.name.toLowerCase())
-        if (compendium_items.length > 0) {
-            items = items.concat(compendium_items)
-        }
+        candidates = candidates.concat(contents.filter(el => el.type == 'companion'))
+    }
+    let items = [];
+    for (const el of candidates) {
+        if (await itemMatchesProfession(el, professionNameLower)) items.push(el)
     }
     if (items.length == 0) {
         return await raiseError("<p>Trait not found. Make sure you have the item in your wolrd.</p>");
@@ -301,6 +337,23 @@ async function selectCompanion(actor, item) {
 
 }
 
+/**
+ * Copy a dropped header item (profession/vocation/folk) onto a character as an
+ * embedded item so the sheet can open it, replacing any previous copy of the
+ * same type. Character-only; opponents don't show these header links.
+ */
+export async function linkHeaderItem(actor, item) {
+    if (actor.type !== 'character') return;
+    const existing = actor.items.filter(i => i.type === item.type).map(i => i.id);
+    if (existing.length) await actor.deleteEmbeddedDocuments("Item", existing);
+    await actor.createEmbeddedDocuments("Item", [{
+        name: item.name,
+        type: item.type,
+        img: item.img,
+        system: foundry.utils.duplicate(item.system)
+    }]);
+}
+
 export async function addProfession(actor, item) {
 
     if (actor.system.profession.trim() != '') {
@@ -322,27 +375,42 @@ export async function addProfession(actor, item) {
         addNewProfession(item, actor)
     }
 }
+export async function addVocation(actor, item) {
+
+    if (actor.system.vocation.trim() != '') {
+        DialogV2.confirm({
+            window: {
+                title: "New Vocation",
+                contentClasses: ["household-dialog-class"]
+            },
+            content: `<p>You already have the vocation ${actor.system.vocation}</p><p>Do you want to proceed and add this new vocation ${item.name}?</p>`,
+            yes: {
+                icon: "fas fa-check",
+                label: "Yes",
+                callback: () => addNewProfession(item, actor)
+            },
+            render: (event) => {
+            }
+        });
+    } else {
+        addNewProfession(item, actor)
+    }
+}
 async function addNewProfession(item, actor) {
     if (item.type == 'profession') {
         await actor.update({ 'system.profession': item.name });
-        populateSkills(actor, item.system.skills.split(","));
+        await linkHeaderItem(actor, item);
+        populateSkills(actor, item.system.skills);
         populateField(actor, item.system.field);
-        let trait_list = item.system.traits.split(",");
-        trait_list = trait_list.map(s => s.toLowerCase().trim());
-        if (trait_list.length == 1) {
-            let trait_item = game.items.filter(el => el.name.toLowerCase() == trait_list[0].toLowerCase() && el.type == 'trait')
-            if (HOUSEHOLD.premium) {
-                const packs = game.packs.get(HOUSEHOLD.premium_name + '.traits')
-                const contents = await packs.getDocuments();
-                const compendium_items = contents.filter(el => el.name.toLowerCase() == trait_list[0].toLowerCase() && el.type == 'trait')
-                if (compendium_items.length > 0) {
-                    trait_item = trait_item.concat(compendium_items)
-                }
-            }
-            if (trait_item.length > 0)
-                addItem(actor, trait_item[0].uuid)
+        // Profession traits are now stored as references (UUIDs / legacy names).
+        // When the profession grants exactly one trait, auto-add it.
+        const trait_refs = item.system.traits ?? [];
+        if (trait_refs.length == 1) {
+            const trait_item = await resolveItemRef(trait_refs[0], 'trait');
+            if (trait_item)
+                addItem(actor, trait_item.uuid)
             else {
-                ui.notifications.warn("Trait not found: "+trait_list[0])
+                ui.notifications.warn("Trait not found: " + trait_refs[0])
             }
         }
         if (item.system.has_companion) {
@@ -354,7 +422,8 @@ async function addNewProfession(item, actor) {
         }
     } else if (item.type == 'vocation') {
         await actor.update({ 'system.vocation': item.name })
-        populateSkills(actor, item.system.skills.split(","));
+        await linkHeaderItem(actor, item);
+        populateSkills(actor, item.system.skills);
         populateField(actor, item.system.field);
         chooseTrait(actor, item)
 

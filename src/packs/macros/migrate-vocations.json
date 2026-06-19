@@ -1,0 +1,19 @@
+{
+  "_id": "householdmigrvoc",
+  "_key": "!macros!householdmigrvoc",
+  "name": "Migrate Vocations to new Item Model",
+  "type": "script",
+  "author": null,
+  "img": "icons/svg/upgrade.svg",
+  "scope": "global",
+  "command": "game.household.migrations.vocations();",
+  "folder": null,
+  "sort": 150,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "systemId": "household"
+  }
+}

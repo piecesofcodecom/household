@@ -260,25 +260,25 @@
     },
     "profession": {
       "description": "",
-      "skills": "",
+      "skills": [],
       "field": "",
-      "moves": "",
-      "traits": "",
+      "moves": [],
+      "traits": [],
       "has_companion": false
     },
     "vocation": {
       "description": "",
       "profession": "",
-      "skills": "",
+      "skills": [],
       "field": "",
-      "traits": "",
+      "traits": [],
       "has_companion": false
     },
     "companion": {
       "description": "",
       "profession": "",
-      "moves": "",
-      "traits": ""
+      "moves": [],
+      "traits": []
     },
     "folk": {
       "description": "",

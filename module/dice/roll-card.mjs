@@ -96,7 +96,7 @@ export async function renderSkillRollCard(actor, roll, field, skill, mod, poll_d
     let message = await roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor }),
       flavor: html,
-      rollMode: game.settings.get('core', 'rollMode'),
+      rollMode: game.settings.get('core', 'messageMode'),
       flags: {
         household: {
           customCss: true
@@ -384,9 +384,9 @@ async function renderPlainRollCard(message, { tally, rollType, originalNorm = 0,
     "systems/household/templates/chat/dice-roll.hbs",
     templateData
   );
+
   await message.update({
     flavor: html,
-    content: "",
     flags: { household: { customCss: false, plainRoll: true } }
   });
 }
@@ -513,7 +513,7 @@ function revealMessageContent(html) {
  * @param {ChatMessage} message
  * @returns {Promise<boolean>}  true if the message was rendered as a card
  */
-async function tryRenderPlainRoll(message) {
+async function tryRenderPlainRoll(message, html) {
   if (!message.rolls.length) return false;
   const roll = message.rolls[0];
   if (!(roll instanceof Roll)) return false;
@@ -525,6 +525,7 @@ async function tryRenderPlainRoll(message) {
   // A plain /roll of d6s is treated as an initial Household roll with an unknown
   // difficulty: scored for Successes and offered re-roll options, but with no
   // pass/fail outcome. See renderPlainRollCard / rerollPlainRoll.
+  
   const tally = HouseholdRoll.tallyDiceFaces(roll.dice);
   await renderPlainRollCard(message, {
     tally,
@@ -545,6 +546,17 @@ async function tryRenderPlainRoll(message) {
  */
 export async function handleRenderChatMessage(message, html) {
   const flags = message.flags?.household ?? {};
+
+  if (flags.plainRoll) {
+     html.classList.add("household-plain-roll");
+    
+    const test = html.querySelectorAll(".dice-tooltip"); //.forEach(e => e.remove());
+    const formulas = html.querySelectorAll(".dice-tooltip");
+    for (const formula of formulas) {
+    console.log("Before:", formula);
+    formula.style.display = "none";
+}
+  }
 
   // Always: mark custom cards and keep the log scrolled to the bottom.
   if (flags.customCss) html.classList.add("household-custom-chat");
@@ -567,6 +579,6 @@ export async function handleRenderChatMessage(message, html) {
   // turning a /roll into a card or revealing plain content.
   if (message.blind === true && !canActOnMessage(message)) return;
   if (isMessageHidden(message)) return;
-  if (!flags.noChanges && await tryRenderPlainRoll(message)) return;
+  if (!flags.noChanges && await tryRenderPlainRoll(message, html)) return;
   revealMessageContent(html);
 }

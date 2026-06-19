@@ -1,5 +1,12 @@
 {
     "HOUSEHOLD": {
+        "RefAdd": "Aggiungi",
+        "RefRemove": "Rimuovi",
+        "RefDropProfession": "Trascina qui un oggetto professione",
+        "RefDropMove": "Trascina qui gli oggetti mossa",
+        "RefDropTrait": "Trascina qui gli oggetti tratto",
+        "RefDropContract": "Trascina qui un oggetto contratto",
+        "AmongCompanionTraits": "Tra quelli del tuo Compagno Animale",
         "AcesSleeve": {
             "long": "Assi Nella Manica"
         },

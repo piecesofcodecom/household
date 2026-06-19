@@ -37,20 +37,60 @@
     </div>
 
     <div class="tab fields {{tabs.configuration.cssClass}}" data-group="primary" data-tab="configuration">
-      <br />
-      <div class="resource">
+      {{!-- Drag items onto this sheet to link them; references are stored as UUIDs. --}}
+      <div class="ref-group">
         <label class="resource-label">{{localize "HOUSEHOLD.Profession.long"}}</label>
-        <input type="text" name="system.profession" value="{{system.profession}}" data-dtype="String" />
+        <div class="ref-list ref-single">
+          {{#if companionProfession}}
+          <div class="ref-chip {{#if companionProfession.missing}}missing{{/if}}">
+            <img src="{{companionProfession.img}}" alt="" />
+            <span class="ref-name">{{companionProfession.name}}</span>
+            {{#if editable}}
+            <a class="ref-remove" data-action="removeRef" data-kind="profession"
+              data-uuid="{{companionProfession.uuid}}" title="{{localize "HOUSEHOLD.RefRemove"}}">
+              <i class="fas fa-times"></i></a>
+            {{/if}}
+          </div>
+          {{else}}
+          <p class="ref-empty">{{localize "HOUSEHOLD.RefDropProfession"}}</p>
+          {{/if}}
+        </div>
       </div>
-      <br />
-      <div class="resource">
+
+      <div class="ref-group">
         <label class="resource-label">{{localize "HOUSEHOLD.Moves.long"}}</label>
-        <input type="text" name="system.moves" value="{{system.moves}}" data-dtype="String" />
+        <div class="ref-list">
+          {{#each companionMoves}}
+          <div class="ref-chip {{#if this.missing}}missing{{/if}}">
+            <img src="{{this.img}}" alt="" />
+            <span class="ref-name">{{this.name}}</span>
+            {{#if ../editable}}
+            <a class="ref-remove" data-action="removeRef" data-kind="move" data-uuid="{{this.uuid}}"
+              title="{{localize "HOUSEHOLD.RefRemove"}}"><i class="fas fa-times"></i></a>
+            {{/if}}
+          </div>
+          {{else}}
+          <p class="ref-empty">{{localize "HOUSEHOLD.RefDropMove"}}</p>
+          {{/each}}
+        </div>
       </div>
-      <br />
-      <div class="resource">
+
+      <div class="ref-group">
         <label class="resource-label">{{localize "HOUSEHOLD.Traits.long"}}</label>
-        <input type="text" name="system.traits" value="{{system.traits}}" data-dtype="String" />
+        <div class="ref-list">
+          {{#each companionTraits}}
+          <div class="ref-chip {{#if this.missing}}missing{{/if}}">
+            <img src="{{this.img}}" alt="" />
+            <span class="ref-name">{{this.name}}</span>
+            {{#if ../editable}}
+            <a class="ref-remove" data-action="removeRef" data-kind="trait" data-uuid="{{this.uuid}}"
+              title="{{localize "HOUSEHOLD.RefRemove"}}"><i class="fas fa-times"></i></a>
+            {{/if}}
+          </div>
+          {{else}}
+          <p class="ref-empty">{{localize "HOUSEHOLD.RefDropTrait"}}</p>
+          {{/each}}
+        </div>
       </div>
     </div>
   </section>

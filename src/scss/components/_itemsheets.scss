@@ -1,4 +1,13 @@
 // New layout
+& {
+  background: url(/systems/household/assets/sheet/char-sheet-bg.png);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow: visible;
+  filter: drop-shadow(2px 4px 6px var(--hh-border-strong));
+}
+
 .sheet-header {
   /*flex: 0 auto;*/
   display: flex;
@@ -113,7 +122,12 @@ label {
   overflow-y: auto;
 }
 
-.text-editor h1,h2,h3,h4,h5,h6 {
+.text-editor h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   color: var(--hh-accent-gold);
 }
 
@@ -125,7 +139,8 @@ label {
   border-left: 4px solid var(--hh-accent-brass);
 }
 
-.text-editor ul, .text-editor ol {
+.text-editor ul,
+.text-editor ol {
   padding-left: 20px;
 }
 
@@ -169,18 +184,18 @@ label {
   padding: 0 8px;
   line-height: 30px;
   border: none;
-  background-image: url(/systems/household/assets/sheet/header_bg.webp);
+  // background-image: url(/systems/household/assets/sheet/header_bg.webp);
   background-repeat: no-repeat;
   background-size: cover;
   color: #575757;
 }
 
-.window-content {
-  background: url(/systems/household/assets/sheet/sheet_bg.webp) no-repeat;
-  background-size: cover;
-  background-position: center;
+// .window-content {
+//   background: url(/systems/household/assets/sheet/sheet_bg.webp) no-repeat;
+//   background-size: cover;
+//   background-position: center;
 
-}
+// }
 
 nav.custom {
   margin: 4px 0;
@@ -623,7 +638,7 @@ input.resource-checkbox[type="checkbox"] {
 input.resource-checkbox[type="checkbox"]::after {
   content: "";
   position: absolute;
-   left: 5px;
+  left: 5px;
   top: 3px;
 
   width: 7px;
@@ -644,4 +659,107 @@ input.resource-checkbox[type="checkbox"]:checked::after {
 input.resource-checkbox[type="checkbox"]::before {
   content: none !important;
   display: none !important;
+}
+
+/* -------------------------------------------- */
+/*  Reference chips (drag-and-dropped items)    */
+/* -------------------------------------------- */
+.ref-group {
+  margin-bottom: 12px;
+
+  .resource-label {
+    display: block;
+    margin-bottom: 4px;
+  }
+}
+
+.skill-picker {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 6px;
+
+  select {
+    flex: 1;
+  }
+
+  .skill-add-btn {
+    flex: 0 0 auto;
+    width: auto;
+    white-space: nowrap;
+  }
+}
+
+.ref-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-height: 40px;
+  padding: 6px;
+  border: 1px dashed var(--hh-accent-gold, #888);
+  border-radius: 4px;
+}
+
+.ref-empty {
+  margin: 0;
+  align-self: center;
+  font-style: italic;
+  opacity: 0.6;
+  color: var(--hh-text-main);
+}
+
+.ref-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 6px 2px 2px;
+  border: 1px solid var(--hh-accent-gold, #888);
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.05);
+
+  img {
+    width: 24px;
+    height: 24px;
+    border: none;
+    object-fit: cover;
+    border-radius: 3px;
+  }
+
+  .ref-name {
+    white-space: nowrap;
+    color: black;
+  }
+
+  .ref-remove {
+    cursor: pointer;
+    opacity: 0.7;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  &.missing {
+    border-style: dashed;
+    opacity: 0.7;
+
+    .ref-name {
+      font-style: italic;
+    }
+  }
+
+  // Hint shown when the profession/vocation has a companion: its traits are
+  // also drawn from the Animal Companion. Not a real (removable) trait chip.
+  &.companion-note {
+    border-style: dashed;
+    background: rgba(0, 0, 0, 0.03);
+
+    i {
+      color: var(--hh-accent-gold, #888);
+    }
+
+    .ref-name {
+      font-style: italic;
+      white-space: normal;
+    }
+  }
 }

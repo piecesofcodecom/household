@@ -1,5 +1,5 @@
 import { HOUSEHOLD } from '../../helpers/config.mjs';
-import { addProfession } from "../../helpers/professions.mjs";
+import { addProfession, addVocation, linkHeaderItem } from "../../helpers/professions.mjs";
 import * as actions from "../../helpers/actions.mjs";
 import { HouseholdBaseActorSheet } from "./base-actor-sheet.mjs";
 
@@ -28,7 +28,8 @@ export class HouseholdActorSheet extends HouseholdBaseActorSheet {
       actionConfig: this.prototype._onActionConfig,
       customEdit: this.prototype._onCustomEdit,
       effectControl: this.prototype._onEffectControl,
-      editImage: this._onEditImage
+      editImage: this._onEditImage,
+      unlinkHeaderItem: this.prototype._onUnlinkHeaderItem
     },
     form: {
       submitOnChange: true,
@@ -95,7 +96,21 @@ export class HouseholdActorSheet extends HouseholdBaseActorSheet {
     const context = await this._prepareBaseContext(options);
     this._prepareItems(context);
     this._prepareCharacterData(context);
+    this._prepareHeaderLinks(context);
     return context;
+  }
+
+  /**
+   * A dropped folk/profession/vocation is copied onto the actor as an embedded
+   * item (see linkHeaderItem). When such a copy exists, the matching header
+   * field renders as a read-only chip (click opens the item) instead of a text
+   * input. Only one copy per type exists, so a simple lookup by type suffices.
+   */
+  _prepareHeaderLinks(context) {
+    const find = (type) => this.document.items.find((i) => i.type === type) ?? null;
+    context.linkedFolk = find('folk');
+    context.linkedProfession = find('profession');
+    context.linkedVocation = find('vocation');
   }
 
   /* -------------------------------------------- */
@@ -198,6 +213,19 @@ export class HouseholdActorSheet extends HouseholdBaseActorSheet {
     }
   }
 
+  /**
+   * Remove a linked header item: delete the embedded copy and clear the string
+   * field, so the field reverts to a free-text input.
+   * @param {PointerEvent} event
+   * @param {HTMLElement} target  Carries data-item-id and data-field
+   */
+  async _onUnlinkHeaderItem(event, target) {
+    const { itemId, field } = target.dataset;
+    const item = this.document.items.get(itemId);
+    if (item) await item.delete();
+    if (field) await this.document.update({ [field]: "" });
+  }
+
   /* -------------------------------------------- */
   /*  Rolls                                       */
   /* -------------------------------------------- */
@@ -212,7 +240,7 @@ export class HouseholdActorSheet extends HouseholdBaseActorSheet {
       return roll.toMessage({
         speaker: ChatMessage.getSpeaker({ actor }),
         flavor: await actor.showAction(roll.total),
-        rollMode: game.settings.get('core', 'rollMode')
+        rollMode: game.settings.get('core', 'messageMode')
       });
     } else if (dataset.type === 'skill') {
 
@@ -244,7 +272,7 @@ export class HouseholdActorSheet extends HouseholdBaseActorSheet {
         return roll.toMessage({
           speaker: ChatMessage.getSpeaker({ actor }),
           flavor: dataset.label ?? "",
-          rollMode: game.settings.get('core', 'rollMode')
+          rollMode: game.settings.get('core', 'messageMode')
         });
       }
     }
@@ -268,29 +296,40 @@ export class HouseholdActorSheet extends HouseholdBaseActorSheet {
     // }
     if (["profession"].includes(item.type)) {
       addProfession(this.actor, item);
+    } else if (item.type == 'vocation') {
+      addVocation(this.actor, item);
     } else if (item.type == 'folk') {
-      const contract_name = item.system.contract;
-      let contract_item = game.items.filter(el => el.type == 'contract' && el.name.toLowerCase() == contract_name.toLowerCase())
       this.actor.update({ 'system.folk': item.name })
-      if (contract_item.length == 0 && HOUSEHOLD.premium) {
-        const packs = game.packs.get(HOUSEHOLD.premium_name + '.character')
-        const contents = await packs.getDocuments();
-        contract_item = contents.filter(el => el.type == 'contract' && el.name.toLowerCase() == contract_name.toLowerCase())
+      // Contract is now a UUID reference (drag-dropped on the folk sheet); fall
+      // back to a legacy name lookup (world + premium) for un-migrated folks.
+      const contract_ref = item.system.contract;
+      let contract_item = null;
+      if (contract_ref) {
+        if (contract_ref.includes('.')) {
+          contract_item = await fromUuid(contract_ref);
+        } else {
+          const lower = contract_ref.toLowerCase();
+          contract_item = game.items.find(el => el.type == 'contract' && el.name.toLowerCase() == lower);
+          if (!contract_item && HOUSEHOLD.premium) {
+            const packs = game.packs.get(HOUSEHOLD.premium_name + '.character')
+            const contents = await packs.getDocuments();
+            contract_item = contents.find(el => el.type == 'contract' && el.name.toLowerCase() == lower);
+          }
+        }
       }
-      if (contract_item.length > 0) {
+      if (contract_item) {
         let newItemData = {
-          name: contract_item[0].name,
-          type: contract_item[0].type,
-          img: contract_item[0].img,
-          system: duplicate(contract_item[0].system)
+          name: contract_item.name,
+          type: contract_item.type,
+          img: contract_item.img,
+          system: foundry.utils.duplicate(contract_item.system)
         }
         await this.document.createEmbeddedDocuments("Item", [newItemData]);
-
+      } else {
+        ui.notifications.warn("Contract not found: " + contract_ref);
       }
-
-      if (contract_item.length == 0) {
-        ui.notifications.warn("Contract not found: "+contract_name);
-      }
+      // Copy the folk item itself so the header field links to it.
+      await linkHeaderItem(this.actor, item);
 
     } else {
       let newItemData = {

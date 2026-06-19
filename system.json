@@ -53,7 +53,14 @@
       "path": "lang/pt-BR.json"
     }
   ],
-  "packs": [],
+  "packs": [
+    {
+      "name": "macros",
+      "label": "Household Macros",
+      "path": "packs/macros",
+      "type": "Macro"
+    }
+  ],
   "packFolders": [],
   "socket": false,
   "manifest": "https://github.com/piecesofcodecom/household/releases/latest/download/system.json",
@@ -67,5 +74,19 @@
     "distance": 5,
     "units": "ft"
   },
-  "primaryTokenAttribute": "stress"
+  "primaryTokenAttribute": "stress",
+  "documentTypes": {
+    "Item": {
+      "item": { "htmlFields": ["description"] },
+      "gadget": { "htmlFields": ["description"] },
+      "weapon": { "htmlFields": ["description"] },
+      "move": { "htmlFields": ["description", "requirements"] },
+      "contract": { "htmlFields": ["description", "concession.details", "counterpart.details"] },
+      "trait": { "htmlFields": ["description"] },
+      "profession": { "htmlFields": ["description"] },
+      "vocation": { "htmlFields": ["description"] },
+      "companion": { "htmlFields": ["description"] },
+      "folk": { "htmlFields": ["description"] }
+    }
+  }
 }
