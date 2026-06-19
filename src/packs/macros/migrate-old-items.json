@@ -1,0 +1,19 @@
+{
+  "_id": "householdmigrate",
+  "_key": "!macros!householdmigrate",
+  "name": "Migrate Companions to new Item Model",
+  "type": "script",
+  "author": null,
+  "img": "icons/svg/upgrade.svg",
+  "scope": "global",
+  "command": "game.household.migrations.companions();",
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "systemId": "household"
+  }
+}

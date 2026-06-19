@@ -1,5 +1,12 @@
 {
     "HOUSEHOLD": {
+        "RefAdd": "Adicionar",
+        "RefRemove": "Remover",
+        "RefDropProfession": "Arraste um item de profissão aqui",
+        "RefDropMove": "Arraste itens de movimento aqui",
+        "RefDropTrait": "Arraste itens de traço aqui",
+        "RefDropContract": "Arraste um item de contrato aqui",
+        "AmongCompanionTraits": "Entre os do seu Companheiro Animal",
         "AcesSleeve": {
             "long": "Áses na Manga"
         },

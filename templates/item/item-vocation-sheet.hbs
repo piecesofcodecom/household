@@ -4,9 +4,23 @@
     <div class="header-fields">
       <input class="item-name" name="name" type="text" value="{{item.name}}" placeholder="Name" data-dtype="String" />
       <div class="grid grid-3col">
-        <div class="resource">
+        <div class="ref-group">
           <label class="resource-label">{{localize "HOUSEHOLD.Profession.long"}}</label>
-          <input type="text" name="system.profession" value="{{system.profession}}" data-dtype="String" />
+          <div class="ref-list ref-single">
+            {{#if refProfession}}
+            <div class="ref-chip {{#if refProfession.missing}}missing{{/if}}">
+              <img src="{{refProfession.img}}" alt="" />
+              <span class="ref-name">{{refProfession.name}}</span>
+              {{#if editable}}
+              <a class="ref-remove" data-action="removeRef" data-kind="profession"
+                data-uuid="{{refProfession.uuid}}" title="{{localize "HOUSEHOLD.RefRemove"}}">
+                <i class="fas fa-times"></i></a>
+              {{/if}}
+            </div>
+            {{else}}
+            <p class="ref-empty">{{localize "HOUSEHOLD.RefDropProfession"}}</p>
+            {{/if}}
+          </div>
         </div>
         <div style="    justify-self: center;
     text-align: center;">
@@ -63,16 +77,55 @@
         </select>
       </div>
       <br />
-      <div class="resource">
+      <div class="ref-group">
         <label class="resource-label">{{localize "HOUSEHOLD.SheetLabels.Skills"}}</label>
-        <input type="text" name="system.skills" value="{{system.skills}}" data-dtype="String"
-          placeholder="{{localize 'HOUSEHOLD.Placeholders.Skills'}}" />
+        {{#if editable}}
+        <div class="skill-picker">
+          <select class="skill-to-add">
+            {{#each availableSkills}}
+            <option value="{{this.key}}">{{localize this.label}}</option>
+            {{/each}}
+          </select>
+          <button type="button" class="skill-add-btn" data-action="addSkill">{{localize "HOUSEHOLD.RefAdd"}}</button>
+        </div>
+        {{/if}}
+        <div class="ref-list">
+          {{#each refSkills}}
+          <div class="ref-chip">
+            <span class="ref-name">{{localize this.label}}</span>
+            {{#if ../editable}}
+            <a class="ref-remove" data-action="removeSkill" data-key="{{this.key}}"
+              title="{{localize "HOUSEHOLD.RefRemove"}}"><i class="fas fa-times"></i></a>
+            {{/if}}
+          </div>
+          {{else}}
+          <p class="ref-empty">{{localize "HOUSEHOLD.Placeholders.Skills"}}</p>
+          {{/each}}
+        </div>
       </div>
       <br />
-      <div class="resource">
+      <div class="ref-group">
         <label class="resource-label">{{localize "HOUSEHOLD.Traits.long"}}</label>
-        <input type="text" name="system.traits" value="{{system.traits}}" data-dtype="String"
-          placeholder="{{localize 'HOUSEHOLD.Placeholders.Traits'}}" />
+        <div class="ref-list">
+          {{#if system.has_companion}}
+          <div class="ref-chip companion-note">
+            <i class="fas fa-paw"></i>
+            <span class="ref-name">{{localize "HOUSEHOLD.AmongCompanionTraits"}}</span>
+          </div>
+          {{/if}}
+          {{#each refTraits}}
+          <div class="ref-chip {{#if this.missing}}missing{{/if}}">
+            <img src="{{this.img}}" alt="" />
+            <span class="ref-name">{{this.name}}</span>
+            {{#if ../editable}}
+            <a class="ref-remove" data-action="removeRef" data-kind="trait" data-uuid="{{this.uuid}}"
+              title="{{localize "HOUSEHOLD.RefRemove"}}"><i class="fas fa-times"></i></a>
+            {{/if}}
+          </div>
+          {{else}}
+          <p class="ref-empty">{{localize "HOUSEHOLD.RefDropTrait"}}</p>
+          {{/each}}
+        </div>
       </div>
     </div>
 

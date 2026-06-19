@@ -1,0 +1,19 @@
+{
+  "_id": "householdmigrwpn",
+  "_key": "!macros!householdmigrwpn",
+  "name": "Migrate Weapons to new Item Model",
+  "type": "script",
+  "author": null,
+  "img": "icons/svg/upgrade.svg",
+  "scope": "global",
+  "command": "game.household.migrations.weapons();",
+  "folder": null,
+  "sort": 175,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "systemId": "household"
+  }
+}

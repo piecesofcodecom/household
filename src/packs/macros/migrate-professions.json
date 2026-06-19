@@ -1,0 +1,19 @@
+{
+  "_id": "householdmigrpro",
+  "_key": "!macros!householdmigrpro",
+  "name": "Migrate Professions to new Item Model",
+  "type": "script",
+  "author": null,
+  "img": "icons/svg/upgrade.svg",
+  "scope": "global",
+  "command": "game.household.migrations.professions();",
+  "folder": null,
+  "sort": 100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "systemId": "household"
+  }
+}

@@ -9,12 +9,18 @@ import {
   renderCharacter,
 } from './applications/_module.mjs';
 // Data models.
-import { HouseholdCharacter, HouseholdOpponent } from './data/_module.mjs';
+import {
+  HouseholdCharacter, HouseholdOpponent,
+  HouseholdGear, HouseholdGadget, HouseholdWeapon, HouseholdMove, HouseholdContract,
+  HouseholdTrait, HouseholdProfession, HouseholdVocation, HouseholdCompanion, HouseholdFolk,
+} from './data/_module.mjs';
 // Helper/utility classes and constants.
 import { preloadHandlebarsTemplates } from './helpers/templates.mjs';
 import { HOUSEHOLD } from './helpers/config.mjs';
 import { registerHandlebarsHelpers } from './helpers/handlebars.mjs';
 import { rollItemMacro } from './helpers/macros.mjs';
+import { migrateCompanions, migrateProfessions, migrateVocations, migrateWeapons, migrateFolks, migrateAll } from './helpers/migrations.mjs';
+import { registerWhatsNewSetting, showWhatsNew } from './helpers/whatsnew.mjs';
 import { isGm } from './helpers/utils.mjs';
 // Pure roll-logic helpers (exposed at game.household.roll for testing/macros).
 import * as HouseholdRoll from './dice/roll.mjs';
@@ -40,6 +46,17 @@ Hooks.once('init', async function () {
   // Remove this, the npc template.json type, and the npc sheet registration in
   // a future release once worlds have migrated.
   CONFIG.Actor.dataModels.npc = HouseholdOpponent;
+  // Register item data models (schemas live here; template.json mirrors them).
+  CONFIG.Item.dataModels.item = HouseholdGear;
+  CONFIG.Item.dataModels.gadget = HouseholdGadget;
+  CONFIG.Item.dataModels.weapon = HouseholdWeapon;
+  CONFIG.Item.dataModels.move = HouseholdMove;
+  CONFIG.Item.dataModels.contract = HouseholdContract;
+  CONFIG.Item.dataModels.trait = HouseholdTrait;
+  CONFIG.Item.dataModels.profession = HouseholdProfession;
+  CONFIG.Item.dataModels.vocation = HouseholdVocation;
+  CONFIG.Item.dataModels.companion = HouseholdCompanion;
+  CONFIG.Item.dataModels.folk = HouseholdFolk;
   // Unregister old sheets if needed
   foundry.documents.collections.Actors.unregisterSheet("household", foundry.applications.sheets.ActorSheet);
   // Register your new V2 sheet
@@ -65,10 +82,21 @@ Hooks.once('init', async function () {
     HouseholdItem,
     rollItemMacro,
     roll: HouseholdRoll,
+    migrations: {
+      companions: migrateCompanions,
+      professions: migrateProfessions,
+      vocations: migrateVocations,
+      weapons: migrateWeapons,
+      folks: migrateFolks,
+      all: migrateAll,
+    },
   };
 
   $("body.game").append('<div id="player-character"></div>');
   $("body.game").append('<div id="party"></div>');
+
+  // Records the last system version whose "What's New" dialog was dismissed.
+  registerWhatsNewSetting();
 
   // Add custom constants for configuration.
   CONFIG.HOUSEHOLD = HOUSEHOLD;
@@ -136,6 +164,10 @@ Hooks.once('ready', async function () {
       ui.notifications.info(`Household: migrated ${legacyNpcs.length} NPC actor(s) to Opponent.`);
     }
   }
+
+  // One-time-per-version notice nudging the GM to run the item migration.
+  // Not awaited so it doesn't block the rest of the ready hook.
+  showWhatsNew();
 
   if (!isGm()) {
     await renderCharacter();

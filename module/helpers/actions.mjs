@@ -90,7 +90,7 @@ export async function rollAction(e) {
           customCss: true
         }
       },
-      rollMode: game.settings.get('core', 'rollMode'),
+      rollMode: game.settings.get('core', 'messageMode'),
     });
   }
   return;
@@ -212,6 +212,13 @@ export async function useItem(e) {
   if (send_chat_message) {
     const templatePath = "systems/household/templates/chat/item-card.hbs";
 
+    let description = item.system.description;
+    if (item.type == "contract") {
+      description = `
+      <p><strong>${item.system.concession.name}</strong>: ${item.system.concession.details}</p>
+      <p><strong>${item.system.counterpart.name}</strong>: ${item.system.counterpart.details}</p>
+      `
+    }
     // Data to pass to the template
     const data = {
       name: item.name,

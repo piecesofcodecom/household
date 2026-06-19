@@ -29,7 +29,17 @@
   <div class="resources grid grid-4col grid-span-4">
 
     <div class="resource__group">
-      <input class="form__field" name="system.folk" value="{{actor.system.folk}}" type="text" data-dtype="String"/>
+      {{#if linkedFolk}}
+      <div class="form__field header-link" data-action="itemEdit" data-item-id="{{linkedFolk.id}}"
+        title="{{linkedFolk.name}}">
+        <img src="{{linkedFolk.img}}" alt="" />
+        <span class="header-link__name">{{linkedFolk.name}}</span>
+        <a class="header-link__remove" data-action="unlinkHeaderItem" data-item-id="{{linkedFolk.id}}"
+          data-field="system.folk" title="{{localize 'HOUSEHOLD.RefRemove'}}"><i class="fas fa-times"></i></a>
+      </div>
+      {{else}}
+      <input class="form__field" name="system.folk" value="{{actor.system.folk}}" type="text" data-dtype="String" />
+      {{/if}}
       <label class="form__label">Folk</label>
     </div>
 
@@ -39,12 +49,34 @@
     </div>
 
     <div class="resource__group">
-      <input class="form__field" name="system.profession" value="{{actor.system.profession}}" type="text" data-dtype="String"/>
+      {{#if linkedProfession}}
+      <div class="form__field header-link" data-action="itemEdit" data-item-id="{{linkedProfession.id}}"
+        title="{{linkedProfession.name}}">
+        <img src="{{linkedProfession.img}}" alt="" />
+        <span class="header-link__name">{{linkedProfession.name}}</span>
+        <a class="header-link__remove" data-action="unlinkHeaderItem" data-item-id="{{linkedProfession.id}}"
+          data-field="system.profession" title="{{localize 'HOUSEHOLD.RefRemove'}}"><i class="fas fa-times"></i></a>
+      </div>
+      {{else}}
+      <input class="form__field" name="system.profession" value="{{actor.system.profession}}" type="text"
+        data-dtype="String" />
+      {{/if}}
       <label class="form__label">Profession</label>
     </div>
 
     <div class="resource__group">
-      <input class="form__field" name="system.vocation" value="{{actor.system.vocation}}" type="text" data-dtype="String"/>
+      {{#if linkedVocation}}
+      <div class="form__field header-link" data-action="itemEdit" data-item-id="{{linkedVocation.id}}"
+        title="{{linkedVocation.name}}">
+        <img src="{{linkedVocation.img}}" alt="" />
+        <span class="header-link__name">{{linkedVocation.name}}</span>
+        <a class="header-link__remove" data-action="unlinkHeaderItem" data-item-id="{{linkedVocation.id}}"
+          data-field="system.vocation" title="{{localize 'HOUSEHOLD.RefRemove'}}"><i class="fas fa-times"></i></a>
+      </div>
+      {{else}}
+      <input class="form__field" name="system.vocation" value="{{actor.system.vocation}}" type="text"
+        data-dtype="String" />
+      {{/if}}
       <label class="form__label">Vocation</label>
     </div>
 

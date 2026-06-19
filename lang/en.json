@@ -1,5 +1,12 @@
 {
     "HOUSEHOLD": {
+        "RefAdd": "Add",
+        "RefRemove": "Remove",
+        "RefDropProfession": "Drag a profession item here",
+        "RefDropMove": "Drag move items here",
+        "RefDropTrait": "Drag trait items here",
+        "RefDropContract": "Drag a contract item here",
+        "AmongCompanionTraits": "Among the ones of your Animal Companion",
         "AcesSleeve": {
             "long": "Aces up the Sleeve"
         },

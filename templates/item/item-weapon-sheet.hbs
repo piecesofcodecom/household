@@ -48,7 +48,17 @@
           </div>
           <div class="flexrow">
             <label class="resource-label">{{localize "HOUSEHOLD.Skill.long"}}</label>
-            <input type="text" name="system.skill" value="{{system.skill}}" data-dtype="String" />
+            <select name="system.skill">
+              <option value="" {{#ifEquals system.skill ""}}selected{{/ifEquals}}>Select one Skill</option>
+              {{#each skillsByField}}
+              <optgroup label="{{localize this.label}}">
+                {{#each this.skills}}
+                <option value="{{this.key}}" {{#ifEquals ../../system.skill this.key}}selected{{/ifEquals}}>{{localize
+                  this.label}}</option>
+                {{/each}}
+              </optgroup>
+              {{/each}}
+            </select>
           </div>
           <br />
           <div class="flexrow">

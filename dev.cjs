@@ -13,6 +13,7 @@ const itemsToCopy = [
   'fonts',
   'README.md',
   'css',
+  'packs',
   'templates',
   'system.json',
   'template.json'
@@ -38,6 +39,7 @@ async function createRelease() {
     // Executa os comandos necessários
     await runCommand('npm run build-css');
     await runCommand('npm run build-js');
+    await runCommand('npm run build-packs');
     await runCommand('npm run minify-js');
     await runCommand('npm run minify-css');
 

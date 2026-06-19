@@ -160,6 +160,44 @@ nav.custom {
   }
 }
 
+// Read-only chip shown in a header field when a folk/profession/vocation item
+// has been dropped (and copied) onto the character. Clicking opens the item.
+.header-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+
+  img {
+    width: 20px;
+    height: 20px;
+    border: none;
+    object-fit: cover;
+    border-radius: 3px;
+    flex: 0 0 auto;
+  }
+
+  .header-link__name {
+    flex: 1 1 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.6rem;
+    color: #030303;
+  }
+
+  .header-link__remove {
+    flex: 0 0 auto;
+    cursor: pointer;
+    opacity: 0.6;
+    color: #030303;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
 .form__label {
   position: absolute;
   top: 0;

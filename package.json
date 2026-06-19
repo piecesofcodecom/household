@@ -6,12 +6,13 @@
   "scripts": {
     "build-css": "sass src/scss/household.scss css/household.css --style=expanded --no-source-map",
     "build-js": "npx rollup -c rollup.config.mjs",
+    "build-packs": "node build-packs.cjs",
     "watch": "sass src/scss/household.scss css/household.css --style=expanded --source-map --watch",
     "minify-js": "npx terser build/household.js -o build/household.min.js && npx rimraf build/household.js",
     "minify-css": "npx postcss ./css/household.css --dir ./css/",
     "release": "node release.cjs",
     "dev": "node dev.cjs",
-    "build": "npm run build-css && npm run build-js",
+    "build": "npm run build-css && npm run build-js && npm run build-packs",
     "minify": "npm run minify-css && npm run minify-js",
     "build-all": "npm run build && npm run minify",
     "normalize-eol": "node normalize-line-endings.cjs"
@@ -26,6 +27,7 @@
     "@rollup/plugin-commonjs": "^25.0.8",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "braces": ">=3.0.3",
+    "classic-level": "^1.4.1",
     "cssnano": "^5.1.15",
     "fs-extra": "^10.1.0",
     "postcss": "^8.4.39",

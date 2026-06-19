@@ -1,0 +1,19 @@
+{
+  "_id": "householdmigrall",
+  "_key": "!macros!householdmigrall",
+  "name": "Migrate ALL old items to new Item Model",
+  "type": "script",
+  "author": null,
+  "img": "icons/svg/upgrade.svg",
+  "scope": "global",
+  "command": "game.household.migrations.all();",
+  "folder": null,
+  "sort": 200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "systemId": "household"
+  }
+}

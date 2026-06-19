@@ -1,0 +1,19 @@
+{
+  "_id": "householdmigrflk",
+  "_key": "!macros!householdmigrflk",
+  "name": "Migrate Folks to new Item Model",
+  "type": "script",
+  "author": null,
+  "img": "icons/svg/upgrade.svg",
+  "scope": "global",
+  "command": "game.household.migrations.folks();",
+  "folder": null,
+  "sort": 125,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "systemId": "household"
+  }
+}
