@@ -1,204 +1,82 @@
-<div class="character-skills {{#when characterStats 'noteq' ''}}{{tabs.characterStats}}{{/when}}">
-    <div class="npc-skills-content">
-        {{#each items as |items kind|}}
-        <div class="actions-category">
-            <h2 class="characteristic-title">{{localize (concat "HOUSEHOLD." kind ".long")}}</h2>
-            <div class="action-list">
-                {{> "systems/household/templates/actor/hud/actor-hud-list-items.hbs" items=items type="{{kind}}" }}
-            </div>
-        </div>
-        {{!-- {{#ifNotEmpty items}}
-        <div class="actions-category">
-            <h2 class="characteristic-title">{{localize (concat "HOUSEHOLD." kind ".long")}}</h2>
-            <div class="action-list">
-                {{#each items as |item|}}
-                <div class="action item" data-item-id="{{ item.id }}" data-character-id="{{@root/id}}">
-                    <div class="item-left" data-tooltip="{{ item.system.description }}">
-                        <img src="{{ item.img }}" />
+<div class="hud-dock">
 
-                        <span>{{trimString item.name 20}}
-                            {{#if (eq item.type "move")}}
-                            {{#each item.system.suits as | value key|}}
-                            {{#if value}}
-                            <i style="color: {{getFieldColor key}}" class="fa-solid fa-{{getSuitFromField key}}"></i>
-                            {{/if}}
-                            {{/each}}
-                            {{/if}}
-                        </span>
-                    </div>
-                    <div class="item-right">
-                        &nbsp;
-                        {{#if (eq item.type "move")}}
-                        {{#if item.system.exhausted}}
-                        <a data-type="{{ item.type }}" data-action="use" data-item-id="{{ item.id }}"
-                            data-character-id="{{@root/id}}" class="action item" title="{{ item.name }}">
-                            <i style="color: red" class="fa-regular fa-toggle-large-off"></i>
-                        </a>
-                        {{else}}
-                        <a data-type="{{ item.type }}" data-action="use" data-item-id="{{ item.id }}"
-                            data-character-id="{{@root/id}}" class="action item" title="{{ item.name }}">
-                            <i style="color: green" class="fa-regular fa-toggle-large-on"></i>
-                        </a>
-                        {{/if}}
-                        {{/if}}
-                    </div>
-                </div>
-                {{/each}}
-            </div>
-        </div>
-        {{/ifNotEmpty}} --}}
-        {{/each}}
-
-
+  {{!-- ===================== Actions pop-over (the six numbered actions) ===================== --}}
+  <div class="character-actions hud-popover {{#when characterActions 'noteq' ''}}{{tabs.characterActions}}{{/when}}">
+    <div class="npc-actions-content hud-popover-card hud-popover-scroll">
+      <div class="hud-popover-head"><h2>{{localize "HOUSEHOLD.actions"}}</h2></div>
+      <div class="hud-action-list">
+        <div class="hud-action-row"><span class="roman">I</span><p>{{actions.action_1}}</p></div>
+        <div class="hud-action-row"><span class="roman">II</span><p>{{actions.action_2}}</p></div>
+        <div class="hud-action-row"><span class="roman">III</span><p>{{actions.action_3}}</p></div>
+        <div class="hud-action-row"><span class="roman">IV</span><p>{{actions.action_4}}</p></div>
+        <div class="hud-action-row"><span class="roman">V</span><p>{{actions.action_5}}</p></div>
+        <div class="hud-action-row"><span class="roman">VI</span><p>{{actions.action_6}}</p></div>
+      </div>
     </div>
+  </div>
+
+  {{!-- ===================== Status pop-over (stress + moves/traits) ===================== --}}
+  <div class="character-skills hud-popover {{#when characterStats 'noteq' ''}}{{tabs.characterStats}}{{/when}}">
+    <div class="npc-skills-content hud-popover-card hud-popover-scroll">
+      {{!-- <div class="hud-popover-head"><h2>{{localize "HOUSEHOLD.Stress.long"}}</h2></div>
+      <div class="hud-stress-track">
+        {{#numLoop stress.max}}
+        <i
+          class="hud-sbox{{#when this 'in' @root/crucial_boxes}} crucial{{/when}}{{#when this 'lteq' @root/stress.value}} filled{{/when}}">{{this}}</i>
+        {{/numLoop}}
+      </div> --}}
+      {{#each items as |items kind|}}
+      {{#ifNotEmpty items}}
+      <div class="hud-popover-head"><h2>{{localize (concat "HOUSEHOLD." kind ".long")}}</h2></div>
+      <div class="hud-item-list">
+        {{> "systems/household/templates/actor/hud/actor-hud-list-items.hbs" items=items type="{{kind}}" }}
+      </div>
+      {{/ifNotEmpty}}
+      {{/each}}
+    </div>
+  </div>
+
+  {{!-- ===================== Always-visible bar ===================== --}}
+  <div class="character-info hud-bar">
+    <div class="hud-portrait opponent" data-tooltip="{{name}}">
+      <div id="frame" class="npc-frame"></div>
+      <div id="photo-mask">
+        <img src="{{picture}}" alt="{{name}}" class="photo-subject">
+      </div>
+      <div id="glass-highlight"></div>
+      <div id="grunge-texture-npc" style="opacity: {{stressPercentage stress}};"></div>
+      <span class="sheet-open hud-open" data-character-id="{{id}}">{{localize "HOUSEHOLD.open_sheet"}}</span>
+    </div>
+
+    <div class="hud-identity">
+      <span class="hud-name">{{name}}</span>
+      <span class="hud-threat"
+        data-tooltip="{{#when threat.level 'lteq' 1}}{{localize 'HOUSEHOLD.BasicOpponent.long'}}{{else}}{{localize 'HOUSEHOLD.CriticalOpponent.long'}}{{/when}}">
+        {{#numLoop 5}}
+        <i class="threat-pip fa-solid fa-spider{{#when @root/threat.level 'gteq' this}} filled{{/when}}"></i>
+        {{/numLoop}}
+      </span>
+      <span class="hud-stress">
+        <a class="hud-step editValue" data-path="system.stress.value" data-value="{{reduceBy stress.value 1}}"
+          data-character-id="{{@root/id}}" data-dtype="Number" title="{{localize 'MESSAGES.Stress.Reduce'}}">&minus;</a>
+        <span class="hud-stress-read{{#if stressCrucial}} crucial{{/if}}"
+          {{#if stressCrucial}}data-tooltip="{{localize 'HOUSEHOLD.Stress.long'}}"{{/if}}>{{#if stressCrucial}}<i
+            class="fa-solid fa-triangle-exclamation"></i> {{/if}}<b>{{stress.value}}</b><span>/ {{stress.max}} {{localize
+            "HOUSEHOLD.Stress.long"}}</span></span>
+        <a class="hud-step editValue" data-path="system.stress.value" data-value="{{increaseBy stress.value 1}}"
+          data-character-id="{{@root/id}}" data-dtype="Number" title="{{localize 'MESSAGES.Stress.Increase'}}">+</a>
+      </span>
+    </div>
+
+    <button class="hud-roll roll-action" data-character-id="{{id}}" data-tooltip="{{localize 'MESSAGES.Actionroll'}}">
+      <i class="fa-solid fa-dice"></i> {{localize "HOUSEHOLD.actions"}}
+    </button>
+
+    <div class="hud-toolbar hud-toolbar-2">
+      <button class="hud-chip hud-chip-wide actions-toggle{{#when actionsToggle 'noteq' ''}}{{tabs.actionsToggle}}{{/when}}">{{localize
+        "HOUSEHOLD.actions"}}</button>
+      <button class="hud-chip hud-chip-wide skills-toggle{{#when statsToggle 'noteq' ''}}{{tabs.statsToggle}}{{/when}}">{{localize
+        "HOUSEHOLD.stats"}}</button>
+    </div>
+  </div>
 </div>
-
-<div class="character-info">
-    <div class="character-info-top">
-        <form class="npc-attrs" data-tooltip="{{#when system.threat.level 'lteq' 1}}{{localize "
-            HOUSEHOLD.BasicOpponent.long"}}{{else}}{{localize "HOUSEHOLD.CriticalOpponent.long" }}{{/when}}">
-            <div class="bar-wrapper" style="background-color: #cec3c9; display: flex;
-    justify-content: center;
-    align-items: center;text-align: center;">
-
-                {{#numLoop 5}}
-                {{#when @root/threat.level 'gteq' this }}
-                {{#when @root/threat.level 'eq' this }}
-                <input type="radio" style="display: none" id="{{@root/id}}-threat_{{this}}" name="system.threat.level"
-                    value="{{reduceBy this 1}}" data-dtype="Number">
-                {{else}}
-                <input type="radio" style="display: none" id="{{@root/id}}-threat_{{this}}" name="system.threat.level"
-                    value="{{this}}" data-dtype="Number">
-                {{/when}}
-                <label for="{{@root/id}}-threat_{{this}}">
-                    <i style="font-size: 1.5em; margin: 2px; color: #612877" class="fa-solid fa-spider"></i>
-                </label>
-                {{else}}
-                <input type="radio" style="display: none" id="{{@root/id}}-threat_{{this}}" name="system.threat.level"
-                    value="{{this}}" data-dtype="Number">
-                <label for="{{@root/id}}-threat_{{this}}">
-                    <i style="font-size: 1.5em; margin: 2px; color: #612877" class="fa-thin fa-spider"></i>
-                </label>
-                {{/when}}
-
-                {{/numLoop}}
-
-
-
-                <!--div class="attr">
-                    <label>Stress</label>
-                    <span contenteditable="true">{{armor}}</span>
-                </div-->
-            </div>
-        </form>
-
-        <div class="npc-picture" data-tooltip="{{ name }}">
-            <!--img src="{{picture}}" alt="{{name}}" /-->
-            <div id="frame" class="npc-frame sheet-open" style="z-index: 10; cursor:pointer" data-character-id="{{id}}" ></div>
-            <div id="photo-mask">
-                <img src="{{picture}}" alt="{{name}}" class="photo-subject">
-            </div>
-            <div id="glass-highlight"></div>
-            <div id="grunge-texture-npc" style="opacity: {{stressPercentage stress}};"></div>
-            <div id="grunge-texture-npc2" style="opacity: {{stressPercentage stress}};"></div>
-
-            <div class="sheet" data-character-id="{{id}}" style="margin-left: 25px;
-    margin-top: 25px;">
-                {{localize "HOUSEHOLD.open_sheet"}}
-            </div>
-
-            <div class="npc-level" style="text-align: center;
-    align-items: center;
-    justify-content: center;
-    justify-items: center;
-    display: flex;">
-                <div>
-                    <a class="{{#when stress.value 'gt' 0}}resource-label editValue{{/when}}" data-path="system.stress.value" data-value="{{reduceBy stress.value 1}}"
-                        data-character-id="{{@root/id}}" data-tooltip="{{localize "MESSAGES.Stress.Reduce"}}" data-dtype="Number">
-                    <i  class="fa fa-minus-circle" aria-hidden="true" style="filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.4));
-    font-size: large;"></i>
-                    </a>
-                </div>
-                <div class="character-level-badge">
-                    <input
-                        class="InputeditValue hud-stress stress-{{#when stress.value 'in' crucial_boxes}}rosette{{else}}square-{{#when stress.value 'eq' stress.max}}green{{else}}red{{/when}}{{/when}}"
-                        style="
-    {{#when stress.value 'eq' 0}}
-         background-image: url(/systems/household/assets/sheet/overstressed.png);
-    {{/when}}" type="text" value="{{#when stress.value 'lteq' stress.max}}{{stress.value}}{{/when}}"
-                        data-path="system.stress.value" data-value="{{stress.value}}"
-                        data-character-id="{{@root/id}}">
-                </div>
-                <div>
-                   <a class="{{#when stress.value 'lt' stress.max}}resource-label editValue{{/when}}" data-path="system.stress.value" data-value="{{increaseBy stress.value 1}}"
-                        data-character-id="{{@root/id}}" data-tooltip="{{localize "MESSAGES.Stress.Increase"}}" data-dtype="Number">
-                    <i  class="fa fa-plus-circle" aria-hidden="true" style="filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.4));
-    font-size: large;"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <div class="npc-health">
-            <div class="bar-wrapper" style="background-color: #cec3c9; display: flex;
-    justify-content: center;
-    align-items: center;text-align: center;" data-tooltip="{{localize "MESSAGES.Actionroll"}}">
-                <i style="color: black; font-size: x-large;
-    cursor: pointer;" class="fa-solid fa-dice roll-action" data-character-id="{{id}}"></i>
-                <!--input data-tooltip="Stress" type="text" value="{{hp.max}}" /-->
-            </div>
-
-        </div>
-    </div>
-
-    <div class="character-buttons grid grid-2col" style="gap: 120px; width: 100%; z">
-        <div style="align-items: center; justify-items: center;">
-            <button class="skills-toggle {{#when statsToggle 'noteq' ''}}{{tabs.statsToggle}}{{/when}}">{{localize
-                "HOUSEHOLD.stats"}}</button>
-        </div>
-        <div style="align-items: center; justify-items: center;">
-            <button class="actions-toggle {{#when actionsToggle 'noteq' ''}}{{tabs.actionsToggle}}{{/when}}">{{localize
-                "HOUSEHOLD.actions"}}</button>
-        </div>
-    </div>
-
-    {{!--
-    <div class="character-details">
-        <div class="character-name">
-            {{name}}
-        </div>
-
-        <div class="character-race-class">
-            {{race}} {{class}}
-        </div>
-    </div>
-    --}}
-</div>
-
-<div class="character-actions {{#when characterActions 'noteq' ''}}{{tabs.characterActions}}{{/when}}">
-    <div class="npc-actions-content" style="">
-        <!-- FORMATACAO TESTE -->
-
-        <div class="dialog-content standard-form">
-            <h2 class="characteristic-title" style="text-align: center; margin: 0; padding: 0;">{{localize
-                "HOUSEHOLD.ActionI.long"}}</h2>
-            <p style="color: rgb(0, 0, 0)">{{actions.action_1}}</p>
-            <h2 class="characteristic-title" style="text-align: center; margin: 0; padding: 0;">{{localize
-                "HOUSEHOLD.ActionII.long"}}</h2>
-            <p style="color: rgb(0, 0, 0)">{{actions.action_2}}</p>
-            <h2 class="characteristic-title" style="text-align: center; margin: 0; padding: 0;">{{localize
-                "HOUSEHOLD.ActionIII.long"}}</h2>
-            <p style="color: rgb(0, 0, 0)">{{actions.action_3}}</p>
-            <h2 class="characteristic-title" style="text-align: center; margin: 0; padding: 0;">{{localize
-                "HOUSEHOLD.ActionIV.long"}}</h2>
-            <p style="color: rgb(0, 0, 0)">{{actions.action_4}}</p>
-            <h2 class="characteristic-title" style="text-align: center; margin: 0; padding: 0;">{{localize
-                "HOUSEHOLD.ActionV.long"}}</h2>
-            <p style="color: rgb(0, 0, 0)">{{actions.action_5}}</p>
-            <h2 class="characteristic-title" style="text-align: center; margin: 0; padding: 0;">{{localize
-                "HOUSEHOLD.ActionVI.long"}}</h2>
-            <p style="color: rgb(0, 0, 0)">{{actions.action_6}}</p>
-
-            <!-- FORMATACAO TESTE FIM -->
-        </div>
-    </div>

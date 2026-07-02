@@ -1,62 +1,209 @@
+// ===========================================================================
+// Skill-roll dialog — new layout
+// Self-contained: this is the only partial imported under the
+// `.dialog-skill-roll` scope (replaces the legacy global/dialog +
+// components/dialog parchment look). The class lives on the DialogV2
+// application root AND on the template's outer div, so `.window-content`
+// selectors below still resolve from the application root.
+// ===========================================================================
+
+// color: var(--hh-ink);
+// font-family: Atsuka, Georgia, serif;
+
+.window-content {
+  background: var(--hh-paper);
+  color: var(--hh-ink);
+}
+
+// --- Skill header row -------------------------------------------------------
+.skill-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--hh-line);
+}
+
+.skill-name {
+  margin: 0;
+  border: 0;
+  color: var(--hh-ink);
+  font-family: 'LHF_Encore', Georgia, serif;
+  font-size: 1.6rem;
+  line-height: 1.1;
+  text-shadow: none;
+}
+
+.skill-select-dropdown {
+  flex: 1;
+  max-width: 220px !important;
+  height: 32px;
+  border: 1px solid var(--hh-line-strong);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.6);
+  color: var(--hh-ink);
+}
+
+.value-display {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--hh-ink);
+  font-size: 1.1rem;
+  font-weight: 700;
+
+  .suit-icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  img {
+    width: 24px;
+    border: 0;
+  }
+}
+
+// --- Section titles ("Choose a field", "Apply modifier") --------------------
+.characteristic-title-dialog {
+  margin: 14px 0 8px;
+  border: none;
+  color: var(--hh-muted);
+  font-family: Atsuka, Georgia, serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-align: center;
+  // text-transform: uppercase;
+
+  // hairline instead of the old deco1 flourish
+  &::after {
+    content: "";
+    display: block;
+    height: 1px;
+    margin-top: 6px;
+    background: var(--hh-line);
+  }
+}
+
+// --- Field chooser ----------------------------------------------------------
+.display-fields {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 28px;
+}
+
+.field-label {
+  cursor: pointer;
+
+  span {
+    position: absolute;
+    margin-left: 2px;
+    color: var(--hh-ink);
+    font-size: medium;
+  }
+}
+
+// Field suit radios (image swaps on :checked).
 input.field-society[type=radio]:checked,
 input.field-war[type=radio]:checked,
 input.field-academia[type=radio]:checked,
 input.field-street[type=radio]:checked {
-    background-repeat: no-repeat !important;
-    background-size: cover !important;
-    -webkit-filter: none !important;
-    filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.4));
+  background-repeat: no-repeat !important;
+  background-size: cover !important;
+  -webkit-filter: none !important;
+  filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.4));
 }
 
 input.field-society[type=radio]:checked {
-    background-image: url(/systems/household/assets/sheet/suit-hearts-full.png) !important;
+  background-image: url(/systems/household/assets/sheet/suit-hearts-full.png) !important;
 }
 
 input.field-war[type=radio]:checked {
-    background-image: url(/systems/household/assets/sheet/suit-clubs-full.png) !important;
+  background-image: url(/systems/household/assets/sheet/suit-clubs-full.png) !important;
 }
 
 input.field-academia[type=radio]:checked {
-    background-image: url(/systems/household/assets/sheet/suit-diamonds-full.png) !important;
+  background-image: url(/systems/household/assets/sheet/suit-diamonds-full.png) !important;
 }
+
 input.field-street[type=radio]:checked {
-    background-image: url(/systems/household/assets/sheet/suit-spades-full.png) !important;
+  background-image: url(/systems/household/assets/sheet/suit-spades-full.png) !important;
 }
 
 input.field-society[type=radio],
 input.field-war[type=radio],
 input.field-academia[type=radio],
 input.field-street[type=radio] {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    vertical-align: middle;
-    border: none;
-
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  vertical-align: middle;
+  border: none;
 }
 
 input.field-society[type=radio] {
-    background-image: url(/systems/household/assets/sheet/suit-hearts.png) !important;
+  background-image: url(/systems/household/assets/sheet/suit-hearts.png) !important;
 }
 
 input.field-war[type=radio] {
-    background-image: url(/systems/household/assets/sheet/suit-clubs.png) !important;
+  background-image: url(/systems/household/assets/sheet/suit-clubs.png) !important;
 }
 
 input.field-academia[type=radio] {
-    background-image: url(/systems/household/assets/sheet/suit-diamonds.png) !important;
+  background-image: url(/systems/household/assets/sheet/suit-diamonds.png) !important;
 }
+
 input.field-street[type=radio] {
-    background-image: url(/systems/household/assets/sheet/suit-spades.png) !important;
+  background-image: url(/systems/household/assets/sheet/suit-spades.png) !important;
 }
 
-h4, span {
-    color: var(--color-light-6);
+// --- Modifier ---------------------------------------------------------------
+.difficulty-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
 }
 
-.header-control.icon {
-    color: #000
+.modifier-item {
+  cursor: pointer;
+}
+
+.difficulty-option {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid var(--hh-line-strong);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.6);
+  color: var(--hh-wine);
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+// --- Dialog button ----------------------------------------------------------
+button[type=submit] {
+  background: var(--hh-paper);
+  border: 1px solid var(--hh-line);
+  border-radius: 6px;
+  font-weight: 700;
+
+  span,
+  i {
+    color: var(--hh-muted);
+  }
+
+  &:hover {
+    background: var(--hh-line);
+    border-color: var(--hh-line-strong);
+  }
 }

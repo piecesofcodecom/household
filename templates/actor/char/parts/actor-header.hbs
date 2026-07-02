@@ -1,86 +1,89 @@
 {{!-- Sheet Header --}}
-<header class="sheet-header">
-  
-  <div class="char-header grid grid-5col">
+<header class="hh-sheet-header">
+  {{#unless creationComplete}}
+  <button type="button" class="hh-create-button" data-action="create-char" title="Create Character" style="
+    position: absolute;
+    right: 40px;
+    margin-top: -15px;
+">
+    <i class="fa fa-magic" aria-hidden="true"></i>
+  </button>
+  {{else}}
+  <button type="button" class="hh-create-button hh-reset-button" data-action="reset-char"
+    title="{{localize 'HOUSEHOLD.Creation.ResetTitle'}}" style="
+    position: absolute;
+    right: 40px;
+    margin-top: -15px;
+">
+    <i class="fa fa-rotate-left" aria-hidden="true"></i>
+  </button>
+  {{/unless}}
+  <img class="hh-portrait character" src="{{actor.img}}" data-action="editImage" data-field="img"
+    title="{{actor.name}}" />
 
-  <!-- Image -->
-  <img
-    class="profile-img grid-span-1 grid-row-span-2"
-    src="{{actor.img}}"
-    data-action="editImage"
-    data-field="img"
-    title="Gwen Summers"
-    height="100"
-    width="100"
-  >
+  <div class="hh-identity">
+    <p class="hh-eyebrow">Player Character</p>
+    <input class="hh-display-name" name="name" type="text" value="{{actor.name}}" placeholder="Name" />
 
-  <!-- Character name -->
-  <h1 class="charname grid-span-4">
-    <input
-      class="char-name"
-      name="name"
-      type="text"
-      value="{{actor.name}}"
-      placeholder="Name"
-    >
-  </h1>
-
-  <!-- Resources -->
-  <div class="resources grid grid-4col grid-span-4">
-
-    <div class="resource__group">
-      {{#if linkedFolk}}
-      <div class="form__field header-link" data-action="itemEdit" data-item-id="{{linkedFolk.id}}"
-        title="{{linkedFolk.name}}">
-        <img src="{{linkedFolk.img}}" alt="" />
-        <span class="header-link__name">{{linkedFolk.name}}</span>
-        <a class="header-link__remove" data-action="unlinkHeaderItem" data-item-id="{{linkedFolk.id}}"
-          data-field="system.folk" title="{{localize 'HOUSEHOLD.RefRemove'}}"><i class="fas fa-times"></i></a>
+    <div class="hh-meta-grid">
+      <div class="hh-field-control">
+        <label>Folk</label>
+        {{#if linkedFolk}}
+        <div class="hh-fake-input header-link" data-action="itemEdit" data-item-id="{{linkedFolk.id}}"
+          title="{{linkedFolk.name}}">
+          <img src="{{linkedFolk.img}}" alt="" />
+          <span class="header-link__name">{{linkedFolk.name}}</span>
+          <a class="header-link__remove" data-action="unlinkHeaderItem" data-item-id="{{linkedFolk.id}}"
+            data-field="system.folk" title="{{localize 'HOUSEHOLD.RefRemove'}}"><i class="fas fa-times"></i></a>
+        </div>
+        {{else}}
+        <input name="system.folk" value="{{actor.system.folk}}" type="text" data-dtype="String" />
+        {{/if}}
       </div>
-      {{else}}
-      <input class="form__field" name="system.folk" value="{{actor.system.folk}}" type="text" data-dtype="String" />
-      {{/if}}
-      <label class="form__label">Folk</label>
-    </div>
 
-    <div class="resource__group">
-      <input class="form__field" name="system.homeland" value="{{actor.system.homeland}}" type="text" data-dtype="String"/>
-      <label class="form__label">Homeland</label>
-    </div>
-
-    <div class="resource__group">
-      {{#if linkedProfession}}
-      <div class="form__field header-link" data-action="itemEdit" data-item-id="{{linkedProfession.id}}"
-        title="{{linkedProfession.name}}">
-        <img src="{{linkedProfession.img}}" alt="" />
-        <span class="header-link__name">{{linkedProfession.name}}</span>
-        <a class="header-link__remove" data-action="unlinkHeaderItem" data-item-id="{{linkedProfession.id}}"
-          data-field="system.profession" title="{{localize 'HOUSEHOLD.RefRemove'}}"><i class="fas fa-times"></i></a>
+      <div class="hh-field-control">
+        <label>Homeland</label>
+        <input name="system.homeland" value="{{actor.system.homeland}}" type="text" data-dtype="String" />
       </div>
-      {{else}}
-      <input class="form__field" name="system.profession" value="{{actor.system.profession}}" type="text"
-        data-dtype="String" />
-      {{/if}}
-      <label class="form__label">Profession</label>
-    </div>
 
-    <div class="resource__group">
-      {{#if linkedVocation}}
-      <div class="form__field header-link" data-action="itemEdit" data-item-id="{{linkedVocation.id}}"
-        title="{{linkedVocation.name}}">
-        <img src="{{linkedVocation.img}}" alt="" />
-        <span class="header-link__name">{{linkedVocation.name}}</span>
-        <a class="header-link__remove" data-action="unlinkHeaderItem" data-item-id="{{linkedVocation.id}}"
-          data-field="system.vocation" title="{{localize 'HOUSEHOLD.RefRemove'}}"><i class="fas fa-times"></i></a>
+      <div class="hh-field-control">
+        <label>Profession</label>
+        {{#if linkedProfession}}
+        <div class="hh-fake-input header-link" data-action="itemEdit" data-item-id="{{linkedProfession.id}}"
+          title="{{linkedProfession.name}}">
+          <img src="{{linkedProfession.img}}" alt="" />
+          <span class="header-link__name">{{linkedProfession.name}}</span>
+          <a class="header-link__remove" data-action="unlinkHeaderItem" data-item-id="{{linkedProfession.id}}"
+            data-field="system.profession" title="{{localize 'HOUSEHOLD.RefRemove'}}"><i class="fas fa-times"></i></a>
+        </div>
+        {{else}}
+        <input name="system.profession" value="{{actor.system.profession}}" type="text" data-dtype="String" />
+        {{/if}}
       </div>
-      {{else}}
-      <input class="form__field" name="system.vocation" value="{{actor.system.vocation}}" type="text"
-        data-dtype="String" />
-      {{/if}}
-      <label class="form__label">Vocation</label>
-    </div>
 
+      <div class="hh-field-control">
+        <label>Vocation</label>
+        {{#if linkedVocation}}
+        <div class="hh-fake-input header-link" data-action="itemEdit" data-item-id="{{linkedVocation.id}}"
+          title="{{linkedVocation.name}}">
+          <img src="{{linkedVocation.img}}" alt="" />
+          <span class="header-link__name">{{linkedVocation.name}}</span>
+          <a class="header-link__remove" data-action="unlinkHeaderItem" data-item-id="{{linkedVocation.id}}"
+            data-field="system.vocation" title="{{localize 'HOUSEHOLD.RefRemove'}}"><i class="fas fa-times"></i></a>
+        </div>
+        {{else}}
+        <input name="system.vocation" value="{{actor.system.vocation}}" type="text" data-dtype="String" />
+        {{/if}}
+      </div>
+    </div>
   </div>
-</div>
 
+  {{!-- <aside class="hh-quick-panel">
+    <div class="hh-metric-grid">
+      <div class="hh-metric"><b>{{system.coins}}</b><span>Coins</span></div>
+      <div class="hh-metric"><b>{{system.ttt}}</b><span>TTT</span></div>
+      <div class="hh-metric"><b>{{#if system.wealth}}{{system.wealth}}{{else}}&mdash;{{/if}}</b><span>Wealth</span>
+      </div>
+    </div>
+  </aside> --}}
 </header>

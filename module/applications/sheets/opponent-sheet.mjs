@@ -1,5 +1,4 @@
 import { HOUSEHOLD } from '../../helpers/config.mjs';
-import { addProfession } from "../../helpers/professions.mjs";
 import * as actions from "../../helpers/actions.mjs";
 import { HouseholdBaseActorSheet } from "./base-actor-sheet.mjs";
 
@@ -15,8 +14,8 @@ export class HouseholdNPCActorSheet extends HouseholdBaseActorSheet {
     classes: ['household', 'sheet', 'npc', 'themed', 'theme-light'],
     tag: 'form',
     position: {
-      width: 511,
-      height: 632
+      width: 624,
+      height: 720
     },
     window: {
       resizable: true
@@ -161,7 +160,8 @@ export class HouseholdNPCActorSheet extends HouseholdBaseActorSheet {
         rollMode: game.settings.get('core', 'messageMode'),
         flags: {
           household: {
-            customCss: true
+            customCss: true,
+            opponentAction: true
           }
         }
       });
@@ -213,12 +213,7 @@ export class HouseholdNPCActorSheet extends HouseholdBaseActorSheet {
     const item = await fromUuid(data.uuid);
     if (!item) return;
 
-    // if (item.type === "profession") {
-    //   return addProfession(this.document, item);
-    // }
-    if (["profession"].includes(item.type)) {
-      addProfession(this.actor, item);
-    } else if (item.type == 'folk') {
+    if (item.type == 'folk') {
       this.actor.update({ 'system.folk': item.name })
       // Contract is now a UUID reference (drag-dropped on the folk sheet); fall
       // back to a legacy name lookup (world + premium) for un-migrated folks.

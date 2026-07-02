@@ -28,6 +28,14 @@ export async function openSheet() {
   }
 }
 
+export async function openItem(e) {
+  const dataset = e.currentTarget.closest('.item-list')?.dataset;
+  if (!dataset) return;
+  const actor = await getActor(dataset.characterId);
+  const item = actor?.items.get(dataset.itemId);
+  if (item) item.sheet.render(true);
+}
+
 export async function itemChat(e) {
   const target = e.currentTarget;
 
@@ -50,10 +58,16 @@ export async function itemChat(e) {
 }
 
 export async function dialogRollSkill(e) {
-  let guess;
   const actor = await getActor(this.dataset.characterId);
-
-  actor.dialogRollSkill(this.dataset);
+  if (!actor) return;
+  // Mirror the sheet: Ctrl+click opens the config dialog, a plain click rolls
+  // straight away.
+  if (e.ctrlKey) {
+    actor.dialogRollSkill(this.dataset);
+  } else {
+    const skill = actor.system.skills[this.dataset.key];
+    actor.onSkillRoll(skill.field, this.dataset.key, 0, { '2': "", '3': "", '4': "", '5': "" });
+  }
 }
 
 export async function rollAction(e) {
@@ -62,13 +76,24 @@ export async function rollAction(e) {
     const actor = await getActor(dataset.characterId);
     const item = actor.items.get(dataset.itemId);
     if (item) {
+      const skill = actor.system.skills[item.system.skill];
       dataset.label = item.system.field;
       dataset.field = item.system.field;
       dataset.key = item.system.skill;
       dataset.itemId = item.id;
       dataset.characterId = actor.id;
-      actor.dialogRollSkill(dataset);
+      // Mirror the sheet: Ctrl+click opens the dialog, a plain click rolls.
+      if (e.ctrlKey) {
+        actor.dialogRollSkill(dataset, item);
+      } else {
+        actor.onSkillRoll(skill.field, dataset.key, 0, { '2': "", '3': "", '4': "", '5': "" }, false, false, false, false, {}, 0, {}, item);
+      }
     }
+  } else if (e.currentTarget?.dataset?.type == 'item') {
+    const dataset = e.currentTarget.closest('.item-list')?.dataset;
+    const actor = await getActor(dataset.characterId);
+    const item = actor?.items.get(dataset.itemId);
+    if (item) item.useItem(null, actor);
   } else {
     let dataset = this?.dataset;
 
@@ -87,7 +112,8 @@ export async function rollAction(e) {
       flags: {
         household: {
           noChanges: true,
-          customCss: true
+          customCss: true,
+          opponentAction: true
         }
       },
       rollMode: game.settings.get('core', 'messageMode'),
@@ -143,6 +169,7 @@ export async function useAce(e) {
 
 
 export async function useItem(e) {
+  console.warn("adsad")
   if (typeof e?.stopPropagation === "function") {
     e.stopPropagation();
   }
@@ -157,42 +184,43 @@ export async function useItem(e) {
   let action, description;
   if (item.type == "move" && thisitem.dataset?.action == "use") {
     description = item.system.description;
+
     if (!item.system.exhausted) {
       action = "Exhaust move";
-      const suits = ["club", "diamond", "heart", "spade"];
-      let fail = 0;
-      let update_suits = [];
+      // const suits = ["club", "diamond", "heart", "spade"];
+      // let fail = 0;
+      // let update_suits = [];
 
 
-      for (let suit of suits) {
-        if (item.system.suits[suit]) {
+      // for (let suit of suits) {
+      //   if (item.system.suits[suit]) {
 
-          if (actor.system.aces[suit]) {
+      //     if (actor.system.aces[suit]) {
 
-            update_suits.push(suit);
-          } else {
-            fail += 1;
-          }
-        }
-      }
+      //       update_suits.push(suit);
+      //     } else {
+      //       fail += 1;
+      //     }
+      //   }
+      // }
 
-      if (fail == 1) {
+      // if (fail == 1) {
 
 
-        if (actor.system.aces.joker) {
-          actor.update({ [`system.aces.joker`]: false });
-          fail -= 1;
-        }
-      }
-      if (fail == 0) {
+      //   if (actor.system.aces.joker) {
+      //     actor.update({ [`system.aces.joker`]: false });
+      //     fail -= 1;
+      //   }
+      // }
+      // if (fail == 0) {
         item.update({ ['system.exhausted']: !item.system.exhausted })
-        for (let suit of update_suits) {
-          actor.update({ [`system.aces.${suit}`]: false });
-        }
-      } else {
-        ui.notifications.warn(`You don't have enough aces.`);
-        send_chat_message = false;
-      }
+      //   for (let suit of update_suits) {
+      //     actor.update({ [`system.aces.${suit}`]: false });
+      //   }
+      // } else {
+      //   ui.notifications.warn(`You don't have enough aces.`);
+      //   send_chat_message = false;
+      // }
     } else {
       action = "Recover move";
       await item.update({ ['system.exhausted']: !item.system.exhausted })
@@ -222,6 +250,7 @@ export async function useItem(e) {
     // Data to pass to the template
     const data = {
       name: item.name,
+      type: item.type,
       description: description,
       img: item.img,
       action: action,
@@ -231,10 +260,12 @@ export async function useItem(e) {
     // Render the template
     const renderedHTML = await foundry.applications.handlebars.renderTemplate(templatePath, data);
 
-    // Send the rendered HTML to the chat
+    // Send the card as flavor (so it's inside .flavor-text where the chat styles
+    // live) and flag it so the message <li> gets a class to scope its layout.
     ChatMessage.create({
-      content: renderedHTML,
-      speaker: { alias: actor.name }
+      flavor: renderedHTML,
+      speaker: { alias: actor.name },
+      flags: { household: { itemCard: true } }
     });
   }
 

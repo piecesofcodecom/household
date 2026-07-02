@@ -1,0 +1,477 @@
+// New-layout player HUD shell (character + opponent dock).
+// Scoped under #player-character (see household.scss). Reuses --hh-* tokens and
+// the fa-household-* suit icon font; the layered portrait (#frame/#photo-mask/
+// #glass-highlight/#grunge-texture-*) is still styled in _hud-layout.scss.
+
+// Re-center the dock and adopt the paper identity (overrides _hud-layout `&`).
+& {
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: 96vw;
+  color: var(--hh-ink);
+  font-family: Atsuka, Georgia, serif;
+}
+
+.hud-dock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ---- Pop-overs (one shown at a time; JS toggles .show) ----------------- */
+.hud-popover { display: none; }
+.hud-popover.show { display: block; }
+
+// All four skill-field cards are shown together inside the skills pop-over.
+.hud-skill-field { display: block; }
+
+// Shared card chrome for pop-over content.
+.hud-popover-card {
+  width: min(560px, 92vw);
+  max-width: 99%;
+  overflow-x: hidden;
+}
+
+// Skills pop-over: the four field cards sit side by side, narrower. Only the
+// character HUD has those cards; the opponent HUD reuses `.character-skills` for
+// a single-card Stats pop-over, which must keep the default centered block
+// layout (the `:has` guard avoids the wide 4-col grid stretching it left).
+.character-skills.show:has(.hud-skill-field) {
+  // display: flex;
+  // flex-wrap: wrap;
+  // align-items: flex-start;
+  gap: 8px;
+  width: auto;
+  max-width: 96vw;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  display: grid !important;
+}
+
+.character-skills .hud-skill-field {
+  width: min(160px, 92vw);
+  overflow: hidden;
+}
+
+// Combined Actions + Stats pop-over: two scroll columns side by side.
+.character-actions.show .hud-combo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.character-actions.show .character-actions-content,
+.character-actions.show .character-stats-content {
+  width: min(270px, 92vw);
+  overflow-x: hidden;
+}
+
+// Inside the combo, cards fill their column instead of the wide 560px default.
+.hud-combo .hud-popover-card {
+  width: auto;
+  max-width: none;
+}
+
+.hud-popover-card {
+  border: 1px solid var(--hh-line-strong);
+  border-radius: 12px;
+  background:
+    linear-gradient(rgba(247, 244, 238, 0.97), rgba(247, 244, 238, 0.97)),
+    url("/systems/household/assets/sheet/sheet_bg.webp") center / cover;
+  box-shadow: var(--hh-shadow, 0 16px 40px rgba(28, 24, 20, 0.2));
+}
+
+.hud-popover-scroll {
+  display: grid;
+  gap: 8px;
+  max-height: 320px;
+  overflow: auto;
+}
+
+.hud-popover-head {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--hh-line);
+
+  h2 {
+    margin: 0;
+    font-family: "LHF_Encore", Georgia, serif;
+    font-size: 14px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+}
+
+/* ---- Persistent bar --------------------------------------------------- */
+.hud-bar {
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 14px;
+  border: 1px solid var(--hh-line-strong);
+  border-radius: 14px;
+  background:
+    linear-gradient(rgba(247, 244, 238, 0.96), rgba(247, 244, 238, 0.96)),
+    url("/systems/household/assets/sheet/sheet_bg.webp") center / cover;
+  box-shadow: var(--hh-shadow, 0 16px 40px rgba(28, 24, 20, 0.2));
+}
+
+/* Portrait: just size the container; the layers come from _hud-layout. */
+.hud-portrait {
+  position: relative;
+  width: 66px;
+  height: 66px;
+  flex: 0 0 66px;
+  margin: 0;
+  cursor: pointer;
+}
+
+.hud-open {
+  position: absolute;
+  inset: auto 0 0 0;
+  z-index: 11;
+  padding: 2px 0;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 8px;
+  letter-spacing: 0.04em;
+  color: #fff;
+  background: rgba(37, 33, 29, 0.74);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.hud-portrait:hover .hud-open { opacity: 1; }
+
+/* Identity + stress stepper */
+.hud-identity {
+  display: grid;
+  gap: 3px;
+  min-width: 140px;
+}
+
+.hud-name {
+  //font-family: "LHF_Encore", Georgia, serif;
+  font-family: 'Vollkorn';
+  font-size: 17px;
+  line-height: 1;
+  color: var(--hh-ink);
+}
+
+.hud-profession {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--hh-muted);
+  font-family: 'Vollkorn';
+}
+
+.hud-stress {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.hud-step {
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--hh-line-strong);
+  border-radius: 6px;
+  background: var(--hh-paper-2, #ebe7df);
+  color: var(--hh-ink);
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+
+  &:hover { border-color: var(--hh-wine); color: var(--hh-wine); }
+}
+
+.hud-stress-read {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 5px;
+
+  b { font-size: 19px; font-weight: 700; min-width: 18px; text-align: center; }
+  span { color: var(--hh-muted); font-size: 11px; }
+
+  // Current stress is sitting on a crucial/danger box: flag the read in wine.
+  &.crucial {
+    color: var(--hh-wine);
+    b { color: var(--hh-wine); }
+    span { color: var(--hh-wine); }
+    .fa-triangle-exclamation { font-size: 12px; }
+  }
+}
+
+/* Aces — CSS cards (replace the old PNG aces) */
+.hud-aces {
+  display: inline-flex;
+  align-self: center;
+  gap: 3px;
+}
+
+.hud-ace {
+  width: 26px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--hh-line-strong);
+  border-radius: 5px;
+  background: var(--hh-paper-2, #ebe7df);
+  font-size: 16px;
+  cursor: pointer;
+  transition: transform 0.12s ease;
+
+  &:hover { transform: translateY(-2px); }
+  &.active {
+    background: #fff;
+    border-color: var(--hh-wine);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+  }
+}
+
+/* Toolbar chips (the skills/actions/stats toggles) */
+.hud-toolbar {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  gap: 6px;
+  align-content: center;
+}
+
+.hud-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-height: 26px;
+  padding: 4px 9px;
+  border: 1px solid var(--hh-line);
+  border-radius: 999px;
+  background: var(--hh-paper, #f7f4ee);
+  color: var(--hh-muted);
+  font-family: Atsuka, Georgia, serif;
+  font-size: 12px;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+
+  &:hover { border-color: var(--hh-line-strong); color: var(--hh-ink); }
+  &.active {
+    border-color: var(--hh-wine);
+    background: var(--hh-wine-soft);
+    color: var(--hh-ink);
+    font-weight: 700;
+  }
+}
+
+.hud-chip-wide { grid-column: span 2; }
+
+/* ---- Skills pop-over content ------------------------------------------ */
+.hud-skill-list {
+  list-style: none;
+  margin: 0;
+  padding: 6px 8px;
+  display: grid;
+  gap: 2px;
+}
+
+.hud-skill-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+
+  &:hover { background: var(--hh-wine-soft); }
+}
+
+.hud-skill-name { font-size: 13px; }
+
+.hud-skill-rank {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 700;
+  color: var(--hh-muted);
+}
+
+/* ---- Actions pop-over (uses the shared hud item-list partial) ---------- */
+.hud-item-list {
+  padding: 4px;
+
+  .item-list {
+    border-radius: 6px;
+    padding: 2px 6px;
+    overflow: hidden;
+    font-family: 'Vollkorn';
+    h5 {
+      font-size: medium;
+      margin: 0;
+    }
+    h4 {
+      font-size: medium;
+      margin: 0;
+    }
+  }
+
+  .item-summary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    list-style: none;
+  }
+
+  // Keep action icons (open, chat, roll, exhaust) from shrinking so the name
+  // gives way first and truncates instead of the buttons getting clipped.
+  .item-summary > * { flex: 0 0 auto; }
+
+  .item-summary-icon { border-radius: 4px; }
+  .item-summary-title {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 13px;
+    font-family: Volkorn;
+  }
+}
+
+/* ---- Stats pop-over content ------------------------------------------- */
+.hud-conditions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+  padding: 8px;
+}
+
+.hud-condition {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+
+  &:hover { background: var(--hh-wine-soft); }
+}
+
+.hud-cond-dot { width: 14px; text-align: center; }
+
+.hud-decorum {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 10px 12px;
+}
+
+.hud-decorum-step {
+  flex: 1;
+  height: 30px;
+  cursor: pointer;
+  background: url("/systems/household/assets/sheet/butterfly.svg") no-repeat center / contain;
+
+  &.active {
+    background-image: url("/systems/household/assets/sheet/butterfly-filled.svg");
+  }
+}
+
+.hud-ttt {
+  display: flex;
+  gap: 6px;
+  padding: 8px 12px;
+  justify-content: center;
+
+  a { cursor: pointer; line-height: 0; }
+  img { border: 0; }
+}
+
+/* ---- Opponent dock extras --------------------------------------------- */
+.hud-toolbar-2 { grid-template-columns: repeat(2, auto); }
+
+.hud-threat {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 1px;
+}
+
+.threat-pip {
+  font-size: 13px;
+  color: var(--hh-line-strong);
+
+  &.filled { color: var(--hh-violet); }
+}
+
+.hud-roll {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border: 1px solid var(--hh-wine);
+  border-radius: 10px;
+  background: var(--hh-wine);
+  color: #fff;
+  font-family: Atsuka, Georgia, serif;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+
+  &:hover { filter: brightness(1.08); }
+}
+
+.hud-stress-track {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 10px 12px;
+}
+
+.hud-sbox {
+  width: 20px;
+  height: 20px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--hh-line-strong);
+  border-radius: 4px;
+  background: var(--hh-moss-soft);
+  color: rgba(37, 33, 29, 0.64);
+  font-size: 10px;
+  font-style: normal;
+  line-height: 1;
+
+  &.filled { background: var(--hh-moss); color: #fff; }
+  &.crucial { border-color: var(--hh-wine); box-shadow: 0 0 0 2px rgba(124, 47, 57, 0.18); }
+}
+
+.hud-action-list {
+  display: grid;
+  gap: 6px;
+  padding: 8px 12px;
+}
+
+.hud-action-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+
+  .roman {
+    flex: 0 0 24px;
+    font-family: "LHF_Encore", Georgia, serif;
+    color: var(--hh-wine);
+    font-size: 14px;
+  }
+
+  p { margin: 0; font-size: 12px; }
+}

@@ -70,6 +70,27 @@ export function registerHandlebarsHelpers() {
     return "#343434";
   });
 
+  // Builds an HTML tooltip listing the suits/aces a move requires, so the HUD
+  // list can drop the inline suit icons but still surface that info on hover.
+  Handlebars.registerHelper('getMoveSuitsTooltip', function (suits) {
+    if (!suits) return "";
+    const map = {
+      heart: { field: "Society", color: "#fd5c63" },
+      diamond: { field: "Academia", color: "#7CB9E8" },
+      club: { field: "War", color: "#32de84" },
+      spade: { field: "Street", color: "#343434" },
+    };
+    const rows = Object.keys(map)
+      .filter(suit => suits[suit])
+      .map(suit => {
+        const { field, color } = map[suit];
+        const label = game.i18n.localize(`HOUSEHOLD.Field.${field}.long`);
+        return `<div style='display:flex;align-items:center;gap:6px;'><i class='fa-household-${suit}-full' style='color:${color}'></i><span>${label}</span></div>`;
+      });
+    if (!rows.length) return "";
+    return `<div style='display:flex;flex-direction:column;gap:2px;'>${rows.join("")}</div>`;
+  });
+
   Handlebars.registerHelper('doCheckIf', function (operand_1, operator, operand_2) {
 
     let operators = {                     //  {{#when <operand1> 'eq' <operand2>}}

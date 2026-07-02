@@ -1,0 +1,11 @@
+{{!-- Character Creation: step navigation --}}
+<nav class="hh-creation-tabs tabs" data-group="primary" data-application-part="nav">
+  {{#each tabs as |tab|}}
+  <a data-action="tab" class="{{tab.cssClass}}" data-tab="{{tab.id}}" data-group="primary"
+    title="{{localize tab.label}}">{{localize tab.label}}</a>
+  {{/each}}
+  <button type="button" class="hh-creation-done" data-action="confirm" {{#unless complete}}disabled{{/unless}}
+    title="{{#unless complete}}{{localize 'HOUSEHOLD.Creation.Incomplete'}}{{/unless}}">
+    <i class="fas fa-check"></i> {{localize "HOUSEHOLD.Creation.Confirm"}}
+  </button>
+</nav>

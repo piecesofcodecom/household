@@ -21,7 +21,6 @@ export default class HouseholdVocation extends HouseholdItemBase {
     schema.skills = new fields.ArrayField(new fields.StringField());
     schema.field = new fields.StringField({ required: true, blank: true });
     schema.traits = new fields.ArrayField(new fields.StringField());
-    schema.has_companion = new fields.BooleanField({ initial: false });
 
     return schema;
   }

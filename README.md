@@ -1,6 +1,10 @@
+![Household](readme/banner.png)
+
 ![Latest Release Download Count](https://img.shields.io/github/downloads/piecesofcodecom/household/latest/system.zip?color=2b82fc&label=DOWNLOADS&style=for-the-badge) [![Forge Installs](https://img.shields.io/badge/dynamic/json?label=Forge%20Installs&query=package.installs&suffix=%25&url=https%3A%2F%2Fforge-vtt.com%2Fapi%2Fbazaar%2Fpackage%2Fhousehold&colorB=03ff1c&style=for-the-badge)](https://forge-vtt.com/bazaar#package=household)
 
-[![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/snagov)
+<center>
+<a href='https://ko-fi.com/X8X011IQ3J' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://storage.ko-fi.com/cdn/kofi6.png?v=6' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+</center>
 
 # Household RPG
 Welcome to the unofficial Foundry VTT implementation for the Household RPG.
@@ -14,7 +18,8 @@ Please note that the images in the asset folder are sourced from the official ga
 ## Sheets
 The system offers two types of sheets: Character sheets and Opponent sheets. The old NPC sheet is being phased out and will be removed in a future update.
 
-![Character Sheet](./readme/char1.png) 
+![Character Sheet](./readme/character.png) 
+![Opponent Sheet](./readme/opponent.png) 
 
 ## Item Types
 The system includes the following item types:
@@ -32,8 +37,6 @@ The system includes the following item types:
 ## Rolls
 The system features a roll dialog that allows players to select which skills and fields to use for their rolls.
 
-![Roll Dialog](./readme/dialog-roll.png) 
-
 Chat messages include options for players to re-roll, use a free re-roll, or go "all-in." All subsequent re-rolls are consolidated into the original chat message to keep the log clean.
 
 ![Chat Rolls](./readme/chat.png) 
@@ -46,3 +49,4 @@ This system requires the [Dice So Nice](https://foundryvtt.com/packages/dice-so-
 
 ### Household Garden Dice
 ![Household Garden Dice](./readme/hhg-dice.png)
+

@@ -1,3 +1,44 @@
+// --- New layout: segmented decorum control (labels 1-5).
+.hh-decorum-scale {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.hh-decorum-step {
+  min-height: 48px;
+  display: grid;
+  place-items: center;
+  padding: 8px 4px;
+  // border: 1px solid var(--hh-line);
+  // border-radius: var(--hh-radius);
+  color: var(--hh-muted);
+  text-align: center;
+  font-size: 12px;
+  cursor: pointer;
+  // Light halo around the label so it stays legible over the butterfly.
+  text-shadow:
+    -1px -1px 0 hsla(40, 36%, 98%, .9),
+     1px -1px 0 hsla(40, 36%, 98%, .9),
+    -1px  1px 0 hsla(40, 36%, 98%, .9),
+     1px  1px 0 hsla(40, 36%, 98%, .9),
+     0    0   2px hsla(40, 36%, 98%, .9);
+  // Fade the butterfly behind the label with a translucent cream wash so the
+  // text stays readable (text is content, so it's unaffected by the overlay).
+  background:
+    linear-gradient(hsla(40, 36%, 95%, .65), hsla(40, 36%, 95%, .65)),
+    url(/systems/household/assets/sheet/butterfly.svg) no-repeat center / contain;
+
+  &.active {
+    // border-color: var(--hh-violet);
+    background:
+      linear-gradient(hsla(40, 36%, 95%, .55), hsla(40, 36%, 95%, .55)),
+      url(/systems/household/assets/sheet/butterfly-filled.svg) no-repeat center / contain;
+    color: var(--hh-ink);
+    font-weight: 700;
+  }
+}
+
 // Decorum grid and butterfly input styles
 .decorum-text {
   font-family: Cambria, Times, 'Times New Roman', serif;

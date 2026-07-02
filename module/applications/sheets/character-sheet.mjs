@@ -1,5 +1,6 @@
 import { HOUSEHOLD } from '../../helpers/config.mjs';
-import { addProfession, addVocation, linkHeaderItem } from "../../helpers/professions.mjs";
+import { linkHeaderItem, resolveItemRef } from "../../helpers/professions.mjs";
+import { HouseholdCharacterCreation } from "../character-creation.mjs";
 import * as actions from "../../helpers/actions.mjs";
 import { HouseholdBaseActorSheet } from "./base-actor-sheet.mjs";
 
@@ -13,7 +14,7 @@ export class HouseholdActorSheet extends HouseholdBaseActorSheet {
     classes: ['household', 'sheet', 'actor', 'themed', 'theme-light'],
     tag: 'form',
     position: {
-      width: 600,
+      width: 823,
       height: 920
     },
     window: {
@@ -29,7 +30,10 @@ export class HouseholdActorSheet extends HouseholdBaseActorSheet {
       customEdit: this.prototype._onCustomEdit,
       effectControl: this.prototype._onEffectControl,
       editImage: this._onEditImage,
-      unlinkHeaderItem: this.prototype._onUnlinkHeaderItem
+      unlinkHeaderItem: this.prototype._onUnlinkHeaderItem,
+      toggleLock: this.prototype._onToggleLock,
+      'create-char': this.prototype._onCreateChar,
+      'reset-char': this.prototype._onResetChar
     },
     form: {
       submitOnChange: true,
@@ -111,6 +115,45 @@ export class HouseholdActorSheet extends HouseholdBaseActorSheet {
     context.linkedFolk = find('folk');
     context.linkedProfession = find('profession');
     context.linkedVocation = find('vocation');
+    // Sheet lock: when true, field/skill controls are disabled (see general tab).
+    context.sheetLocked = !!this.document.getFlag('household', 'sheetLocked');
+    // Creation done: hide the "Create Character" button, show the reset control.
+    context.creationComplete = !!this.document.getFlag('household', 'creation')?.completed;
+  }
+
+  /**
+   * Toggle the sheet lock flag, which freezes field/skill editing on the sheet.
+   * @this {HouseholdActorSheet}
+   */
+  async _onToggleLock(event, target) {
+    await this.document.setFlag('household', 'sheetLocked', !this.document.getFlag('household', 'sheetLocked'));
+  }
+
+  /**
+   * Open the guided character-creation wizard for this actor. Re-focuses the
+   * existing window if it is already open.
+   * @this {HouseholdActorSheet}
+   */
+  async _onCreateChar(event, target) {
+    const id = `household-creation-${this.document.id}`;
+    const existing = foundry.applications.instances.get(id);
+    if (existing) return existing.bringToFront();
+    new HouseholdCharacterCreation({ id, actor: this.document }).render(true);
+  }
+
+  /**
+   * Fully undo character creation after a confirmation prompt: deletes granted
+   * items, resets Field/Skill points, clears the header strings, and removes the
+   * creation flag so the "Create Character" button reappears.
+   * @this {HouseholdActorSheet}
+   */
+  async _onResetChar(event, target) {
+    const confirmed = await foundry.applications.api.DialogV2.confirm({
+      window: { title: game.i18n.localize('HOUSEHOLD.Creation.ResetTitle') },
+      content: `<p>${game.i18n.localize('HOUSEHOLD.Creation.ResetConfirm')}</p>`
+    });
+    if (!confirmed) return;
+    await HouseholdCharacterCreation.reset(this.document);
   }
 
   /* -------------------------------------------- */
@@ -243,27 +286,56 @@ export class HouseholdActorSheet extends HouseholdBaseActorSheet {
         rollMode: game.settings.get('core', 'messageMode')
       });
     } else if (dataset.type === 'skill') {
+      const skill = this.actor.system.skills[dataset.key];
+      const ctrlKey = event.ctrlKey;
+      if (ctrlKey) {
+        this.actor.dialogRollSkill(dataset);
+      } else {
+        this.actor.onSkillRoll(
+          skill.field,
+          dataset.key,
+          0, {
+          '2': "",
+          '3': "",
+          '4': "",
+          '5': ""
+        })
+      }
 
-      this.actor.dialogRollSkill(dataset);
+      //this.actor.dialogRollSkill(dataset);
 
     } else if (dataset.type == 'attack') {
-
-
       const item_id = target.closest('.item-list')?.dataset.itemId;
 
       const item = this.actor.items.get(item_id);
       if (item) {
-
-
+        const skill = this.actor.system.skills[item.system.skill];
+        const ctrlKey = event.ctrlKey;
         dataset.label = item.system.field;
         dataset.field = item.system.field;
         dataset.key = item.system.skill;
         dataset.itemId = item.id;
         dataset.characterId = this.actor.id;
-
-        this.actor.dialogRollSkill(dataset);
-
-
+        if (ctrlKey) {
+          this.actor.dialogRollSkill(dataset, item);
+        } else {
+          this.actor.onSkillRoll(
+            skill.field,
+            dataset.key,
+            0, {
+            '2': "",
+            '3': "",
+            '4': "",
+            '5': ""
+          }, false, false, false, false, {}, 0, {}, item)
+        }
+      }
+    } if (dataset.type == 'item') {
+      const item_id = target.closest('.item-list')?.dataset.itemId;
+      const item = this.actor.items.get(item_id);
+      console.warn("teste")
+      if (item) {
+        item.useItem(null, actor);
       }
     } else {
 
@@ -287,68 +359,43 @@ export class HouseholdActorSheet extends HouseholdBaseActorSheet {
 
   async _onDrop(event) {
     const data = foundry.applications.ux.TextEditor.implementation.getDragEventData(event);
+    if (data.type !== "Item") return;
 
     const item = await fromUuid(data.uuid);
     if (!item) return;
 
-    // if (item.type === "profession") {
-    //   return addProfession(this.document, item);
-    // }
-    if (["profession"].includes(item.type)) {
-      addProfession(this.actor, item);
-    } else if (item.type == 'vocation') {
-      addVocation(this.actor, item);
-    } else if (item.type == 'folk') {
-      this.actor.update({ 'system.folk': item.name })
-      // Contract is now a UUID reference (drag-dropped on the folk sheet); fall
-      // back to a legacy name lookup (world + premium) for un-migrated folks.
-      const contract_ref = item.system.contract;
-      let contract_item = null;
-      if (contract_ref) {
-        if (contract_ref.includes('.')) {
-          contract_item = await fromUuid(contract_ref);
-        } else {
-          const lower = contract_ref.toLowerCase();
-          contract_item = game.items.find(el => el.type == 'contract' && el.name.toLowerCase() == lower);
-          if (!contract_item && HOUSEHOLD.premium) {
-            const packs = game.packs.get(HOUSEHOLD.premium_name + '.character')
-            const contents = await packs.getDocuments();
-            contract_item = contents.find(el => el.type == 'contract' && el.name.toLowerCase() == lower);
-          }
-        }
-      }
-      if (contract_item) {
-        let newItemData = {
-          name: contract_item.name,
-          type: contract_item.type,
-          img: contract_item.img,
-          system: foundry.utils.duplicate(contract_item.system)
-        }
-        await this.document.createEmbeddedDocuments("Item", [newItemData]);
-      } else {
-        ui.notifications.warn("Contract not found: " + contract_ref);
-      }
-      // Copy the folk item itself so the header field links to it.
+    // Folk/profession/vocation are "header" items: drop just embeds a copy and
+    // links the header chip — no guided dialogs (those live in the creation
+    // wizard, opened from the "Create Char" button). Folk also embeds its
+    // granted contract.
+    if (item.type === 'profession') {
       await linkHeaderItem(this.actor, item);
-
+      await this.actor.update({ 'system.profession': item.name });
+    } else if (item.type === 'vocation') {
+      await linkHeaderItem(this.actor, item);
+      await this.actor.update({ 'system.vocation': item.name });
+    } else if (item.type === 'folk') {
+      await linkHeaderItem(this.actor, item);
+      await this.actor.update({ 'system.folk': item.name });
+      const contract = await resolveItemRef(item.system.contract, 'contract');
+      if (contract) {
+        await this.document.createEmbeddedDocuments("Item", [{
+          name: contract.name,
+          type: contract.type,
+          img: contract.img,
+          system: foundry.utils.duplicate(contract.system)
+        }]);
+      } else if (item.system.contract) {
+        ui.notifications.warn("Contract not found: " + item.system.contract);
+      }
     } else {
-      let newItemData = {
+      await this.document.createEmbeddedDocuments("Item", [{
         name: item.name,
         type: item.type,
         img: item.img,
         system: foundry.utils.duplicate(item.system)
-      }
-      await this.document.createEmbeddedDocuments("Item", [newItemData]);
+      }]);
     }
-
-    if (data.type !== "Item") return;
-
-    // await this.document.createEmbeddedDocuments("Item", [{
-    //   name: item.name,
-    //   type: item.type,
-    //   img: item.img,
-    //   system: foundry.utils.deepClone(item.system)
-    // }]);
   }
 
 }

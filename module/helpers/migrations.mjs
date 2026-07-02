@@ -112,11 +112,37 @@ async function _migrateCompanions(unresolved) {
   return count;
 }
 
+/**
+ * The profession now owns the lists of its vocations and companions. Build a
+ * profession's `field` list from the items that still point back at it via their
+ * legacy `system.profession` (resolving names to UUIDs as needed). Adds only —
+ * never removes — so it is idempotent and lossless. Writes into `update`.
+ */
+async function backfillOwnedRefs(profession, items, field, update) {
+  const linked = [];
+  for (const item of items) {
+    let prof = item.system.profession;
+    if (!prof) continue;
+    if (!looksLikeUuid(prof)) prof = await resolveUuidByName("profession", prof);
+    if (prof === profession.uuid && !linked.includes(item.uuid)) linked.push(item.uuid);
+  }
+  const existing = profession.system[field] ?? [];
+  const merged = [...new Set([...existing, ...linked])];
+  if (merged.length !== existing.length) update[`system.${field}`] = merged;
+}
+
 async function _migrateProfessions(unresolved) {
   let count = 0;
+  const allVocations = game.items.filter((i) => i.type === "vocation");
+  const allCompanions = game.items.filter((i) => i.type === "companion");
   for (const profession of game.items.filter((i) => i.type === "profession")) {
     // Only moves/traits are item references; skills are plain keys (no resolve).
     const update = await migrateItemArrays(profession, unresolved);
+
+    // Build the profession's vocations/companions from items pointing back at it.
+    await backfillOwnedRefs(profession, allVocations, "vocations", update);
+    await backfillOwnedRefs(profession, allCompanions, "companions", update);
+
     if (Object.keys(update).length > 0) {
       await profession.update(update);
       count++;

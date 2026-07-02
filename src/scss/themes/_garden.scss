@@ -1,0 +1,72 @@
+// =========================================================================
+//  Garden theme — optional layer ("Welcome to the Garden", Household vol. 2)
+//  -------------------------------------------------------------------------
+//  Same markup as the default new layout, re-scoped tokens. The new layout is
+//  driven by the --hh-* custom properties in utils/_tokens.scss (defined on
+//  :root); this layer redefines those tokens on a `garden` class, so anything
+//  carrying that class (a Garden sheet root, the HUD root, a chat message)
+//  inherits the garden palette while the default sheets stay untouched.
+//
+//  Palette source: novoLayoutGarden/PALETTE.md (Household base -> Garden).
+// =========================================================================
+
+@mixin hh-garden-tokens {
+  --hh-paper: #f2efdd;        // vellum creme do banner WELCOME
+  --hh-paper-2: #e4dfc6;      // creme rebaixado para portraits/cards
+  --hh-ink: #1a2a18;          // casca de árvore: quase-preto esverdeado
+  --hh-muted: #5d6a4b;        // musgo acinzentado (labels/secundário)
+  --hh-line: #c2c6a2;         // fio de sálvia
+  --hh-line-strong: #7a8a59;  // oliva para bordas com peso
+
+  // Marca / acento primário: esmeralda da folhagem (ocupa o papel do "vinho").
+  --hh-wine: #2e6b37;
+  --hh-wine-soft: #d8e7c9;
+
+  // Verde secundário: broto de primavera (stress / sucesso).
+  --hh-moss: #5d8a32;
+  --hh-moss-soft: #e1edc9;
+
+  // Dourado: latão antigo da moldura ornamental.
+  --hh-gold: #b3893a;
+
+  // Floração: roxo de dedaleira/íris (joker, decorum, threat).
+  --hh-violet: #6a4d78;
+
+  // Sombra levemente esverdeada para assentar nas superfícies de folha.
+  --hh-shadow: 0 16px 40px rgba(18, 30, 16, 0.26);
+}
+
+.household.garden,
+#player-character.garden,
+.chat-message.garden {
+  @include hh-garden-tokens;
+}
+
+// --- Garden chat cards: keep the translucent white surface, add a leaf accent.
+// The leaf is a cutout PNG, so it lives on a pseudo-element to control opacity
+// independently of the text and to clip cleanly to the card corner. Which leaf
+// is chosen per message is set by a `leaf-1/2/3` class (picked deterministically
+// from the message id in dice/roll-card.mjs, so it stays stable across renders).
+.chat-message.garden {
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: "";
+    position: absolute;
+    right: -14px;
+    top: -16px;
+    width: 92px;
+    height: 92px;
+    background: no-repeat center / contain;
+    opacity: 0.16;
+    transform: rotate(8deg);
+    pointer-events: none;
+  }
+
+  &.leaf-1::after { background-image: url("/systems/household/assets/chat/leaf-01.png"); }
+  &.leaf-2::after { background-image: url("/systems/household/assets/chat/leaf-02.png"); }
+  &.leaf-3::after { background-image: url("/systems/household/assets/chat/leaf-03.png"); }
+  &.leaf-4::after { background-image: url("/systems/household/assets/chat/leaf-04.png"); }
+  &.leaf-5::after { background-image: url("/systems/household/assets/chat/leaf-05.png"); }
+}

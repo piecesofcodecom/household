@@ -1,11 +1,118 @@
-// New layout
+// --- New layout (novoLayout): paper shell + clean controls for every item type.
+// CSS-led conversion: the item templates already share these structural classes
+// and the nav already carries the `tabs` class, so all 10 types are restyled
+// here without touching templates (ref chips / dropdowns preserved). Paper sits
+// on the application root (with !important to beat Foundry's --background) and
+// shows through a transparent window-content, mirroring the actor sheets.
 & {
-  background: url(/systems/household/assets/sheet/char-sheet-bg.png);
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  overflow: visible;
-  filter: drop-shadow(2px 4px 6px var(--hh-border-strong));
+  color: var(--hh-ink);
+  // Body text uses Foundry's default font; LHF_Encore is reserved for titles
+  // (.item-name) and tab names.
+  font-family: var(--font-primary);
+  background:
+    linear-gradient(rgba(247, 244, 238, 0.96), rgba(247, 244, 238, 0.96)),
+    url('/systems/household/assets/sheet/sheet_bg.webp') center / cover !important;
+}
+
+.window-content {
+  background: none !important;
+}
+
+.item-sheet {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  .sheet-header {
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    gap: 12px;
+    align-items: start;
+    padding: 12px;
+    border-bottom: 1px solid var(--hh-line);
+    background:
+      linear-gradient(90deg, rgba(124, 47, 57, 0.08), transparent 58%),
+      rgba(255, 255, 255, 0.32);
+  }
+
+  .profile-img {
+    width: 96px;
+    height: 96px;
+    flex: none;
+    margin: 0;
+    border: 1px solid var(--hh-line-strong);
+    border-radius: var(--hh-radius);
+    object-fit: cover;
+  }
+
+  .header-fields {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .item-name {
+    width: 100%;
+    margin: 0 0 8px;
+    padding: 6px 10px;
+    border: 1px solid var(--hh-line-strong);
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.45);
+    color: var(--hh-ink);
+    font-family: 'LHF_Encore', Georgia, serif;
+    font-size: clamp(22px, 3vw, 30px);
+    line-height: 1.1;
+  }
+
+  .resource-label {
+    color: var(--hh-muted);
+    font-size: 11px;
+    font-weight: 700;
+    // text-transform: uppercase;
+  }
+
+  .sheet-tabs {
+    display: flex;
+    gap: 4px;
+    margin: 0;
+    padding: 0 12px;
+    border: 0;
+    border-bottom: 1px solid var(--hh-line);
+    border-radius: 0;
+    background: rgba(235, 231, 223, 0.72);
+    box-shadow: none;
+
+    a {
+      padding: 9px 10px 7px;
+      border-bottom: 3px solid transparent;
+      color: var(--hh-muted);
+      font-weight: 700;
+      text-decoration: none;
+      font-family: LHF_Encore, Georgia, serif;
+
+      &.active {
+        border-color: var(--hh-wine);
+        color: var(--hh-ink);
+      }
+    }
+  }
+
+  .sheet-body {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 12px;
+  }
+
+  // Clean box inputs/selects (overrides the legacy inset text-input styling).
+  input[type="text"],
+  input[type="number"],
+  select {
+    border: 1px solid var(--hh-line);
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.68);
+    box-shadow: none;
+    color: var(--hh-ink);
+  }
 }
 
 .sheet-header {

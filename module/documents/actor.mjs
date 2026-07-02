@@ -131,7 +131,11 @@ export class HouseholdActor extends Actor {
       5: "V",
       6: "VI"
     }
+    console.warn(this)
     const templateData = {
+      name: this.name,
+      img: this.img,
+      roman: roman[action],
       label: "Action " + roman[action],
       description: this.system.actions[`action_${action}`],
       threat: this.system.threat.level
@@ -159,14 +163,15 @@ export class HouseholdActor extends Actor {
    * PUBLIC METHODS
    */
 
-  _get_poll(field, skill, mod) {
-    return HHRoll.dicePoolSize(this.system.fields[field].value, this.system.skills[skill].value, mod);
-  }
-
-  async onReroll(field, skill, mod, keep_poll) {
-    const original_poll = this._get_poll(field.toLowerCase(), skill.toLowerCase(), mod);
+  async onReroll(keep_poll, current_poll) {
+    // Re-roll the dice that are still unlocked: (dice currently shown) − (locked
+    // Successes kept). Counting the displayed dice — rather than recomputing the
+    // pool from field+skill+mod — keeps this in sync with what the card shows
+    // (mirrors the plain /roll path in roll-card.mjs); recomputing could desync
+    // from the displayed dice and re-roll the wrong number.
+    const total = Object.values(current_poll).reduce((sum, n) => sum + Number(n), 0);
     const remove_from_poll = Object.values(keep_poll).reduce((sum, n) => sum + Number(n), 0);
-    const for_this_poll = Number(original_poll) - remove_from_poll;
+    const for_this_poll = total - remove_from_poll;
     const roll = new Roll(HHRoll.buildRollFormula(for_this_poll, { reroll: true }));
     await roll.evaluate();
     return { poll: roll.dice, roll };
@@ -205,7 +210,7 @@ export class HouseholdActor extends Actor {
     '3': 0,
     '4': 0,
     '5': 0
-  }, keep_poll = false, is_reroll = false, is_free_reroll = false, is_allin = false, original_poll_success = {}, message_id = 0) {
+  }, keep_poll = false, is_reroll = false, is_free_reroll = false, is_allin = false, original_poll_success = {}, message_id = 0, current_poll = {},  item = null) {
     mod = Number(mod) || 0;
     const rollType = HHRoll.rollTypeFromFlags({ isReroll: is_reroll, isFreeReroll: is_free_reroll, isAllIn: is_allin });
     const normalized_original_success = HHRoll.normalizePoll(original_poll_success);
@@ -215,7 +220,7 @@ export class HouseholdActor extends Actor {
     let skill_roll;
     let transformed_poll_result;
     if (rollType !== HHRoll.ROLL_TYPES.INITIAL) {
-      skill_roll = await this.onReroll(field, skill, mod, keep_poll);
+      skill_roll = await this.onReroll(keep_poll, current_poll);
       transformed_poll_result = HHRoll.mergePolls(keep_poll, HHRoll.tallyDiceFaces(skill_roll.poll));
     } else {
       skill_roll = await this._skillRoll(field, skill, mod);
@@ -252,29 +257,37 @@ export class HouseholdActor extends Actor {
       options.allowFreeReroll,
       options.allowAllIn,
       options.giveUp,
-      message_id
+      message_id,
+      item,
     );
 
     return;
   }
 
-  async dialogRollSkill(dataset) {
-    return openSkillRollDialog(this, dataset);
+  async dialogRollSkill(dataset, item = null) {
+    return openSkillRollDialog(this, dataset, item);
   }
 
-  toggleCondition(path) {
-    const condition_value = path.split('.').reduce((acc, part) => acc && acc[part], this);
+  /**
+   * Toggle a character condition. Conditions are registered as status effects
+   * (see helpers/conditions.mjs), so this drives a real ActiveEffect via
+   * toggleStatusEffect; the `system.conditions.*` boolean is mirrored by the
+   * create/delete ActiveEffect sync hooks. Also posts a chat notice.
+   * @param {string} path  e.g. "system.conditions.frightened"
+   */
+  async toggleCondition(path) {
     const condition_name = path.split('.').pop();
+    const active = !this.statuses.has(condition_name);
     const actor = this;
     let messageContent = game.i18n.localize('HOUSEHOLD.ConditionToggleMessage');
     messageContent = messageContent.replace("{condition}", game.i18n.localize('HOUSEHOLD.Conditions.' + condition_name.charAt(0).toUpperCase() + condition_name.slice(1)));
-    messageContent = messageContent.replace("{status}", !Boolean(condition_value) ? game.i18n.localize('HOUSEHOLD.Conditions.On') : game.i18n.localize('HOUSEHOLD.Conditions.Off'))
+    messageContent = messageContent.replace("{status}", active ? game.i18n.localize('HOUSEHOLD.Conditions.On') : game.i18n.localize('HOUSEHOLD.Conditions.Off'))
     ChatMessage.create({
       user: game.user.id, // The ID of the current user sending the message
       flavor: messageContent, // The message content
       speaker: ChatMessage.getSpeaker({ actor }) // Automatically sets the speaker as the current user or token
     });
-    this.update({ [path]: !Boolean(condition_value) })
+    await this.toggleStatusEffect(condition_name, { active });
   }
 }
 

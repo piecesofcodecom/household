@@ -41,6 +41,8 @@ export async function showWhatsNew() {
       <p><strong>Action needed:</strong> your existing items still use the old format. Run the
       migration script once to convert their references. Open the <em>Macros</em> compendium and run
       <strong>"Migrate ALL old items to new Item Model"</strong> or individually.</p>
+      <br />
+      <strong>BEFORE MIGRATE, ALWAYS MAKE A BACKUP OF YOUR WORLD</strong>
     </div>`;
 
   await DialogV2.wait({

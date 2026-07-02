@@ -3,9 +3,11 @@ import { HouseholdActor, HouseholdItem, HouseholdCombat, HouseholdCombatant } fr
 // Applications (sheets, combat tracker, player HUD).
 import {
   HouseholdActorSheet,
+  HouseholdGardenActorSheet,
   HouseholdNPCActorSheet,
   HouseholdItemSheet,
   HouseholdCombatTracker,
+  HouseholdCharacterCreation,
   renderCharacter,
 } from './applications/_module.mjs';
 // Data models.
@@ -21,6 +23,8 @@ import { registerHandlebarsHelpers } from './helpers/handlebars.mjs';
 import { rollItemMacro } from './helpers/macros.mjs';
 import { migrateCompanions, migrateProfessions, migrateVocations, migrateWeapons, migrateFolks, migrateAll } from './helpers/migrations.mjs';
 import { registerWhatsNewSetting, showWhatsNew } from './helpers/whatsnew.mjs';
+import { registerSettings } from './helpers/settings.mjs';
+import { registerStatusEffects, registerConditionSyncHooks } from './helpers/conditions.mjs';
 import { isGm } from './helpers/utils.mjs';
 // Pure roll-logic helpers (exposed at game.household.roll for testing/macros).
 import * as HouseholdRoll from './dice/roll.mjs';
@@ -65,6 +69,13 @@ Hooks.once('init', async function () {
     makeDefault: true,
     label: "HOUSEHOLD.SheetLabels.Actor"
   });
+  // Optional "Garden" variant — same sheet, garden palette. Non-default; the GM
+  // can pick it as the character default and players can override per actor.
+  foundry.documents.collections.Actors.registerSheet("household", HouseholdGardenActorSheet, {
+    types: ["character"],
+    makeDefault: false,
+    label: "HOUSEHOLD.SheetLabels.Garden"
+  });
   foundry.documents.collections.Actors.registerSheet("household", HouseholdNPCActorSheet, {
     types: ["opponent", "npc"], // `npc` kept only so legacy actors load until migrated to `opponent`
     makeDefault: true,
@@ -80,6 +91,7 @@ Hooks.once('init', async function () {
   game.household = {
     HouseholdActor,
     HouseholdItem,
+    HouseholdCharacterCreation,
     rollItemMacro,
     roll: HouseholdRoll,
     migrations: {
@@ -97,6 +109,8 @@ Hooks.once('init', async function () {
 
   // Records the last system version whose "What's New" dialog was dismissed.
   registerWhatsNewSetting();
+  // Character-creation source settings (world vs. compendium).
+  registerSettings();
 
   // Add custom constants for configuration.
   CONFIG.HOUSEHOLD = HOUSEHOLD;
@@ -119,6 +133,8 @@ Hooks.once('init', async function () {
   registerHandlebarsHelpers();
   registerDiceSoNice();
   registerHooks();
+  // Keep system.conditions.* in sync with condition ActiveEffects (both directions).
+  registerConditionSyncHooks();
 
   // Preload Handlebars templates.
   return preloadHandlebarsTemplates();
@@ -131,6 +147,10 @@ Hooks.once('init', async function () {
 Hooks.once('ready', async function () {
   // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
   registerHotbarHooks();
+
+  // Register the character conditions as Foundry status effects (needs i18n,
+  // which is ready by now). Toggling a condition then applies a real ActiveEffect.
+  registerStatusEffects();
 
   // One-time migration: the `npc` actor type was merged into `opponent`.
   // Convert any leftover npc actors so they keep working. Idempotent: once

@@ -6,20 +6,18 @@
       <div class="grid grid-2col">
         <div class="ref-group">
           <label class="resource-label">{{localize "HOUSEHOLD.Contract.long"}}</label>
-          <div class="ref-list ref-single">
-            {{#if refContract}}
-            <div class="ref-chip {{#if refContract.missing}}missing{{/if}}">
-              <img src="{{refContract.img}}" alt="" />
-              <span class="ref-name">{{refContract.name}}</span>
-              {{#if editable}}
-              <a class="ref-remove" data-action="removeRef" data-kind="contract" data-uuid="{{refContract.uuid}}"
-                title="{{localize "HOUSEHOLD.RefRemove"}}"><i class="fas fa-times"></i></a>
-              {{/if}}
-            </div>
-            {{else}}
-            <p class="ref-empty">{{localize "HOUSEHOLD.RefDropContract"}}</p>
+          {{#if refContract}}
+          <div class="hh-fake-input header-link {{#if refContract.missing}}missing{{/if}}" title="{{refContract.name}}">
+            <img src="{{refContract.img}}" alt="" />
+            <span class="header-link__name">{{refContract.name}}</span>
+            {{#if editable}}
+            <a class="header-link__remove" data-action="removeRef" data-kind="contract" data-uuid="{{refContract.uuid}}"
+              title="{{localize "HOUSEHOLD.RefRemove"}}"><i class="fas fa-times"></i></a>
             {{/if}}
           </div>
+          {{else}}
+          <div class="hh-fake-input ref-empty">{{localize "HOUSEHOLD.RefDropContract"}}</div>
+          {{/if}}
       </div>
       <div style="display: flex; align-items: center;">
           <input class="resource-checkbox" id="{{item._id}}-free-reroll" type="checkbox" name="system.free_reroll"
@@ -39,7 +37,7 @@
   <section class="sheet-body">
     {{!-- Description Tab --}}
     <div class="tab {{tabs.description.cssClass}}" data-group="primary" data-tab="description">
-       <div class="text-editor" style="height: 270px;">
+       <div class="text-editor" style="height: 100%;">
       {{#if editable}}
         <prose-mirror
           name="system.description"

@@ -15,4 +15,26 @@
   --hh-accent-brass: #{$accent-brass};
   --hh-hover: #{$state-hover};
   --hh-active: #{$state-active};
+
+  // --- New layout tokens (novoLayout) ---
+  // Added alongside the legacy tokens above; new (hh-prefixed) components use
+  // these. Legacy surfaces keep the tokens above until they are converted and
+  // their CSS removed, so the transition doesn't shift existing sheets.
+  --hh-paper: #f7f4ee;
+  --hh-paper-2: #ebe7df;
+  --hh-ink: #25211d;
+  --hh-muted: #706a62;
+  --hh-line: #c9c1b5;
+  --hh-line-strong: #948677;
+  //--hh-wine: #7c2f39;
+  --hh-wine: #870a97;
+  // --hh-wine-soft: #eadde0;
+  --hh-wine-soft: #ebd9ee;
+  --hh-moss: #3f6f54;
+  --hh-moss-soft: #dce7df;
+  --hh-gold: #b1852c;
+  --hh-violet: #5a456f;
+  --hh-shadow: 0 16px 40px rgba(28, 24, 20, 0.2);
+  --hh-radius: 8px;
+  --hh-gap: 12px;
 }

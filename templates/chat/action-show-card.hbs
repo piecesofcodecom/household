@@ -1,36 +1,25 @@
-<div class="household chat-card item-card" data-actor-id="{{ actor.id }}">
-
-    <h3 class="header_og">{{label}}</h3>
-    <p>{{description}}</p>
-    {{!-- <h3 class="header_og" style="margin-top: 0; padding-top: 0">Challange</h3> --}}
-    <div class="">
-        <div class="resource flex-group-center" style="margin: 0">
-            <div class="resource-content flexrow flex-center flex-between">
-                {{#when threat 'lteq' 1}}
-                <h4 class="characteristic-description" style="text-align: center; ">{{localize
-                    "HOUSEHOLD.BasicOpponent.long"}}</h4>
-                {{else}}
-                <h4 class="characteristic-description" style="text-align: center; ">{{localize
-                    "HOUSEHOLD.CriticalOpponent.long"}}</h4>
-                {{/when}}
-            </div>
-        </div>
-
-        <div class="resource flex-group-center">
-            <div class="">
-                {{#numLoop 5}}
-                {{#when @root.threat 'gteq' this }}
-                
-                    <i style="font-size: 2.0em; margin: 2px; color: #612877" class="fa-solid fa-spider"></i>
-                
-                {{else}}
-                
-                    <i style="font-size: 2.0em; margin: 2px; color: #612877" class="fa-thin fa-spider"></i>
-                
-                {{/when}}
-
-                {{/numLoop}}
-            </div>
-        </div>
+<div class="hh-chat-card hh-opponent-action">
+  <header class="chat-card-header">
+    <img class="chat-avatar" src="{{img}}" alt="" />
+    <div class="chat-title">
+      <strong>{{name}}</strong>
+      <span>{{localize "HOUSEHOLD.RollActions.long"}}</span>
     </div>
+    <span class="chat-badge wine">
+      {{#numLoop 5}}
+          {{#when ../threat 'gteq' this}}         
+            <i class="hh-threat-pip fa-solid fa-spider"></i>
+          {{else}}          
+            <i class="hh-threat-pip fa-thin fa-spider" ></i>
+          {{/when}}
+          {{/numLoop}}
+      {{!-- {{#when threat 'lteq' 1}}{{localize "HOUSEHOLD.BasicOpponent.long"}}{{else}}Threat {{threat}}{{/when}} --}}
+    </span>
+  </header>
+  <div class="chat-card-body">
+    <div class="action-row">
+      <span class="roman">{{roman}}</span>
+      <strong>{{description}}</strong>
+    </div>
+  </div>
 </div>

@@ -1,16 +1,76 @@
 {
     "HOUSEHOLD": {
+        "Creation": {
+            "Title": "Criação de Personagem",
+            "Confirm": "OK",
+            "Incomplete": "Conclua todas as etapas antes de finalizar.",
+            "Applied": "Criação de personagem aplicada.",
+            "ResetTitle": "Redefinir criação de personagem",
+            "ResetConfirm": "Isso removerá tudo que o construtor adicionou — itens concedidos, pontos de Campo/Perícia e os campos Povo/Terra Natal/Profissão/Vocação — e permitirá recomeçar. Continuar?",
+            "ElementTitle": "Grupo Elemental",
+            "ElementNote": "Grupo Elemental",
+            "WillIncrease": "Irá aumentar",
+            "ProfessionTrait": "Traço da Profissão",
+            "Companion": "Companheiro Animal",
+            "Move": "Manobra",
+            "VocationTrait": "Traço da Vocação",
+            "NoOptions": "Nenhuma opção disponível. Adicione itens ao seu mundo ou configure um compêndio nas configurações do sistema.",
+            "NeedProfession": "Escolha uma Profissão primeiro para liberar suas Vocações.",
+            "FolkHint": "Escolha o Povo ao qual seu personagem pertence. Um Espírito também deve escolher um grupo elemental.",
+            "NationHint": "Escolha a Nação onde seu personagem nasceu, cresceu ou para onde se mudou.",
+            "ProfessionHint": "Escolha uma Profissão. Ela concede um traço único e acesso a uma Manobra de sua escolha.",
+            "VocationHint": "Escolha uma das Vocações da sua Profissão. Ela concede um Traço adicional e define seus Campos e Perícias.",
+            "Step": {
+                "Folk": "Povo",
+                "Nation": "Nação",
+                "Profession": "Profissão",
+                "Vocation": "Vocação"
+            }
+        },
+        "Nation": {
+            "Realm": { "long": "O Reino", "place": "Na Sala de Jantar" },
+            "Hearth": { "long": "O Lar", "place": "Na Sala de Estar" },
+            "FreeDominions": { "long": "Os Domínios Livres", "place": "No Andar de Cima" },
+            "Horde": { "long": "A Horda", "place": "No Porão" }
+        },
+        "SpriteElement": {
+            "Salamander": "Salamandra",
+            "Sylph": "Sílfide",
+            "Undine": "Ondina"
+        },
+        "Settings": {
+            "CreationSource": {
+                "name": "Fonte da Criação de Personagem",
+                "hint": "De onde o assistente de criação lê as opções de Povo/Profissão/Vocação.",
+                "world": "Itens do Mundo",
+                "compendium": "Compêndio"
+            },
+            "CreationCompendium": {
+                "name": "Compêndio de Criação de Personagem",
+                "hint": "Id do compêndio de onde ler os itens de criação quando a fonte for Compêndio (ex.: world.meu-pacote)."
+            },
+            "ChatTheme": {
+                "name": "Tema das Cartas de Chat",
+                "hint": "Tema visual aplicado às cartas de chat do sistema para todos.",
+                "base": "Household (padrão)",
+                "garden": "Welcome to the Garden"
+            }
+        },
         "RefAdd": "Adicionar",
         "RefRemove": "Remover",
         "RefDropProfession": "Arraste um item de profissão aqui",
         "RefDropMove": "Arraste itens de movimento aqui",
         "RefDropTrait": "Arraste itens de traço aqui",
+        "RefDropVocation": "Arraste itens de vocação aqui",
+        "RefDropCompanion": "Arraste itens de companheiro aqui",
         "RefDropContract": "Arraste um item de contrato aqui",
         "AmongCompanionTraits": "Entre os do seu Companheiro Animal",
         "AcesSleeve": {
             "long": "Áses na Manga"
         },
         "actions": "Ações",
+        "actionsStats": "Ações & Habilidades",
+        "skills": "Habilidades",
         "ActionI": {
             "long": "Ação I"
         },
@@ -105,7 +165,7 @@
         },
         "DialogTitles": {
             "RollAbility": "Rolar Habilidade",
-            "RollActions": "Rolar Ação do Oponente",
+            "RollActions": "Rolar Ação",
             "EditActionTable": "Editar Tabela de Ações",
             "SelectSkill": "Selecionar Habilidade para Rolar"
         },
@@ -167,11 +227,14 @@
             "long": "Re-Rolagem Gratuita",
             "short": "RG"
         },
+        "Optional": {
+            "long": "Opcional"
+        },
         "Gadgets": {
             "long": "Engenhocas"
         },
-        "HasCompanion": {
-            "long": "Tem Companheiro"
+        "Companions": {
+            "long": "Companheiros"
         },
         "Homeland": {
             "long": "Terra Natal"
@@ -235,6 +298,7 @@
             "Configuration": "Configuração",
             "Description": "Descrição",
             "Equipament": "Equipamento",
+            "Garden": "Household — Jardim",
             "General": "Geral",
             "Item": "Ficha de Item de Househood",
             "Main": "Principal",
@@ -346,6 +410,9 @@
         },
         "Vocation": {
             "long": "Vocação"
+        },
+        "Vocations": {
+            "long": "Vocações"
         },
         "Wealth": {
             "long": "Fortuna"

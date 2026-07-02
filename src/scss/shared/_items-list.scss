@@ -1,3 +1,109 @@
+// --- New layout: compact, expandable item rows (hh-item-entry / hh-item-row).
+.hh-item-entry {
+  border: 1px solid var(--hh-line);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.5);
+
+  // Closed: clip any overflow; open: allow the body to scroll if it's tall.
+  overflow-y: hidden;
+
+  &[open] {
+    overflow-y: auto;
+  }
+
+  &+& {
+    margin-top: 6px;
+  }
+}
+
+.hh-item-row {
+  display: grid;
+  grid-template-columns: 34px 1fr auto;
+  align-items: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 5px;
+  cursor: pointer;
+  list-style: none;
+
+  &::-webkit-details-marker,
+  &::marker {
+    display: none;
+  }
+}
+
+.hh-item-icon img {
+  display: block;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 5px;
+  object-fit: cover;
+}
+
+.hh-item-main {
+  min-width: 0;
+  font-family: var(--font-body);
+
+  text-transform: capitalize;
+
+  strong {
+    display: block;
+    font-size: medium;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--hh-ink);
+    font-weight: 200;
+  }
+
+  small {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--hh-muted);
+    font-size: 12px;
+
+    i {
+      width: 14px;
+      height: 14px;
+    }
+  }
+}
+
+.hh-item-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hh-item-act {
+  cursor: pointer;
+  opacity: 0.75;
+  color: var(--hh-ink);
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.hh-item-body {
+  padding: 0 10px 10px 47px;
+  color: #3e3932;
+  line-height: 1.4;
+  font-size: smaller;
+  font-family: 'Signika';
+
+  h4 {
+    margin: 6px 0 2px;
+    font-size: x-large;
+  }
+
+  h5 {
+    font-size: medium;
+  }
+}
+
 // Items list and header shared styles
 // Section Header
 .items-header {
@@ -8,10 +114,12 @@
   background: rgba(0, 0, 0, 0.05);
   border: 2px groove #eeede0;
   font-weight: bold;
-  > * {
+
+  >* {
     font-size: 14px;
     text-align: center;
   }
+
   .item-name {
     font-weight: bold;
     padding-left: 5px;
@@ -48,7 +156,9 @@
     text-align: left;
     align-items: center;
     display: flex;
-    h3, h4 {
+
+    h3,
+    h4 {
       margin: 0;
       white-space: nowrap;
       overflow-x: hidden;
@@ -60,6 +170,7 @@
     display: flex;
     flex: 0 0 100px;
     justify-content: flex-end;
+
     a {
       font-size: 12px;
       text-align: center;
@@ -72,9 +183,14 @@
     align-items: center;
     padding: 0 2px;
     border-bottom: 1px solid #c9c7b8;
-    &:last-child { border-bottom: none; }
+
+    &:last-child {
+      border-bottom: none;
+    }
+
     .item-name {
       color: #191813;
+
       .item-image {
         flex: 0 0 30px;
         height: 30px;
@@ -101,10 +217,12 @@
     background: rgba(0, 0, 0, 0.05);
     border: 2px groove #eeede0;
     font-weight: bold;
-    > * {
+
+    >* {
       font-size: 12px;
       text-align: center;
     }
+
     .item-name {
       padding-left: 5px;
       text-align: left;
@@ -126,7 +244,9 @@
   font-weight: bold;
 }
 
-.item-list {
+// Legacy expandable list rows. Excludes the new compact rows (.hh-item-entry),
+// which keep the `item-list` class only as a JS hook; the HUD still uses this.
+.item-list:not(.hh-item-entry) {
   border-color: #f2bebb;
   border-bottom: 1px solid;
   cursor: pointer;

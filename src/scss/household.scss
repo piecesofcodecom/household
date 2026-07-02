@@ -7,6 +7,13 @@
   src: url('/systems/household/fonts/lhf-encore-distressed.ttf');
 }
 
+// Body font for the new layout (prototype "Atsuka"). Display headings keep LHF_Encore.
+@font-face {
+  font-family: 'Atsuka';
+  src: url('/systems/household/fonts/Atsuka_Montreal_Regular.ttf');
+  font-weight: 400;
+}
+
 // /* Soft ambient shadow */
 // box-shadow: 0 2px 6px rgba(43, 42, 38, 0.25);
 
@@ -83,10 +90,13 @@ $state-disabled-bg: #EEE7D8;
 // ===========================================
 #player-character {
   @import 'components/hud/hud-layout';
-  @import 'components/hud/hud-header';
-  @import 'components/hud/hud-actions';
-  @import 'components/hud/hud-stats';
-  @import 'components/hud/hud-items';
+  @import 'components/hud/hud-shell';
+  // Legacy HUD CSS — superseded by hud-shell (new layout). Kept commented until
+  // the new dock is verified in Foundry, then delete these files.
+  // @import 'components/hud/hud-header';
+  // @import 'components/hud/hud-actions';
+  // @import 'components/hud/hud-stats';
+  // @import 'components/hud/hud-items';
 }
 
 // ===========================================
@@ -96,12 +106,26 @@ $state-disabled-bg: #EEE7D8;
   @import 'components/chat';
 }
 
+.chat-message {
+  border: 1px solid var(--hh-line);
+  border-radius: var(--hh-radius);
+  background: rgba(255, 255, 255, 0.72);
+}
+
 .household-custom-chat .message-content {
+  
   display: none;
 }
 
 .household-plain-roll .dice-roll {
     display: none !important;
+}
+
+// Opponent action roll message: the card box lives on the message <li> itself.
+.household-opponent-action-chat-message {
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid var(--hh-line);
+  border-radius: var(--hh-radius);
 }
 
 // ===========================================
@@ -112,10 +136,15 @@ $state-disabled-bg: #EEE7D8;
 }
 
 .dialog-skill-roll {
-  @import 'global/dialog';
-  @import 'components/dialog';
   @import 'dialogs/skill-roll';
 }
+
+@import 'dialogs/hh-dialog';
+
+// ===========================================
+// Character Creation Wizard (scoped internally)
+// ===========================================
+@import 'components/character-creation';
 
 // ===========================================
 // Sheet Scopes
@@ -123,6 +152,15 @@ $state-disabled-bg: #EEE7D8;
 .household {
   @import 'components/forms';
   @import 'components/effects';
+}
+
+// Shared new-layout shell + controls (hh-prefixed). Scoped to every Household
+// sheet so the generic-looking pieces never leak into Foundry core / modules.
+.application.sheet.household.actor.themed.theme-light,
+.application.sheet.household.npc.themed.theme-light,
+.application.sheet.household.item {
+  @import 'shared/sheet-panels';
+  @import 'shared/sheet-controls';
 }
 
 .application.sheet.household.item {
@@ -136,3 +174,9 @@ $state-disabled-bg: #EEE7D8;
 .application.sheet.household.npc.themed.theme-light {
   @import 'components/npcsheetlight';
 }
+
+// ===========================================
+// Optional theme layers (token overrides via a `garden` class).
+// Imported last so any component-level overrides win the cascade.
+// ===========================================
+@import 'themes/garden';

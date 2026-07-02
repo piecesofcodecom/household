@@ -1,28 +1,44 @@
 {{#each items as |item id|}}
-<details class='item-list' data-item-id='{{item._id}}' data-object="item" data-character-id="{{@root/id}}"
+<div class='item-list' data-item-id='{{item._id}}' data-object="item" data-character-id="{{@root/id}}"
   class="default square" {{#multipleOf @index 2}} {{else}}style="background-color: rgba(0,0,0,0.1)" {{/multipleOf}}>
-  <summary>
+  <div class="item-summary">
     <label style="margin-right: 10px;">
-      <a style="" class="item-control item-chat" title="Show Item" data-action="show" data-sub-action="show">
+      <a style="" class="item-control item-open" title="Open Item">
         <img style="border: 0px;" class="item-summary-icon" src='{{item.img}}' title='{{item.name}}' width='24'
           height='24' />
       </a>
     </label>
-    <span class="item-summary-title" style="opacity: 1.0;">{{item.name}}</span>
-    {{#if item.system.type}}
+    <span class="item-summary-title" style="opacity: 1.0;" {{#when type 'eq' 'move' }}
+      data-tooltip="{{getMoveSuitsTooltip item.system.suits}}" data-tooltip-direction="UP"
+      {{/when}}>{{item.name}}</span>
+    {{#when type 'eq' 'move' }}
+    <label class='item-control item' style="float:right; margin-left: 5px;margin-right: 15px; cursor: pointer;"
+      for="move-{{item._id}}" data-item-id="{{item._id}}" data-character-id="{{@root/id}}" data-action="use">
+      {{#if item.system.exhausted}}
+      <i style="color: red" class="fa-regular fa-toggle-large-off"></i>
+      {{else}}
+      <i style="color: green" class="fa-regular fa-toggle-large-on"></i>
+    </label>
+    {{/if}}
+    </label>
+    {{/when}}
+    <label style="margin-left: 5px;">
+      <a class="item-control item-chat" title="Send to Chat" data-sub-action="show">
+        <i class="fa-regular fa-comment"></i>
+      </a>
+    </label>
+    {{#when type 'eq' 'move' }}
+    <a class="hh-item-act" data-action="roll" data-type="item" title="Use Move">
+      <i class="fa-regular fa-dice"></i>
+    </a>
+    {{/when}}
+    {{#when type 'eq' 'weapon'}}
     <label style="">
       <a style="" class="item-control roll-action" title="Roll Item" data-action="roll" data-type="attack">
         <i class="fa-regular fa-dice"></i>
       </a>
     </label>
-    {{/if}}
-    {{#each item.system.suits as | value key|}}
-    {{#if value}}
-    <i style="color: {{getFieldColor key}}" class="fa-household-{{getSuitFromField key}}-full"></i>
-    <!--img style="vertical-align:middle; border: 0px" width="12" height="12"
-          src="/systems/household/assets/sheet/{{key}}-filled.svg" /-->
-    {{/if}}
-    {{/each}}
+    {{/when}}
     {{!-- <label>
       <a style="float:right; margin-left: 5px;" class='item-control item-delete'
         title='{{localize "DOCUMENT.Delete" type=' Item'}}' data-action="itemDelete" data-item-id="{{item._id}}">
@@ -46,56 +62,7 @@
       <i style="color: #d49d08" class="fa-solid fa-coins"></i>
     </label>
     {{/if}} --}}
-    {{#if item.system.type}}
-    <label style="float:right; margin-left: 5px;margin-right: 5px">
-      <i class="fa-regular {{getWeaponTypeIcon item.system.type}}"></i>
-    </label>
-    {{/if}}
-    {{#if item.system.field}}
-    <label style="float:right; margin-left: 5px;margin-right: 5px">
-      <i style="color: {{getFieldColor item.system.field}}"
-        class="fa-household-{{getSuitFromField item.system.field}}-full"></i>
-    </label>
-    {{/if}}
-    {{#when type 'eq' 'move' }}
-   
-    <label class='item-control item' style="float:right; margin-left: 5px;margin-right: 15px; cursor: pointer;"
-      for="move-{{item._id}}" data-item-id="{{item._id}}" data-character-id="{{@root/id}}" data-action="use">
-    {{#if item.system.exhausted}}
-      <i style="color: red" class="fa-regular fa-toggle-large-off" ></i>
-    {{else}}
-      <i style="color: green" class="fa-regular fa-toggle-large-on"></i>
-    </label>
-    {{/if}}
-    </label>
-    {{/when}}
-  </summary>
-  <br />
-  {{#if item.system.requirements}}
-  <b>{{item.system.requirements}}</b><br /><br />
-  {{/if}}
-  {{#if item.system.trait}}
-  <b>{{item.system.trait}}</b><br /><br />
-  {{/if}}
-  {{#when type 'eq' 'contract' }}
-  <div class="flexrow" style="align-items: start;">
-    <div>
-      <div class="">
-        <h4 style=" font-weight: bold; text-align: center">{{localize "HOUSEHOLD.Concession.long"}}:
-          {{item.system.concession.name}}</h4>
-      </div>
-      <div>{{{item.system.concession.details}}}</div>
-    </div>
-    <div>
-      <div>
-        <h4 style=" font-weight: bold; text-align: center">{{localize "HOUSEHOLD.Counterpart.long"}}:
-          {{item.system.counterpart.name}}</h4>
-      </div>
-      <div>{{{item.system.counterpart.details}}}</div>
-    </div>
+
   </div>
-  {{else}}
-  {{{item.system.description}}} <br />
-  {{/when}}
-</details>
+</div>
 {{/each}}

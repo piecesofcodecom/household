@@ -35,7 +35,7 @@
     {{!-- Description Tab --}}
     <div class="tab {{tabs.description.cssClass}}" data-group="primary" data-tab="description">
       <!--label class="resource-label my-title">Description</label-->
-      <div class="text-editor" style="height: 270px;">
+      <div class="text-editor" style="height: 100%;">
         {{#if editable}}
         <prose-mirror name="system.description" button="true" editable="{{editable}}" toggled="false"
           value="{{system.description}}">

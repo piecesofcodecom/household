@@ -94,6 +94,23 @@ export function characterData(actor, tokenId) {
     conditions = actor.system.conditions;
   }
 
+  // Crucial/danger warning: true when the current stress marker sits on a
+  // crucial box. The marked box index mirrors the sheets' fill logic
+  // (`max - value`). Characters have a single `danger` position; opponents list
+  // positions in `crucial_boxes` (a comma-separated string, e.g. "4, 7").
+  const markedBox = stress.max - stress.value;
+  let stressCrucial = false;
+  if (markedBox > 0) {
+    if (actor.type === "character") {
+      stressCrucial = markedBox === stress.danger;
+    } else {
+      stressCrucial = String(crucial_boxes ?? "")
+        .split(",")
+        .map(s => Number(s.trim()))
+        .includes(markedBox);
+    }
+  }
+
   return {
     id: tokenId,
     isCharacter: actor.type === 'character',
@@ -111,6 +128,7 @@ export function characterData(actor, tokenId) {
     ttt,
     threat,
     stress,
+    stressCrucial,
     crucial_boxes,
     conditions
   };
@@ -142,9 +160,19 @@ function activatePlayerListeners(elem) {
     item.addEventListener('click', actions.rollAction);
   }
 
+  const itemActs = elem.querySelectorAll('#player-character .hh-item-act');
+  for (let item of itemActs) {
+    item.addEventListener('click', actions.rollAction);
+  }
+
   const itemsChat = elem.querySelectorAll('#player-character .item-chat');
   for (let item of itemsChat) {
     item.addEventListener('click', actions.itemChat);
+  }
+
+  const itemsOpen = elem.querySelectorAll('#player-character .item-open');
+  for (let item of itemsOpen) {
+    item.addEventListener('click', actions.openItem);
   }
 
   const decorum = elem.querySelectorAll('#player-character .decorum');
@@ -170,81 +198,37 @@ function activatePlayerListeners(elem) {
     ability.addEventListener("click", actions.rollAbility);
   }
   const actions_menu = elem.querySelector('#player-character .actions-toggle');
-  actions_menu.addEventListener("click", toggleActions);
+  if (actions_menu)
+    actions_menu.addEventListener("click", toggleActions);
 
 
   const skills_menu = elem.querySelectorAll('#player-character .skills-toggle');
-  skills_menu.forEach(sk => {
-    sk.addEventListener("click", toggleSkills);
-  });
-
-
-  const stats_menu = elem.querySelector('#player-character .stats-toggle');
-  if (stats_menu)
-    stats_menu.addEventListener("click", toggleStats);
+  if (skills_menu)
+    skills_menu.forEach(sk => {
+      sk.addEventListener("click", toggleSkills);
+    });
 
 }
 
+// Single pop-over now holds both Actions and Stats side by side.
 function toggleActions(event) {
   event.stopPropagation();
   $(".character-actions").toggleClass("show");
   $(".actions-toggle").toggleClass("active");
-  //$(".stats-toggle").toggleClass("active");
 
   $(".skills-toggle").removeClass("active");
-  $(".stats-toggle").removeClass("active");
-  $(".character-stats").removeClass("show");
   $(".character-skills").removeClass("show");
 
 }
 
-function toggleStats(event) {
-  event.stopPropagation();
-  $(".character-stats").toggleClass("show");
-  $(".stats-toggle").toggleClass("active");
-
-  $(".skills-toggle").removeClass("active");
-  $(".actions-toggle").removeClass("active");
-  $(".character-actions").removeClass("show");
-  $(".character-skills").removeClass("show");
-}
-
+// Single pop-over now shows all four skill fields side by side.
 function toggleSkills(event) {
   event.stopPropagation();
-  const fields = ['society', 'war', 'academia', 'street'];
-  const display_field = event.currentTarget.dataset?.display;
-
-  $(".stats-toggle").removeClass("active");
   $(".actions-toggle").removeClass("active");
   $(".character-actions").removeClass("show");
-  $(".character-stats").removeClass("show");
 
-  if (!display_field) {
-    $(".skills-toggle").toggleClass("active");
-    $(".character-skills").toggleClass("show");
-    return;
-  }
-
-
-  var index = fields.indexOf(display_field);
-  if (index > -1) {
-    fields.splice(index, 1);
-  }
-
-  $(`.character-skills-content-${display_field}`).toggleClass("show");
-
-  if ($(`.character-skills-content-${display_field}`).hasClass("show")) {
-    $(".character-skills").addClass("show");
-    $(`.${display_field}-skills-toggle`).addClass("active");
-  } else {
-    $(".character-skills").removeClass("show");
-    $(`.${display_field}-skills-toggle`).removeClass("active");
-  }
-
-  fields.forEach(field => {
-    $(`.character-skills-content-${field}`).removeClass("show");
-    $(`.${field}-skills-toggle`).removeClass("active");
-  })
+  $(".skills-toggle").toggleClass("active");
+  $(".character-skills").toggleClass("show");
 }
 
 function setupHealthPointsTracker(element) {
@@ -302,6 +286,11 @@ export async function renderCharacter() {
   if (character instanceof TokenDocument || character instanceof foundry.canvas.placeables.Token) {
     actor = character.actor;
   }
+
+  // Mirror the actor's chosen sheet theme on the HUD: `actor.sheet` resolves the
+  // per-actor override → type default, so the HUD follows whichever sheet the
+  // player picked. The Garden sheet tags itself with the `garden` class.
+  elem.classList.toggle("garden", !!actor?.sheet?.options?.classes?.includes("garden"));
   const data = characterData(actor, character.id);
   if (!data) return;
   let scroll_1 = $('.character-actions-content').scrollTop();
@@ -316,20 +305,14 @@ export async function renderCharacter() {
   data["tabs"] = {
     characterSkills: $(".character-skills").length > 0 ? ($(".character-skills").attr("class")).replace("character-skills", "") : "",
     characterStats: $(".character-stats").length > 0 ? ($(".character-stats").attr("class")).replace("character-stats", "") : "",
-    societySkillsToggle: $(".society-skills-toggle").length > 0 ? ($(".society-skills-toggle").attr("class")).replace("society-skills-toggle", "").replace("skills-toggle", "") : "",
-    academiaSkillsToggle: $(".academia-skills-toggle").length > 0 ? ($(".academia-skills-toggle").attr("class")).replace("academia-skills-toggle", "").replace("skills-toggle", "") : "",
-    warSkillsToggle: $(".war-skills-toggle").length > 0 ? ($(".war-skills-toggle").attr("class")).replace("war-skills-toggle", "").replace("skills-toggle", "") : "",
-    streetSkillsToggle: $(".street-skills-toggle").length > 0 ? ($(".street-skills-toggle").attr("class")).replace("street-skills-toggle", "").replace("skills-toggle", "") : "",
+    skillsToggle: $(".skills-toggle").length > 0 ? ($(".skills-toggle").attr("class")).replace("skills-toggle", "") : "",
     statsToggle: $(".stats-toggle").length > 0 ? ($(".stats-toggle").attr("class")).replace("stats-toggle", "") : "",
     actionsToggle: $(".actions-toggle").length > 0 ? ($(".actions-toggle").attr("class")).replace("actions-toggle", "") : "",
     characterActions: $(".character-actions").length > 0 ? ($(".character-actions").attr("class")).replace("character-actions", "") : "",
   }
   data["tabs"].characterSkills = data["tabs"].characterSkills.trim().replace('undefined', '')
   data["tabs"].characterStats = data["tabs"].characterStats.trim().replace('undefined', '')
-  data["tabs"].societySkillsToggle = data["tabs"].societySkillsToggle.trim().replace('undefined', '')
-  data["tabs"].academiaSkillsToggle = data["tabs"].academiaSkillsToggle.trim().replace('undefined', '')
-  data["tabs"].warSkillsToggle = data["tabs"].warSkillsToggle.trim().replace('undefined', '')
-  data["tabs"].streetSkillsToggle = data["tabs"].streetSkillsToggle.trim().replace('undefined', '')
+  data["tabs"].skillsToggle = data["tabs"].skillsToggle.trim().replace('undefined', '')
   data["tabs"].statsToggle = data["tabs"].statsToggle.trim().replace('undefined', '')
   data["tabs"].actionsToggle = data["tabs"].actionsToggle.trim().replace('undefined', '')
   data["tabs"].characterActions = data["tabs"].characterActions.trim().replace('undefined', '')
