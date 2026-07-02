@@ -20,7 +20,7 @@ permissions:
 
 env:
   IS_SYSTEM: 'true'
-  PACKAGE_ITEMS: 'assets/ build/ css/ fonts/ lang/ templates/ README.md system.json template.json'
+  PACKAGE_ITEMS: 'assets/ build/ css/ fonts/ lang/ templates/ packs/ README.md system.json template.json'
 
 jobs:
   release:
