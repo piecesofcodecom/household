@@ -1,3 +1,16 @@
-2026/07/01-20:44:41.956 9d20 Recovering log #92
-2026/07/01-20:44:42.012 9d20 Delete type=0 #92
-2026/07/01-20:44:42.012 9d20 Delete type=3 #91
+2026/07/02-20:17:40.088 983c Recovering log #94
+2026/07/02-20:17:40.147 983c Delete type=0 #94
+2026/07/02-20:17:40.147 983c Delete type=3 #93
+2026/07/02-21:14:05.396 10164 Level-0 table #98: started
+2026/07/02-21:14:05.396 10164 Level-0 table #98: 0 bytes OK
+2026/07/02-21:14:05.438 10164 Delete type=0 #96
+2026/07/02-21:14:05.513 10164 Manual compaction at level-0 from '!macros!householdmigrall' @ 72057594037927935 : 1 .. '!macros!householdmigrwpn' @ 0 : 0; will stop at '!macros!householdmigrwpn' @ 144 : 1
+2026/07/02-21:14:05.513 10164 Compacting 3@0 + 1@1 files
+2026/07/02-21:14:05.536 10164 Generated table #99@0: 6 keys, 849 bytes
+2026/07/02-21:14:05.536 10164 Compacted 3@0 + 1@1 files => 849 bytes
+2026/07/02-21:14:05.563 10164 compacted to: files[ 0 1 0 0 0 0 0 ]
+2026/07/02-21:14:05.563 10164 Delete type=2 #69
+2026/07/02-21:14:05.563 10164 Delete type=2 #71
+2026/07/02-21:14:05.564 10164 Delete type=2 #74
+2026/07/02-21:14:05.564 10164 Delete type=2 #77
+2026/07/02-21:14:05.614 10164 Manual compaction at level-0 from '!macros!householdmigrwpn' @ 144 : 1 .. '!macros!householdmigrwpn' @ 0 : 0; will stop at (end)
