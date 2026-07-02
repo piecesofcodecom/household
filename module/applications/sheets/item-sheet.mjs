@@ -4,6 +4,7 @@ import {
 } from '../../helpers/effects.mjs';
 import { HOUSEHOLD } from '../../helpers/config.mjs';
 import { skills_list } from '../../helpers/utils.mjs';
+import { resolveItemRef } from '../../helpers/professions.mjs';
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ItemSheetV2 } = foundry.applications.sheets;
@@ -19,7 +20,7 @@ export class HouseholdItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) 
     tag: 'form',
     position: {
       width: 520,
-      height: 480
+      height: 580
     },
     window: {
       resizable: true
@@ -64,16 +65,21 @@ export class HouseholdItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) 
    * @type {Record<string, {single: string[], array: Record<string, string>}>}
    */
   static REF_TARGETS = {
+    // The companion no longer references its profession; the profession owns the
+    // link (see below). The companion sheet only takes dropped moves/traits.
     companion: {
-      single: { profession: 'profession' }, // dropped type -> field
+      single: {},
       array: { move: 'moves', trait: 'traits' }
     },
     profession: {
       single: {},
-      array: { move: 'moves', trait: 'traits' }
+      array: { move: 'moves', trait: 'traits', vocation: 'vocations', companion: 'companions' }
     },
+    // The profession ↔ vocation link is now owned by the profession: a vocation is
+    // dragged onto its profession. The vocation sheet only displays the back-
+    // reference (set automatically), so it no longer accepts a dropped profession.
     vocation: {
-      single: { profession: 'profession' },
+      single: {},
       array: { trait: 'traits' }
     },
     folk: {
@@ -246,9 +252,6 @@ export class HouseholdItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) 
     // Resolve UUID references (drag-and-dropped items) to display chips.
     if (this.document.type === 'companion') {
       const sys = this.document.system;
-      context.companionProfession = sys.profession
-        ? await this.#resolveRef(sys.profession)
-        : null;
       context.companionMoves = await Promise.all((sys.moves ?? []).map((u) => this.#resolveRef(u)));
       context.companionTraits = await Promise.all((sys.traits ?? []).map((u) => this.#resolveRef(u)));
     }
@@ -259,9 +262,12 @@ export class HouseholdItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) 
       const sys = this.document.system;
       context.refMoves = await Promise.all((sys.moves ?? []).map((u) => this.#resolveRef(u)));
       context.refTraits = await Promise.all((sys.traits ?? []).map((u) => this.#resolveRef(u)));
-      // Vocation links a single profession (drag-dropped UUID).
-      if (this.document.type === 'vocation') {
-        context.refProfession = sys.profession ? await this.#resolveRef(sys.profession) : null;
+      // Profession owns the lists of its vocations and companions (drag-dropped
+      // UUIDs). A profession "has a companion" when its companions list is non-empty.
+      if (this.document.type === 'profession') {
+        context.refVocations = await Promise.all((sys.vocations ?? []).map((u) => this.#resolveRef(u)));
+        context.refCompanions = await Promise.all((sys.companions ?? []).map((u) => this.#resolveRef(u)));
+        context.hasCompanion = (sys.companions ?? []).length > 0;
       }
       // Picked skills (key -> localized label) and the skills still available to add.
       const picked = sys.skills ?? [];
@@ -288,7 +294,9 @@ export class HouseholdItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) 
    * @returns {Promise<{uuid: string, name: string, img: string, missing: boolean}>}
    */
   async #resolveRef(uuid) {
-    const doc = await fromUuid(uuid);
+    // resolveItemRef also resolves bare "Item.<id>" refs that point at compendium
+    // items (fromUuid alone only checks the world).
+    const doc = await resolveItemRef(uuid);
     if (doc) return { uuid, name: doc.name, img: doc.img, missing: false };
     return { uuid, name: uuid, img: 'icons/svg/hazard.svg', missing: true };
   }

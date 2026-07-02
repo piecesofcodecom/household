@@ -3,13 +3,20 @@
     <img class="profile-img" src="{{item.img}}" data-action="editImage" data-field="img" title="{{item.name}}" />
     <div class="header-fields">
       <input class="item-name" name="name" type="text" value="{{item.name}}" placeholder="Name" data-dtype="String" />
-      <div class="resource" style="display: flex"
-          data-tooltip="{{localize 'HOUSEHOLD.FreeReRoll.long'}}">
+      <div class="grid grid-2col">
+        <div class="resource" style="display: flex" data-tooltip="{{localize 'HOUSEHOLD.FreeReRoll.long'}}">
           <input class="resource-checkbox" id="{{item._id}}-free-reroll" type="checkbox" name="system.free_reroll"
             value="{{system.free_reroll}}" data-dtype="Boolean" {{#if system.free_reroll}}checked{{/if}} />
-            <label for="{{item._id}}-free-reroll" class="resource-label" style="">{{localize
+          <label for="{{item._id}}-free-reroll" class="resource-label" style="">{{localize
             "HOUSEHOLD.FreeReRoll.long"}}</label>
         </div>
+        <div class="resource" style="display: flex" data-tooltip="{{localize 'HOUSEHOLD.Optional.long'}}">
+          <input class="resource-checkbox" id="{{item._id}}-optional" type="checkbox" name="system.optional"
+            value="{{system.optional}}" data-dtype="Boolean" {{#if system.optional}}checked{{/if}} />
+          <label for="{{item._id}}-optional" class="resource-label" style="">{{localize
+            "HOUSEHOLD.Optional.long"}}</label>
+        </div>
+      </div>
     </div>
   </header>
 

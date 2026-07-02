@@ -1,0 +1,190 @@
+// ===========================================================================
+// Shared sheet shell + panels (new layout)
+// Translated from novoLayout/layout.css, hh-prefixed and adapted for Foundry.
+// Bare rulesets: imported INSIDE the Household sheet scope blocks in
+// household.scss, so these only ever apply to Household sheets.
+// Width comes from the application window (DEFAULT_OPTIONS.position), not from
+// a fixed inner shell as in the static prototype.
+// ===========================================================================
+
+.hh-sheet {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  color: var(--hh-ink);
+  font-family: Atsuka, Georgia, serif;
+  background:
+    linear-gradient(rgba(247, 244, 238, 0.96), rgba(247, 244, 238, 0.96)),
+    url('/systems/household/assets/sheet/sheet_bg.webp') center / cover;
+}
+
+.hh-sheet-header {
+  display: grid;
+  grid-template-columns: 104px 1fr auto;
+  gap: 12px;
+  align-items: stretch;
+  padding: 12px;
+  border-bottom: 1px solid var(--hh-line);
+  background:
+    linear-gradient(90deg, rgba(124, 47, 57, 0.08), transparent 58%),
+    rgba(255, 255, 255, 0.32);
+}
+
+.hh-portrait {
+  width: 104px;
+  min-height: 104px;
+  border: 1px solid var(--hh-line-strong);
+  border-radius: var(--hh-radius);
+  background: var(--hh-paper-2);
+  object-fit: cover;
+
+  &.character {
+    object-position: center;
+  }
+
+  &.opponent {
+    object-position: center;
+  }
+}
+
+.hh-identity {
+  min-width: 0;
+  display: grid;
+  align-content: start;
+  gap: 10px;
+}
+
+.hh-eyebrow {
+  margin: 0;
+  color: var(--hh-muted);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  // text-transform: uppercase;
+}
+
+.hh-name-meta-grid {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  gap: 8px;
+}
+
+.hh-display-name {
+  width: 100%;
+  min-height: 48px;
+  margin: 0;
+  padding: 4px 10px 2px;
+  border: 1px solid var(--hh-line-strong);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.45);
+  color: var(--hh-ink);
+  font-family: 'LHF_Encore', Georgia, serif;
+  font-size: clamp(26px, 4vw, 40px);
+  line-height: 1;
+  // text-transform: uppercase;
+}
+
+.hh-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.hh-quick-panel {
+  min-width: 170px;
+  display: grid;
+  gap: 10px;
+  align-content: start;
+}
+
+.hh-sheet-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 0 12px;
+  border-bottom: 1px solid var(--hh-line);
+  background: rgba(235, 231, 223, 0.72);
+
+  // V2 tabs use <a data-action="tab"> with an `.active` class toggled by the
+  // framework; restyle without changing that mechanism.
+  a {
+    padding: 9px 10px 7px;
+    border-bottom: 3px solid transparent;
+    color: var(--hh-muted);
+    text-decoration: none;
+    font-weight: 700;
+
+    &.active {
+      border-color: var(--hh-wine);
+      color: var(--hh-ink);
+    }
+  }
+}
+
+.hh-sheet-body {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+}
+
+.hh-panel {
+  border: 1px solid var(--hh-line);
+  border-radius: var(--hh-radius);
+  background: rgba(255, 255, 255, 0.48);
+  // overflow: hidden;
+}
+
+.hh-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 36px;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--hh-line);
+  background: rgba(255, 255, 255, 0.44);
+
+  h2,
+  h3 {
+    margin: 0;
+    color: var(--hh-ink);
+    font-size: 14px;
+    letter-spacing: 0.06em;
+    color: var(--hh-accent-gold);
+    font-family: LHF_Encore, Georgia, serif;
+    //text-transform: uppercase;
+  }
+}
+
+.hh-panel-content-fields,
+.hh-panel-content {
+  display: grid;
+  gap: 8px;
+  padding: 10px;
+  overflow: auto
+}
+
+.hh-panel-content.maxsize {
+  max-height: 300px;
+}
+
+
+.hh-panel-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px;
+}
+
+@media (max-width: 620px) {
+
+  .hh-sheet-header,
+  .hh-meta-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hh-sheet-tabs {
+    overflow-x: auto;
+  }
+
+  .hh-quick-panel {
+    min-width: 0;
+  }
+}

@@ -1,3 +1,50 @@
+// --- New layout: condition rows with colored dots.
+.hh-status-list {
+  display: grid;
+  gap: 6px;
+  grid-template-columns: 1fr 1fr;
+}
+
+.hh-condition-row {
+  display: grid;
+  grid-template-columns: 16px 1fr;
+  align-items: center;
+  gap: 8px;
+  min-height: 26px;
+  cursor: pointer;
+  color: var(--hh-muted);
+  font-size: small;
+  font-family: var(--font-body);
+
+  &.active {
+    color: var(--hh-ink);
+    font-weight: 700;
+  }
+}
+
+.hh-condition-dot {
+  width: 13px;
+  height: 13px;
+  border: 1px solid var(--hh-line-strong);
+  border-radius: 50%;
+  background: transparent;
+
+  &.plain {
+    border-radius: 50%;
+    background: #000;
+  }
+
+  &.empty {
+    border-radius: 50%;
+    background: #fff;
+  }
+
+  &.embarrassed { background: #b9424f; }
+  &.confused { background: #4f76a8; }
+  &.hurt { background: #3f6f54; }
+  &.frightened { background: #3b3b40; }
+}
+
 // Conditions grid and custom radio styles
 .conditions-grid {
   display: grid;

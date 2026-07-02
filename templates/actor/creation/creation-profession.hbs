@@ -1,0 +1,85 @@
+{{!-- Step 3: Profession (+ trait, move / companion) --}}
+<section class="tab hh-creation-step {{tabs.profession.cssClass}}" data-tab="profession" data-group="primary">
+  <header class="hh-creation-intro">
+    <h2>{{localize "HOUSEHOLD.Creation.Step.Profession"}}</h2>
+    <p>{{localize "HOUSEHOLD.Creation.ProfessionHint"}}</p>
+  </header>
+
+  <div class="hh-creation-options">
+    {{#each professions as |prof|}}
+    <button type="button" class="hh-creation-option{{#if prof.selected}} selected{{/if}}" data-action="selectProfession"
+      data-uuid="{{prof.uuid}}" title="{{prof.name}}">
+      <img src="{{prof.img}}" alt="" />
+      <span class="hh-creation-option__name">{{prof.name}}</span>
+    </button>
+    {{else}}
+    <p class="hh-creation-empty">{{localize "HOUSEHOLD.Creation.NoOptions"}}</p>
+    {{/each}}
+  </div>
+
+  {{#if selectedProfession}}
+  <div class="hh-creation-desc">{{{selectedProfession.system.description}}}</div>
+  {{#if professionPoints}}
+  <div class="hh-creation-substep">
+    <h3>{{localize "HOUSEHOLD.Creation.WillIncrease"}}</h3>
+    <div class="hh-creation-points">
+      {{#if professionPoints.field}}
+      <span class="hh-creation-point field">{{professionPoints.field}} <b>+1</b></span>
+      {{/if}}
+      {{#each professionPoints.skills as |skill|}}
+      <span class="hh-creation-point">{{skill}} <b>+1</b></span>
+      {{/each}}
+    </div>
+  </div>
+  {{/if}}
+  {{#if professionTraits.length}}
+  <div class="hh-creation-substep">
+    <h3>{{localize "HOUSEHOLD.Creation.ProfessionTrait"}}</h3>
+    <ul class="hh-creation-granted">
+      {{#each professionTraits as |trait|}}
+      <li><img src="{{trait.img}}" alt="" /> {{trait.name}}</li>
+      {{/each}}
+    </ul>
+  </div>
+  {{/if}}
+
+  {{#if hasCompanion}}
+  <div class="hh-creation-substep">
+    <h3>{{localize "HOUSEHOLD.Creation.Companion"}}</h3>
+    <div class="hh-creation-options">
+      {{#each companions as |comp|}}
+      <button type="button" class="hh-creation-option{{#if comp.selected}} selected{{/if}}" data-action="selectCompanion"
+        data-uuid="{{comp.uuid}}" title="{{comp.name}}">
+        <img src="{{comp.img}}" alt="" />
+        <span class="hh-creation-option__name">{{comp.name}}</span>
+      </button>
+      {{else}}
+      <p class="hh-creation-empty">{{localize "HOUSEHOLD.Creation.NoOptions"}}</p>
+      {{/each}}
+    </div>
+    {{#if selectedCompanion}}
+    <div class="hh-creation-desc">{{{selectedCompanion.system.description}}}</div>
+    {{/if}}
+  </div>
+  {{/if}}
+
+  <div class="hh-creation-substep">
+    <h3>{{localize "HOUSEHOLD.Creation.Move"}}</h3>
+    <div class="hh-creation-options">
+      {{#each moves as |move|}}
+      <button type="button" class="hh-creation-option{{#if move.selected}} selected{{/if}}" data-action="selectMove"
+        data-uuid="{{move.uuid}}" title="{{move.name}}">
+        <img src="{{move.img}}" alt="" />
+        <span class="hh-creation-option__name">{{move.name}}</span>
+      </button>
+      {{else}}
+      <p class="hh-creation-empty">{{localize "HOUSEHOLD.Creation.NoOptions"}}</p>
+      {{/each}}
+    </div>
+    {{#if selectedMove}}
+    <div class="hh-creation-desc">{{{selectedMove.system.description}}}</div>
+    {{/if}}
+  </div>
+
+  {{/if}}
+</section>

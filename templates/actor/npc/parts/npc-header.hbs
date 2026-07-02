@@ -1,55 +1,66 @@
-<header class="sheet-header">
-  
-  <div class="char-header grid grid-4col">
-    <!-- Image -->
-    <img class="profile-img" src="{{actor.img}}" style="border: 0px; margin-right: 5px; cursor: pointer; grid-row: 1 / span 2;" data-action="editImage" data-field="img" data-tooltip="Edit Image" title="{{actor.name}}" height="100" width="100" />
-    
-     <!-- Character name -->
-    <h1 class="char-name  grid-span-3" style="margin: 0">
-      <input class="char-name" name="name" type="text" value="{{actor.name}}" placeholder="Name" style="font-size: smaller;" />
-    </h1>
+<header class="hh-sheet-header">
+  <img class="hh-portrait opponent" src="{{actor.img}}" data-action="editImage" data-field="img"
+    data-tooltip="Edit Image" title="{{actor.name}}" />
 
-     <!-- Resources -->
-  <div class=" grid grid-7col grid-span-3 grid-row-start-2" style="justify-items: center;
-    align-items: center;
-    text-align: center;">
+  <div class="hh-identity">
+    <p class="hh-eyebrow">
+      {{#when system.threat.level 'lteq' 1}}{{localize "HOUSEHOLD.BasicOpponent.long"}}{{else}}{{localize
+      "HOUSEHOLD.CriticalOpponent.long"}}{{/when}}
+    </p>
+    <input class="hh-display-name" name="name" type="text" value="{{actor.name}}" placeholder="Name" />
 
-      <div class="resource flex-group-center grid-span-3"  style="margin: 0">
-        <div class="resource-content flexrow flex-center flex-between">
-          {{#when system.threat.level 'lteq' 1}}
-          <h4 class="characteristic-description" style="text-align: center; margin: 0;">{{localize "HOUSEHOLD.BasicOpponent.long"}}</h4>
-          {{else}}
-          <h4 class="characteristic-description" style="text-align: center; margin: 0;">{{localize "HOUSEHOLD.CriticalOpponent.long"}}</h4>
-          {{/when}}
-        </div>
-      </div>
-
-      <div class="resource flex-group-center grid-span-3">
-        <div class="">
+    <div class="hh-meta-grid">
+      <div class="hh-field-control">
+        <label>Threat</label>
+        <div class="hh-threat-track">
           {{#numLoop 5}}
-            {{#when ../system.threat.level 'gteq' this }}
-              {{#when ../system.threat.level 'eq' this }}
-                <input type="radio" class="input-hidden" id="{{../id}}-threat_{{this}}" name="system.threat.level" value="{{reduceBy this 1}}" data-dtype="Number" data-character-id="{{../id}}" >
-              {{else}}
-                <input type="radio" class="input-hidden" id="{{../id}}-threat_{{this}}" name="system.threat.level" value="{{this}}" data-dtype="Number" data-character-id="{{../id}}" >
-              {{/when}}
-               <label for="{{../id}}-threat_{{this}}" style="cursor: pointer">
-                <i style="font-size: 1.0em; margin: 2px; color: #612877" class="fa-solid fa-spider"></i>
-              </label>
-            {{else}}
-              <input type="radio" class="input-hidden" id="{{../id}}-threat_{{this}}" name="system.threat.level" value="{{this}}" data-dtype="Number" >
-                <label for="{{../id}}-threat_{{this}}" style="cursor: pointer">
-                <i style="font-size: 1.0em; margin: 2px; color: #612877" class="fa-thin fa-spider"></i>
-              </label>
-            {{/when}}
-
+          {{#when ../system.threat.level 'gteq' this}}
+          <input type="radio" class="input-hidden" id="{{../id}}-threat_{{this}}" name="system.threat.level"
+            value="{{#when ../system.threat.level 'eq' this}}{{reduceBy this 1}}{{else}}{{this}}{{/when}}"
+            data-dtype="Number" data-character-id="{{../id}}" />
+          <label for="{{../id}}-threat_{{this}}">
+            <i class="hh-threat-pip fa-solid fa-spider"></i>
+          </label>
+          {{else}}
+          <input type="radio" class="input-hidden" id="{{../id}}-threat_{{this}}" name="system.threat.level"
+            value="{{this}}" data-dtype="Number" />
+          <label for="{{../id}}-threat_{{this}}">
+            <i class="hh-threat-pip fa-thin fa-spider" ></i>
+          </label>
+          {{/when}}
           {{/numLoop}}
         </div>
       </div>
-      <div class="resource flex-group-center">
-        <a class="item roll-action rollable" data-type="action" data-action="roll" title="{{localize "HOUSEHOLD.RollActions.long"}}"><i class="fa-solid fa-dice"></i></a>
+
+      <div class="hh-field-control">
+        <label>Stress max</label>
+        {{!-- <div class="hh-fake-input"> --}}
+          <input name="system.stress.max" value="{{system.stress.max}}" type="text" data-dtype="Number">
+          {{!-- <span>{{system.stress.max}}</span>
+          <a data-action="npcPopupEdit" data-dtype="Number" data-path="system.stress.max" data-label="Stress"
+            data-crucial_boxes="{{system.crucial_boxes}}" data-value="{{system.stress.max}}" title="Edit"
+            style="margin-left:auto;cursor:pointer"><i class="fas fa-edit"></i></a> --}}
+        {{!-- </div> --}}
       </div>
 
+      <div class="hh-field-control">
+        <label>Crucial boxes</label>
+        <input name="system.crucial_boxes" value="{{system.crucial_boxes}}" type="text" data-dtype="String">
+        {{!-- <div class="hh-fake-input">{{#if system.crucial_boxes}}{{system.crucial_boxes}}{{else}}&mdash;{{/if}}</div> --}}
+      </div>
+
+      <div class="hh-field-control">
+        <label>{{localize "HOUSEHOLD.RollActions.long"}}</label>
+        <a class="hh-primary-button rollable" data-type="action" data-action="roll"
+          title="{{localize "HOUSEHOLD.RollActions.long"}}"><i class="fa-solid fa-dice"></i></a>
+      </div>
     </div>
   </div>
+
+  {{!-- <aside class="hh-quick-panel">
+    <div class="hh-metric-grid">
+      <div class="hh-metric"><b>{{system.threat.level}}</b><span>Threat</span></div>
+      <div class="hh-metric"><b>{{system.stress.value}}</b><span>{{localize "HOUSEHOLD.Stress.long"}}</span></div>
+    </div>
+  </aside> --}}
 </header>

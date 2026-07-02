@@ -1,36 +1,56 @@
 {{!-- Owned Items Tab --}}
-<section class="tab items {{tabs.items.cssClass}}"
-         data-tab="items" data-group="primary">
-  <div class="flexrow flexcenter">
-    <div class="flexcenter">
-      <h3 style="text-align: center" class="characteristic-description">{{localize "HOUSEHOLD.Wealth.long"}}</h3>
-    </div>
-    <div class="resource">
-      <input type="text" name="system.wealth" value="{{system.wealth}}" data-dtype="String" />
+<section class="tab items {{tabs.items.cssClass}}" data-tab="items" data-group="primary">
+  
+    <div class="hh-character-tab-main">
+
+      <section class="hh-panel">
+        <div class="hh-panel-header"><h2>{{localize "HOUSEHOLD.Wealth.long"}}</h2></div>
+        <div class="hh-panel-content">
+          <div class="hh-two-col">
+            <div class="hh-field-control">
+              <label>{{localize "HOUSEHOLD.Wealth.long"}}</label>
+              <input type="text" name="system.wealth" value="{{system.wealth}}" data-dtype="String" />
+            </div>
+            <div class="hh-field-control">
+              <label>{{localize "HOUSEHOLD.Coins.long"}}</label>
+              <input type="text" name="system.coins" value="{{system.coins}}" data-dtype="String" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="hh-panel">
+        <div class="hh-panel-header">
+          <h2>{{localize "HOUSEHOLD.SheetLabels.General"}}</h2>
+          <button type="button" class="hh-icon-button" data-action="itemCreate" data-type="item">+</button>
+        </div>
+        <div class="hh-panel-content">
+          {{> "systems/household/templates/actor/char/parts/actor-list-items.hbs" items=gear type='equipament'}}
+        </div>
+      </section>
+
+      {{!-- <section class="hh-panel">
+        <div class="hh-panel-header">
+          <h2>{{localize "HOUSEHOLD.Weapons.long"}}</h2>
+          <button type="button" class="hh-icon-button" data-action="itemCreate" data-type="weapon">+</button>
+        </div>
+        <div class="hh-panel-content">
+          {{> "systems/household/templates/actor/char/parts/actor-list-items.hbs" items=weapons type='weapon'}}
+        </div>
+      </section> --}}
+
     </div>
 
-    <div class="flexcenter">
-      <h3 class="characteristic-description" style="text-align: center">{{localize "HOUSEHOLD.Coins.long"}}</h3>
-    </div>
-    <div class="resource">
-      <input type="text" name="system.coins" value="{{system.coins}}" data-dtype="String" />
-    </div>
-  </div>
-
-  <h2 class="characteristic-title">{{localize "HOUSEHOLD.SheetLabels.General"}}
-    <button class="create-item-circle" data-action="itemCreate" data-type="item"></button>
-  </h2>
-  {{> "systems/household/templates/actor/char/parts/actor-list-items.hbs" items=gear type='equipament'}}
-  <br />
-
-  <h2 class="characteristic-title">{{localize "HOUSEHOLD.Weapons.long"}}
-    <button class="create-item-circle" data-action="itemCreate" data-type="weapon"></button>
-  </h2>
-  {{> "systems/household/templates/actor/char/parts/actor-list-items.hbs" items=weapons type='weapon'}}
-  <br />
-
-  <h2 class="characteristic-title">{{localize "HOUSEHOLD.Gadgets.long"}}
-    <button class="create-item-circle" data-action="itemCreate" data-type="gadget"></button>
-  </h2>
-  {{> "systems/household/templates/actor/char/parts/actor-list-items.hbs" items=gadgets type='equipament'}}
+    {{!-- <aside class="hh-section-stack">
+      <section class="hh-panel">
+        <div class="hh-panel-header">
+          <h2>{{localize "HOUSEHOLD.Gadgets.long"}}</h2>
+          <button type="button" class="hh-icon-button" data-action="itemCreate" data-type="gadget">+</button>
+        </div>
+        <div class="hh-panel-content">
+          {{> "systems/household/templates/actor/char/parts/actor-list-items.hbs" items=gadgets type='equipament'}}
+        </div>
+      </section>
+    </aside> --}}
+ 
 </section>

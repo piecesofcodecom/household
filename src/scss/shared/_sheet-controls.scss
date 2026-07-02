@@ -1,0 +1,240 @@
+// ===========================================================================
+// Shared sheet controls (new layout)
+// Translated from novoLayout/layout.css, hh-prefixed. Compact field controls,
+// lock toggle, metrics, buttons, tags, and the note callout. Imported inside
+// the Household sheet scope blocks in household.scss.
+// ===========================================================================
+
+.hh-field-control {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+
+  label {
+    color: var(--hh-muted);
+    font-size: 11px;
+    font-weight: 700;
+    // text-transform: uppercase;
+  }
+
+  input,
+  select,
+  textarea {
+    width: 100%;
+    min-height: 34px;
+    padding: 7px 9px;
+    border: 1px solid var(--hh-line);
+    border-radius: 5px;
+    color: var(--hh-ink);
+    background: rgba(255, 255, 255, 0.68);
+  }
+}
+
+// Read-only display that mirrors an input box (e.g. linked refs, derived values).
+.hh-fake-input {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 34px;
+  padding: 7px 9px;
+  border: 1px solid var(--hh-line);
+  border-radius: 5px;
+  color: var(--hh-ink);
+  background: rgba(255, 255, 255, 0.68);
+}
+
+// Read-only chip shown in a header field when a folk/profession/vocation item
+// (character sheet) or a contract (folk item sheet) has been linked. On the
+// character sheet, clicking opens the item.
+.header-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  max-width: 153.25px;
+
+  img {
+    width: 20px;
+    height: 20px;
+    border: none;
+    object-fit: cover;
+    border-radius: 3px;
+    flex: 0 0 auto;
+  }
+
+  .header-link__name {
+    flex: 1 1 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.6rem;
+    color: #030303;
+  }
+
+  .header-link__remove {
+    flex: 0 0 auto;
+    cursor: pointer;
+    opacity: 0.6;
+    color: #030303;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  // Referenced item not found (e.g. deleted, or a legacy name not yet migrated).
+  &.missing {
+    border-style: dashed;
+    opacity: 0.7;
+
+    .header-link__name {
+      font-style: italic;
+    }
+  }
+}
+
+.hh-lock-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.hh-lock-button {
+  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border: 1px solid var(--hh-line-strong);
+  border-radius: 6px;
+  color: var(--hh-ink);
+  background: rgba(255, 255, 255, 0.68);
+  cursor: pointer;
+
+  &.locked {
+    border-color: var(--hh-wine);
+    background: var(--hh-wine-soft);
+  }
+}
+
+.hh-lock-mark {
+  width: 16px;
+  height: 13px;
+  display: inline-block;
+  position: relative;
+  border: 2px solid currentColor;
+  border-radius: 3px;
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: 2px;
+    top: -10px;
+    width: 8px;
+    height: 10px;
+    border: 2px solid currentColor;
+    border-bottom: 0;
+    border-radius: 8px 8px 0 0;
+  }
+}
+
+.hh-lock-button.unlocked .hh-lock-mark::before {
+  left: 6px;
+  transform: rotate(22deg);
+  transform-origin: left bottom;
+}
+
+.hh-metric-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.hh-metric {
+  min-height: 56px;
+  padding: 8px;
+  border: 1px solid var(--hh-line);
+  border-radius: var(--hh-radius);
+  background: rgba(255, 255, 255, 0.5);
+
+  b {
+    display: block;
+    font-size: 18px;
+    line-height: 1;
+  }
+
+  span {
+    color: var(--hh-muted);
+    font-size: 12px;
+    text-transform: uppercase;
+  }
+}
+
+.hh-toolbar {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.hh-icon-button,
+.hh-primary-button {
+  min-height: 30px;
+  border: 1px solid var(--hh-line-strong);
+  border-radius: 6px;
+  color: var(--hh-ink);
+  background: rgba(255, 255, 255, 0.62);
+  cursor: pointer;
+}
+
+.hh-icon-button {
+  width: 30px;
+  padding: 0;
+}
+
+.hh-primary-button {
+  padding: 5px 11px;
+  background: var(--hh-ink);
+  color: #fff;
+  text-align: center;
+}
+
+.hh-tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 3px 8px;
+  border: 1px solid var(--hh-line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.55);
+  color: var(--hh-muted);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.hh-note {
+  padding: 12px;
+  border-left: 4px solid var(--hh-gold);
+  border-radius: 6px;
+  background: rgba(177, 133, 44, 0.12);
+  color: #4c4234;
+  line-height: 1.45;
+}
+
+.hh-two-col {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.hh-three-col {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+@media (max-width: 620px) {
+  .hh-metric-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,15 +1,75 @@
 {
     "HOUSEHOLD": {
+        "Creation": {
+            "Title": "Creazione del Personaggio",
+            "Confirm": "OK",
+            "Incomplete": "Completa ogni passaggio prima di terminare.",
+            "Applied": "Creazione del personaggio applicata.",
+            "ResetTitle": "Reimposta la creazione del personaggio",
+            "ResetConfirm": "Questo rimuoverà tutto ciò che il generatore ha aggiunto — oggetti concessi, punti Campo/Abilità e le voci Popolo/Patria/Professione/Vocazione — e ti permetterà di ricominciare. Continuare?",
+            "ElementTitle": "Gruppo Elementale",
+            "ElementNote": "Gruppo Elementale",
+            "WillIncrease": "Aumenterà",
+            "ProfessionTrait": "Tratto della Professione",
+            "Companion": "Compagno Animale",
+            "Move": "Mossa",
+            "VocationTrait": "Tratto della Vocazione",
+            "NoOptions": "Nessuna opzione disponibile. Aggiungi oggetti al tuo mondo o configura un compendio nelle impostazioni del sistema.",
+            "NeedProfession": "Scegli prima una Professione per sbloccare le sue Vocazioni.",
+            "FolkHint": "Scegli il Popolo a cui appartiene il tuo personaggio. Uno Spiritello deve anche scegliere un gruppo elementale.",
+            "NationHint": "Scegli la Nazione in cui il tuo personaggio è nato, è cresciuto o si è trasferito.",
+            "ProfessionHint": "Scegli una Professione. Garantisce un tratto unico e l'accesso a una Mossa a tua scelta.",
+            "VocationHint": "Scegli una delle Vocazioni della tua Professione. Garantisce un Tratto aggiuntivo e definisce Campi e Abilità.",
+            "Step": {
+                "Folk": "Popolo",
+                "Nation": "Nazione",
+                "Profession": "Professione",
+                "Vocation": "Vocazione"
+            }
+        },
+        "Nation": {
+            "Realm": { "long": "Il Reame", "place": "Nella Sala da Pranzo" },
+            "Hearth": { "long": "Il Focolare", "place": "Nel Salotto" },
+            "FreeDominions": { "long": "I Liberi Domini", "place": "Al Piano Superiore" },
+            "Horde": { "long": "L'Orda", "place": "In Cantina" }
+        },
+        "SpriteElement": {
+            "Salamander": "Salamandra",
+            "Sylph": "Silfide",
+            "Undine": "Ondina"
+        },
+        "Settings": {
+            "CreationSource": {
+                "name": "Fonte della Creazione del Personaggio",
+                "hint": "Da dove la creazione guidata legge le opzioni di Popolo/Professione/Vocazione.",
+                "world": "Oggetti del Mondo",
+                "compendium": "Compendio"
+            },
+            "CreationCompendium": {
+                "name": "Compendio per la Creazione del Personaggio",
+                "hint": "Id del compendio da cui leggere gli oggetti di creazione quando la fonte è impostata su Compendio (es. world.mio-pack)."
+            },
+            "ChatTheme": {
+                "name": "Tema delle Carte in Chat",
+                "hint": "Tema visivo applicato alle carte di chat del sistema per tutti.",
+                "base": "Household (predefinito)",
+                "garden": "Welcome to the Garden"
+            }
+        },
         "RefAdd": "Aggiungi",
         "RefRemove": "Rimuovi",
         "RefDropProfession": "Trascina qui un oggetto professione",
         "RefDropMove": "Trascina qui gli oggetti mossa",
         "RefDropTrait": "Trascina qui gli oggetti tratto",
+        "RefDropVocation": "Trascina qui gli oggetti vocazione",
+        "RefDropCompanion": "Trascina qui gli oggetti compagno",
         "RefDropContract": "Trascina qui un oggetto contratto",
         "AmongCompanionTraits": "Tra quelli del tuo Compagno Animale",
         "AcesSleeve": {
             "long": "Assi Nella Manica"
         },
+        "actionsStats": "Azioni & Abilità",
+        "skills": "Abilità",
         "ActionI": {
             "long": "Azione I"
         },
@@ -104,7 +164,7 @@
         },
         "DialogTitles": {
             "RollAbility": "Tiro Abilità",
-            "RollActions": "Tiro Azione Avversario",
+            "RollActions": "Tiro Azione",
             "EditActionTable": "Modifica Tabella Azioni",
             "SelectSkill": "Seleziona Abilità da Tiro"
         },
@@ -166,11 +226,14 @@
             "long": "Rilancio in Sicurezza",
             "short": "RS"
         },
+        "Optional": {
+            "long": "Opzionale"
+        },
         "Gadgets": {
             "long": "Marchingegni"
         },
-        "HasCompanion": {
-            "long": "Ha Compagno"
+        "Companions": {
+            "long": "Compagni"
         },
         "Homeland": {
             "long": "Nazione"
@@ -231,6 +294,7 @@
             "Configuration": "Configurazione",
             "Description": "Descrizione",
             "Equipament": "Equipaggiamenti",
+            "Garden": "Household — Garden",
             "General": "Generale",
             "Item": "Househood Item Sheet",
             "Main": "Principale",
@@ -340,6 +404,9 @@
         },
         "Vocation": {
             "long": "Vocazione"
+        },
+        "Vocations": {
+            "long": "Vocazioni"
         },
         "Wealth": {
             "long": "Ricchezza"

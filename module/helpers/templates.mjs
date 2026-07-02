@@ -14,8 +14,13 @@ export const preloadHandlebarsTemplates = async function () {
     'systems/household/templates/actor/char/parts/actor-tab-description.hbs',
     'systems/household/templates/actor/char/parts/actor-tab-items.hbs',
     'systems/household/templates/actor/char/parts/actor-list-items.hbs',
-    'systems/household/templates/actor/char/parts/actor-features.hbs',
     'systems/household/templates/actor/char/parts/actor-others.hbs',
+    // Character-creation wizard
+    'systems/household/templates/actor/creation/creation-nav.hbs',
+    'systems/household/templates/actor/creation/creation-folk.hbs',
+    'systems/household/templates/actor/creation/creation-nation.hbs',
+    'systems/household/templates/actor/creation/creation-profession.hbs',
+    'systems/household/templates/actor/creation/creation-vocation.hbs',
     // NPC actor partials
     "systems/household/templates/actor/npc/parts/npc-header.hbs",
     "systems/household/templates/actor/npc/parts/npc-tabs.hbs",

@@ -1,10 +1,209 @@
+// --- New layout (novoLayout): paper shell + general-tab components.
+// `.window-content` is forced transparent by a legacy rule below, so the paper
+// background lives on the application root and shows through it. `!important`
+// beats Foundry's default `--background` (ui/parchment.jpg) on the themed app.
 & {
-  background: url(/systems/household/assets/sheet/char-sheet-bg.png);
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  overflow: visible;
-  filter: drop-shadow(2px 4px 6px var(--hh-border-strong));
+  color: var(--hh-ink);
+  font-family: Atsuka, Georgia, serif;
+  background:
+    linear-gradient(rgba(247, 244, 238, 0.96), rgba(247, 244, 238, 0.96)),
+    url('/systems/household/assets/sheet/sheet_bg.webp') center / cover !important;
+}
+
+// General tab: fields panel (left) + stress/decorum/conditions/aces (right).
+// Padding lives on this grid (not `.tab.active`) so the still-legacy Items/
+// Others/Description tabs keep their own layout during the migration.
+.hh-character-grid {
+  display: grid;
+  //grid-template-columns: minmax(245px, 0.9fr) minmax(0, 1fr);
+  gap: 10px;
+  padding: 12px;
+  align-items: start;
+  grid-template-columns: 245px 1fr;
+}
+
+.hh-character-right {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+}
+
+// Items / Moves & Traits / Biography tabs: main column + side stack.
+.hh-character-tab-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.7fr);
+  gap: 10px;
+  padding: 12px;
+  align-items: start;
+}
+
+.hh-character-tab-main,
+.hh-section-stack {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+}
+
+// Biography chapter inputs.
+.hh-chapter-grid {
+  display: grid;
+  gap: 6px;
+}
+
+.hh-chapter-row {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  align-items: center;
+  gap: 8px;
+
+  > label {
+    color: var(--hh-muted);
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  input {
+    width: 100%;
+    min-height: 30px;
+    padding: 5px 8px;
+    border: 1px solid var(--hh-line);
+    border-radius: 5px;
+    color: var(--hh-ink);
+    background: rgba(255, 255, 255, 0.68);
+  }
+}
+
+.hh-chapter-inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.hh-bio-editor {
+  min-height: 280px;
+  padding: 12px;
+  border: 1px solid var(--hh-line);
+  border-radius: var(--hh-radius);
+  background: rgba(255, 255, 255, 0.56);
+  line-height: 1.5;
+}
+
+.hh-field-card {
+  display: grid;
+  gap: 6px;
+  padding: 8px;
+  border: 1px solid var(--hh-line);
+  border-radius: var(--hh-radius);
+  background: rgba(247, 244, 238, 0.58);
+}
+
+.hh-field-card-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 0;
+
+  h3 {
+    margin: 0;
+    font-size: 14px;
+  }
+}
+
+.hh-field-rank {
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+
+  input {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+.hh-skill-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 8px;
+  min-height: 24px;
+
+  > label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+}
+
+.hh-skill-suits {
+  display: inline-flex;
+  gap: 3px;
+  align-items: center;
+
+  input {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+// .hh-fields-panel {
+//   max-width: 266px;
+// }
+
+// Sheet lock: disable + dim field/skill controls while locked.
+.hh-fields-panel.sheet-locked {
+  .hh-field-rank input,
+  .hh-skill-suits input {
+    pointer-events: none;
+    opacity: 0.85;
+  }
+}
+
+// Aces up the sleeve: fanned hand of CSS cards.
+.hh-aces-hand {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  min-height: 86px;
+  padding: 12px 16px 6px;
+}
+
+.hh-aces-card {
+  width: 44px;
+  height: 62px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--hh-line-strong);
+  border-radius: 5px;
+  background: #fff;
+  box-shadow: 0 4px 10px rgba(28, 24, 20, 0.12);
+  color: var(--hh-muted);
+  font-family: Georgia, serif;
+  font-size: 22px;
+  cursor: pointer;
+  margin-left: -8px;
+  transform-origin: bottom center;
+  transition: transform 0.16s ease, margin 0.16s ease;
+
+  &:first-child { margin-left: 0; transform: rotate(-18deg) translateY(10px); }
+  &:nth-child(2) { transform: rotate(-9deg) translateY(3px); }
+  &:nth-child(3) { transform: rotate(0deg) translateY(0); }
+  &:nth-child(4) { transform: rotate(9deg) translateY(3px); }
+  &:nth-child(5) { transform: rotate(18deg) translateY(10px); }
+
+  &:hover {
+    z-index: 2;
+    transform: translateY(-6px) scale(1.04);
+  }
+
+  &.heart, &.diamond { color: #b9424f; }
+
+  // &.active {
+  //   color: var(--hh-wine);
+  //   border-color: var(--hh-gold);
+  //   box-shadow: 0 0 0 2px rgba(177, 133, 44, 0.4);
+  // }
 }
 
 .profile-img {
@@ -77,29 +276,6 @@ h6 {
 //     background-size: contain;
 // }
 
-nav.custom {
-  margin: 4px 0;
-  border-top: 1px solid var(--color-border-light-primary);
-  border-bottom: 1px solid var(--color-border-light-primary);
-  border-right: 1px solid var(--color-border-light-primary);
-  background: none;
-  border-top-right-radius: 8px;
-  backdrop-filter: blur(10px);
-  border: 1px solid #6B4F3A;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
-}
-
-nav.custom>[data-tab] {
-  padding-left: 5px;
-  padding-right: 5px;
-  padding-top: 0;
-  padding-bottom: 0;
-}
-
-nav.custom>[data-tab]:hover {
-  filter: drop-shadow(0 0 8px var(--color-shadow-primary));
-}
-
 .ttt {
   cursor: pointer;
 }
@@ -121,18 +297,6 @@ nav.custom>[data-tab]:hover {
   padding: 15px 0 0;
   /*margin-top: 10px;*/
   width: 100%;
-}
-
-nav.custom {
-  --tab-full-width: 44px;
-  --tab-inactive-width: 34px;
-  position: absolute;
-  left: 100%;
-  top: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  z-index: -1;
 }
 
 .form__field {
@@ -157,44 +321,6 @@ nav.custom {
     color: #000;
     cursor: text;
     top: 18px;
-  }
-}
-
-// Read-only chip shown in a header field when a folk/profession/vocation item
-// has been dropped (and copied) onto the character. Clicking opens the item.
-.header-link {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-
-  img {
-    width: 20px;
-    height: 20px;
-    border: none;
-    object-fit: cover;
-    border-radius: 3px;
-    flex: 0 0 auto;
-  }
-
-  .header-link__name {
-    flex: 1 1 auto;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-size: 0.6rem;
-    color: #030303;
-  }
-
-  .header-link__remove {
-    flex: 0 0 auto;
-    cursor: pointer;
-    opacity: 0.6;
-    color: #030303;
-
-    &:hover {
-      opacity: 1;
-    }
   }
 }
 
@@ -241,8 +367,8 @@ nav.custom {
   cursor: pointer;
   transition: background 0.3s;
   border-radius: 4px;
-  max-height: 250px;
-  overflow-y: auto;
+  min-height: 50px;
+  //overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: #ddd !important;
   transform-origin: top center;
@@ -278,6 +404,7 @@ details p {
   line-height: 1.7;
   margin: 10px 0 0;
   padding: 0 20px 15px;
+  font-size: medium;
 }
 
 details.square {
@@ -585,3 +712,4 @@ input[type="text"].char-name {
 .create-item-circle:hover {
   opacity: 0.7;
 }
+

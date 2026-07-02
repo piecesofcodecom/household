@@ -1,3 +1,5 @@
+const { DialogV2 } = foundry.applications.api;
+
 /**
  * Extend the basic Item with some very simple modifications.
  * @extends {Item}
@@ -68,13 +70,13 @@ export class HouseholdItem extends Item {
     const speaker = ChatMessage.getSpeaker({ actor: this.actor });
     const rollMode = game.settings.get('core', 'messageMode');
     const label = `[${item.type}] ${item.name}`;
-    if(item.system.skill.trim() != '') {
+    if (item.system.skill.trim() != '') {
       let field = item.system.field;
-      if(field.trim() == '') {
+      if (field.trim() == '') {
         const suit = this.actor.systems.skills[skill].suit;
         const fields = this.actor.system.fields;
         for (let [k, v] of Object.entries(this.actor.system.fields)) {
-          if(v === suit) {
+          if (v === suit) {
             field = k;
           }
         }
@@ -94,8 +96,104 @@ export class HouseholdItem extends Item {
           timestamp: msg.timestamp
         };
         const html = await foundry.applications.handlebars.renderTemplate("systems/household/templates/chat/skill-show-card.hbs", templateData);
-        msg.update( { flavor: html } );
+        msg.update({ flavor: html });
       });
     }
+  }
+
+  /**
+   * Handle use items.
+   * @public
+   * return: true if item was used, or false if item cannot be used
+   */
+  async useItem(parameters, actor) {
+
+    if (this.type == 'move') {
+      console.warn('move logic')
+      if (!this.system.exhausted) {
+        this.update({ ['system.exhausted']: !this.system.exhausted });
+        const templatePath = "systems/household/templates/chat/item-card.hbs";
+        const action = "Exhaust move";
+        let description = this.system.description;
+        // Data to pass to the template
+        const data = {
+          name: this.name,
+          type: this.type,
+          description: description,
+          img: this.img,
+          action: action,
+          has_action: action.length > 0 ? true : false
+        };
+
+        // Render the template
+        const renderedHTML = await foundry.applications.handlebars.renderTemplate(templatePath, data);
+
+        // Send the card as flavor (so it's inside .flavor-text where the chat styles
+        // live) and flag it so the message <li> gets a class to scope its layout.
+        ChatMessage.create({
+          flavor: renderedHTML,
+          speaker: { alias: actor.name },
+          flags: { household: { itemCard: true } }
+        });
+        return true;
+      } else {
+        // Move already exhausted: it can still be used by spending an ace.
+        // Eligible aces are the suits the move accepts (this.system.suits) that
+        // the actor currently holds (actor.system.aces), plus the joker wild card.
+        const useActor = actor ?? this.actor;
+        if (!useActor) return false;
+
+        const suits = ["club", "heart", "diamond", "spade"];
+        const available = suits.filter(
+          (suit) => this.system.suits[suit] && useActor.system.aces[suit]
+        );
+        if (useActor.system.aces.joker) available.push("joker");
+
+        if (available.length === 0) {
+          ui.notifications.warn("You don't have an ace to use this move.");
+          return false;
+        }
+
+        // Let the player pick which ace to spend (one button per eligible suit).
+        const chosen = await DialogV2.wait({
+          classes: ["hh-dialog"],
+          window: { title: this.name, contentClasses: ["household-dialog-class"] },
+          content: `<p>Select an ace to spend to use this move.</p>`,
+          buttons: available.map((suit) => ({
+            action: suit,
+            icon: `fa-household-${suit}-full`,
+            label: suit.charAt(0).toUpperCase() + suit.slice(1),
+            callback: () => suit
+          })),
+          rejectClose: false
+        });
+        if (!chosen) return false;
+
+        // Spend the chosen ace.
+        await useActor.update({ [`system.aces.${chosen}`]: false });
+        Hooks.callAll('household.onUpdateTokenRequest');
+
+        // Announce in chat which ace was exhausted to use the move.
+        let description = this.system.description;
+        const templatePath = "systems/household/templates/chat/item-card.hbs";
+        const data = {
+          name: this.name,
+          type: this.type,
+          description: `<p>Exhausted the <i class="fa-household-${chosen}-full"></i> ace to use this move.</p>` + description,
+          img: this.img,
+          action: "Use move",
+          has_action: true
+        };
+        const renderedHTML = await foundry.applications.handlebars.renderTemplate(templatePath, data);
+        ChatMessage.create({
+          flavor: renderedHTML,
+          speaker: { alias: useActor.name },
+          flags: { household: { itemCard: true } }
+        });
+        return true;
+      }
+    }
+    return false;
+
   }
 }

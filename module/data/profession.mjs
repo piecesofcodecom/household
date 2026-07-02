@@ -19,7 +19,10 @@ export default class HouseholdProfession extends HouseholdItemBase {
     schema.field = new fields.StringField({ required: true, blank: true });
     schema.moves = new fields.ArrayField(new fields.StringField());
     schema.traits = new fields.ArrayField(new fields.StringField());
-    schema.has_companion = new fields.BooleanField({ initial: false });
+    // The profession owns the lists of its vocations and companions (item UUIDs,
+    // drag-dropped). A profession "has a companion" when `companions` is non-empty.
+    schema.vocations = new fields.ArrayField(new fields.StringField());
+    schema.companions = new fields.ArrayField(new fields.StringField());
 
     return schema;
   }

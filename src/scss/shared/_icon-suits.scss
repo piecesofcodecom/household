@@ -63,6 +63,32 @@
   filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.4));
 }
 
+.fa-household-joker-full {
+      background-image: url(/systems/household/assets/sheet/suit-joker-full.png);
+    background-position: 50%;
+    background-repeat: repeat;
+    background-size: 27px;
+    border: none;
+    display: inline-block;
+    height: 20px;
+    vertical-align: middle;
+    width: 20px;
+  filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.4));
+}
+
+.fa-household-joker {
+  background-image: url(/systems/household/assets/sheet/suit-joker.png);
+  background-position: 50%;
+    background-repeat: repeat;
+    background-size: 27px;
+    border: none;
+    display: inline-block;
+    height: 20px;
+    vertical-align: middle;
+    width: 20px;
+  filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.4));
+}
+
 .fa-household-home {
   background-image: url(/systems/household/assets/sheet/icon-home.png);
 }

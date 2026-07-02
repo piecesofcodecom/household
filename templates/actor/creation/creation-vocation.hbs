@@ -1,0 +1,58 @@
+{{!-- Step 4: Vocation (+ trait) --}}
+<section class="tab hh-creation-step {{tabs.vocation.cssClass}}" data-tab="vocation" data-group="primary">
+  <header class="hh-creation-intro">
+    <h2>{{localize "HOUSEHOLD.Creation.Step.Vocation"}}</h2>
+    <p>{{localize "HOUSEHOLD.Creation.VocationHint"}}</p>
+  </header>
+
+  {{#unless hasProfession}}
+  <p class="hh-creation-empty">{{localize "HOUSEHOLD.Creation.NeedProfession"}}</p>
+  {{else}}
+  <div class="hh-creation-options">
+    {{#each vocations as |voc|}}
+    <button type="button" class="hh-creation-option{{#if voc.selected}} selected{{/if}}" data-action="selectVocation"
+      data-uuid="{{voc.uuid}}" title="{{voc.name}}">
+      <img src="{{voc.img}}" alt="" />
+      <span class="hh-creation-option__name">{{voc.name}}</span>
+    </button>
+    {{else}}
+    <p class="hh-creation-empty">{{localize "HOUSEHOLD.Creation.NoOptions"}}</p>
+    {{/each}}
+  </div>
+
+  {{#if selectedVocation}}
+  <div class="hh-creation-desc">{{{selectedVocation.system.description}}}</div>
+  {{#if vocationPoints}}
+  <div class="hh-creation-substep">
+    <h3>{{localize "HOUSEHOLD.Creation.WillIncrease"}}</h3>
+    <div class="hh-creation-points">
+      {{#if vocationPoints.field}}
+      <span class="hh-creation-point field">{{vocationPoints.field}} <b>+1</b></span>
+      {{/if}}
+      {{#each vocationPoints.skills as |skill|}}
+      <span class="hh-creation-point">{{skill}} <b>+1</b></span>
+      {{/each}}
+    </div>
+  </div>
+  {{/if}}
+  <div class="hh-creation-substep">
+    <h3>{{localize "HOUSEHOLD.Creation.VocationTrait"}}</h3>
+    <div class="hh-creation-options">
+      {{#each vocationTraits as |trait|}}
+      <button type="button" class="hh-creation-option{{#if trait.selected}} selected{{/if}}" data-action="selectTrait"
+        data-uuid="{{trait.uuid}}" title="{{trait.name}}">
+        <img src="{{trait.img}}" alt="" />
+        <span class="hh-creation-option__name">{{trait.name}}</span>
+      </button>
+      {{else}}
+      <p class="hh-creation-empty">{{localize "HOUSEHOLD.Creation.NoOptions"}}</p>
+      {{/each}}
+    </div>
+    {{#if selectedVocationTrait}}
+    <div class="hh-creation-desc">{{{selectedVocationTrait.system.description}}}</div>
+    {{/if}}
+  </div>
+
+  {{/if}}
+  {{/unless}}
+</section>

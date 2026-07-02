@@ -1,0 +1,204 @@
+// Character-creation wizard. Scoped to the wizard's app class so nothing leaks
+// into Foundry core or other sheets.
+.application.household-creation {
+
+  background: linear-gradient(hsla(40, 36%, 95%, .96), hsla(40, 36%, 95%, .96)), url(/systems/household/assets/sheet/sheet_bg.webp) 50% / cover !important;
+  color: var(--hh-ink);
+
+  .hh-creation-tabs {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    border-bottom: 1px solid var(--hh-line, #c7b89a);
+
+    a {
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px 6px 0 0;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+
+      &.active {
+        background: var(--hh-paper-light, #f4eedd);
+        box-shadow: inset 0 -2px 0 var(--hh-accent-gold, #c2a14d);
+      }
+    }
+
+    .hh-creation-done {
+      margin-left: auto;
+      flex: 0 0 auto;
+      width: auto;
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  .hh-creation-step {
+    padding: 0.75rem 1rem;
+    overflow: auto;
+  }
+
+  .hh-creation-intro {
+    margin-bottom: 0.75rem;
+
+    h2 { margin: 0 0 0.25rem; }
+    p { margin: 0; color: var(--hh-text-soft, #5e5a52); font-size: 0.9em; }
+  }
+
+  .hh-creation-substep {
+    margin-top: 1rem;
+
+    h3 {
+      margin: 0 0 0.4rem;
+      font-size: 1em;
+      border-bottom: 1px solid var(--hh-line, #c7b89a);
+      padding-bottom: 0.2rem;
+    }
+  }
+
+  // Grid of selectable option cards (folk / profession / vocation / move / trait).
+  .hh-creation-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 0.5rem;
+
+    &.chips,
+    &.nations {
+      display: flex;
+      flex-wrap: wrap;
+    }
+  }
+
+  .hh-creation-option {
+    height: 68px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.5rem;
+    border: 1px solid var(--hh-line, #c7b89a);
+    border-radius: 8px;
+    background: var(--hh-paper-base, #efe5cf);
+    cursor: pointer;
+    text-align: center;
+
+    img {
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+      border: 0;
+    }
+
+    &__name { font-weight: 700; font-size: 0.85em; }
+
+    &:hover { background: var(--hh-state-hover, #efe1b2); }
+
+    &.selected {
+      border-color: var(--hh-accent-gold, #c2a14d);
+      box-shadow: 0 0 0 2px var(--hh-accent-gold, #c2a14d);
+    }
+  }
+
+  .hh-creation-chip {
+    padding: 0.35rem 0.9rem;
+    border: 1px solid var(--hh-line, #c7b89a);
+    border-radius: 999px;
+    background: var(--hh-paper-base, #efe5cf);
+    cursor: pointer;
+    font-weight: 700;
+
+    &:hover { background: var(--hh-state-hover, #efe1b2); }
+    &.selected {
+      border-color: var(--hh-accent-gold, #c2a14d);
+      box-shadow: 0 0 0 2px var(--hh-accent-gold, #c2a14d);
+    }
+  }
+
+  .hh-creation-nation {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.15rem;
+    padding: 0.6rem 0.9rem;
+    border: 1px solid var(--hh-line, #c7b89a);
+    border-radius: 8px;
+    background: var(--hh-paper-base, #efe5cf);
+    cursor: pointer;
+    flex: 1 1 200px;
+    height: 45px;
+
+    &__name { font-weight: 700; }
+    &__place { font-size: 0.8em; color: var(--hh-text-soft, #5e5a52); }
+
+    &:hover { background: var(--hh-state-hover, #efe1b2); }
+    &.selected {
+      border-color: var(--hh-accent-gold, #c2a14d);
+      box-shadow: 0 0 0 2px var(--hh-accent-gold, #c2a14d);
+    }
+  }
+
+  // "Will increase" chips: Field + Skills an option raises by +1.
+  .hh-creation-points {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  .hh-creation-point {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.2rem 0.6rem;
+    border: 1px solid var(--hh-line, #c7b89a);
+    border-radius: 999px;
+    background: var(--hh-paper-base, #efe5cf);
+    font-size: 0.85em;
+
+    b { color: var(--hh-accent-teal, #4f7c7a); }
+
+    &.field {
+      background: var(--hh-state-active, #d6bf77);
+      font-weight: 700;
+    }
+  }
+
+  .hh-creation-contract {
+    font-size: 0.9em;
+
+    h4 {
+      margin: 0.5rem 0 0.2rem;
+      color: var(--hh-accent-teal, #4f7c7a);
+    }
+  }
+
+  .hh-creation-granted {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.2rem 0;
+    }
+    img { width: 24px; height: 24px; object-fit: contain; border: 0; }
+  }
+
+  .hh-creation-desc {
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--hh-line, #c7b89a);
+    font-size: 0.9em;
+  }
+
+  .hh-creation-empty {
+    color: var(--hh-text-faded, #8a857a);
+    font-style: italic;
+  }
+}

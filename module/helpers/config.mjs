@@ -53,5 +53,68 @@ HOUSEHOLD.fieldsAbbreviations = {
   street: 'HOUSEHOLD.Field.Street.abbr'
 };
 
+/**
+ * The four Nations of the House. Fixed in the rulebook (no item type); the
+ * character-creation wizard writes the chosen nation's name to `system.homeland`.
+ * @type {Object}
+ */
+HOUSEHOLD.nations = {
+  realm: { label: 'HOUSEHOLD.Nation.Realm.long', place: 'HOUSEHOLD.Nation.Realm.place' },
+  hearth: { label: 'HOUSEHOLD.Nation.Hearth.long', place: 'HOUSEHOLD.Nation.Hearth.place' },
+  free_dominions: { label: 'HOUSEHOLD.Nation.FreeDominions.long', place: 'HOUSEHOLD.Nation.FreeDominions.place' },
+  horde: { label: 'HOUSEHOLD.Nation.Horde.long', place: 'HOUSEHOLD.Nation.Horde.place' }
+};
+
+/**
+ * Sprite elemental groups. Only Sprite folk pick one; the choice is appended as
+ * a note to the embedded folk item's description by the creation wizard.
+ * @type {Object}
+ */
+HOUSEHOLD.spriteElements = {
+  salamander: 'HOUSEHOLD.SpriteElement.Salamander',
+  sylph: 'HOUSEHOLD.SpriteElement.Sylph',
+  undine: 'HOUSEHOLD.SpriteElement.Undine'
+};
+
+/**
+ * Folk name used to detect a Sprite (which unlocks the elemental-group sub-step).
+ * Matched case-insensitively against the chosen folk item's name.
+ * @type {string}
+ */
+HOUSEHOLD.spriteFolk = 'Sprite';
+
+/**
+ * Character conditions, registered as Foundry status effects so toggling one
+ * applies a real ActiveEffect (and shows an icon on the token). Keys match the
+ * `system.conditions.*` booleans on the character model; labels reuse the
+ * existing HOUSEHOLD.Conditions.* localization.
+ * @type {Object}
+ */
+HOUSEHOLD.statusEffects = {
+  embarrassed: 'HOUSEHOLD.Conditions.Embarrassed',
+  frightened: 'HOUSEHOLD.Conditions.Frightened',
+  confused: 'HOUSEHOLD.Conditions.Confused',
+  hurt: 'HOUSEHOLD.Conditions.Hurt',
+  tired: 'HOUSEHOLD.Conditions.Tired',
+  sick: 'HOUSEHOLD.Conditions.Sick',
+  poisoned: 'HOUSEHOLD.Conditions.Poisoned',
+  broken: 'HOUSEHOLD.Conditions.Broken'
+};
+
+/**
+ * Token icon for each condition (Foundry core SVGs).
+ * @type {Object}
+ */
+HOUSEHOLD.statusEffectImages = {
+  embarrassed: 'icons/svg/stoned.svg',
+  frightened: 'icons/svg/terror.svg',
+  confused: 'icons/svg/daze.svg',
+  hurt: 'icons/svg/blood.svg',
+  tired: 'icons/svg/sleep.svg',
+  sick: 'icons/svg/acid.svg',
+  poisoned: 'icons/svg/poison.svg',
+  broken: 'icons/svg/skull.svg'
+};
+
 HOUSEHOLD.premium = false;
 HOUSEHOLD.premium_name = 'household-premium';

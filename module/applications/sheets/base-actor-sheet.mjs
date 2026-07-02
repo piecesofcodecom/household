@@ -107,6 +107,15 @@ export class HouseholdBaseActorSheet extends HandlebarsApplicationMixin(ActorShe
     if (profileImg) {
       profileImg.addEventListener('contextmenu', this.constructor._onImageRightClick.bind(this));
     }
+
+    // The item icon (.hh-item-icon, sends to chat) and action buttons
+    // (.hh-item-act) live inside the <summary> of a native <details>, so a click
+    // would also toggle the entry open/closed. Cancel that default toggle so only
+    // .hh-item-main opens the entry; the ApplicationV2 data-action dispatch is
+    // unaffected.
+    for (const el of this.element.querySelectorAll('.hh-item-act, .hh-item-icon')) {
+      el.addEventListener('click', (event) => event.preventDefault());
+    }
   }
 
   /* -------------------------------------------- */

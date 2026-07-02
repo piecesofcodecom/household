@@ -11,8 +11,8 @@ export default class HouseholdActorBase extends HouseholdDataModel {
     const schema = {};
 
     schema.stress = new fields.SchemaField({
-      value: new fields.NumberField({ ...requiredInteger, initial: 12, min: 0 }),
-      current: new fields.NumberField({ ...requiredInteger, initial: 12, min: 0 }),
+      value: new fields.NumberField({ ...requiredInteger, initial: 12, min: 0, max: 12 }),
+      current: new fields.NumberField({ ...requiredInteger, initial: 12, min: 0, max: 12 }),
       danger: new fields.NumberField({ ...requiredInteger, initial: 8, min: 0 }),
       max: new fields.NumberField({ ...requiredInteger, initial: 12, min: 0 }),
       min: new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 }),

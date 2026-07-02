@@ -1,5 +1,6 @@
 import * as HouseholdRoll from "./roll.mjs";
 import { capitalizeFirstLetter } from "../helpers/utils.mjs";
+import { CHAT_THEME_KEY } from "../helpers/settings.mjs";
 
 function preparediceToChat(dice_poll, cancel_face = 0) {
   const success_label = {
@@ -31,7 +32,7 @@ function preparediceToChat(dice_poll, cancel_face = 0) {
  * message. Formerly HouseholdActor._sendToChat; actor.onSkillRoll delegates here.
  * @param {HouseholdActor} actor
  */
-export async function renderSkillRollCard(actor, roll, field, skill, mod, poll_difficulty, dice_poll, success_poll, outcome, is_reroll, is_allin, is_jackpot, allow_reroll, allow_free_reroll, allow_allin, give_up, message_id = 0) {
+export async function renderSkillRollCard(actor, roll, field, skill, mod, poll_difficulty, dice_poll, success_poll, outcome, is_reroll, is_allin, is_jackpot, allow_reroll, allow_free_reroll, allow_allin, give_up, message_id = 0, item = null) {
   //face=dice.face locked=dice.locked success=dice.success
   const dice = preparediceToChat(dice_poll);
   const successes = HouseholdRoll.successesToChat(success_poll);
@@ -80,7 +81,14 @@ export async function renderSkillRollCard(actor, roll, field, skill, mod, poll_d
     message_id: message_id || "MESSAGEID",
     free_roll_items: free_roll_items,
     cancel_all: cancel_all,
-    is_jackpot: is_jackpot
+    is_jackpot: is_jackpot,
+    // The item this roll came from (a weapon "attack"), shown in the card header
+    // and carried on the re-roll buttons so it survives re-renders.
+    has_item: !!item,
+    item_img: item?.img,
+    item_name: item?.name,
+    item_id: item?.id,
+    item_description: item?.system?.description ?? ""
   };
   const html = await foundry.applications.handlebars.renderTemplate("systems/household/templates/chat/skill-roll-card.hbs", templateData);
   if (message_id) {
@@ -121,6 +129,18 @@ export function wireSkillRollCard(message, html) {
   const parser = new DOMParser();
   const actor = game.actors.get(message.speaker.actor);
   const level = CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER;
+
+  // Clicking the item icon toggles its description. Local show/hide only (no
+  // message update), so wire it before the owner gate — any viewer can read it.
+  const itemToggle = html.querySelector('.hh-item-toggle');
+  const itemDesc = html.querySelector('.chat-item-desc');
+  if (itemToggle && itemDesc) {
+    itemToggle.style.cursor = 'pointer';
+    itemToggle.addEventListener('click', (event) => {
+      event.preventDefault();
+      itemDesc.style.display = itemDesc.style.display === 'none' ? 'block' : 'none';
+    });
+  }
 
   if (!((actor?.ownership?.[game.user.id] ?? 0) >= level) && !game.user.isGM) {
     return;
@@ -246,7 +266,8 @@ export function wireSkillRollCard(message, html) {
 
       const dataset = element.dataset;
       const skill = dataset.key
-      actor.onSkillRoll(field, skill, mod, difficulty);
+      const item = dataset.itemId ? actor.items.get(dataset.itemId) : null;
+      actor.onSkillRoll(field, skill, mod, difficulty, false, false, false, false, {}, 0, {}, item);
     });
   }
 
@@ -272,7 +293,8 @@ export function wireSkillRollCard(message, html) {
         const current_success = JSON.parse(dataset.current_success)
         const keep_poll = HouseholdRoll.keepSuccessfulFaces(current_poll);
         const message_id = dataset.messageId;
-        actor.onSkillRoll(dataset.field, dataset.skill, Number(dataset.mod), poll_difficulty, keep_poll, normal_reroll, free_reroll, all_in, current_success, message_id)
+        const item = dataset.itemId ? actor.items.get(dataset.itemId) : null;
+        actor.onSkillRoll(dataset.field, dataset.skill, Number(dataset.mod), poll_difficulty, keep_poll, normal_reroll, free_reroll, all_in, current_success, message_id, current_poll, item)
       });
     });
   }
@@ -560,6 +582,18 @@ export async function handleRenderChatMessage(message, html) {
 
   // Always: mark custom cards and keep the log scrolled to the bottom.
   if (flags.customCss) html.classList.add("household-custom-chat");
+  if (flags.opponentAction) html.classList.add("household-opponent-action-chat-message");
+  if (flags.itemCard) html.classList.add("household-item-chat-message");
+
+  // Apply the world-wide chat theme (chat has no native per-actor sheet choice).
+  const isHouseholdCard = flags.customCss || flags.plainRoll || flags.opponentAction || flags.itemCard;
+  if (isHouseholdCard && game.settings.get("household", CHAT_THEME_KEY) === "garden") {
+    html.classList.add("garden");
+    // Pick one of the five leaf accents. Derived from the message id rather
+    // than Math.random so it stays the same across re-renders of this message.
+    const seed = [...(message.id ?? "")].reduce((sum, c) => sum + c.charCodeAt(0), 0);
+    html.classList.add(`leaf-${(seed % 5) + 1}`);
+  }
   pinChatLogToBottom();
 
   // Interactive skill-roll card (wireSkillRollCard does its own ownership check).

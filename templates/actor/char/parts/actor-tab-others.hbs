@@ -1,23 +1,50 @@
-<section class="tab features other-details {{tabs.others.cssClass}}"
-         data-tab="others" data-group="primary">
-  <div>
-  <!-- Contracts -->
-  <h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.Contracts.long"}}
-    <button class="create-item-circle" data-action="itemCreate" data-type="contract"></button>
-  </h2>
-  {{> "systems/household/templates/actor/char/parts/actor-list-items.hbs" items=contracts type='contract'}}
-
-  <!-- Traits -->
-  <h2 class="characteristic-title">{{localize "HOUSEHOLD.Traits.long"}}
-    <button class="create-item-circle" data-action="itemCreate" data-type="trait"></button>
-  </h2>
-  {{> "systems/household/templates/actor/char/parts/actor-list-items.hbs" items=traits type='trait'}}
-  <br />
-
-  <!-- Moves -->
-  <h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.Moves.long"}}
-    <button class="create-item-circle" data-action="itemCreate" data-type="move"></button>
-  </h2>
-  {{> "systems/household/templates/actor/char/parts/actor-list-items.hbs" items=moves type='move'}}
+<section class="tab features other-details {{tabs.others.cssClass}}" data-tab="others" data-group="primary">
+  <div class="hh-sheet-body">
+    <section class="hh-panel">
+      <div class="hh-panel-header">
+        <h2>{{localize "HOUSEHOLD.Contracts.long"}}</h2>
+        <button type="button" class="hh-icon-button" data-action="itemCreate" data-type="contract">+</button>
+      </div>
+      <div class="hh-panel-content">
+        {{> "systems/household/templates/actor/char/parts/actor-list-items.hbs" items=contracts type='contract'}}
+      </div>
+    </section>
   </div>
+  {{!-- <div class="hh-character-tab-grid">
+    <div class="hh-character-tab-main">
+
+      <section class="hh-panel">
+        <div class="hh-panel-header">
+          <h2>{{localize "HOUSEHOLD.Moves.long"}}</h2>
+          <button type="button" class="hh-icon-button" data-action="itemCreate" data-type="move">+</button>
+        </div>
+        <div class="hh-panel-content">
+          {{> "systems/household/templates/actor/char/parts/actor-list-items.hbs" items=moves type='move'}}
+        </div>
+      </section>
+
+      <section class="hh-panel">
+        <div class="hh-panel-header">
+          <h2>{{localize "HOUSEHOLD.Traits.long"}}</h2>
+          <button type="button" class="hh-icon-button" data-action="itemCreate" data-type="trait">+</button>
+        </div>
+        <div class="hh-panel-content">
+          {{> "systems/household/templates/actor/char/parts/actor-list-items.hbs" items=traits type='trait'}}
+        </div>
+      </section>
+
+    </div>
+
+    <aside class="hh-section-stack">
+      <section class="hh-panel">
+        <div class="hh-panel-header">
+          <h2>{{localize "HOUSEHOLD.Contracts.long"}}</h2>
+          <button type="button" class="hh-icon-button" data-action="itemCreate" data-type="contract">+</button>
+        </div>
+        <div class="hh-panel-content">
+          {{> "systems/household/templates/actor/char/parts/actor-list-items.hbs" items=contracts type='contract'}}
+        </div>
+      </section>
+    </aside>
+  </div> --}}
 </section>

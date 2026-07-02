@@ -88,15 +88,15 @@ section.chat-sidebar .jump-to-bottom>a {
 }
 
 .npc-frame {
-  background-image: url('/systems/household/assets/sheet/enemy_frame.webp');
+  background-image: url('/systems/household/assets/sheet/profile-img-frame.png');
   filter: drop-shadow(0 0 5px black);
 
 }
 
 #photo-mask {
   position: absolute;
-  width: 69%;
-  height: 69%;
+  width: 85%;
+  height: 85%;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -108,7 +108,7 @@ section.chat-sidebar .jump-to-bottom>a {
 }
 
 .photo-subject {
-  width: auto;
+  width: 100%;
   height: 100%;
   object-fit: cover;
 }
@@ -119,7 +119,12 @@ section.chat-sidebar .jump-to-bottom>a {
 
 #glass-highlight {
   background-image: url('/systems/household/assets/sheet/profile-img-glass.png');
-  background-size: cover;
+  // The glass disc only fills ~68% of its 500x500 canvas (centered), while the
+  // token photo (#photo-mask) sits at 85%. With the new thin-border frame its
+  // opening is larger, so a `cover` glass leaves an uncovered ring. Zoom the
+  // glass background (~85/68 ≈ 1.25) so its disc reaches the photo edge.
+  background-size: 125%;
+  background-position: center;
   mix-blend-mode: screen;
   opacity: 0.8;
   filter: drop-shadow(0 0 5px black);

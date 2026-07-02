@@ -1,0 +1,17 @@
+{{!-- Step 2: Nation --}}
+<section class="tab hh-creation-step {{tabs.nation.cssClass}}" data-tab="nation" data-group="primary">
+  <header class="hh-creation-intro">
+    <h2>{{localize "HOUSEHOLD.Creation.Step.Nation"}}</h2>
+    <p>{{localize "HOUSEHOLD.Creation.NationHint"}}</p>
+  </header>
+
+  <div class="hh-creation-options nations">
+    {{#each nations as |nation|}}
+    <button type="button" class="hh-creation-nation{{#if nation.selected}} selected{{/if}}" data-action="selectNation"
+      data-key="{{nation.key}}">
+      <span class="hh-creation-nation__name">{{nation.label}}</span>
+      <span class="hh-creation-nation__place">{{nation.place}}</span>
+    </button>
+    {{/each}}
+  </div>
+</section>

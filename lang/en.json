@@ -1,16 +1,75 @@
 {
     "HOUSEHOLD": {
+        "Creation": {
+            "Title": "Character Creation",
+            "Confirm": "OK",
+            "Incomplete": "Complete every step before finishing.",
+            "Applied": "Character creation applied.",
+            "ResetTitle": "Reset Character Creation",
+            "ResetConfirm": "This will remove everything the character builder added — granted items, Field/Skill points, and the Folk/Homeland/Profession/Vocation entries — and let you start over. Continue?",
+            "ElementTitle": "Elemental Group",
+            "ElementNote": "Elemental Group",
+            "WillIncrease": "Will increase",
+            "ProfessionTrait": "Profession Trait",
+            "Companion": "Animal Companion",
+            "Move": "Move",
+            "VocationTrait": "Vocation Trait",
+            "NoOptions": "No options available. Add items to your world or configure a compendium in the system settings.",
+            "NeedProfession": "Choose a Profession first to unlock its Vocations.",
+            "FolkHint": "Choose the Folk your character belongs to. A Sprite must also pick an elemental group.",
+            "NationHint": "Choose the Nation where your character was born, grew up, or moved to.",
+            "ProfessionHint": "Choose a Profession. It grants a unique trait and access to a Move of your choice.",
+            "VocationHint": "Choose one of your Profession's Vocations. It grants an additional Trait and shapes your Fields and Skills.",
+            "Step": {
+                "Folk": "Folk",
+                "Nation": "Nation",
+                "Profession": "Profession",
+                "Vocation": "Vocation"
+            }
+        },
+        "Nation": {
+            "Realm": { "long": "The Realm", "place": "In the Dining Hall" },
+            "Hearth": { "long": "The Hearth", "place": "In the Living Room" },
+            "FreeDominions": { "long": "The Free Dominions", "place": "On the Upper Floor" },
+            "Horde": { "long": "The Horde", "place": "In the Basement" }
+        },
+        "SpriteElement": {
+            "Salamander": "Salamander",
+            "Sylph": "Sylph",
+            "Undine": "Undine"
+        },
+        "Settings": {
+            "CreationSource": {
+                "name": "Character Creation Source",
+                "hint": "Where the creation wizard reads Folk/Profession/Vocation options from.",
+                "world": "World Items",
+                "compendium": "Compendium Pack"
+            },
+            "CreationCompendium": {
+                "name": "Character Creation Compendium",
+                "hint": "Pack id to read creation items from when the source is set to Compendium (e.g. world.my-pack)."
+            },
+            "ChatTheme": {
+                "name": "Chat Card Theme",
+                "hint": "Visual theme applied to the system's chat cards for everyone.",
+                "base": "Household (default)",
+                "garden": "Welcome to the Garden"
+            }
+        },
         "RefAdd": "Add",
         "RefRemove": "Remove",
         "RefDropProfession": "Drag a profession item here",
         "RefDropMove": "Drag move items here",
         "RefDropTrait": "Drag trait items here",
+        "RefDropVocation": "Drag vocation items here",
+        "RefDropCompanion": "Drag companion items here",
         "RefDropContract": "Drag a contract item here",
         "AmongCompanionTraits": "Among the ones of your Animal Companion",
         "AcesSleeve": {
             "long": "Aces up the Sleeve"
         },
         "actions": "Actions",
+        "actionsStats": "Actions & Stats",
         "ActionI": {
             "long": "Action I"
         },
@@ -167,11 +226,14 @@
             "long": "Free Re-Roll",
             "short": "FR"
         },
+        "Optional": {
+            "long": "Optional"
+        },
         "Gadgets": {
             "long": "Gadgets"
         },
-        "HasCompanion": {
-            "long": "Has Companion"
+        "Companions": {
+            "long": "Companions"
         },
         "Homeland": {
             "long": "Homeland"
@@ -224,7 +286,7 @@
             "long": "Roll Ability"
         },
         "RollActions": {
-            "long": "Roll Opponent Action"
+            "long": "Roll Action"
         },
         "Rolling": {
             "long": "Rolling"
@@ -235,11 +297,12 @@
             "Configuration": "Configuration",
             "Description": "Description",
             "Equipament": "Equipament",
+            "Garden": "Household — Garden",
             "General": "General",
             "Item": "Househood Item Sheet",
             "Main": "Main",
             "Name": "Name",
-            "Others": "Decorum & Contracts",
+            "Others": "Contracts",
             "Requirements": "Requirements",
             "Skills": "Skills",
             "Type": "Type"
@@ -347,6 +410,9 @@
         },
         "Vocation": {
             "long": "Vocation"
+        },
+        "Vocations": {
+            "long": "Vocations"
         },
         "Wealth": {
             "long": "Wealth"

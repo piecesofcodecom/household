@@ -1,30 +1,41 @@
-<div style="border: 20px solid;
-    border-image-slice: 20 20;
-    border-image-source: url(/systems/household/assets/chat/deco4.png);
-    display: grid;
-    margin-top: 10px;
-    padding: 2px;
-    width: 100%;">
-    <h2 class="hh-title" style="border: 0;
-    /* display: flex; */
-    font-family: LHF_Encore, Beau Rivage, cursive;
-    font-size: 1.2rem;
-    font-weight: 600;
-    text-align: center"><span class="hh-vs" style="font-size: 0.7em">Rolling</span> <b
-            style="color: {{getFieldColor ability}};">{{ localize (concat "HOUSEHOLD.Skill."
+<header class="chat-card-header">
+    <img class="chat-avatar" src="{{actor.img}}" alt="">
+    <div class="chat-title">
+        <strong>{{actor.name}}</strong>
+        <span>Rolling</span> <b style="color: {{getFieldColor ability}};">{{ localize (concat "HOUSEHOLD.Skill."
             ability ".long") }}</b> <span class="hh-vs" style="font-size: 0.7em">using</span> <b
             style="color: {{getFieldColor field}}; ">{{
             localize
-            (concat "HOUSEHOLD.Field." field ".long") }}</b></h2>
+            (concat "HOUSEHOLD.Field." field ".long") }}</b></span>
+    </div>
+    {{!-- <span class="chat-badge wine">
+        <i class="hh-threat-pip fa-solid fa-spider"></i>
+        <i class="hh-threat-pip fa-thin fa-spider"></i>
+        <i class="hh-threat-pip fa-thin fa-spider"></i>
+        <i class="hh-threat-pip fa-thin fa-spider"></i>
+        <i class="hh-threat-pip fa-thin fa-spider"></i>
+    </span> --}}
+    {{#if has_item}}
+    <img class="item-icon hh-item-toggle" title="{{item_name}}" src="{{item_img}}" alt="">
+    {{/if}}
+</header>
+{{#if has_item}}
+<div class="chat-item-desc" style="display: none;">{{{item_description}}}</div>
+{{/if}}
+
+
+{{!-- <div class="chat-roll-item">
+   
+    <div class="chat-item">
+        <strong>{{item_name}}</strong>
+        <span class="hh-item-type">weapon</span>
+    </div>
+     
+</div> --}}
+
+<div class="chat-card hh-skill-card">
 
     <!-- Dice -->
-    {{#if cancel_all}}
-    <hr style="
-    margin: 0;
-    padding: 0;
-">
-    {{> "systems/household/templates/chat/parts/all-in-failed.hbs"}}
-    {{/if}}
     {{#if is_jackpot}}
     <hr style="
     margin: 0;
@@ -38,7 +49,8 @@
     {{/if}}
     <div class="hh-result">
         <div class="hh-dice">
-            <hr class="hh-divider soft">
+            {{!--
+            <hr class="hh-divider soft"> --}}
             <div class="dice-list" data-ability-name="{{ability}}" data-field-name="{{field}}">
                 {{#if cancel_all}}
                 {{#each dice as |dice value|}}
@@ -84,10 +96,19 @@
                 {{/hasNoSuccess }}
                 {{/if}}
             </div>
-            <hr class="hh-divider soft">
+            {{!--
+            <hr class="hh-divider soft"> --}}
         </div>
     </div>
 
+    {{#if cancel_all}}
+    {{!--
+    <hr style="
+    margin: 0;
+    padding: 0;
+"> --}}
+    {{> "systems/household/templates/chat/parts/all-in-failed.hbs"}}
+    {{/if}}
     <!-- Outcome -->
     {{#when outcome 'eq' 'LostSuccess'}}
     {{> "systems/household/templates/chat/parts/give-up-notice.hbs"}}
@@ -115,16 +136,16 @@
     <!-- Actions -->
     {{#if reroll}}
     <br />
-    <button class="reroll-button" data-rerolltype="normal" data-currentpoll="{{currentpoll}}" data-field="{{field}}"
-        data-skill="{{skill}}" data-mod="{{modifierroll}}" data-current_success="{{poll_success}}"
-        data-poll_difficulty="{{poll_difficulty}}" data-dice="{{ dice_string }}"
+    <button class="reroll-button" data-rerolltype="normal" data-item-id="{{item_id}}" data-currentpoll="{{currentpoll}}"
+        data-field="{{field}}" data-skill="{{skill}}" data-mod="{{modifierroll}}"
+        data-current_success="{{poll_success}}" data-poll_difficulty="{{poll_difficulty}}" data-dice="{{ dice_string }}"
         data-message-id="{{message_id}}">{{localize
         "HOUSEHOLD.ReRoll.long"}}</button>
     {{/if}}
     {{#if free_reroll}}
-    <button class="reroll-button" data-rerolltype="free" data-currentpoll="{{currentpoll}}" data-field="{{field}}"
-        data-skill="{{skill}}" data-mod="{{modifierroll}}" data-current_success="{{poll_success}}"
-        data-poll_difficulty="{{poll_difficulty}}" data-dice="{{ dice_string }}"
+    <button class="reroll-button" data-rerolltype="free" data-item-id="{{item_id}}" data-currentpoll="{{currentpoll}}"
+        data-field="{{field}}" data-skill="{{skill}}" data-mod="{{modifierroll}}"
+        data-current_success="{{poll_success}}" data-poll_difficulty="{{poll_difficulty}}" data-dice="{{ dice_string }}"
         data-message-id="{{message_id}}">{{localize
         "HOUSEHOLD.FreeReRoll.long"}}</button>
     {{#ifNotEmpty free_roll_items}}
@@ -147,9 +168,9 @@
     {{/if}}
     {{#if allin}}
     <br />
-    <button class="reroll-button" data-rerolltype="allin" data-currentpoll="{{currentpoll}}" data-field="{{field}}"
-        data-skill="{{skill}}" data-mod="{{mod}}" data-current_success="{{poll_success}}"
-        data-poll_difficulty="{{poll_difficulty}}" data-dice="{{ dice_string }}"
+    <button class="reroll-button" data-rerolltype="allin" data-item-id="{{item_id}}" data-currentpoll="{{currentpoll}}"
+        data-field="{{field}}" data-skill="{{skill}}" data-mod="{{modifierroll}}"
+        data-current_success="{{poll_success}}" data-poll_difficulty="{{poll_difficulty}}" data-dice="{{ dice_string }}"
         data-message-id="{{message_id}}">{{localize
         "HOUSEHOLD.AllIn.long"}}</button>
     {{/if}}

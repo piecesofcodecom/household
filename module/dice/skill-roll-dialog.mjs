@@ -4,8 +4,9 @@
  * Extracted verbatim from HouseholdActor.dialogRollSkill (which now delegates here).
  * @param {HouseholdActor} actor
  * @param {DOMStringMap|object} dataset  the clicked element's dataset (key/field/label)
+ * @param {Item|null} [item]  the weapon this roll came from, shown in the dialog/card
  */
-export async function openSkillRollDialog(actor, dataset) {
+export async function openSkillRollDialog(actor, dataset, item = null) {
   let guess;
 
   const skill = actor.system.skills[dataset.key];
@@ -25,6 +26,9 @@ export async function openSkillRollDialog(actor, dataset) {
     key: dataset.key,
     field: dataset.field,
     actor: actor,
+    item_img: item?.img,
+    item_name: item?.name,
+    has_item: !!item,
     //timestamp: msg.timestamp
   };
 
@@ -64,7 +68,7 @@ export async function openSkillRollDialog(actor, dataset) {
           '3': critical_value.replace("x", ""),
           '4': extreme_value.replace("x", ""),
           '5': impossible_value.replace("x", "")
-        })
+        }, false, false, false, false, {}, 0, {}, item)
       }
     }],
     position: {

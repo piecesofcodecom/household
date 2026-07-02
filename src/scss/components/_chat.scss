@@ -115,33 +115,191 @@ input[type="radio"].modifier-option:checked+label.mod-label-minus {
   background-color: #ba5858;
 }
 
-.table-results {
-  display: grid;
-  width: 100%;
-  margin-top: 10px;
-  padding: 2px;
-  border: solid 20px;
-  border-image-source: url(/systems/household/assets/chat/deco4.png) !important;
-  border-image-slice: 20 20;
-
-}
-
+// --- New layout (novoLayout): compact chat cards. The heavy deco4 border is
+// replaced by a clean panel; all JS-read classes/attrs are untouched.
 .chat-card {
   display: grid;
+  gap: 8px;
   width: 100%;
   margin-top: 10px;
-  padding: 2px;
-  border: solid 20px;
-  border-image-source: url(/systems/household/assets/chat/deco4.png);
-  border-image-slice: 20 20;
+  padding: 10px;
+}
+
+.hh-title {
+  margin: 0;
+}
+
+// Opponent-action card (action-show-card.hbs) — header / badge / action row.
+// The card box itself is applied at the message level
+// (.household-opponent-action-chat-message, see household.scss).
+.hh-chat-card {
+  overflow: hidden;
+}
+
+.chat-card-header {
+  display: grid;
+  grid-template-columns: 38px 1fr auto;
+  gap: 10px;
+  align-items: center;
+  padding: 10px;
+  // border-bottom: 1px solid var(--hh-line);
+  // background: rgba(235, 231, 223, 0.58);
+}
+
+.chat-avatar {
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--hh-line-strong);
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.chat-title {
+  min-width: 0;
+
+  strong {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 16px;
+    color: var(--hh-ink);
+  }
+
+  span {
+    color: var(--hh-muted);
+    font-size: 12px;
+  }
+}
+
+.chat-badge {
+  display: flex;
+  place-items: center;
+  min-width: 34px;
+  min-height: 28px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  color: #fff;
+  background: var(--hh-ink);
+  font-size: 14px;
+  font-weight: normal;
+  white-space: nowrap;
+
+  &.wine { background: var(--hh-wine); }
+  &.moss { background: var(--hh-moss); }
+}
+
+// Weapon/item banner shown under the skill-roll card header when a roll comes
+// from an item (skill-roll-card.hbs). Kept compact — smaller icon and tight
+// spacing — so it never looms larger than the header above it.
+.chat-roll-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px 0;
+  justify-content: flex-end;
+
+  .item-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .chat-item {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    line-height: 1.15;
+
+    strong {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 13px;
+      color: var(--hh-ink);
+    }
+  }
+
+  .hh-item-type {
+    font-size: 11px;
+    color: var(--hh-muted);
+  }
+}
+
+.chat-card-body {
+  display: grid;
+  gap: 10px;
+  padding: 10px;
+}
+
+// Item reveal card (item-card.hbs).
+.hh-item-type {
+  text-transform: capitalize;
+}
+
+.item-description {
+  margin: 0;
+  color: #3e3932;
+  line-height: 1.4;
+}
+
+.action-row {
+  display: grid;
+  grid-template-columns: 38px 1fr;
+  align-items: center;
+  gap: 8px;
+  min-height: 46px;
+  padding: 7px;
+  border: 1px solid var(--hh-line);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.52);
+  font-size: larger;
+    font-weight: lighter;
+}
+
+.roman {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #fff;
+  background: var(--hh-violet);
+  font-weight: 700;
 }
 
 .roll-suc {
-  font-size: 18px;
-  margin-left: 20px;
-  font-style: none;
+  display: inline-block;
+  padding: 4px 10px;
+  border: 1px solid var(--hh-line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.75);
+  font-size: 13px;
+  font-weight: 700;
   text-align: center;
-  font-weight: bold;
+}
+
+.success-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+}
+
+// Re-roll / free / all-in buttons (plain <button>s the JS reads by .reroll-button).
+.reroll-button {
+  width: 100%;
+  margin: 2px 0;
+  padding: 6px 11px;
+  border: 1px solid var(--hh-line-strong);
+  border-radius: 6px;
+  background: var(--hh-ink);
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.9;
+  }
 }
 
 /* Shared boxed notice for the "give up a Success" / "All In failed" messages,
@@ -149,16 +307,17 @@ input[type="radio"].modifier-option:checked+label.mod-label-minus {
 .hh-roll-notice {
   display: block;
   text-align: center;
-  padding: 8px 12px;
+  padding: 9px 10px;
   margin: 4px 0;
-  border-radius: 6px;
-  font-weight: bold;
-  font-size: 1rem;
-  color: #333;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(177, 133, 44, 0.36);
+  border-radius: var(--hh-radius);
+  background: rgba(177, 133, 44, 0.12);
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #4c4234;
 
   i {
-    color: #ff9800;
+    color: var(--hh-wine);
   }
 }
 
@@ -271,10 +430,13 @@ input[type="radio"].modifier-option:checked+label.mod-label-minus {
 
 .dice-list {
   display: flex;
-  gap: 5px;
-  margin-bottom: 10px;
+  gap: 7px;
   justify-content: center;
   flex-wrap: wrap;
+  padding: 8px;
+  border: 1px solid var(--hh-line);
+  border-radius: var(--hh-radius);
+  background: rgba(247, 244, 238, 0.7);
 }
 
 .dice-face-other {
@@ -393,32 +555,31 @@ input[type=radio]:checked.field-street+label>img {
 }
 
 .item-display {
-  /*border: 1px solid #444;*/
-  /*background: #222;*/
-  /*color: #fff;*/
-  padding: 10px;
-  border-radius: 8px;
-  max-width: 400px;
-  margin: 10px auto;
-  font-family: Arial, sans-serif;
+  padding: 4px;
+  font-family: Atsuka, Georgia, serif;
+  color: var(--hh-ink);
 }
 
 .item-header {
   display: flex;
   align-items: center;
+  gap: 10px;
 }
 
 .item-icon {
-  width: 50px;
-  height: 50px;
-  margin-right: 10px;
-  border-radius: 5px;
-  border: 1px solid #888;
+  width: 44px;
+  height: 44px;
+  margin-right: 0;
+  border-radius: 6px;
+  border: 1px solid var(--hh-line-strong);
+  object-fit: cover;
 }
 
 .item-name {
-  font-size: 1.5rem;
   margin: 0;
+  font-family: 'LHF_Encore', Georgia, serif;
+  font-size: 1.4rem !important;
+  line-height: 1.1;
 }
 
 .item-body {

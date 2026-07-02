@@ -12,10 +12,11 @@
     "minify-css": "npx postcss ./css/household.css --dir ./css/",
     "release": "node release.cjs",
     "dev": "node dev.cjs",
-    "build": "npm run build-css && npm run build-js && npm run build-packs",
+    "build": "npm run build-css && npm run build-js",
     "minify": "npm run minify-css && npm run minify-js",
     "build-all": "npm run build && npm run minify",
-    "normalize-eol": "node normalize-line-endings.cjs"
+    "normalize-eol": "node normalize-line-endings.cjs",
+    "build-dev": "npm run build-css && npm run minify-css && npm run build-js && npm run minify-css"
   },
   "browserslist": [
     "last 3 versions"

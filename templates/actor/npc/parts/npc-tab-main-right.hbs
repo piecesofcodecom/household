@@ -1,62 +1,51 @@
-<section class="tab {{tabs.main.cssClass}}" data-tab="{{tabs.main.id}}" data-group="{{tabs.main.group}}">
-  {{!-- If you want TinyMCE editors to output inline rolls when rendered, you need to pass the actor's roll data to
-  the rollData property. --}}
-  <!--Stress-->
-  <h2 class="characteristic-title" style="text-align: center;">{{localize "HOUSEHOLD.Stress.long"}}
+<section class="tab {{tabs.main.cssClass}}" data-tab="main" data-group="primary">
 
-  </h2>
-  <a style="right: 13px;
-    position: absolute;
-    float: right;" title='' data-dtype="Number" data-action="npcPopupEdit" data-path="system.stress.max"
-    data-label="Stress" data-crucial_boxes="{{system.crucial_boxes}}" data-value="{{system.stress.max}}">
-    <i class='fas fa-edit' style="font-size: small;"></i>
-  </a>
-  <div style="display: flex;
-    text-align: center;
-    justify-content: center;
-    gap: 10px;">
-    {{#numLoop system.stress.max}}
-    <div class=''>
-       {{#when this 'lteq' (math @root.system.stress.max "-" @root.system.stress.value) }}
-      <input id="stress-{{this}}-{{../id}}" class="input-hidden" type="radio" max="2" name="system.stress.value"
-        value="{{reduceBy ../system.stress.max (math this "-" 1)}}" data-dtype="Number" />
-        {{#when this 'in' ../system.crucial_boxes}}
-        <label class="label-stress stress-rosette-damage" for="stress-{{this}}-{{../id}}">
-        </label>
-        {{else}}
-        <label class="label-stress stress-square-damage" for="stress-{{this}}-{{../id}}">
-        </label>
-        {{/when}}
-      {{else}}
-      <input id="stress-{{this}}-{{../id}}" class="input-hidden" type="radio" max="2" name="system.stress.value"
-        value="{{reduceBy ../system.stress.max this}}" data-dtype="Number" />
-        {{#when this 'in' ../system.crucial_boxes}}
-        <label class="label-stress stress-rosette" for="stress-{{this}}-{{../id}}"> </label>
-        {{else}}
-        <label class="label-stress stress-square" for="stress-{{this}}-{{../id}}"> </label>
-        {{/when}}
-      {{/when}}
+  <section class="hh-panel">
+    <div class="hh-panel-header">
+      <h2>{{localize "HOUSEHOLD.Stress.long"}}</h2>
+      <span class="hh-tag">{{system.stress.value}} / {{system.stress.max}}</span>
     </div>
-    {{/numLoop}}
-  </div>
+    <div class="hh-panel-content">
+      <div class="hh-stress-caption">
+        <span>Crucial boxes trigger encounter effects.</span>
+        <span class="hh-stress-legend"><i class="hh-stress-box crucial"><span></span></i> Crucial</span>
+      </div>
+      <div class="hh-stress-track">
+        {{#numLoop system.stress.max}}
+        {{#when this 'lteq' (math @root.system.stress.max "-" @root.system.stress.value) }}
+        <input id="stress-{{this}}-{{../id}}" class="input-hidden" type="radio" name="system.stress.value"
+          value="{{reduceBy ../system.stress.max (math this "-" 1)}}" data-dtype="Number" />
+        <label class="hh-stress-box filled{{#when this 'in' ../system.crucial_boxes}} crucial{{/when}}"
+          for="stress-{{this}}-{{../id}}"><span>{{this}}</span></label>
+        {{else}}
+        <input id="stress-{{this}}-{{../id}}" class="input-hidden" type="radio" name="system.stress.value"
+          value="{{reduceBy ../system.stress.max this}}" data-dtype="Number" />
+        <label class="hh-stress-box{{#when this 'in' ../system.crucial_boxes}} crucial{{/when}}"
+          for="stress-{{this}}-{{../id}}"><span>{{this}}</span></label>
+        {{/when}}
+        {{/numLoop}}
+      </div>
+    </div>
+  </section>
 
-  <!-- Moves -->
-  <h2 class="characteristic-title" style="text-align: center;  padding: 0px; margin: 0px;">{{localize
-    "HOUSEHOLD.Moves.long"}}
-    <button class="create-item-circle" data-action="itemCreate" data-type="move">
-    </button>
-  </h2>
-  <div style="height: 115px; overflow: auto">
-    {{> "systems/household/templates/actor/char/parts/actor-list-items.hbs" items=moves type="move"}}
-  </div>
-  <!-- Traits -->
-  <h2 class="characteristic-title" style="text-align: center; padding: 0px; margin: 0px;">{{localize
-    "HOUSEHOLD.Traits.long"}}
-    <button class="create-item-circle" data-action="itemCreate" data-type="trait">
-    </button>
-  </h2>
-  <div style="height: 115px; overflow: auto">
-    {{> "systems/household/templates/actor/char/parts/actor-list-items.hbs" items=traits type="trait"}}
-  </div>
+  <section class="hh-panel">
+    <div class="hh-panel-header">
+      <h2>{{localize "HOUSEHOLD.Moves.long"}}</h2>
+      <button type="button" class="hh-icon-button" data-action="itemCreate" data-type="move">+</button>
+    </div>
+    <div class="hh-panel-content">
+      {{> "systems/household/templates/actor/char/parts/actor-list-items.hbs" items=moves type="move"}}
+    </div>
+  </section>
+
+  <section class="hh-panel">
+    <div class="hh-panel-header">
+      <h2>{{localize "HOUSEHOLD.Traits.long"}}</h2>
+      <button type="button" class="hh-icon-button" data-action="itemCreate" data-type="trait">+</button>
+    </div>
+    <div class="hh-panel-content">
+      {{> "systems/household/templates/actor/char/parts/actor-list-items.hbs" items=traits type="trait"}}
+    </div>
+  </section>
 
 </section>

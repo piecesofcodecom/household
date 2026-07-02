@@ -1,11 +1,89 @@
+// --- New layout (novoLayout): paper shell + opponent components.
 & {
-  background: url(/systems/household/assets/sheet/opponent-n-bg.png);
-  //background-size: 250px;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  overflow: visible;
-  filter: drop-shadow(2px 4px 6px var(--hh-border-strong));
+  color: var(--hh-ink);
+  font-family: Atsuka, Georgia, serif;
+}
+
+.window-content {
+  // background:
+  //   linear-gradient(rgba(247, 244, 238, 0.96), rgba(247, 244, 238, 0.96)),
+  //   url('/systems/household/assets/sheet/sheet_bg.webp') center / cover;
+    background: linear-gradient(hsl(293.57deg 26.77% 86.79%), hsl(300deg 32.54% 93.09%)), url(/systems/household/assets/sheet/sheet_bg.webp) 50% / cover;
+}
+
+// Each tab part is a direct child of window-content; give the active tab the
+// body padding and let panels stack with a gap. Scoped to `.active` so it never
+// overrides the framework hiding inactive tabs.
+.tab.active {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  overflow: auto;
+}
+
+// Threat: five compact pips (radio inputs stay; labels are the pips).
+.hh-threat-track {
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.hh-threat-pip {
+  width: 18px;
+  height: 18px;
+  // border: 1px solid rgba(90, 69, 111, 0.44);
+  // border-radius: 50%;
+  // background: rgba(90, 69, 111, 0.18);
+  cursor: pointer;
+  font-size: large;
+  color: var(--hh-violet);
+
+  // &.filled {
+  //   background: var(--hh-violet);
+  //   border-color: var(--hh-violet);
+  // }
+}
+
+// Opponent action rows: roman numeral + text.
+.hh-action-row {
+  display: grid;
+  grid-template-columns: 30px 1fr;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 7px;
+  border: 1px solid var(--hh-line);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.52);
+
+  input {
+    width: 100%;
+    border: 0;
+    background: transparent;
+    color: var(--hh-ink);
+    font: inherit;
+    outline: 0;
+  }
+}
+
+.hh-roman {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #fff;
+  background: var(--hh-violet);
+  font-weight: 700;
+}
+
+.hh-editor {
+  min-height: 320px;
+  padding: 12px;
+  border: 1px solid var(--hh-line);
+  border-radius: var(--hh-radius);
+  background: rgba(255, 255, 255, 0.56);
+  line-height: 1.5;
 }
 
 .window-header {
@@ -19,74 +97,8 @@
   backdrop-filter: brightness(0.7);
 }
 
-nav.tabs {
-  border-image: linear-gradient(90deg,
-      transparent 0%,
-      #e7d1b1 50%,
-      transparent 100%) 1;
-
-}
-
-nav.custom {
-  backdrop-filter: blur(10px);
-  background: #c49fc275;
-  border: 1px solid #6b4f3a;
-  border-top-right-radius: 8px;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, .3);
-  margin: 4px 0;
-  --tab-full-width: 44px;
-  --tab-inactive-width: 34px;
-  display: flex;
-  flex-direction: column;
-  gap: .25rem;
-  left: 100%;
-  position: absolute;
-  top: 1.5rem;
-  z-index: -1;
-}
-nav.custom>[data-tab] {
-  padding-left: 5px;
-  padding-right: 5px;
-  padding-top: 0;
-  padding-bottom: 0;
-}
-
-nav.custom>[data-tab]:hover {
-  filter: drop-shadow(0 0 8px var(--color-shadow-primary));
-}
-
-
 .window-content {
   backdrop-filter: none;
-}
-
-.create-item-circle {
-
-  background-image: url(/systems/household/assets/sheet/btn-create.png);
-  background-color: transparent;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-
-  align-items: center;
-  position: absolute;
-  right: 10px;
-  padding-left: 10px;
-  margin-top: -15px;
-  border-radius: 50%;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  width: 12px;
-  height: 12px;
-  justify-content: center;
-  transition: background-color .3s, color .3s;
-
-}
-
-.create-item-circle:hover {
-  opacity: 0.7;
-
 }
 
 details>summary {
