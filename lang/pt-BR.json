@@ -289,6 +289,11 @@
         "RollActions": {
             "long": "Rolar Ação do Oponente"
         },
+        "RollHint": {
+            "Click": "Clique",
+            "ClickHint": "Rola imediatamente usando <strong>{field}</strong>.",
+            "CtrlClickHint": "Abre o diálogo de rolagem para escolher outro campo, adicionar um modificador e definir a dificuldade."
+        },
         "Rolling": {
             "long": "Rolando"
         },

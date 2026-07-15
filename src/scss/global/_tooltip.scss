@@ -1,0 +1,58 @@
+// Rich tooltip for the rollable skill labels (actor-tab-general.hbs), explaining
+// click vs Ctrl+click. Foundry's TooltipManager moves #tooltip to <body>, so this
+// can't be scoped under a sheet class — the sheet opts in with data-tooltip-class
+// instead. Core already paints it dark (.themed.theme-dark), so colors here read
+// against a dark surface, not the parchment tokens.
+#tooltip.hh-roll-tip,
+.locked-tooltip.hh-roll-tip {
+  max-width: 280px;
+  padding: 8px 10px;
+  text-align: left;
+  //background: #fff;
+
+  .hh-roll-tip-title {
+    margin: 0 0 6px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+    font-family: 'LHF_Encore', serif;
+    font-size: var(--font-size-16);
+    letter-spacing: 0.02em;
+    color: var(--hh-gold);
+  }
+
+  .hh-roll-tip-row {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin: 0;
+    font-size: var(--font-size-13);
+    line-height: 1.45;
+
+    + .hh-roll-tip-row {
+      margin-top: 6px;
+    }
+  }
+
+  // Keeps the key caps on one line so only the description text wraps.
+  .hh-roll-tip-keys {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+
+  kbd {
+    display: inline-block;
+    padding: 0 5px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-bottom-width: 2px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.1);
+    font-family: inherit;
+    font-size: var(--font-size-11);
+    line-height: 1.5;
+  }
+
+  strong {
+    color: var(--hh-gold);
+    font-weight: 700;
+  }
+}

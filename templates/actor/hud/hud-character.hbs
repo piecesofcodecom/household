@@ -1,7 +1,8 @@
 <div class="hud-dock">
 
   {{!-- ============ Skills pop-over (all four fields side by side) ============ --}}
-  <div class="character-skills hud-popover {{#when characterSkills 'noteq' ''}}{{tabs.characterSkills}}{{/when}}">
+  <div class="character-skills hud-popover {{#when characterSkills 'noteq' ''}}{{tabs.characterSkills}}{{/when}}"
+    data-tooltip-class="hh-roll-tip">
     <section class="character-skills-content-society hud-skill-field hud-popover-card">
       <div class="hud-popover-head">
         <h2><i class="fa-household-heart-full"></i> {{localize
@@ -10,7 +11,9 @@
       <ul class="hud-skill-list">
         {{#each skills as |skill|}}{{#when skill.field 'eq' 'society'}}
         <li class="hud-skill-row skill rollable" data-type="skill" data-field="{{skill.field}}" data-key="{{skill.id}}"
-          data-label="{{skill.name}}" data-character-id="{{@root/id}}">
+          data-label="{{skill.name}}" data-character-id="{{@root/id}}"
+          data-tooltip-html="<p class='hh-roll-tip-row'><span class='hh-roll-tip-keys'><kbd>{{localize 'HOUSEHOLD.RollHint.Click'}}</kbd></span><span>{{localize 'HOUSEHOLD.RollHint.ClickHint' field=(localize 'HOUSEHOLD.Field.Society.long')}}</span></p>
+            <p class='hh-roll-tip-row'><span class='hh-roll-tip-keys'><kbd>Ctrl</kbd>+<kbd>{{localize 'HOUSEHOLD.RollHint.Click'}}</kbd></span><span>{{localize 'HOUSEHOLD.RollHint.CtrlClickHint'}}</span></p>">
           <span class="hud-skill-name">{{skill.name}}</span>
           <span class="hud-skill-rank">{{skill.mod}}<i class="fa-household-{{skill.suit}}-full"></i></span>
         </li>
@@ -25,7 +28,9 @@
       <ul class="hud-skill-list">
         {{#each skills as |skill|}}{{#when skill.field 'eq' 'academia'}}
         <li class="hud-skill-row skill rollable" data-type="skill" data-field="{{skill.field}}" data-key="{{skill.id}}"
-          data-label="{{skill.name}}" data-character-id="{{@root/id}}">
+          data-label="{{skill.name}}" data-character-id="{{@root/id}}"
+          data-tooltip-html="<p class='hh-roll-tip-row'><span class='hh-roll-tip-keys'><kbd>{{localize 'HOUSEHOLD.RollHint.Click'}}</kbd></span><span>{{localize 'HOUSEHOLD.RollHint.ClickHint' field=(localize 'HOUSEHOLD.Field.Academia.long')}}</span></p>
+            <p class='hh-roll-tip-row'><span class='hh-roll-tip-keys'><kbd>Ctrl</kbd>+<kbd>{{localize 'HOUSEHOLD.RollHint.Click'}}</kbd></span><span>{{localize 'HOUSEHOLD.RollHint.CtrlClickHint'}}</span></p>">
           <span class="hud-skill-name">{{skill.name}}</span>
           <span class="hud-skill-rank">{{skill.mod}}<i class="fa-household-{{skill.suit}}-full"></i></span>
         </li>
@@ -40,7 +45,9 @@
       <ul class="hud-skill-list">
         {{#each skills as |skill|}}{{#when skill.field 'eq' 'war'}}
         <li class="hud-skill-row skill rollable" data-type="skill" data-field="{{skill.field}}" data-key="{{skill.id}}"
-          data-label="{{skill.name}}" data-character-id="{{@root/id}}">
+          data-label="{{skill.name}}" data-character-id="{{@root/id}}"
+          data-tooltip-html="<p class='hh-roll-tip-row'><span class='hh-roll-tip-keys'><kbd>{{localize 'HOUSEHOLD.RollHint.Click'}}</kbd></span><span>{{localize 'HOUSEHOLD.RollHint.ClickHint' field=(localize 'HOUSEHOLD.Field.War.long')}}</span></p>
+            <p class='hh-roll-tip-row'><span class='hh-roll-tip-keys'><kbd>Ctrl</kbd>+<kbd>{{localize 'HOUSEHOLD.RollHint.Click'}}</kbd></span><span>{{localize 'HOUSEHOLD.RollHint.CtrlClickHint'}}</span></p>">
           <span class="hud-skill-name">{{skill.name}}</span>
           <span class="hud-skill-rank">{{skill.mod}}<i class="fa-household-{{skill.suit}}-full"></i></span>
         </li>
@@ -55,7 +62,9 @@
       <ul class="hud-skill-list">
         {{#each skills as |skill|}}{{#when skill.field 'eq' 'street'}}
         <li class="hud-skill-row skill rollable" data-type="skill" data-field="{{skill.field}}" data-key="{{skill.id}}"
-          data-label="{{skill.name}}" data-character-id="{{@root/id}}">
+          data-label="{{skill.name}}" data-character-id="{{@root/id}}"
+          data-tooltip-html="<p class='hh-roll-tip-row'><span class='hh-roll-tip-keys'><kbd>{{localize 'HOUSEHOLD.RollHint.Click'}}</kbd></span><span>{{localize 'HOUSEHOLD.RollHint.ClickHint' field=(localize 'HOUSEHOLD.Field.Street.long')}}</span></p>
+            <p class='hh-roll-tip-row'><span class='hh-roll-tip-keys'><kbd>Ctrl</kbd>+<kbd>{{localize 'HOUSEHOLD.RollHint.Click'}}</kbd></span><span>{{localize 'HOUSEHOLD.RollHint.CtrlClickHint'}}</span></p>">
           <span class="hud-skill-name">{{skill.name}}</span>
           <span class="hud-skill-rank">{{skill.mod}}<i class="fa-household-{{skill.suit}}-full"></i></span>
         </li>

@@ -28,7 +28,10 @@
           {{#when skill.field 'eq' key}}
           <div class="hh-skill-row">
             <label class="rollable" data-action="roll" data-type="skill" data-field="{{key}}" data-key="{{ky}}"
-              data-label="{{skill.label}}">{{skill.label}}</label>
+              data-label="{{skill.label}}" data-tooltip-class="hh-roll-tip"
+              data-tooltip-html="<p class='hh-roll-tip-title'>{{skill.label}}</p>
+                <p class='hh-roll-tip-row'><span class='hh-roll-tip-keys'><kbd>{{localize 'HOUSEHOLD.RollHint.Click'}}</kbd></span><span>{{localize 'HOUSEHOLD.RollHint.ClickHint' field=ability.label}}</span></p>
+                <p class='hh-roll-tip-row'><span class='hh-roll-tip-keys'><kbd>Ctrl</kbd>+<kbd>{{localize 'HOUSEHOLD.RollHint.Click'}}</kbd></span><span>{{localize 'HOUSEHOLD.RollHint.CtrlClickHint'}}</span></p>">{{skill.label}}</label>
             <span class="hh-skill-suits">
               {{#numLoop 4}}
               <input id="{{ky}}-{{this}}-{{@root.id}}"
