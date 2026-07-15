@@ -1,8 +1,4 @@
-// Rich tooltip for the rollable skill labels (actor-tab-general.hbs), explaining
-// click vs Ctrl+click. Foundry's TooltipManager moves #tooltip to <body>, so this
-// can't be scoped under a sheet class — the sheet opts in with data-tooltip-class
-// instead. Core already paints it dark (.themed.theme-dark), so colors here read
-// against a dark surface, not the parchment tokens.
+// Rich tooltip for the rollable skill labels (actor-tab-general.hbs)
 #tooltip.hh-roll-tip,
 .locked-tooltip.hh-roll-tip {
   max-width: 280px;
