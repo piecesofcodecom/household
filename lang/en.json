@@ -288,6 +288,11 @@
         "RollActions": {
             "long": "Roll Action"
         },
+        "RollHint": {
+            "Click": "Click",
+            "ClickHint": "Rolls right away using <strong>{field}</strong>.",
+            "CtrlClickHint": "Opens the roll dialog to pick another field, add a modifier and set the difficulty."
+        },
         "Rolling": {
             "long": "Rolling"
         },
@@ -296,7 +301,7 @@
             "Chapter": "Chapters",
             "Configuration": "Configuration",
             "Description": "Description",
-            "Equipament": "Equipament",
+            "Equipament": "Equipment",
             "Garden": "Household — Garden",
             "General": "General",
             "Item": "Househood Item Sheet",

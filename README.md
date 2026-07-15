@@ -1,6 +1,8 @@
 ![Household](readme/banner.png)
 
-![Latest Release Download Count](https://img.shields.io/github/downloads/piecesofcodecom/household/latest/system.zip?color=2b82fc&label=DOWNLOADS&style=for-the-badge) [![Forge Installs](https://img.shields.io/badge/dynamic/json?label=Forge%20Installs&query=package.installs&suffix=%25&url=https%3A%2F%2Fforge-vtt.com%2Fapi%2Fbazaar%2Fpackage%2Fhousehold&colorB=03ff1c&style=for-the-badge)](https://forge-vtt.com/bazaar#package=household)
+[![Current Version](https://img.shields.io/github/v/release/piecesofcodecom/household?style=for-the-badge&label=Current%20Version)]()
+[![Latest Release Download Count](https://img.shields.io/github/downloads/piecesofcodecom/household/latest/system.zip?label=Downloads&style=for-the-badge)]()
+[![Forge Installs](https://img.shields.io/badge/dynamic/json?label=Forge%20Installs&query=package.installs&suffix=%25&url=https%3A%2F%2Fforge-vtt.com%2Fapi%2Fbazaar%2Fpackage%2Fhousehold&colorB=03ff1c&style=for-the-badge)](https://forge-vtt.com/bazaar#package=household)
 
 <center>
 <a href='https://ko-fi.com/X8X011IQ3J' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://storage.ko-fi.com/cdn/kofi6.png?v=6' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>

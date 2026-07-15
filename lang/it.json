@@ -285,6 +285,11 @@
         "RollActions": {
             "long": "Roll Opponent Action"
         },
+        "RollHint": {
+            "Click": "Clic",
+            "ClickHint": "Tira subito usando <strong>{field}</strong>.",
+            "CtrlClickHint": "Apre la finestra di tiro per scegliere un altro campo, aggiungere un modificatore e impostare la difficoltà."
+        },
         "Rolling": {
             "long": "Tiro"
         },
